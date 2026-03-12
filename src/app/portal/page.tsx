@@ -11,8 +11,8 @@ export default function PortalPage() {
       <header className="px-8 py-6 border-b border-glass-border">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white">SN</div>
-            <span className="text-sm font-medium serif-text text-white">Client Portal</span>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white">U</div>
+            <span className="text-sm font-medium tracking-[0.15em] uppercase text-white">UMBRA</span>
           </div>
           <span className="text-xs text-text-secondary">Apex Growth Partners</span>
         </div>

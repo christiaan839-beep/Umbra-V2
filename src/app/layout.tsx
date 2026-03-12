@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sovereign Node — Autonomous AI Marketing Intelligence",
-  description: "The AI system that writes ads, kills losers, buys media, generates code, and remembers everything that works.",
+  title: "UMBRA — Shadow Intelligence",
+  description: "Autonomous AI that markets, sells, and scales while you sleep. Shadow intelligence for the modern agency.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -34,8 +34,8 @@ export default function SovereignPage() {
 
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold">SN</div>
-          <span className="text-sm font-medium serif-text">Sovereign Node</span>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold">U</div>
+          <span className="text-sm font-medium tracking-[0.15em] uppercase">UMBRA</span>
         </div>
         <button onClick={() => checkout("sovereign")} className="px-5 py-2 bg-white text-midnight text-sm font-bold rounded-xl hover:bg-gray-200 transition-all">Get Started</button>
       </nav>
@@ -48,7 +48,7 @@ export default function SovereignPage() {
           Stop Hiring.<br /><span className="bg-gradient-to-r from-electric via-rose-glow to-gold bg-clip-text text-transparent font-medium">Deploy Intelligence.</span>
         </motion.h1>
         <motion.p {...fadeUp(0.2)} className="text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed mb-10">
-          An autonomous AI system that writes ads, kills losers, buys media, generates code, and remembers everything that works.
+          An autonomous AI system that writes ads, kills losers, buys media, generates code, and never forgets what works.
         </motion.p>
         <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 justify-center">
           <button onClick={() => checkout("sovereign")} className="px-8 py-4 bg-white text-midnight font-bold rounded-xl text-lg flex items-center justify-center gap-2 group hover:bg-gray-200 transition-all">
@@ -86,7 +86,7 @@ export default function SovereignPage() {
           ))}
           <div className="grid grid-cols-2 gap-4 pt-4 border-t border-glass-border">
             <div className="glass-card p-4 text-center bg-onyx/50"><p className="text-[10px] uppercase text-text-secondary mb-1">Monthly</p><p className="text-xl font-bold text-white font-mono">${monthlyRev.toLocaleString()}</p></div>
-            <div className="glass-card p-4 text-center border-emerald-500/20 bg-emerald-500/5"><p className="text-[10px] uppercase text-emerald-400 mb-1">ROI</p><p className="text-xl font-bold text-emerald-400 font-mono">{roi.toLocaleString()}%</p></div>
+            <div className="glass-card p-4 text-center border-emerald-500/20 bg-emerald-500/5"><p className="text-[10px] uppercase text-emerald-400 mb-1">ROI vs $997/mo</p><p className="text-xl font-bold text-emerald-400 font-mono">{roi.toLocaleString()}%</p></div>
           </div>
         </div>
       </section>
@@ -96,8 +96,8 @@ export default function SovereignPage() {
         <div className="text-center mb-12"><h2 className="text-3xl serif-text font-light">Choose Your Tier</h2></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
-            { name: "Sovereign", price: "$497", period: "/mo", tier: "sovereign", features: ["All AI agents", "Swarm Intelligence", "God-Brain Memory", "Client Portal", "Unlimited campaigns"], featured: false },
-            { name: "Ghost Mode", price: "$997", period: "/mo", tier: "ghost", features: ["Everything in Sovereign", "Ghost Mode autopilot", "Autonomous ad buying", "Claude Coder", "Priority support", "Custom agent training"], featured: true },
+            { name: "UMBRA Core", price: "$497", period: "/mo", tier: "sovereign", features: ["All AI agents", "Swarm Intelligence", "God-Brain Memory", "Client Portal", "Unlimited campaigns"], featured: false },
+            { name: "Ghost Mode", price: "$997", period: "/mo", tier: "ghost", features: ["Everything in Core", "Ghost Mode autopilot", "Autonomous ad buying", "Claude Coder", "Priority support", "Custom agent training"], featured: true },
             { name: "Franchise", price: "$2,497", period: " once", tier: "franchise", features: ["Everything in Ghost", "White-label license", "Your branding", "Resell to clients", "Source code access", "Lifetime updates"], featured: false },
           ].map((t, i) => (
             <div key={i} className={`glass-card p-7 flex flex-col ${t.featured ? "border-electric/40 relative overflow-hidden" : ""}`}>
@@ -117,7 +117,7 @@ export default function SovereignPage() {
       </section>
 
       <footer className="relative z-10 border-t border-glass-border/30 px-8 py-10 text-center">
-        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">Sovereign Node — Autonomous AI Marketing Intelligence</p>
+        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">UMBRA — Shadow Intelligence</p>
       </footer>
     </div>
   );

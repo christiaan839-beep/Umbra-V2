@@ -26,8 +26,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="w-64 border-r border-glass-border flex flex-col shrink-0">
         <div className="p-6 border-b border-glass-border">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white">SN</div>
-            <span className="text-sm font-semibold tracking-wide">Sovereign Node</span>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white">U</div>
+            <span className="text-sm font-semibold tracking-[0.15em] uppercase">UMBRA</span>
           </Link>
         </div>
 
