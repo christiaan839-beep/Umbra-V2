@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Obsidian Rose Design System ─────────────────── */
+
+@theme {
+  /* Backgrounds */
+  --color-midnight: #0f080c;
+  --color-onyx: #1a1014;
+  --color-surface: #231820;
+
+  /* Accents */
+  --color-electric: #a855f7;
+  --color-electric-light: #c084fc;
+  --color-rose-glow: #631C2D;
+  --color-gold: #d4a574;
+  --color-emerald-glow: #34d399;
+
+  /* Glass */
+  --color-glass-bg: rgba(255, 255, 255, 0.03);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --color-text-primary: #f5e6ee;
+  --color-text-secondary: #8b7a83;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ─── Base ────────────────────────────────────────── */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-midnight);
+  color: var(--color-text-primary);
+  font-family: "Outfit", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.3);
+}
+
+/* ─── Typography ──────────────────────────────────── */
+
+.serif-text {
+  font-family: "Cormorant Garamond", serif;
+}
+
+/* ─── Glass Card ──────────────────────────────────── */
+
+.glass-card {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 1rem;
+  backdrop-filter: blur(16px);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-card:hover {
+  border-color: rgba(168, 85, 247, 0.15);
+}
+
+/* ─── Scrollbar ───────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Form Controls ───────────────────────────────── */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-onyx);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-electric);
+  cursor: pointer;
+  border: 2px solid var(--color-midnight);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
 }
