@@ -17,6 +17,7 @@ const NAV_GROUPS = [
       { href: "/dashboard", label: "Command Center", icon: LayoutDashboard },
       { href: "/dashboard/omnipresence", label: "Global Telemetry", icon: Workflow },
       { href: "/dashboard/treasury", label: "Treasury Matrix", icon: DollarSign },
+      { href: "/dashboard/affiliates", label: "Affiliate Engine", icon: Users },
     ]
   },
   {
