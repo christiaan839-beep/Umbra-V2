@@ -4,13 +4,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
-  Users, Mail, Settings, LogOut, BarChart3, Shield,
+  Users, Mail, Settings, LogOut, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
   Send, Sparkles, Building2, Webhook, Layers, ShieldAlert
 } from "lucide-react";
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/treasury", label: "Treasury", icon: DollarSign },
   { href: "/dashboard/ghost-mode", label: "Ghost Mode", icon: Ghost },
   { href: "/dashboard/memory", label: "God-Brain", icon: Brain },
   { href: "/dashboard/swarm", label: "Swarm Critic", icon: Code },
