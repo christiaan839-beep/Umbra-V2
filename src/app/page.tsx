@@ -35,17 +35,17 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
           
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-glow/10 border border-rose-glow/20 text-rose-glow text-xs font-bold uppercase tracking-[0.2em] mb-8">
-            <ShieldAlert className="w-4 h-4" /> The Traditional Agency is Obsolete
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-electric/10 border border-electric/20 text-electric text-xs font-bold uppercase tracking-[0.2em] mb-8 shadow-[0_0_15px_rgba(45,110,255,0.2)]">
+            <BrainCircuit className="w-4 h-4" /> UMBRA V2: Autonomous AGI
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight drop-shadow-2xl">
-            15 AI Engines.<br/>
-            <span className="bg-gradient-to-r from-electric via-white to-rose-glow bg-clip-text text-transparent">Zero Employees.</span>
+            The Agency is Dead.<br/>
+            <span className="bg-gradient-to-r from-electric via-white to-rose-glow bg-clip-text text-transparent">The Swarm is Here.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12">
-            The 2026 AI Dominance Stack is here. Replace your $5,000/mo marketing agency with an autonomous ecosystem that scales your traffic, steals competitor keywords, and closes leads on WhatsApp 24/7.
+            Meet the world's first Autonomous AGI Acquisition Swarm. A self-directed, self-improving ecosystem that controls text, voice, video, strategy, and execution—without human intervention.
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-20">
@@ -102,29 +102,35 @@ export default function Home() {
         {/* The 2026 Stack Architecture Grid */}
         <div className="w-full max-w-7xl mx-auto relative z-10 mt-10">
            <div className="text-center mb-16">
-             <h2 className="text-3xl font-bold text-white serif-text mb-4">The 2026 AI Dominance Stack</h2>
-             <p className="text-text-secondary">How we permanently replace your marketing department.</p>
+             <h2 className="text-3xl font-bold text-white serif-text mb-4">The AGI Swarm Matrix</h2>
+             <p className="text-text-secondary uppercase tracking-[0.2em] text-xs">A comprehensive intelligence network</p>
            </div>
            
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
-                  icon: Target,
-                  title: "Agentic Skills Hub",
-                  desc: "1-Click playbooks. UMBRA scans competitors, finds missing SEO gaps, and automatically generates exactly what you need to steal their map pack rankings.",
+                  icon: BrainCircuit,
+                  title: "Apex Intelligence",
+                  desc: "The CEO node. Continuously aggregates global God-Brain telemetry to autonomously formulate cross-channel marketing strategies.",
                   color: "text-rose-glow", bg: "bg-rose-glow/10", border: "border-rose-glow/20"
                 },
                 {
-                  icon: Globe,
-                  title: "Programmatic SEO Factory",
-                  desc: "Stop writing blogs manually. UMBRA generates hundreds of hyper-localized, visually stunning, highly converting service pages instantly to blanket search results.",
+                  icon: Target,
+                  title: "The Nexus",
+                  desc: "Visual workflow orchestrator. Drag-and-drop agent pipelines to construct multi-step acquisition funnels that run automatically.",
                   color: "text-electric", bg: "bg-electric/10", border: "border-electric/20"
                 },
                 {
-                  icon: BrainCircuit,
-                  title: "Autonomous WhatsApp Closer",
-                  desc: "When leads inbound, UMBRA parses the text, recalls your business context from the God-Brain vector database, and uses Claude 3.5 to flawlessly close them.",
+                  icon: Globe,
+                  title: "Cinematic Studio",
+                  desc: "Autonomous video synthesis. Creates scripts, generates AI voiceovers, and maps avatar lip-syncs to launch high-converting VSLs.",
                   color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20"
+                },
+                {
+                  icon: Zap,
+                  title: "Ghost & Voice",
+                  desc: "Undetectable text prospecting on LinkedIn and conversational AI calling to automatically pre-qualify and close leads 24/7.",
+                  color: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20"
                 }
               ].map((feature, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 + (i * 0.1) }}
@@ -132,8 +138,8 @@ export default function Home() {
                   <div className={`w-14 h-14 rounded-2xl ${feature.bg} ${feature.border} border flex items-center justify-center mb-6`}>
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                  <p className="text-sm text-text-secondary leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-lg font-bold text-white mb-3">{feature.title}</h3>
+                  <p className="text-xs text-text-secondary leading-relaxed">{feature.desc}</p>
                 </motion.div>
               ))}
            </div>
