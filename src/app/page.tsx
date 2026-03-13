@@ -28,20 +28,36 @@ export default function Home() {
           className="w-24 h-px bg-gradient-to-r from-transparent via-electric to-transparent mx-auto mb-8" />
 
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
-          className="text-lg text-text-secondary max-w-md mx-auto leading-relaxed mb-14 tracking-wide">
+          className="text-lg text-text-secondary max-w-md mx-auto leading-relaxed mb-6 tracking-wide">
           Autonomous AI that markets, sells, and scales<br />while you sleep.
         </motion.p>
 
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3 }}
+        {/* Stat Ticker */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+          className="flex items-center justify-center gap-6 mb-14">
+          {[
+            { value: "15", label: "Engines" },
+            { value: "47", label: "Routes" },
+            { value: "0", label: "Employees" },
+          ].map((s, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-lg font-bold text-white font-mono">{s.value}</span>
+              <span className="text-[10px] text-text-secondary uppercase tracking-widest">{s.label}</span>
+              {i < 2 && <span className="text-text-secondary/20 ml-4">·</span>}
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/sovereign" className="px-10 py-4 bg-white text-midnight font-bold rounded-xl text-lg flex items-center justify-center gap-2 group hover:bg-gray-200 transition-all duration-500">
             Enter <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Link>
-          <Link href="/dashboard" className="px-10 py-4 border border-glass-border text-white font-medium rounded-xl text-lg hover:bg-glass-bg transition-all duration-500">
-            Dashboard
+          <Link href="/demo" className="px-10 py-4 border border-glass-border text-white font-medium rounded-xl text-lg hover:bg-glass-bg transition-all duration-500">
+            Try Demo
           </Link>
-          <Link href="/login" className="px-8 py-4 text-text-secondary hover:text-white font-medium text-lg transition-colors flex items-center justify-center">
-            Log In
+          <Link href="/pricing" className="px-8 py-4 text-text-secondary hover:text-white font-medium text-lg transition-colors flex items-center justify-center">
+            Pricing
           </Link>
         </motion.div>
       </motion.div>
