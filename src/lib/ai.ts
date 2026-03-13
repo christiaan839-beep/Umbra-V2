@@ -1,12 +1,15 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Anthropic from "@anthropic-ai/sdk";
+import { tavily } from "@tavily/core";
 import type { AIModel, AIOptions } from "@/types";
 
 const geminiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || "";
 const anthropicKey = process.env.ANTHROPIC_API_KEY || "";
+const tavilyKey = process.env.TAVILY_API_KEY || "tvly-demo";
 
 const genAI = new GoogleGenerativeAI(geminiKey);
 const anthropic = new Anthropic({ apiKey: anthropicKey });
+const tvly = tavily({ apiKey: tavilyKey });
 
 /**
  * Unified AI text generation router.
@@ -39,6 +42,42 @@ async function claudeText(prompt: string, system?: string, maxTokens: number = 2
     messages: [{ role: "user", content: prompt }],
   });
   return response.content[0].type === "text" ? response.content[0].text : "";
+}
+
+/**
+ * Live Web Search AI
+ * 
+ * Performs a real-time web search for context before asking the LLM to generate.
+ * This ensures the AI has live, accurate data (e.g., for competitor analysis).
+ */
+export async function research_ai(query: string, prompt: string, options: AIOptions = {}): Promise<string> {
+  try {
+    // 1. Fetch live context
+    const searchResult = await tvly.search(query, {
+      searchDepth: "advanced",
+      includeImages: false,
+      includeRawContent: false,
+      maxResults: 5,
+    });
+
+    // 2. Format context
+    const context = searchResult.results
+      .map((r, i) => `Source ${i + 1} (${r.url}):\n${r.content}`)
+      .join("\n\n");
+
+    // 3. Inject context into the LLM prompt
+    const enrichedPrompt = `LIVE WEB SEARCH RESULTS:\n${context}\n\n---\n\nUSER TASK:\n${prompt}`;
+    
+    // 4. Generate with live context
+    return ai(enrichedPrompt, { 
+      ...options, 
+      system: `${options.system || "You are an elite researcher."}\n\nYou have been provided with real-time web search results. Use this data absolutely strictly to answer the user's task. If the search results contradict your training data, trust the search results.` 
+    });
+  } catch (error) {
+    console.error("[Live Search Error]:", error);
+    // Fallback to standard AI if search fails
+    return ai(prompt, options);
+  }
 }
 
 /**

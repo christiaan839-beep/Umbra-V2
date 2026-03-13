@@ -4,6 +4,7 @@ import { generateCloseSequence } from "@/agents/closer";
 import { generateNurtureSequence } from "@/agents/nurture";
 import { prospectLeads } from "@/agents/prospector";
 import { executeGhostCycle } from "@/agents/ghost-mode";
+import { analyzeCompetitor } from "@/agents/war-room";
 
 /** Dynamic agent router — single endpoint for all agents */
 export async function POST(req: Request) {
@@ -22,6 +23,8 @@ export async function POST(req: Request) {
         return NextResponse.json(await prospectLeads(body.industry, body.idealClient));
       case "ghost":
         return NextResponse.json({ success: true, actions: await executeGhostCycle() });
+      case "war-room":
+        return NextResponse.json(await analyzeCompetitor(body.companyName));
       default:
         return NextResponse.json({ error: `Unknown agent: ${agent}` }, { status: 400 });
     }
