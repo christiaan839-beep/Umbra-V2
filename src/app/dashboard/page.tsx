@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { motion } from "framer-motion";
 import { TrendingUp, DollarSign, Users, Ghost, Brain, Zap, ArrowUpRight, ArrowRight, Sparkles, Play, FileText, Send, Wrench, Code, Shield, Workflow, FlaskConical, GitBranch, Video, Building2, MessageSquare, BarChart3, Laptop, Mail } from "lucide-react";
 import Link from "next/link";
@@ -166,19 +168,60 @@ export default function DashboardOverview() {
         </div>
         <div className="divide-y divide-glass-border">
           {ACTIVITY.map((a, i) => (
-            <motion.div key={i} {...fade(i + 8)} className="flex items-center gap-4 px-6 py-3.5 hover:bg-glass-bg/30 transition-colors">
-              <div className="p-2 rounded-lg bg-onyx border border-glass-border shrink-0">
-                <a.icon className="w-4 h-4" style={{ color: a.color }} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-white truncate">{a.action}</p>
-                <p className="text-[10px] text-text-secondary">{a.agent}</p>
-              </div>
-              <span className="text-[10px] text-text-secondary whitespace-nowrap">{a.time}</span>
-            </motion.div>
+            <ActivityRow key={i} a={a} i={i} />
           ))}
         </div>
       </motion.div>
     </div>
+  );
+}
+
+function ActivityRow({ a, i }: { a: any, i: number }) {
+  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+
+  const handleGrade = async (score: number) => {
+    setStatus("loading");
+    try {
+      await fetch('/api/intelligence/rlhf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agentId: a.agent,
+          action: a.action,
+          score,
+          context: "Dashboard manual grading"
+        })
+      });
+      setStatus("success");
+      setTimeout(() => setStatus("idle"), 2000);
+    } catch {
+      setStatus("idle");
+    }
+  };
+
+  return (
+    <motion.div {...fade(i + 8)} className="flex items-center gap-4 px-6 py-3.5 hover:bg-glass-bg/30 transition-colors group">
+      <div className="p-2 rounded-lg bg-onyx border border-glass-border shrink-0">
+        <a.icon className="w-4 h-4" style={{ color: a.color }} />
+      </div>
+      <div className="flex-1 min-w-0 pr-4">
+        <p className="text-sm text-white truncate">{a.action}</p>
+        <p className="text-[10px] text-text-secondary flex items-center gap-2">
+          {a.agent}
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 ml-2">
+            {status === "loading" && <span className="text-electric">Logging...</span>}
+            {status === "success" && <span className="text-emerald-400">Logged to God-Brain.</span>}
+            {status === "idle" && (
+              <>
+                <button onClick={() => handleGrade(1.0)} className="hover:text-emerald-400 transition-colors px-1" title="Approve">✓ Approve</button>
+                <button onClick={() => handleGrade(-0.5)} className="hover:text-amber-400 transition-colors px-1 border-l border-glass-border" title="Revise">↻ Revise</button>
+                <button onClick={() => handleGrade(-1.0)} className="hover:text-rose-500 transition-colors px-1 border-l border-glass-border" title="Reject">✕ Reject</button>
+              </>
+            )}
+          </span>
+        </p>
+      </div>
+      <span className="text-[10px] text-text-secondary whitespace-nowrap">{a.time}</span>
+    </motion.div>
   );
 }
