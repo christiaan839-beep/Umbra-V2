@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Users, Search, Loader2, User, Building2, Mail, Flame, Filter, ArrowUpRight, Zap } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Users, Search, Loader2, User, Building2, Mail, Flame, Filter, ArrowUpRight, Zap, MessageCircle } from "lucide-react";
 
 interface Lead {
   id: string; name: string; email: string; company: string; score: number;
@@ -82,7 +82,7 @@ export default function LeadsPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2 mb-6">
         <Filter className="w-3.5 h-3.5 text-text-secondary" />
         {(["all", "hot", "warm", "cold"] as const).map(f => (
           <button key={f} onClick={() => setFilter(f)}
@@ -92,13 +92,67 @@ export default function LeadsPage() {
         ))}
       </div>
 
-      {/* Scored Leads Table */}
-      <div className="glass-card overflow-hidden mb-8">
-        <div className="px-5 py-3 border-b border-glass-border flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-text-secondary">Scored Pipeline</h2>
-          <span className="text-[10px] text-text-secondary">{displayLeads.length} leads</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Live Communications Feed */}
+        <div className="lg:col-span-1 glass-card overflow-hidden flex flex-col h-[500px]">
+          <div className="px-5 py-4 border-b border-glass-border bg-black/20 flex items-center justify-between">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Live Comm Line
+            </h2>
+            <MessageCircle className="w-4 h-4 text-emerald-400/50" />
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 font-sans text-sm hide-scrollbar">
+            {/* Mock Live Feed */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1">
+                <span>+1 (512) 555-0198</span>
+                <span>Just now</span>
+              </div>
+              <div className="bg-onyx/40 border border-glass-border rounded-xl rounded-tl-sm p-3 inline-block max-w-[90%] text-white text-xs">
+                Saw your post about GBP hijacking. Do you guys handle dental practices?
+              </div>
+            </div>
+            
+            <div className="space-y-1 flex flex-col items-end">
+              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1 w-full flex-row-reverse">
+                <span className="text-electric flex items-center gap-1"><Zap className="w-3 h-3" /> UMBRA C-35</span>
+                <span>Just now</span>
+              </div>
+              <div className="bg-electric/10 border border-electric/20 text-white rounded-xl rounded-tr-sm p-3 inline-block max-w-[90%] text-xs">
+                Yes. We currently track 244 dental competitors in Austin. Our system finds their blind spots and generates the exact copy needed to steal their local map traffic. Want to see a live audit of your clinic?
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1 mt-4">
+                <span>+1 (214) 555-0122</span>
+                <span>2m ago</span>
+              </div>
+              <div className="bg-onyx/40 border border-glass-border rounded-xl rounded-tl-sm p-3 inline-block max-w-[90%] text-white text-xs">
+                I'm looking for a new agency. Our current one is too slow.
+              </div>
+            </div>
+
+            <div className="space-y-1 flex flex-col items-end">
+              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1 w-full flex-row-reverse">
+                <span className="text-electric flex items-center gap-1"><Zap className="w-3 h-3" /> UMBRA C-35</span>
+                <span>1m ago</span>
+              </div>
+              <div className="bg-electric/10 border border-electric/20 text-white rounded-xl rounded-tr-sm p-3 inline-block max-w-[90%] text-xs">
+                We don't have employees, so we don't have delays. UMBRA executes campaigns 24/7 autonomously. I've sent you our autonomous pipeline demo. Let me know when you've reviewed it.
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="divide-y divide-glass-border">
+
+        {/* Scored Leads Table */}
+        <div className="lg:col-span-2 glass-card overflow-hidden flex flex-col h-[500px]">
+          <div className="px-5 py-4 border-b border-glass-border flex items-center justify-between bg-black/20">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-text-secondary">Scored Pipeline</h2>
+            <span className="text-[10px] text-text-secondary bg-onyx/50 px-2 py-1 rounded border border-glass-border">{displayLeads.length} active</span>
+          </div>
+          <div className="divide-y divide-glass-border overflow-y-auto hide-scrollbar">
           {displayLeads.map((l, i) => {
             const style = TIER_STYLE[l.tier];
             return (
@@ -132,6 +186,7 @@ export default function LeadsPage() {
               </motion.div>
             );
           })}
+          </div>
         </div>
       </div>
 

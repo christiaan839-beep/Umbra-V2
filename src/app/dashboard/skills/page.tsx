@@ -1,96 +1,85 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FlaskConical, Trophy, BarChart3, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { CopySlash, MapPin, Code2, ArrowRight } from "lucide-react";
 
-interface Skill {
-  id: string; name: string; description: string; agent: string;
-  status: "testing" | "optimized";
-  variants: { id: string; prompt: string; usageCount: number; successes: number }[];
-  winningVariantId: string | null;
-}
+const SKILLS = [
+  {
+    id: "gap-killer",
+    name: "Competition Gap Killer",
+    description: "Scan 3 competitor websites to instantly find missing content, keyword gaps, and untargeted trust signals. Autonomously generates the 5 high-impact blog topics needed to steal their traffic.",
+    icon: CopySlash,
+    color: "text-rose-glow",
+    bg: "bg-rose-glow/10",
+    border: "border-rose-glow/20",
+    status: "Active",
+    href: "/dashboard/skills/gap-killer",
+  },
+  {
+    id: "gbp-hijack",
+    name: "GBP Map Pack Hijack",
+    description: "Analyzes competitor Google Business Profiles to find what they aren't doing. Generates 10-30 days of hyper-local, urgency-driven Map posts with embedded local landmarks.",
+    icon: MapPin,
+    color: "text-electric",
+    bg: "bg-electric/10",
+    border: "border-electric/20",
+    status: "Active",
+    href: "/dashboard/skills/gbp-hijack",
+  },
+  {
+    id: "schema-audit",
+    name: "Full Schema Technical Audit",
+    description: "A developer-grade technical audit. Scans a prospect's URL and strictly outputs missing LocalBusiness JSON-LD code for instant deployment. The ultimate cold outreach value add.",
+    icon: Code2,
+    color: "text-emerald-400",
+    bg: "bg-emerald-400/10",
+    border: "border-emerald-400/20",
+    status: "Active",
+    href: "/dashboard/skills/schema-audit",
+  },
+];
 
-export default function SkillsPage() {
-  const [skills, setSkills] = useState<Skill[]>([]);
-
-  useEffect(() => {
-    fetch("/api/skills").then(r => r.json()).then(d => { if (d.skills) setSkills(d.skills); });
-  }, []);
-
+export default function SkillsHubPage() {
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-8 max-w-5xl">
       <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
-          <FlaskConical className="w-3 h-3" /> Self-Optimizing
-        </div>
-        <h1 className="text-2xl font-bold serif-text text-white">Skills A/B Testing</h1>
-        <p className="text-sm text-text-secondary mt-1">AI agents automatically A/B test prompts and lock in the winner.</p>
+        <h1 className="text-3xl font-bold serif-text text-white">Agentic Skills Hub</h1>
+        <p className="text-sm text-text-secondary mt-2 max-w-2xl">
+          One-click autonomous playbooks that execute complex marketing attacks based on battle-tested agency SOPs.
+        </p>
       </div>
 
-      <div className="space-y-4">
-        {skills.map((skill, i) => {
-          const [a, b] = skill.variants;
-          const rateA = a.usageCount > 0 ? ((a.successes / a.usageCount) * 100).toFixed(1) : "0.0";
-          const rateB = b?.usageCount > 0 ? ((b.successes / b.usageCount) * 100).toFixed(1) : "0.0";
-          const aWinning = parseFloat(rateA) > parseFloat(rateB);
-
-          return (
-            <motion.div key={skill.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
-              className="glass-card p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-sm font-bold text-white">{skill.name}</h3>
-                  <p className="text-xs text-text-secondary">{skill.description}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {SKILLS.map((skill, i) => (
+          <Link href={skill.href} key={skill.id}>
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="glass-card p-6 border border-glass-border hover:border-electric/30 transition-all duration-300 group h-full flex flex-col"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className={`p-3 rounded-xl ${skill.bg} ${skill.border} border`}>
+                  <skill.icon className={`w-6 h-6 ${skill.color}`} />
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-electric/10 text-electric border border-electric/20">{skill.agent}</span>
-                  {skill.status === "optimized" ? (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                      <Trophy className="w-2.5 h-2.5" /> Optimized
-                    </span>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/20">Testing</span>
-                  )}
-                </div>
+                <span className="px-2 py-1 rounded-md bg-white/5 text-[10px] font-bold uppercase tracking-wider text-text-secondary border border-glass-border">
+                  {skill.status}
+                </span>
               </div>
+              
+              <h3 className="text-lg font-bold text-white mb-2">{skill.name}</h3>
+              <p className="text-xs text-text-secondary leading-relaxed mb-6 flex-1">
+                {skill.description}
+              </p>
 
-              <div className="grid grid-cols-2 gap-3">
-                {[a, b].filter(Boolean).map(v => {
-                  const rate = v.usageCount > 0 ? ((v.successes / v.usageCount) * 100).toFixed(1) : "0.0";
-                  const isWinner = skill.winningVariantId === v.id;
-                  return (
-                    <div key={v.id} className={`p-3 rounded-xl border ${isWinner ? "border-emerald-500/30 bg-emerald-500/5" : "border-glass-border bg-onyx/50"}`}>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-bold text-white">Variant {v.id}</span>
-                        {isWinner && <Trophy className="w-3 h-3 text-emerald-400" />}
-                      </div>
-                      <p className="text-[11px] text-text-secondary leading-relaxed mb-3 line-clamp-2">{v.prompt}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <BarChart3 className="w-3 h-3 text-text-secondary" />
-                          <span className="text-[10px] text-text-secondary">{v.usageCount} uses</span>
-                        </div>
-                        <span className={`text-sm font-bold font-mono ${isWinner ? "text-emerald-400" : parseFloat(rate) > 10 ? "text-amber-400" : "text-text-secondary"}`}>
-                          {rate}%
-                        </span>
-                      </div>
-                      {/* Win rate bar */}
-                      <div className="h-1.5 bg-onyx rounded-full mt-2 overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${Math.min(parseFloat(rate) * 3, 100)}%` }}
-                          transition={{ duration: 1, delay: 0.5 }}
-                          className={`h-full rounded-full ${isWinner ? "bg-emerald-400" : "bg-electric/50"}`}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="flex items-center text-sm font-semibold text-white group-hover:text-electric transition-colors mt-auto">
+                Execute Playbook
+                <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" />
               </div>
             </motion.div>
-          );
-        })}
+          </Link>
+        ))}
       </div>
     </div>
   );

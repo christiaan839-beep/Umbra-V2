@@ -1,79 +1,84 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Lock, ArrowRight, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
-import { TrendingUp, DollarSign, Users, Eye, BarChart3, Zap, Shield } from "lucide-react";
 
-const fadeUp = (d: number) => ({ initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0, transition: { duration: 0.6, delay: d } } });
+export default function ClientPortalLogin() {
+  const [clientId, setClientId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-export default function PortalPage() {
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!clientId) return;
+    
+    setIsLoading(true);
+    // Simulate auth delay
+    setTimeout(() => {
+      // In a real app, validate the ID against the DB. Here we just route to the dynamic page.
+      router.push(`/portal/${clientId}`);
+    }, 1500);
+  };
+
   return (
-    <div className="min-h-screen bg-midnight">
-      <header className="px-8 py-6 border-b border-glass-border">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white">U</div>
-            <span className="text-sm font-medium tracking-[0.15em] uppercase text-white">UMBRA</span>
+    <div className="min-h-screen bg-midnight flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-electric/10 rounded-full blur-[120px] pointer-events-none" />
+
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-md relative z-10">
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center shadow-[0_0_30px_rgba(45,110,255,0.3)] mb-6">
+            <ShieldCheck className="w-8 h-8 text-white" />
           </div>
-          <span className="text-xs text-text-secondary">Apex Growth Partners</span>
-        </div>
-      </header>
-
-      <main className="px-8 py-10 max-w-5xl mx-auto">
-        <motion.div {...fadeUp(0)} className="mb-10">
-          <h1 className="text-2xl serif-text font-light text-white mb-1">Performance Dashboard</h1>
-          <p className="text-sm text-text-secondary">Real-time results from your AI marketing system.</p>
-        </motion.div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          {[
-            { label: "Revenue Generated", value: "$47,320", icon: DollarSign, color: "text-gold" },
-            { label: "Qualified Leads", value: "312", icon: Users, color: "text-electric" },
-            { label: "ROAS", value: "5.6x", icon: TrendingUp, color: "text-emerald-glow" },
-            { label: "Impressions", value: "2.1M", icon: Eye, color: "text-electric-light" },
-          ].map((s, i) => (
-            <motion.div key={i} {...fadeUp(i * 0.1)} className="glass-card p-5">
-              <s.icon className={`w-5 h-5 ${s.color} mb-3`} />
-              <p className="text-2xl font-bold text-white font-mono">{s.value}</p>
-              <p className="text-xs text-text-secondary mt-1">{s.label}</p>
-            </motion.div>
-          ))}
+          <h1 className="text-2xl font-bold text-white tracking-widest uppercase">Client Portal</h1>
+          <p className="text-text-secondary text-sm mt-2 text-center">Secure access to your live AI Marketing ecosystem.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <motion.div {...fadeUp(0.4)} className="glass-card">
-            <div className="px-6 py-4 border-b border-glass-border"><h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary">Active Campaigns</h2></div>
-            <div className="divide-y divide-glass-border">
-              {[
-                { name: "Q1 Lead Gen — Facebook", status: "Active", roas: "6.2x" },
-                { name: "Retargeting — Instagram", status: "Active", roas: "4.8x" },
-                { name: "YouTube Discovery", status: "Optimizing", roas: "3.1x" },
-              ].map((c, i) => (
-                <div key={i} className="flex items-center justify-between px-6 py-3">
-                  <div><p className="text-sm text-white">{c.name}</p><p className="text-xs text-text-secondary">{c.status}</p></div>
-                  <span className="text-sm font-mono font-bold text-emerald-glow">{c.roas}</span>
-                </div>
-              ))}
+        <form onSubmit={handleLogin} className="glass-card p-8 border border-glass-border">
+          <div className="space-y-6">
+            <div>
+              <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
+                Client Access ID
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary" />
+                <input
+                  type="password"
+                  value={clientId}
+                  onChange={(e) => setClientId(e.target.value)}
+                  placeholder="Enter your secure ID"
+                  className="w-full bg-onyx/50 border border-glass-border rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-text-secondary/50 focus:outline-none focus:border-electric transition-colors"
+                  required
+                />
+              </div>
             </div>
-          </motion.div>
 
-          <motion.div {...fadeUp(0.5)} className="glass-card">
-            <div className="px-6 py-4 border-b border-glass-border"><h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary">AI Activity</h2></div>
-            <div className="divide-y divide-glass-border">
-              {[
-                { action: "Ghost Mode killed underperforming campaign", time: "2h ago", icon: Shield },
-                { action: "Swarm Critic approved new ad copy (9/10)", time: "5h ago", icon: Zap },
-                { action: "God-Brain stored new winning pattern", time: "12h ago", icon: BarChart3 },
-              ].map((a, i) => (
-                <div key={i} className="flex items-center gap-3 px-6 py-3">
-                  <a.icon className="w-4 h-4 text-electric shrink-0" />
-                  <div className="flex-1"><p className="text-sm text-white">{a.action}</p></div>
-                  <span className="text-xs text-text-secondary">{a.time}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </main>
+            <button
+              type="submit"
+              disabled={isLoading || !clientId}
+              className="w-full py-4 rounded-xl bg-white text-midnight font-bold flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors disabled:opacity-50 group"
+            >
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                   <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-midnight" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Authenticating...
+                </span>
+              ) : (
+                <>Access Dashboard <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></>
+              )}
+            </button>
+          </div>
+        </form>
+        
+        <p className="text-center text-xs text-text-secondary mt-8 uppercase tracking-widest">
+           Powered by UMBRA Autonomous Systems
+        </p>
+      </motion.div>
     </div>
   );
 }
