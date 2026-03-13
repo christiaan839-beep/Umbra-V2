@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
-  Users, Mail, BarChart3, LogOut
+  Users, Mail, Settings, LogOut
 } from "lucide-react";
 
 const NAV = [
@@ -15,6 +15,7 @@ const NAV = [
   { href: "/dashboard/coder", label: "Claude Coder", icon: Laptop },
   { href: "/dashboard/leads", label: "Leads", icon: Users },
   { href: "/dashboard/nurture", label: "Nurture", icon: Mail },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
