@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   if (!STRIPE_KEY) return NextResponse.json({ error: "Stripe not configured." }, { status: 500 });
 
   const TIERS: Record<string, { cents: number; mode: string; name: string }> = {
-    sovereign: { cents: 49700, mode: "subscription", name: "Sovereign Node — $497/mo" },
+    sovereign: { cents: 49700, mode: "subscription", name: "UMBRA Core — $497/mo" },
     ghost: { cents: 99700, mode: "subscription", name: "Ghost Mode — $997/mo" },
     franchise: { cents: 249700, mode: "payment", name: "Franchise License — $2,497" },
   };
@@ -14,16 +14,24 @@ export async function POST(req: Request) {
   const t = TIERS[tier || "sovereign"];
   if (!t) return NextResponse.json({ error: "Invalid tier." }, { status: 400 });
 
+  const baseUrl = process.env.NEXT_PUBLIC_URL || "https://omnia-os.vercel.app";
+
   const params: Record<string, string> = {
     mode: t.mode,
-    success_url: successUrl || `${process.env.NEXT_PUBLIC_URL || "https://sovereign-v2.vercel.app"}/portal?welcome=true`,
-    cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_URL || "https://sovereign-v2.vercel.app"}`,
+    success_url: successUrl || `${baseUrl}/portal?welcome=true`,
+    cancel_url: cancelUrl || baseUrl,
     "line_items[0][price_data][currency]": "usd",
     "line_items[0][price_data][product_data][name]": t.name,
     "line_items[0][price_data][unit_amount]": String(t.cents),
     "line_items[0][quantity]": "1",
+    // Pass tier metadata so webhook knows which tier to provision
+    "metadata[tier]": tier || "sovereign",
+    "metadata[source]": "umbra_checkout",
   };
-  if (t.mode === "subscription") params["line_items[0][price_data][recurring][interval]"] = "month";
+
+  if (t.mode === "subscription") {
+    params["line_items[0][price_data][recurring][interval]"] = "month";
+  }
 
   const session = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

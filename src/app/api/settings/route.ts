@@ -1,18 +1,15 @@
 import { NextResponse } from "next/server";
-
-// In-memory settings store (replace with DB in production)
-const settingsStore = new Map<string, Record<string, string>>();
+import { db, getUserFromCookie } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
     const { action, settings } = await req.json();
+    const userEmail = getUserFromCookie(req) || "admin";
 
     if (action === "save") {
-      // In production: save per-user settings to DB, encrypted at rest
-      const userId = "admin"; // TODO: extract from session cookie
-      settingsStore.set(userId, { ...(settingsStore.get(userId) || {}), ...settings });
-      
-      // If Meta keys were provided, set them as runtime env vars for this instance
+      db.settings.set(userEmail, settings);
+
+      // Inject into runtime env for this serverless instance
       if (settings.META_ACCESS_TOKEN) process.env.META_ACCESS_TOKEN = settings.META_ACCESS_TOKEN;
       if (settings.META_AD_ACCOUNT_ID) process.env.META_AD_ACCOUNT_ID = settings.META_AD_ACCOUNT_ID;
       if (settings.TELEGRAM_BOT_TOKEN) process.env.TELEGRAM_BOT_TOKEN = settings.TELEGRAM_BOT_TOKEN;
@@ -22,16 +19,14 @@ export async function POST(req: Request) {
     }
 
     if (action === "load") {
-      const userId = "admin";
-      const saved = settingsStore.get(userId) || {};
-      
-      // Mask sensitive values for display
+      const saved = db.settings.get(userEmail);
+
+      // Mask sensitive values
       const masked: Record<string, string> = {};
       for (const [key, val] of Object.entries(saved)) {
         masked[key] = val.length > 8 ? val.slice(0, 4) + "••••" + val.slice(-4) : "••••••••";
       }
-      
-      // Also check which env vars are already set
+
       const status = {
         META_ACCESS_TOKEN: !!process.env.META_ACCESS_TOKEN,
         META_AD_ACCOUNT_ID: !!process.env.META_AD_ACCOUNT_ID,

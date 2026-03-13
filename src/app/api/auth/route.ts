@@ -1,16 +1,6 @@
 import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
 import type { User } from "@/types";
-
-// In-memory user store for MVP. Replace with DB in production.
-const users: Map<string, User & { password?: string }> = new Map();
-
-// Default admin user
-users.set("admin@umbra.ai", {
-  email: "admin@umbra.ai",
-  password: "umbra", // simple password for testing
-  name: "Umbra Admin",
-  tier: "franchise"
-});
 
 export async function POST(req: Request) {
   try {
@@ -21,46 +11,42 @@ export async function POST(req: Request) {
     }
 
     if (action === "signup") {
-      if (users.has(email)) {
+      if (db.users.findByEmail(email)) {
         return NextResponse.json({ error: "Account already exists." }, { status: 400 });
       }
-      
-      const newUser: User = { email, name: name || email.split("@")[0], tier: "sovereign" };
-      users.set(email, { ...newUser, password });
-      
-      const response = NextResponse.json({ success: true, user: newUser });
-      
-      // Set auth cookie
-      response.cookies.set("umbra_session", Buffer.from(JSON.stringify(newUser)).toString("base64"), {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        path: "/",
-      });
-      
-      return response;
-    }
 
-    if (action === "login") {
-      const user = users.get(email);
-      if (!user || user.password !== password) {
-        return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
-      }
-      
-      const response = NextResponse.json({ 
-        success: true, 
-        user: { email: user.email, name: user.name, tier: user.tier }
-      });
-      
-      response.cookies.set("umbra_session", Buffer.from(JSON.stringify({ email: user.email, name: user.name, tier: user.tier })).toString("base64"), {
+      const newUser = db.users.create(email, password, name);
+      const sessionUser: User = { email: newUser.email, name: newUser.name, tier: newUser.tier };
+      const response = NextResponse.json({ success: true, user: sessionUser });
+
+      response.cookies.set("umbra_session", Buffer.from(JSON.stringify(sessionUser)).toString("base64"), {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 60 * 24 * 30,
         path: "/",
       });
-      
+
+      return response;
+    }
+
+    if (action === "login") {
+      const user = db.users.verifyPassword(email, password);
+      if (!user) {
+        return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
+      }
+
+      const sessionUser: User = { email: user.email, name: user.name, tier: user.tier };
+      const response = NextResponse.json({ success: true, user: sessionUser });
+
+      response.cookies.set("umbra_session", Buffer.from(JSON.stringify(sessionUser)).toString("base64"), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 30,
+        path: "/",
+      });
+
       return response;
     }
 
@@ -71,7 +57,6 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ error: "Invalid action. Use: login, signup, logout" }, { status: 400 });
-
   } catch (error) {
     console.error("[Auth Error]:", error);
     return NextResponse.json({ error: "Authentication failed." }, { status: 500 });
