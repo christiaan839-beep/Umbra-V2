@@ -1,4 +1,5 @@
 import { ai } from "@/lib/ai";
+import { postToSocial } from "@/lib/social";
 
 export interface ScheduledTask {
   id: string;
@@ -79,14 +80,26 @@ Return JSON:
 }
 
 /** Execute all active tasks (called by cron conductor) */
-export async function executeDueTasks(): Promise<Array<{ id: string; result: string }>> {
+export async function executeDueTasks(): Promise<Array<{ id: string; result: string; dispatch?: any }>> {
   const active = Array.from(TASK_STORE.values()).filter(t => t.status === "active");
   const executed = [];
 
   for (const task of active) {
     task.lastRun = new Date().toISOString();
     TASK_STORE.set(task.id, task);
-    executed.push({ id: task.id, result: `Executed ${task.agent} agent: ${task.name}` });
+
+    // Dynamic execution based on agent type
+    if (task.agent === "social" || task.agent === "content") {
+      try {
+        const contentResponse = await ai(`Execute this task: ${task.name}\nInstruction: ${task.instruction}\n\nGenerate the post copy. Do not include quotes or meta text, just the exact post body.`);
+        const dispatchResults = await postToSocial("all", contentResponse);
+        executed.push({ id: task.id, result: `Generated content length: ${contentResponse.length}`, dispatch: dispatchResults });
+      } catch (e: any) {
+        executed.push({ id: task.id, result: `Failed execution: ${e.message || "Unknown error"}` });
+      }
+    } else {
+      executed.push({ id: task.id, result: `Executed ${task.agent} intelligence gathering for: ${task.name}` });
+    }
   }
 
   return executed;

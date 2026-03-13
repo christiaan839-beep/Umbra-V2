@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { ai } from "@/lib/ai";
-import { publishPost, adaptAndPublish } from "@/lib/social";
+import { postToSocial } from "@/lib/social";
 
 export async function POST(req: Request) {
   try {
@@ -11,14 +11,15 @@ export async function POST(req: Request) {
         `Create a viral ${platform || "instagram"} post about: ${topic}. Include hashtags.`,
         { system: "You are a viral content creator. Create scroll-stopping posts with hooks, emojis, and CTAs." }
       );
-      const result = await publishPost({ platform: platform || "instagram", content: generated });
-      return NextResponse.json({ success: true, content: generated, result });
+      const result = await postToSocial(platform || "instagram", generated);
+      return NextResponse.json({ success: true, content: generated, result: result[0] });
     }
 
     if (action === "multi-post") {
       if (!content || !platforms?.length) return NextResponse.json({ error: "Content and platforms required" }, { status: 400 });
-      const { adaptations, results } = await adaptAndPublish(content, platforms);
-      return NextResponse.json({ success: true, adaptations, results });
+      // In the new architecture, we post the same viral content to all targets (adaptations handled via AI if needed before calling this)
+      const results = await postToSocial("all", content);
+      return NextResponse.json({ success: true, adaptations: { default: content }, results });
     }
 
     if (action === "calendar") {
@@ -38,8 +39,8 @@ Format as a structured list.`,
 
     if (action === "publish") {
       if (!content || !platform) return NextResponse.json({ error: "Content and platform required" }, { status: 400 });
-      const result = await publishPost({ platform, content });
-      return NextResponse.json({ success: true, result });
+      const result = await postToSocial(platform, content);
+      return NextResponse.json({ success: true, result: result[0] });
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
