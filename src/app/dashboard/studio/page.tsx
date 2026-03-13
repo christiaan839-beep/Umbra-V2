@@ -2,210 +2,217 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Video, Film, Wand2, MonitorPlay, Activity, RefreshCw, Layers, CheckCircle2, Play } from "lucide-react";
+import { Film, Play, Upload, MessageSquare, Mic, UserSquare2, RefreshCcw, Send, CheckCircle2 } from "lucide-react";
 
-export default function CinematicStudioHub() {
-  const [isRendering, setIsRendering] = useState(false);
-  const [renderStage, setRenderStage] = useState<"idle" | "scripting" | "audio" | "compositing" | "completed">("idle");
-  const [renderedAssets, setRenderedAssets] = useState<any[]>([]);
+type RenderStatus = "idle" | "script" | "voice" | "avatar" | "rendering" | "deployed";
 
-  const triggerRenderCycle = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setIsRendering(true);
-      setRenderStage("scripting");
+export default function CinematicStudioPage() {
+  const [status, setStatus] = useState<RenderStatus>("idle");
+  const [topic, setTopic] = useState("Biohacking Protocol for CEO Focus");
+  const [progress, setProgress] = useState(0);
 
-      const formData = new FormData(e.target as HTMLFormElement);
-      const payload = {
-          topic: formData.get("topic"),
-          format: formData.get("format"),
-          duration: formData.get("duration")
-      };
+  const startPipeline = () => {
+    if (!topic || status !== "idle") return;
+    
+    setStatus("script");
+    setProgress(15);
+    
+    setTimeout(() => {
+      setStatus("voice");
+      setProgress(40);
+    }, 2500);
 
-      try {
-          // Simulate the multi-stage rendering visual feedback
-          setTimeout(() => setRenderStage("audio"), 2500);
-          setTimeout(() => setRenderStage("compositing"), 5000);
+    setTimeout(() => {
+      setStatus("avatar");
+      setProgress(65);
+    }, 5000);
 
-          const res = await fetch("/api/swarm/cinematic/render", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-          });
+    setTimeout(() => {
+      setStatus("rendering");
+      setProgress(85);
+    }, 7500);
 
-          const data = await res.json();
-          
-          if (data.success) {
-              setRenderStage("completed");
-              setRenderedAssets(prev => [data.data, ...prev]);
-          }
-      } catch (error) {
-          console.error("Render Failed:", error);
-          setRenderStage("idle");
-      } finally {
-          setTimeout(() => {
-              setIsRendering(false);
-              setRenderStage("idle");
-          }, 2000);
-      }
+    setTimeout(() => {
+      setStatus("deployed");
+      setProgress(100);
+    }, 10000);
+  };
+
+  const getStepStatus = (step: string) => {
+    const order = ["idle", "script", "voice", "avatar", "rendering", "deployed"];
+    const currentIndex = order.indexOf(status);
+    const stepIndex = order.indexOf(step);
+    
+    if (currentIndex > stepIndex) return "completed";
+    if (currentIndex === stepIndex) return "active";
+    return "pending";
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 min-h-screen bg-midnight text-white font-mono">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto h-[calc(100vh-6rem)] flex flex-col">
+      <div className="mb-8 shrink-0">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
+          <Film className="w-3 h-3" /> Synthesis Engine
+        </div>
+        <h1 className="text-3xl font-bold font-mono text-white tracking-tight">Cinematic Studio</h1>
+        <p className="text-sm text-[#8A95A5] mt-2 max-w-2xl font-mono uppercase tracking-widest">
+          Autonomous Content Pipeline: Script → Voice → HeyGen Avatar → Social
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
         
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-glass-border pb-6">
+        {/* Input & Control Panel */}
+        <div className="lg:col-span-1 glass-card border flex flex-col overflow-hidden bg-[#0B0C10]/95 border-glass-border">
+          <div className="p-8 flex items-center justify-between border-b border-glass-border bg-black/40">
+            <h3 className="text-white font-bold font-mono flex items-center gap-2 text-sm uppercase tracking-widest">
+              <Upload className="w-4 h-4 text-indigo-400" /> Vector Input
+            </h3>
+          </div>
+          <div className="p-8 flex-1 flex flex-col space-y-6">
             <div>
-                <h1 className="text-3xl font-bold tracking-[0.2em] uppercase flex items-center gap-3">
-                    <Film className="text-electric w-8 h-8" />
-                    Cinematic Studio
-                </h1>
-                <p className="text-text-secondary uppercase tracking-widest text-xs mt-2">Autonomous Video Synthesis // HeyGen + ElevenLabs Uplink</p>
-            </div>
-            <div className="flex items-center gap-6">
-                 <div className="flex flex-col items-end">
-                     <span className="text-[10px] uppercase text-emerald-400 tracking-widest flex items-center gap-1">
-                         <MonitorPlay className="w-3 h-3" /> Rendered Core Assets
-                     </span>
-                     <span className="text-xl font-bold font-sans">{renderedAssets.length + 142}</span>
-                 </div>
-                 <div className="flex flex-col items-end">
-                     <span className="text-[10px] uppercase text-text-secondary tracking-widest flex items-center gap-1">
-                         <Activity className="w-3 h-3" /> GPU Cluster Status
-                     </span>
-                     <span className="text-xl font-bold font-sans text-electric">Online</span>
-                 </div>
-            </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            {/* Render Matrix (Form) */}
-            <div className="col-span-1 border border-glass-border bg-onyx/30 backdrop-blur-md rounded-xl p-6 h-fit">
-                <h2 className="text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2 border-b border-glass-border pb-4">
-                    <Wand2 className="w-4 h-4 text-electric" /> Render Matrix
-                </h2>
-
-                <form onSubmit={triggerRenderCycle} className="space-y-5">
-                    <div>
-                        <label className="text-xs uppercase tracking-wider text-text-secondary block mb-2">Creative Topic</label>
-                        <input name="topic" type="text" placeholder="e.g. UMBRA Omni-Channel Domination" required className="w-full bg-midnight/50 border border-glass-border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-electric transition-colors" />
-                    </div>
-
-                    <div>
-                        <label className="text-xs uppercase tracking-wider text-text-secondary block mb-2">Payload Format</label>
-                        <select name="format" className="w-full bg-midnight/50 border border-glass-border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-electric transition-colors appearance-none">
-                            <option value="short">Short-form (TikTok/Reels/Shorts)</option>
-                            <option value="vsl">Video Sales Letter (Long-form)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                         <label className="text-xs uppercase tracking-wider text-text-secondary block mb-2">Target Duration (Seconds)</label>
-                        <input name="duration" type="number" defaultValue={60} min={15} max={600} required className="w-full bg-midnight/50 border border-glass-border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-electric transition-colors" />
-                    </div>
-
-                    <button disabled={isRendering} type="submit" className="w-full py-4 mt-6 bg-gradient-to-r from-electric to-rose-glow rounded-md text-white font-bold uppercase tracking-wider text-xs hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(45,110,255,0.2)]">
-                         {isRendering ? (
-                             <><RefreshCw className="w-4 h-4 animate-spin text-white" /> Allocating GPU Nodes...</>
-                         ) : (
-                             <><Film className="w-4 h-4" /> Synthesize Asset</>
-                         )}
-                    </button>
-                    
-                    <p className="text-[10px] text-text-secondary mt-4 text-center leading-relaxed">
-                        Initializing the render matrix will trigger Gemini 1.5 Pro script generation, followed by ElevenLabs voice synthesis and HeyGen visual avatar lip-syncing.
-                    </p>
-                </form>
+              <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Subject / Hook Vector</label>
+              <textarea 
+                rows={3}
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                className="w-full bg-black/60 border border-glass-border rounded-lg px-4 py-3 text-sm text-white font-mono focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 outline-none transition-all shadow-inner resize-none"
+                placeholder="Paste context from God-Brain..."
+                disabled={status !== "idle"}
+              />
             </div>
 
-            {/* Render Queue & Media Gallery */}
-            <div className="col-span-1 lg:col-span-2 space-y-6">
-                
-                {/* Active Render Queue UI */}
-                <AnimatePresence>
-                    {isRendering && (
-                        <motion.div 
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="border border-electric bg-midnight/80 rounded-xl p-6 shadow-[0_0_30px_rgba(0,183,255,0.15)] relative overflow-hidden"
-                        >
-                            {/* Scanning line effect */}
-                            <motion.div 
-                                initial={{ top: 0 }} animate={{ top: "100%" }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                className="absolute left-0 right-0 h-1 bg-electric blur-[2px] opacity-50 shadow-[0_0_20px_rgba(0,183,255,1)]"
-                             />
-
-                            <h3 className="text-xs uppercase font-bold tracking-widest text-electric flex items-center gap-2 mb-6">
-                                <Activity className="w-4 h-4 animate-pulse" /> Active Render Queue
-                            </h3>
-
-                            <div className="space-y-4 relative z-10">
-                                <div className={`flex items-center gap-4 ${renderStage === 'scripting' ? 'text-white' : renderStage === 'audio' || renderStage === 'compositing' || renderStage === 'completed' ? 'text-emerald-400' : 'text-text-secondary'}`}>
-                                    {renderStage === 'scripting' ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
-                                    <span className="text-sm font-bold tracking-widest uppercase">Phase 1: Synthesizing Script Matrix (Gemini 1.5 Pro)</span>
-                                </div>
-                                <div className={`flex items-center gap-4 ${renderStage === 'audio' ? 'text-white' : renderStage === 'compositing' || renderStage === 'completed' ? 'text-emerald-400' : 'text-text-secondary opacity-50'}`}>
-                                    {renderStage === 'audio' ? <RefreshCw className="w-4 h-4 animate-spin" /> : renderStage === 'compositing' || renderStage === 'completed' ? <CheckCircle2 className="w-4 h-4" /> : <div className="w-4 h-4 rounded-full border-2 border-current" />}
-                                    <span className="text-sm font-bold tracking-widest uppercase">Phase 2: Generating Neural Voiceover (ElevenLabs)</span>
-                                </div>
-                                <div className={`flex items-center gap-4 ${renderStage === 'compositing' ? 'text-white' : renderStage === 'completed' ? 'text-emerald-400' : 'text-text-secondary opacity-50'}`}>
-                                    {renderStage === 'compositing' ? <RefreshCw className="w-4 h-4 animate-spin" /> : renderStage === 'completed' ? <CheckCircle2 className="w-4 h-4" /> : <div className="w-4 h-4 rounded-full border-2 border-current" />}
-                                    <span className="text-sm font-bold tracking-widest uppercase">Phase 3: Avatar Lip-Sync & Final Compositing (HeyGen)</span>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Media Gallery */}
-                <div className="border border-glass-border bg-onyx/30 backdrop-blur-md rounded-xl p-6 min-h-[400px]">
-                     <h2 className="text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2 border-b border-glass-border pb-4">
-                        <Video className="w-4 h-4 text-electric" /> UMBRA Media Library
-                    </h2>
-
-                    {renderedAssets.length === 0 && !isRendering ? (
-                        <div className="flex flex-col items-center justify-center h-64 text-text-secondary opacity-50">
-                            <MonitorPlay className="w-12 h-12 mb-4" />
-                            <p className="uppercase tracking-widest text-xs">Media Library Empty</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <AnimatePresence>
-                                {renderedAssets.map((asset) => (
-                                    <motion.div 
-                                        key={asset.id}
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        className="bg-midnight border border-glass-border rounded-lg overflow-hidden group hover:border-electric transition-colors"
-                                    >
-                                        {/* Mock Video Thumbnail Area */}
-                                        <div className="h-32 bg-black relative flex items-center justify-center border-b border-glass-border">
-                                            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30 mix-blend-overlay group-hover:scale-105 transition-transform duration-700" />
-                                            <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:bg-electric/20 group-hover:border-electric transition-colors z-10">
-                                                <Play className="w-4 h-4 text-white ml-1" />
-                                            </div>
-                                            <div className="absolute top-2 right-2 px-2 py-1 bg-black/60 backdrop-blur-md rounded text-[10px] uppercase font-bold text-electric z-10">
-                                                .MP4
-                                            </div>
-                                        </div>
-
-                                        <div className="p-4">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Layers className="w-3 h-3 text-text-secondary" />
-                                                <span className="text-[10px] text-text-secondary font-mono">{asset.id}</span>
-                                            </div>
-                                            <p className="text-xs text-white line-clamp-2 leading-relaxed font-sans">{asset.script}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
-                        </div>
-                    )}
+            <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Voice Clone</label>
+                  <select disabled={status !== "idle"} className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-xs text-white outline-none cursor-pointer appearance-none">
+                    <option>CEO - Authority (11Labs)</option>
+                    <option>Sales - Energetic (11Labs)</option>
+                  </select>
                 </div>
+                <div>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Visual Avatar</label>
+                  <select disabled={status !== "idle"} className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-xs text-white outline-none cursor-pointer appearance-none">
+                    <option>Studio - Suit (HeyGen)</option>
+                    <option>Casual - Office (HeyGen)</option>
+                  </select>
+                </div>
+            </div>
+
+            <div className="mt-auto pt-6">
+              <button 
+                onClick={startPipeline}
+                disabled={status !== "idle" || !topic}
+                className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white font-bold text-xs uppercase tracking-[0.2em] rounded-lg flex justify-center items-center gap-2 transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+              >
+                {status === "idle" ? <><Play className="w-4 h-4" /> Synthesize Grid</> : <><RefreshCcw className="w-4 h-4 animate-spin" /> Swarm Generating...</>}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Pipeline Visualizer */}
+        <div className="lg:col-span-2 glass-card border flex flex-col overflow-hidden bg-[#0B0C10]/95 border-glass-border relative">
+            <div className="p-4 border-b border-glass-border bg-black/40 flex flex-col shrink-0 gap-3">
+               <div className="flex justify-between items-center">
+                  <h3 className="text-sm font-bold text-white font-mono">Telemetry: Real-Time Render</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      {status !== "idle" && status !== "deployed" && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>}
+                      <span className={`relative inline-flex rounded-full h-2 w-2 ${status === 'idle' ? 'bg-stone-500' : status === 'deployed' ? 'bg-emerald-500' : 'bg-indigo-500'}`}></span>
+                    </span>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-[#5C667A]">
+                      {status === "idle" ? "Standby" : status === "deployed" ? "Live" : "Processing"}
+                    </span>
+                  </div>
+               </div>
+               <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                 <motion.div 
+                   className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.8)]"
+                   initial={{ width: 0 }}
+                   animate={{ width: `${progress}%` }}
+                   transition={{ duration: 0.5 }}
+                 />
+               </div>
+            </div>
+
+            <div className="flex-1 p-8 flex flex-col justify-center relative">
+               
+               {/* Decorative grid */}
+               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:1rem_1rem] opacity-50" />
+               <div className="absolute inset-0 bg-gradient-to-t from-[#0B0C10] to-transparent pointer-events-none" />
+
+               <div className="relative z-10 max-w-lg mx-auto w-full space-y-6">
+                 
+                 {/* Step 1 */}
+                 <PipelineNode 
+                   title="Script Engineering" 
+                   agent="Gemini 1.5 Pro" 
+                   icon={MessageSquare} 
+                   status={getStepStatus("script")} 
+                 />
+                 
+                 {/* Step 2 */}
+                 <PipelineNode 
+                   title="Voice Clone Generation" 
+                   agent="ElevenLabs API" 
+                   icon={Mic} 
+                   status={getStepStatus("voice")} 
+                 />
+
+                 {/* Step 3 */}
+                 <PipelineNode 
+                   title="Avatar Rendering" 
+                   agent="HeyGen Matrix" 
+                   icon={UserSquare2} 
+                   status={getStepStatus("avatar")} 
+                 />
+
+                 {/* Step 4 */}
+                 <PipelineNode 
+                   title="Autonomous Deployment" 
+                   agent="Swarm Root" 
+                   icon={Send} 
+                   status={getStepStatus("rendering")} 
+                 />
+
+               </div>
 
             </div>
         </div>
+
+      </div>
+    </div>
+  );
+}
+
+function PipelineNode({ title, agent, icon: Icon, status }: { title: string, agent: string, icon: any, status: "pending" | "active" | "completed" }) {
+  return (
+    <div className={`relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-500 
+      ${status === 'active' ? 'bg-indigo-500/10 border-indigo-500/50 shadow-[0_0_30px_rgba(79,70,229,0.15)] scale-105 z-10' : 
+        status === 'completed' ? 'bg-emerald-500/5 border-emerald-500/20' : 
+        'bg-black/40 border-glass-border opacity-50'}`}
+    >
+       <div className={`flex items-center justify-center w-10 h-10 rounded-lg border 
+         ${status === 'active' ? 'bg-indigo-600 border-indigo-400 text-white animate-pulse' : 
+           status === 'completed' ? 'bg-emerald-900 border-emerald-500 text-emerald-400' : 
+           'bg-stone-900 border-stone-800 text-stone-500'}`}
+       >
+         {status === 'completed' ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+       </div>
+       
+       <div className="flex-1">
+         <h4 className={`text-sm tracking-wide font-bold ${status === 'active' ? 'text-white' : status === 'completed' ? 'text-emerald-100' : 'text-stone-400'}`}>{title}</h4>
+         <p className="text-[10px] uppercase tracking-widest text-[#5C667A] font-mono mt-0.5">{agent}</p>
+       </div>
+
+       {status === 'active' && (
+         <div className="absolute right-4 flex gap-1">
+           <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+           <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+           <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" />
+         </div>
+       )}
     </div>
   );
 }

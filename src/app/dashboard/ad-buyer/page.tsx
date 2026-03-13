@@ -2,211 +2,162 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { DollarSign, BarChart3, TrendingUp, Zap, Target, Activity, Flame, MousePointerClick, CheckCircle2 } from "lucide-react";
+import { Target, TrendingUp, DollarSign, Activity, Zap, ShieldAlert, ArrowUpRight, ArrowDownRight, Layers } from "lucide-react";
 
-type AllocationMatrix = {
-    platform: string;
-    budgetPercentage: number;
-    simulatedCPA: number;
-    status: "SCALING" | "LEARNING" | "KILLING";
-};
+export default function AdBuyerTerminal() {
+  const [budget, setBudget] = useState("5000");
+  const [active, setActive] = useState(false);
 
-type DeploymentData = {
-     timestamp: string;
-     dailyCapitalDrawn: number;
-     matrix: AllocationMatrix[];
-     projections: {
-         impressions: number;
-         clicks: number;
-         leadsV1: number;
-         blendedCPA: number;
-     };
-};
-
-export default function AdBuyerDashboard() {
-  const [budgetInput, setBudgetInput] = useState<string>("500");
-  const [isDeploying, setIsDeploying] = useState(false);
-  const [deployment, setDeployment] = useState<DeploymentData | null>(null);
-  const [logs, setLogs] = useState<string[]>([]);
-
-  const handleDeploy = async () => {
-       const limit = parseInt(budgetInput);
-       if(isNaN(limit) || limit < 50) return;
-
-       setIsDeploying(true);
-       setDeployment(null);
-       setLogs(["[APEX] Awaiting Strategic Directive..."]);
-
-       setTimeout(() => setLogs(prev => [...prev, "[TREASURY] Capital approved for deployment."]), 600);
-       setTimeout(() => setLogs(prev => [...prev, "[AD-BUYER] Calculating optimal distribution matrix..."]), 1400);
-
-       try {
-            const res = await fetch("/api/swarm/apex/ad-buyer", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    directive: { strategy: "High-Ticket VSL Funnel", targetCPA: limit * 0.2 },
-                    dailyBudget: limit
-                })
-            });
-
-            const result = await res.json();
-            
-            if(result.success) {
-                setTimeout(() => {
-                     setLogs(prev => [...prev, `[SUCCESS] Simulated algorithmic deployment across ${result.data.matrix.length} platforms.`]);
-                     setDeployment(result.data);
-                     setIsDeploying(false);
-                }, 2200);
-            } else {
-                 setLogs(prev => [...prev, "[FATAL] Allocation matrix collapsed."]);
-                 setIsDeploying(false);
-            }
-       } catch (err) {
-            setLogs(prev => [...prev, "[FATAL] Connection to God-Brain severed."]);
-            setIsDeploying(false);
-       }
-  };
+  // Mock telemetry data
+  const metrics = [
+    { platform: "Meta Array", spend: "$2,105", roas: "3.4x", cpl: "$14.20", trend: "up", status: "scaling" },
+    { platform: "TikTok Grid", spend: "$1,840", roas: "4.1x", cpl: "$9.80", trend: "up", status: "scaling" },
+    { platform: "Google Search", spend: "$1,055", roas: "1.8x", cpl: "$45.00", trend: "down", status: "culling" }
+  ];
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold font-serif mb-2 tracking-wide flex items-center gap-3">
-          <DollarSign className="w-8 h-8 text-electric" />
-          APEX AD-BUYER
-        </h1>
-        <p className="text-text-secondary">UMBRA's autonomous capital allocation matrix. Simulates algorithmic media buying driven by the God-Brain.</p>
+    <div className="p-4 md:p-8 max-w-6xl mx-auto flex flex-col min-h-[calc(100vh-6rem)]">
+      <div className="mb-8 shrink-0 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-3">
+            <Target className="w-3 h-3" /> Acquisition Swarm
+          </div>
+          <h1 className="text-3xl font-bold font-mono text-white tracking-tight">Autonomous Ad-Buyer</h1>
+          <p className="text-sm text-[#8A95A5] mt-2 max-w-2xl font-mono uppercase tracking-widest">
+            Capital Allocation Engine. Auto-scaling winners, culling losers.
+          </p>
+        </div>
+        
+        <div className="glass-card bg-[#0B0C10]/80 p-4 border border-glass-border text-right rounded-lg">
+           <p className="text-[10px] text-[#5C667A] font-bold uppercase tracking-widest mb-1">Total System ROAS</p>
+           <div className="text-2xl font-bold text-emerald-400 font-mono flex items-center justify-end gap-2">
+              <TrendingUp className="w-5 h-5" /> 3.1x
+           </div>
+        </div>
       </div>
 
-       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-           
-           {/* Control Panel (Left Column) */}
-           <div className="lg:col-span-1 space-y-6">
-               <div className="glass-card p-6 border border-glass-border relative overflow-hidden">
-                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-electric to-transparent" />
-                   <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                       <Target className="w-5 h-5 text-electric" /> Capital Deployment
-                   </h2>
-                   
-                   <p className="text-xs text-text-secondary mb-4">Set the daily budget allocation ceiling. The Apex Node will mathematically divide this across highest-probability traffic engines.</p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
+         
+         {/* Command Terminal */}
+         <div className="lg:col-span-1 glass-card bg-[#0B0C10]/95 border border-glass-border p-6 flex flex-col">
+            <h3 className="text-white font-bold mb-6 font-mono border-b border-glass-border pb-4 flex items-center gap-2 text-sm uppercase tracking-widest">
+               <DollarSign className="w-4 h-4 text-emerald-400" /> Capital Input
+            </h3>
 
-                   <div className="space-y-4">
-                       <div>
-                           <label className="text-xs text-stone-400 font-mono mb-1 block uppercase">Daily Budget Limit ($)</label>
-                           <input 
-                               type="number" 
-                               value={budgetInput}
-                               onChange={(e) => setBudgetInput(e.target.value)}
-                               className="w-full bg-onyx border border-glass-border rounded-lg p-3 text-white focus:border-electric focus:ring-0 transition-colors font-mono"
-                               min="50"
-                           />
-                       </div>
-
-                       <button 
-                           onClick={handleDeploy}
-                           disabled={isDeploying || !budgetInput}
-                           className="w-full bg-electric hover:bg-electric-hover text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 uppercase tracking-wider text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                       >
-                           {isDeploying ? (
-                               <><Activity className="w-4 h-4 animate-spin" /> Simulating Deployment</>
-                           ) : (
-                               <><Zap className="w-4 h-4" /> Execute Ad Buy</>
-                           )}
-                       </button>
-                   </div>
+            <div className="space-y-6 flex-1">
+               <div>
+                 <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Daily Budget Allocation ($)</label>
+                 <div className="relative">
+                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 font-mono">$</span>
+                   <input 
+                     type="number" 
+                     value={budget}
+                     onChange={(e) => setBudget(e.target.value)}
+                     disabled={active}
+                     className="w-full bg-black/60 border border-glass-border rounded-lg pl-8 pr-4 py-4 text-xl text-white font-mono focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 outline-none transition-all shadow-inner font-bold"
+                   />
+                 </div>
                </div>
 
-               {/* Live Readout Log */}
-               <div className="glass-card p-4 border border-glass-border h-48 overflow-y-auto font-mono text-xs bg-black/50">
-                   {logs.length === 0 && <span className="text-stone-600">Awaiting capital deployment commands...</span>}
-                   {logs.map((log, index) => (
-                        <div key={index} className="mb-2 text-stone-300">
-                             <span className="text-emerald-500 mr-2">{`[${new Date().toLocaleTimeString()}]`}</span>
-                             {log}
+               <div>
+                 <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Targeting Directive</label>
+                 <select disabled={active} className="w-full bg-black/60 border border-glass-border rounded-lg px-4 py-3 text-sm text-white outline-none cursor-pointer appearance-none font-mono">
+                   <option>God-Brain Lookalike (Max LTV)</option>
+                   <option>Pixel Converters (High Intent)</option>
+                   <option>Cold Outreach Retargeting (Omnipresence)</option>
+                 </select>
+               </div>
+
+               <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                     <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                     <p className="text-[10px] text-amber-200/80 uppercase tracking-wider font-bold leading-relaxed">
+                        Notice: The Ad-Buyer autonomously scales budgets by 15% every 4 hours for variants maintaining &gt; 2.5x ROAS, and kills variants dipping below 1.2x.
+                     </p>
+                  </div>
+               </div>
+            </div>
+
+            <button 
+              onClick={() => setActive(!active)}
+              className={`mt-6 w-full py-4 font-bold text-xs uppercase tracking-[0.2em] rounded-lg flex justify-center items-center gap-2 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]
+                ${active 
+                  ? 'bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 border border-rose-500/30' 
+                  : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'}`}
+            >
+              {active ? <><Activity className="w-4 h-4" /> Terminate Swarm</> : <><Zap className="w-4 h-4" /> Ignite Ad-Buyer</>}
+            </button>
+         </div>
+
+         {/* Live Telemetry Matrix */}
+         <div className="lg:col-span-2 flex flex-col gap-6">
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+               {[
+                 { label: "Active Nodes", val: "14" },
+                 { label: "Avg CPL", val: "$12.40", color: "text-emerald-400" },
+                 { label: "God-Brain Match", val: "94%" },
+                 { label: "Next Reallocation", val: "00:45:12" }
+               ].map((stat, i) => (
+                 <div key={i} className="glass-card bg-[#0B0C10]/80 border border-glass-border p-4 rounded-lg flex flex-col justify-center">
+                    <span className="text-[9px] text-[#5C667A] uppercase tracking-widest font-bold mb-1">{stat.label}</span>
+                    <span className={`text-xl font-bold font-mono ${stat.color || 'text-white'}`}>{stat.val}</span>
+                 </div>
+               ))}
+            </div>
+
+            <div className="glass-card bg-[#0B0C10]/95 border border-glass-border p-6 rounded-lg flex-1 overflow-hidden flex flex-col">
+               <h3 className="text-white font-bold mb-6 font-mono flex items-center gap-2 text-sm uppercase tracking-widest shrink-0">
+                  <Layers className="w-4 h-4 text-[#5C667A]" /> Platform Telemetry
+               </h3>
+
+               <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar relative">
+                 {!active && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0B0C10]/80 z-10 backdrop-blur-[1px]">
+                       <Activity className="w-8 h-8 text-[#5C667A] mb-4" />
+                       <span className="text-[10px] uppercase font-bold tracking-widest text-[#5C667A]">Swarm Offline: Awaiting Capital</span>
+                    </div>
+                 )}
+
+                 {metrics.map((m, i) => (
+                   <motion.div 
+                     key={i}
+                     initial={{ opacity: 0, y: 10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ delay: i * 0.1 }}
+                     className="bg-black/40 border border-glass-border rounded-lg p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+                   >
+                     <div className="w-full md:w-auto">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`w-2 h-2 rounded-full ${m.status === 'scaling' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                          <h4 className="text-sm font-bold text-white font-mono">{m.platform}</h4>
                         </div>
-                   ))}
+                        <span className="text-[9px] uppercase tracking-widest text-[#5C667A] font-bold">Status: {m.status}</span>
+                     </div>
+                     
+                     <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end border-t border-glass-border md:border-t-0 pt-4 md:pt-0 mt-2 md:mt-0">
+                       <div className="text-right">
+                         <span className="block text-[9px] text-[#5C667A] uppercase tracking-widest font-bold">Spend</span>
+                         <span className="text-sm font-bold text-white font-mono">{m.spend}</span>
+                       </div>
+                       <div className="text-right">
+                         <span className="block text-[9px] text-[#5C667A] uppercase tracking-widest font-bold">CPL</span>
+                         <span className="text-sm font-bold text-white font-mono">{m.cpl}</span>
+                       </div>
+                       <div className="text-right">
+                         <span className="block text-[9px] text-[#5C667A] uppercase tracking-widest font-bold">ROAS</span>
+                         <span className={`text-sm font-bold font-mono flex items-center justify-end gap-1 ${m.trend === 'up' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                           {m.roas}
+                           {m.trend === 'up' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                         </span>
+                       </div>
+                     </div>
+                   </motion.div>
+                 ))}
                </div>
-           </div>
-
-           {/* Metrics & Matrices (Right Column) */}
-           <div className="lg:col-span-2 space-y-6">
-                {!deployment && !isDeploying && (
-                     <div className="glass-card p-12 border border-glass-border h-full flex flex-col items-center justify-center text-center text-text-secondary border-dashed">
-                           <BarChart3 className="w-12 h-12 mb-4 text-stone-600" />
-                           <h3 className="text-lg font-mono mb-2">Matrix Standby Mode</h3>
-                           <p className="max-w-xs text-sm">Deploy capital via the control panel to generate an algorithmic buying matrix.</p>
-                     </div>
-                )}
-
-                {isDeploying && !deployment && (
-                     <div className="glass-card p-12 border border-blue-500/20 h-full flex flex-col items-center justify-center text-center">
-                           <Activity className="w-12 h-12 mb-4 text-electric animate-spin duration-1000" />
-                           <h3 className="text-lg font-mono mb-2 text-electric animate-pulse">Calculating Algorithmic Weights</h3>
-                           <p className="max-w-xs text-sm text-stone-400">Interrogating Treasury limits and Apex campaign vectors...</p>
-                     </div>
-                )}
-
-                {deployment && (
-                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
-                         {/* Top Level Projections */}
-                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                             <div className="glass-card p-4 border border-glass-border flex flex-col justify-between">
-                                  <span className="text-xs text-stone-400 uppercase tracking-widest block mb-1">Sim. Impr.</span>
-                                  <span className="text-xl font-mono text-white flex items-center gap-2"><TrendingUp className="w-4 h-4 text-electric" /> {deployment.projections.impressions.toLocaleString()}</span>
-                             </div>
-                             <div className="glass-card p-4 border border-glass-border flex flex-col justify-between">
-                                  <span className="text-xs text-stone-400 uppercase tracking-widest block mb-1">Sim. Clicks</span>
-                                  <span className="text-xl font-mono text-white flex items-center gap-2"><MousePointerClick className="w-4 h-4 text-blue-400" /> {deployment.projections.clicks.toLocaleString()}</span>
-                             </div>
-                             <div className="glass-card p-4 border border-glass-border flex flex-col justify-between">
-                                  <span className="text-xs text-stone-400 uppercase tracking-widest block mb-1">Proj. Leads</span>
-                                  <span className="text-xl font-mono text-white flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> {deployment.projections.leadsV1.toLocaleString()}</span>
-                             </div>
-                             <div className="glass-card p-4 border border-glass-border bg-electric/10 flex flex-col justify-between">
-                                  <span className="text-xs text-electric uppercase tracking-widest block mb-1 font-bold">Vector CPA</span>
-                                  <span className="text-2xl font-mono text-white">${deployment.projections.blendedCPA.toFixed(2)}</span>
-                             </div>
-                         </div>
-
-                         {/* Distribution Matrix */}
-                         <div className="glass-card p-6 border border-glass-border">
-                             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-400 mb-6 flex items-center gap-2">
-                                <DollarSign className="w-4 h-4" /> Capital Distribution Matrix
-                             </h3>
-
-                             <div className="space-y-5">
-                                 {deployment.matrix.map((net, i) => (
-                                      <div key={i}>
-                                            <div className="flex justify-between items-end mb-2">
-                                                <div className="flex items-center gap-2">
-                                                     <span className="font-mono text-white font-bold">{net.platform}</span>
-                                                     {net.status === "SCALING" && <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><Flame className="w-3 h-3" /> Scaling</span>}
-                                                     {net.status === "LEARNING" && <span className="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Learning Phase</span>}
-                                                     {net.status === "KILLING" && <span className="bg-red-500/20 text-red-400 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Algorithmic Kill</span>}
-                                                </div>
-                                                <div className="text-right">
-                                                     <span className="text-xs text-stone-400 mr-3">Est. CPA: <span className="text-white">${net.simulatedCPA.toFixed(2)}</span></span>
-                                                     <span className="font-mono text-electric">{net.budgetPercentage}%</span>
-                                                </div>
-                                            </div>
-                                            <div className="w-full bg-onyx h-2 rounded-full overflow-hidden">
-                                                 <motion.div 
-                                                     initial={{ width: 0 }} 
-                                                     animate={{ width: `${net.budgetPercentage}%` }} 
-                                                     transition={{ duration: 1, delay: i * 0.1 }}
-                                                     className={`h-full ${net.status === 'KILLING' ? 'bg-red-500/50' : net.status === 'SCALING' ? 'bg-emerald-500' : 'bg-electric'}`} 
-                                                 />
-                                            </div>
-                                      </div>
-                                 ))}
-                             </div>
-                         </div>
-                     </motion.div>
-                )}
-           </div>
-
-       </div>
+            </div>
+         </div>
+      </div>
     </div>
   );
 }
