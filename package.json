@@ -9,10 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/google": "^3.0.43",
     "@anthropic-ai/sdk": "^0.78.0",
     "@google/generative-ai": "^0.24.1",
     "@pinecone-database/pinecone": "^7.1.0",
     "@tavily/core": "^0.7.2",
+    "ai": "^6.0.116",
     "framer-motion": "^12.36.0",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
