@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, LogOut, BarChart3, Shield,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2
+  Send, Sparkles, Building2, Webhook
 } from "lucide-react";
 
 const NAV = [
@@ -27,6 +27,8 @@ const NAV = [
   { href: "/dashboard/pipelines", label: "Pipelines", icon: GitBranch },
   { href: "/dashboard/factory", label: "Tool Factory", icon: Wrench },
   { href: "/dashboard/reports", label: "Reports", icon: FileText },
+  { href: "/dashboard/sequences", label: "Email Sequences", icon: Mail },
+  { href: "/dashboard/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
