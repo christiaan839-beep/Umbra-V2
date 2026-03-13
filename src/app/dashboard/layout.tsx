@@ -50,8 +50,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="w-64 border-r border-glass-border flex flex-col shrink-0">
         <div className="p-6 border-b border-glass-border">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white">U</div>
-            <span className="text-sm font-semibold tracking-[0.15em] uppercase">UMBRA</span>
+            <img src="/logo.png" alt="UMBRA Logo" className="w-8 h-8 object-cover rounded-md shadow-[0_0_15px_rgba(0,183,255,0.3)]" />
+            <span className="text-sm font-semibold tracking-[0.15em] uppercase glow-text">UMBRA</span>
           </Link>
         </div>
 
