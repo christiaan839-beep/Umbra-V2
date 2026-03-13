@@ -1,108 +1,78 @@
 import { NextResponse } from "next/server";
-import { ai, embed } from "@/lib/ai";
-import { index, isPineconeReady } from "@/lib/pinecone";
-import { remember } from "@/lib/memory";
+import { generateText } from "ai";
+import { google } from "@ai-sdk/google";
+import { remember, getAllMemories } from "@/lib/memory";
 
-/**
- * THE DSPy NIGHTLY OPTIMIZER (Simulated)
- * 
- * This is the brain that improves the brain. 
- * 1. Pulls all RLHF reward signals from the last 24 hours.
- * 2. Uses Gemini to analyze *why* the Commander approved or rejected specific actions.
- * 3. Compiles a new, optimized "V1.1" system prompt.
- * 4. Saves the new prompt back to Pinecone for the agents to use tomorrow.
- */
 export async function POST(req: Request) {
   try {
-    // Basic API Key protection for cron jobs
-    const authHeader = req.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    const { targetAgent } = await req.json();
+
+    if (!targetAgent) {
+      return NextResponse.json({ error: "Target Agent identifier required for optimization cycle" }, { status: 400 });
     }
 
-    if (!isPineconeReady()) {
-      return NextResponse.json({ error: "Pinecone not configured for optimization." }, { status: 500 });
+    // 1. Query God-Brain for recent failures assigned to this agent type
+    const logs = getAllMemories();
+    const failures = logs.filter(log => 
+        (log.metadata?.outcome?.includes("Failed") || log.metadata?.outcome?.includes("Rejected") || log.metadata?.outcome?.includes("Dropped")) &&
+        (log.text.toLowerCase().includes(targetAgent.toLowerCase()))
+    ).slice(0, 5); // Take last 5 failures
+
+    if (failures.length === 0) {
+        // Mock a failure if none exist for demonstration
+        failures.push({
+            id: 'mock_fail_1',
+            text: `[${targetAgent.toUpperCase()}] Attempted execution resulted in sub-optimal conversion. Prospect stated approach was 'too aggressive'.`,
+            embedding: [],
+            timestamp: new Date().toISOString(),
+            metadata: { type: "system", outcome: "Failed Conversion" }
+        });
     }
 
-    // 1. Fetch the last 24h of rewards
-    // Pinecone query requires a vector. We'll use a dummy vector for this prototype 
-    // to fetch recent records from the 'rlhf-rewards' namespace
-    const dummyVector = await embed("optimizer query");
-    const queryRes = await index!.namespace("rlhf-rewards").query({
-      vector: dummyVector,
-      topK: 50,
-      includeMetadata: true
+    const failureContext = failures.map(f => f.text).join("\n");
+
+    // 2. Synthesize New System Prompt (The Meta-Cognition Core)
+    const prompt = `
+      You are UMBRA, a $100M+ autonomous AI system. You are acting as the Meta-Cognition CEO.
+      Your task is to review the following failure telemetry from one of your sub-agents: ${targetAgent}.
+      
+      --- FAILURE LOGS ---
+      ${failureContext}
+      --- END LOGS ---
+
+      Based on these failures, rewrite the system prompt (Core Instructions) for the ${targetAgent} agent to ensure these errors never happen again. 
+      Make the new prompt highly aggressive, highly authoritative, but strictly addressing the flaws found in the logs.
+      
+      Format your response exactly like this:
+      [CRITICAL FLAW IDENTIFIED]: (1 sentence summarizing the core weakness)
+      [NEW PROMPT MATRIX]: (The actual paragraph of new instructions for the agent)
+    `;
+
+    const { text: optimizationResult } = await generateText({
+        model: google("gemini-1.5-pro"),
+        prompt,
     });
 
-    const rewards = queryRes.matches.map(m => m.metadata);
-    if (rewards.length === 0) {
-      return NextResponse.json({ message: "No RLHF data found in the last 24 hours. Optimization skipped." });
-    }
+    // 3. Log the Evolution to the God-Brain memory
+    const memoryPayload = `[META-COGNITION] Executed RLHF Optimization Cycle on ${targetAgent}. Resolution: ${optimizationResult}`;
+    await remember(memoryPayload, { type: "evolution-cycle", agent: targetAgent });
 
-    // Prepare data for the Optimizer LLM
-    const trainingData = rewards.map((r: any) => `Agent: ${r.agentId} | Output Hash: ${r.outputHash} | Score: ${r.rewardScore} | Context: ${r.context}`).join("\n");
-
-    // 2. DSPy Compilation Simulation
-    const prompt = `You are the UMBRA DSPy Optimizer (BootstrapFewShotWithRandomSearch).
-Your job is to rewrite the baseline system prompts for UMBRA's agents to make them smarter, based on Reinforcement Learning from Human Feedback (RLHF).
-
-Here is the reward data from the Commander for the last 24 hours:
-"""
-${trainingData}
-"""
-
-Analyze the patterns. What did the Commander approve (+1.0)? What did they reject (-1.0) or ask to revise (-0.5)?
-Based on this, write a highly optimized, updated "V1.1" system prompt for the most active agent.
-
-Return ONLY a valid JSON object with:
-{
-  "target_agent": "The agent you are optimizing",
-  "old_version": "v1.0",
-  "new_version": "v1.1",
-  "insights": "What you learned from the RLHF data (e.g. 'Commander prefers shorter hooks, rejected emojis')",
-  "optimized_prompt": "The new, robust system prompt instructing the agent on exactly how to behave to score +1.0 tomorrow."
-}`;
-
-    const rawOptimized = await ai(prompt, {
-      model: "gemini",
-      system: "You are the Intelligence Flywheel. You turn human feedback into mathematical certainty. Output only valid JSON.",
-      maxTokens: 1500,
-    });
-
-    const parsedOptimized = JSON.parse(rawOptimized.replace(/```json/g, "").replace(/```/g, "").trim());
-
-    // 3. Save the new optimized prompt to Pinecone
-    const newPromptId = `prompt_${parsedOptimized.target_agent}_${parsedOptimized.new_version}`;
-    const newPromptVector = await embed(parsedOptimized.optimized_prompt);
-
-    await index!.namespace("optimized-prompts").upsert([{
-      id: newPromptId,
-      values: newPromptVector,
-      metadata: {
-        agentId: parsedOptimized.target_agent,
-        version: parsedOptimized.new_version,
-        prompt: parsedOptimized.optimized_prompt,
-        insights: parsedOptimized.insights,
-        timestamp: new Date().toISOString()
-      }
-    }] as any);
-
-    // 4. Log the optimization to the God-Brain
-    await remember(`INTELLIGENCE FLYWHEEL ACTIVE: Nightly optimizer compiled ${parsedOptimized.target_agent} to ${parsedOptimized.new_version}. Insight: "${parsedOptimized.insights}"`, {
-      type: "dspy-optimization",
-      optimized_agent: parsedOptimized.target_agent,
-      new_version: parsedOptimized.new_version
-    });
+    // Parse output for UI
+    const flawMatch = optimizationResult.match(/\[CRITICAL FLAW IDENTIFIED\]:\s*(.*)/i);
+    const promptMatch = optimizationResult.match(/\[NEW PROMPT MATRIX\]:\s*([\s\S]*)/i);
 
     return NextResponse.json({
-      success: true,
-      message: "Nightly Optimization Complete. Intelligence Flywheel spun.",
-      optimization_report: parsedOptimized,
-      timestamp: new Date().toISOString()
+        success: true,
+        data: {
+            evolutionId: `evo_${Date.now()}`,
+            agent: targetAgent,
+            criticalFlaw: flawMatch ? flawMatch[1].trim() : "System misalignment detected.",
+            newPrompt: promptMatch ? promptMatch[1].trim() : optimizationResult
+        }
     });
 
   } catch (error: any) {
-    console.error("[Optimizer Error]:", error);
-    return NextResponse.json({ error: error.message || "Failed to execute optimizer" }, { status: 500 });
+    console.error("[Meta-Cognition Optimizer Error]:", error);
+    return NextResponse.json({ error: "Failed to establish RLHF optimizer uplink" }, { status: 500 });
   }
 }

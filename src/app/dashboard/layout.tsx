@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, LogOut, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb
 } from "lucide-react";
 
 const NAV = [
@@ -17,6 +17,7 @@ const NAV = [
   { href: "/dashboard/ghost-mode", label: "Ghost Mode", icon: Ghost },
   { href: "/dashboard/memory", label: "God-Brain", icon: Brain },
   { href: "/dashboard/swarm", label: "Swarm Critic", icon: Code },
+  { href: "/dashboard/optimizer", label: "Meta-Cognition", icon: Lightbulb },
   { href: "/dashboard/coder", label: "Claude Coder", icon: Laptop },
   { href: "/dashboard/playground", label: "AI Playground", icon: Sparkles },
   { href: "/dashboard/social", label: "Social", icon: Send },
