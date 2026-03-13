@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
-  Users, Mail, Settings, LogOut, BarChart3, Shield, Workflow
+  Users, Mail, Settings, LogOut, BarChart3, Shield,
+  Workflow, FlaskConical, GitBranch, Wrench, FileText
 } from "lucide-react";
 
 const NAV = [
@@ -18,6 +19,10 @@ const NAV = [
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/dashboard/omnipresence", label: "Omnipresence", icon: Workflow },
   { href: "/dashboard/competitor", label: "War Room", icon: Shield },
+  { href: "/dashboard/skills", label: "Skills A/B", icon: FlaskConical },
+  { href: "/dashboard/pipelines", label: "Pipelines", icon: GitBranch },
+  { href: "/dashboard/factory", label: "Tool Factory", icon: Wrench },
+  { href: "/dashboard/reports", label: "Reports", icon: FileText },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
