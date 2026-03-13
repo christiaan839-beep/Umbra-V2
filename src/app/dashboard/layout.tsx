@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, LogOut, BarChart3, Shield,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert
 } from "lucide-react";
 
 const NAV = [
@@ -24,6 +24,7 @@ const NAV = [
   { href: "/dashboard/omnipresence", label: "Omnipresence", icon: Workflow },
   { href: "/dashboard/programmatic", label: "Programmatic SEO", icon: Layers },
   { href: "/dashboard/competitor", label: "War Room", icon: Shield },
+  { href: "/dashboard/funnel-hacker", label: "Funnel Hacker", icon: ShieldAlert },
   { href: "/dashboard/skills", label: "Agentic Skills", icon: FlaskConical },
   { href: "/dashboard/pipelines", label: "Pipelines", icon: GitBranch },
   { href: "/dashboard/factory", label: "Tool Factory", icon: Wrench },

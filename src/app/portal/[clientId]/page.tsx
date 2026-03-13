@@ -71,7 +71,6 @@ export default function ClientDashboard({ params }: Props) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
           {/* Autonomous Action Log Feed */}
           <div className="lg:col-span-2 glass-card border border-glass-border overflow-hidden h-[600px] flex flex-col">
             <div className="px-6 py-4 border-b border-glass-border bg-black/20 flex items-center justify-between shrink-0">
@@ -83,35 +82,9 @@ export default function ClientDashboard({ params }: Props) {
             
             <div className="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar relative">
                <div className="absolute left-9 top-8 bottom-8 w-px bg-glass-border" />
-               
-               {[
-                 { time: "Just Now", action: "WhatsApp Negotiation", detail: "AI replied to lead +1 (512) ***-**98. Analyzed intent and sent booking link.", type: "comms" },
-                 { time: "2m ago", action: "SEO Page Generated", detail: "Deployed programmatic page: /locations/invisalign/austin. Embedded LocalBusiness schema.", type: "seo" },
-                 { time: "15m ago", action: "Competitor Scan Complete", detail: "Found 3 content gaps on competitorsite.com. Queued 3 blog generation tasks.", type: "scan" },
-                 { time: "1h ago", action: "Google Business Auto-Post", detail: "Drafted and scheduled 7 days of urgency-driven posts to hijack local map pack.", type: "gbp" },
-                 { time: "3h ago", action: "Lead Successfully Handled", detail: "Lead marked as WARM. Intent score increased to 88/100.", type: "auth" },
-               ].map((log, i) => (
-                 <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + (i * 0.1) }}
-                   className="relative flex gap-6">
-                    <div className="w-6 h-6 rounded-full bg-onyx border-2 border-midnight flex-shrink-0 z-10 flex items-center justify-center mt-1">
-                      {log.type === "comms" && <MessageCircle className="w-3 h-3 text-blue-400" />}
-                      {log.type === "seo" && <MapPin className="w-3 h-3 text-emerald-400" />}
-                      {log.type === "scan" && <Target className="w-3 h-3 text-rose-400" />}
-                      {log.type === "gbp" && <Activity className="w-3 h-3 text-amber-400" />}
-                      {log.type === "auth" && <CheckCircle2 className="w-3 h-3 text-emerald-400" />}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <span className="text-sm font-bold text-white">{log.action}</span>
-                        <span className="text-[10px] text-text-secondary font-mono">{log.time}</span>
-                      </div>
-                      <p className="text-xs text-text-secondary/80 leading-relaxed max-w-lg">{log.detail}</p>
-                    </div>
-                 </motion.div>
-               ))}
+               <LiveLogFeed clientId={params.clientId} />
             </div>
           </div>
-
           {/* Quick Stats / Active Sub-systems */}
           <div className="space-y-6">
              <div className="glass-card p-6 border border-glass-border">
@@ -149,7 +122,6 @@ export default function ClientDashboard({ params }: Props) {
                 </button>
              </div>
           </div>
-
         </div>
       </main>
     </div>
@@ -162,4 +134,77 @@ function ShieldCheckIcon(props: any) {
 }
 function GlobeIcon(props: any) {
   return <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>;
+}
+
+function LiveLogFeed({ clientId }: { clientId: string }) {
+  const [logs, setLogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const res = await fetch("/api/memory", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: clientId, limit: 10 }),
+        });
+        const data = await res.json();
+        
+        let formattedLogs = (data.results || []).map((match: any) => {
+          let type = "scan";
+          let action = "System Action";
+          
+          if (match.metadata?.type === "programmatic-page") {
+            type = "seo"; action = "SEO Page Generated";
+          } else if (match.metadata?.type === "outbound-prospect") {
+            type = "comms"; action = "Prospecting Sweep";
+          }
+
+          return {
+            id: match.id,
+            action,
+            detail: match.metadata?.content || match.text || "Executed background operation",
+            type,
+            time: "Recently" // Pinecone doesn't natively store creation time unless we added it to metadata
+          };
+        });
+
+        // If no real logs yet, show the system status message
+        if (formattedLogs.length === 0) {
+          formattedLogs = [{ id: "1", action: "System Initialized", detail: "UMBRA God-Brain active. Awaiting first autonomous cycle.", type: "auth", time: "Just Now" }];
+        }
+
+        setLogs(formattedLogs);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLogs();
+  }, [clientId]);
+
+  if (loading) return <div className="p-6 text-sm text-text-secondary animate-pulse">Syncing with God-Brain...</div>;
+
+  return (
+    <>
+      {logs.map((log, i) => (
+        <motion.div key={log.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + (i * 0.1) }} className="relative flex gap-6 mt-6 first:mt-0">
+          <div className="w-6 h-6 rounded-full bg-onyx border-2 border-midnight flex-shrink-0 z-10 flex items-center justify-center mt-1">
+            {log.type === "comms" && <MessageCircle className="w-3 h-3 text-blue-400" />}
+            {log.type === "seo" && <MapPin className="w-3 h-3 text-emerald-400" />}
+            {log.type === "scan" && <Target className="w-3 h-3 text-rose-400" />}
+            {log.type === "auth" && <CheckCircle2 className="w-3 h-3 text-emerald-400" />}
+          </div>
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <span className="text-sm font-bold text-white">{log.action}</span>
+              <span className="text-[10px] text-text-secondary font-mono">{log.time}</span>
+            </div>
+            <p className="text-xs text-text-secondary/80 leading-relaxed max-w-lg line-clamp-3">{log.detail}</p>
+          </div>
+        </motion.div>
+      ))}
+    </>
+  );
 }

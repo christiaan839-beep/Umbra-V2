@@ -4,16 +4,18 @@ import { motion } from "framer-motion";
 import { ArrowRight, Zap, Target, BrainCircuit, Globe, CheckCircle2, XCircle, ShieldAlert, Cpu } from "lucide-react";
 import Link from "next/link";
 
+import { UmbraLogo } from "@/components/ui/UmbraLogo";
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-midnight text-text-primary selection:bg-electric/30">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-electric/30 font-sans">
       
       {/* Navigation */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-midnight/80 backdrop-blur-md border-b border-glass-border">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white shadow-[0_0_15px_rgba(45,110,255,0.3)]">U</div>
-            <span className="text-xl font-bold tracking-[0.15em] uppercase text-white">UMBRA</span>
+            <UmbraLogo size="md" />
+            <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">UMBRA</span>
           </div>
           <div className="flex items-center gap-6">
              <Link href="/login" className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Client Login</Link>
