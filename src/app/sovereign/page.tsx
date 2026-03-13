@@ -54,7 +54,7 @@ export default function SovereignPage() {
           <button onClick={() => checkout("sovereign")} className="px-8 py-4 bg-white text-midnight font-bold rounded-xl text-lg flex items-center justify-center gap-2 group hover:bg-gray-200 transition-all">
             Start for $497/mo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
-          <a href="/dashboard" className="px-8 py-4 border border-glass-border text-white font-medium rounded-xl text-lg text-center hover:bg-glass-bg transition-all">View Demo</a>
+          <a href="/demo" className="px-8 py-4 border border-glass-border text-white font-medium rounded-xl text-lg text-center hover:bg-glass-bg transition-all">Try UMBRA Free</a>
         </motion.div>
       </motion.section>
 
