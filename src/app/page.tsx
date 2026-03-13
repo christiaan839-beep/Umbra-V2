@@ -46,21 +46,34 @@ export default function Home() {
             The 2026 AI Dominance Stack is here. Replace your $5,000/mo marketing agency with an autonomous ecosystem that scales your traffic, steals competitor keywords, and closes leads on WhatsApp 24/7.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-             <button onClick={async () => {
-               const res = await fetch("/api/stripe/checkout", {
-                 method: "POST",
-                 headers: { "Content-Type": "application/json" },
-                 body: JSON.stringify({ tier: "sovereign" }),
-               });
-               const data = await res.json();
-               if (data.url) window.location.href = data.url;
-             }} className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold text-lg shadow-[0_0_30px_rgba(45,110,255,0.4)] hover:shadow-[0_0_50px_rgba(45,110,255,0.6)] transition-all flex items-center justify-center gap-2 group cursor-pointer">
-              Deploy UMBRA — $497/mo
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <Link href="/demo" className="w-full sm:w-auto px-8 py-4 rounded-full border border-glass-border bg-glass-bg text-white font-bold text-lg hover:bg-white/5 transition-all flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5 text-electric" /> Watch Live Demo
+          <div className="flex flex-col items-center gap-4 mb-20">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+              <button onClick={async () => {
+                const res = await fetch("/api/stripe/checkout", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ tier: "sovereign" }),
+                });
+                const data = await res.json();
+                if (data.url) window.location.href = data.url;
+              }} className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold text-lg shadow-[0_0_30px_rgba(45,110,255,0.4)] hover:shadow-[0_0_50px_rgba(45,110,255,0.6)] transition-all flex items-center justify-center gap-2 group cursor-pointer">
+                Deploy UMBRA — $497/mo
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button onClick={async () => {
+                const res = await fetch("/api/payfast/checkout", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ tier: "sovereign" }),
+                });
+                const data = await res.json();
+                if (data.url) window.location.href = data.url;
+              }} className="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-emerald-400/30 bg-emerald-400/5 text-emerald-400 font-bold text-lg hover:bg-emerald-400/10 transition-all flex items-center justify-center gap-2 group cursor-pointer">
+                🇿🇦 Pay with PayFast — R8,997/mo
+              </button>
+            </div>
+            <Link href="/demo" className="px-8 py-3 text-text-secondary hover:text-white font-medium text-base transition-colors flex items-center justify-center gap-2">
+              <Zap className="w-4 h-4 text-electric" /> Watch Live Demo
             </Link>
           </div>
 
