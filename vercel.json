@@ -2,6 +2,7 @@
   "framework": "nextjs",
   "regions": ["iad1"],
   "crons": [
-    { "path": "/api/cron/conductor", "schedule": "0 0 * * *" }
+    { "path": "/api/cron/conductor", "schedule": "0 0 * * *" },
+    { "path": "/api/cron/self-optimize", "schedule": "0 2 * * *" }
   ]
 }

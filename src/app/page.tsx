@@ -47,10 +47,18 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-             <Link href="/sovereign" className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold text-lg shadow-[0_0_30px_rgba(45,110,255,0.4)] hover:shadow-[0_0_50px_rgba(45,110,255,0.6)] transition-all flex items-center justify-center gap-2 group">
-              Deploy UMBRA Ecosystem
+             <button onClick={async () => {
+               const res = await fetch("/api/stripe/checkout", {
+                 method: "POST",
+                 headers: { "Content-Type": "application/json" },
+                 body: JSON.stringify({ tier: "sovereign" }),
+               });
+               const data = await res.json();
+               if (data.url) window.location.href = data.url;
+             }} className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold text-lg shadow-[0_0_30px_rgba(45,110,255,0.4)] hover:shadow-[0_0_50px_rgba(45,110,255,0.6)] transition-all flex items-center justify-center gap-2 group cursor-pointer">
+              Deploy UMBRA — $497/mo
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </button>
             <Link href="/demo" className="w-full sm:w-auto px-8 py-4 rounded-full border border-glass-border bg-glass-bg text-white font-bold text-lg hover:bg-white/5 transition-all flex items-center justify-center gap-2">
               <Zap className="w-5 h-5 text-electric" /> Watch Live Demo
             </Link>

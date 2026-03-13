@@ -81,6 +81,41 @@ export async function research_ai(query: string, prompt: string, options: AIOpti
 }
 
 /**
+ * Adaptive AI — Self-Improving Prompt Engine
+ * 
+ * This is the key differentiator. Before every execution, it:
+ * 1. Queries the God-Brain for the latest system optimization directives
+ * 2. Injects them into the system prompt as learned context
+ * 3. Executes the user's prompt with the benefit of accumulated intelligence
+ * 
+ * Over time, UMBRA gets measurably better at closing leads, writing copy,
+ * and analyzing competitors — without any human retraining.
+ */
+export async function adaptive_ai(prompt: string, options: AIOptions = {}): Promise<string> {
+  // Dynamically import to avoid circular dependency
+  const { recall } = await import("./memory");
+  
+  let learnedDirectives = "";
+  try {
+    const optimizations = await recall("SYSTEM_OPTIMIZATION directive", 2);
+    if (optimizations.length > 0) {
+      learnedDirectives = optimizations
+        .map(o => o.entry.text)
+        .join("\n\n");
+    }
+  } catch {
+    // If recall fails, proceed without optimizations
+  }
+
+  const enhancedSystem = [
+    options.system || "You are UMBRA, an elite autonomous AI marketing system.",
+    learnedDirectives ? `\n\n--- LEARNED OPTIMIZATION DIRECTIVES (Auto-Injected) ---\n${learnedDirectives}\n--- END DIRECTIVES ---` : "",
+  ].join("");
+
+  return ai(prompt, { ...options, system: enhancedSystem });
+}
+
+/**
  * Generate embeddings using Gemini for vector memory.
  */
 export async function embed(text: string): Promise<number[]> {
