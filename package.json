@@ -13,13 +13,16 @@
     "@anthropic-ai/sdk": "^0.78.0",
     "@google/generative-ai": "^0.24.1",
     "@pinecone-database/pinecone": "^7.1.0",
+    "@react-three/fiber": "^9.5.0",
     "@tavily/core": "^0.7.2",
+    "@types/three": "^0.183.1",
     "ai": "^6.0.116",
     "framer-motion": "^12.36.0",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "three": "^0.183.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

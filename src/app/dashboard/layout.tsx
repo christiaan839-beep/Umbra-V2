@@ -8,6 +8,7 @@ import {
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
   Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server
 } from "lucide-react";
+import ImmersiveNodeLayer from '@/components/3d/ImmersiveNodeLayer';
 
 const NAV_GROUPS = [
   {
@@ -27,6 +28,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/apex-strategy", label: "The Apex Node", icon: BrainCircuit },
       { href: "/dashboard/nexus", label: "The Nexus Graph", icon: Network },
       { href: "/dashboard/memory", label: "God-Brain DB", icon: Brain },
+      { href: "/dashboard/omnisearch", label: "Omniscient Memory", icon: BrainCircuit },
       { href: "/dashboard/optimizer", label: "Meta-Cognition", icon: Lightbulb },
       { href: "/dashboard/swarm", label: "Swarm Critic", icon: Code },
     ]
@@ -67,6 +69,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/playground", label: "AGI Sandbox", icon: Sparkles },
       { href: "/dashboard/reports", label: "Client Briefs", icon: FileText },
       { href: "/dashboard/webhooks", label: "Webhook Relays", icon: Webhook },
+      { href: "/dashboard/compliance", label: "Compliance & Risk", icon: ShieldAlert },
       { href: "/dashboard/settings", label: "Global Settings", icon: Settings },
     ]
   }
@@ -105,13 +108,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    <div className="flex min-h-screen bg-midnight text-white selection:bg-electric/30">
+    <div className="flex min-h-screen bg-black text-white selection:bg-electric/30 relative overflow-hidden">
+      {/* 3D Global Background Layer */}
+      <ImmersiveNodeLayer />
+
+      {/* Cinematic Grid Lines Overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-[1]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,183,255,0.04),transparent_60%)] pointer-events-none z-[2]" />
+
       {/* OS Sidebar */}
-      <aside className="w-64 border-r border-glass-border bg-[#0B0C10] flex flex-col shrink-0 overflow-hidden relative">
+      <aside className="w-64 border-r border-[#00B7FF]/10 bg-black/40 backdrop-blur-2xl flex flex-col shrink-0 overflow-hidden relative z-10 shadow-[0_0_80px_rgba(0,0,0,0.8)]">
         {/* Subtle grid background */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
         
-        <div className="p-6 border-b border-glass-border z-10 bg-[#0B0C10]/80 backdrop-blur-sm">
+        <div className="p-6 border-b border-[#00B7FF]/10 z-10 bg-black/20 backdrop-blur-sm">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
               <img src="/logo.png" alt="UMBRA Logo" className="w-8 h-8 object-cover rounded-md shadow-[0_0_15px_rgba(0,183,255,0.3)] group-hover:shadow-[0_0_25px_rgba(0,183,255,0.5)] transition-shadow duration-300" />
@@ -152,7 +162,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           ))}
         </nav>
 
-        <div className="p-4 border-t border-glass-border z-10 bg-[#0B0C10]/80 backdrop-blur-sm">
+        <div className="p-4 border-t border-[#00B7FF]/10 z-10 bg-black/20 backdrop-blur-sm">
           <button className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-xs font-bold text-text-secondary hover:text-rose-glow hover:bg-rose-glow/10 border border-transparent hover:border-rose-glow/20 transition-all group" onClick={handleLogout}>
             <LogOut className="w-4 h-4 group-hover:text-rose-glow transition-colors" />
             DISCONNECT
@@ -161,7 +171,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* OS Main Content Panel */}
-      <main className="flex-1 overflow-y-auto bg-midnight relative">
+      <main className="flex-1 overflow-y-auto bg-transparent relative z-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,183,255,0.03),transparent_40%)] pointer-events-none" />
         <div className="relative z-10 w-full min-h-full">
            {children}
