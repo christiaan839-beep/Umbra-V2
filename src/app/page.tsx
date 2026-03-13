@@ -40,6 +40,9 @@ export default function Home() {
           <Link href="/dashboard" className="px-10 py-4 border border-glass-border text-white font-medium rounded-xl text-lg hover:bg-glass-bg transition-all duration-500">
             Dashboard
           </Link>
+          <Link href="/login" className="px-8 py-4 text-text-secondary hover:text-white font-medium text-lg transition-colors flex items-center justify-center">
+            Log In
+          </Link>
         </motion.div>
       </motion.div>
 

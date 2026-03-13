@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
-  Users, Mail, BarChart3
+  Users, Mail, BarChart3, LogOut
 } from "lucide-react";
 
 const NAV = [
@@ -19,6 +19,12 @@ const NAV = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const handleLogout = async () => {
+    await fetch("/api/auth", { method: "POST", body: JSON.stringify({ action: "logout" }) });
+    router.push("/login");
+    router.refresh();
+  };
 
   return (
     <div className="flex min-h-screen bg-midnight">
@@ -52,11 +58,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </nav>
 
         <div className="p-4 border-t border-glass-border">
-          <Link href="/portal" className="flex items-center gap-2 px-3 py-2 text-xs text-text-secondary hover:text-white transition-colors">
-            <BarChart3 className="w-3.5 h-3.5" />
-            Client Portal
-          </Link>
-        </div>
+        <button className="flex items-center gap-3 px-3 py-2 w-full rounded-lg text-sm font-medium text-text-secondary hover:text-white hover:bg-glass-bg transition-colors mt-auto group" onClick={handleLogout}>
+          <LogOut className="w-4 h-4 group-hover:text-rose-glow transition-colors" />
+          Log Out
+        </button>
+      </div>
       </aside>
 
       {/* Main content */}
