@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const plausibleDomain = process.env.NEXT_PUBLIC_URL?.replace("https://", "").replace("http://", "") || "umbra-v2.vercel.app";
   return (
     <html lang="en">
       <head>
@@ -32,8 +33,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Outfit:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        {/* Plausible Analytics — Privacy-friendly, GDPR compliant, no cookies */}
+        <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js" />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="bg-midnight text-white antialiased">{children}</body>
     </html>
   );
 }
