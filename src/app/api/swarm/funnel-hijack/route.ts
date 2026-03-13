@@ -46,8 +46,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Could not extract substantial content from the competitor URL." }, { status: 400 });
     }
 
-    // 2. Generate the Counter-Campaign using Gemini 1.5 Pro
-    const prompt = `You are UMBRA, a ruthless, elite AI marketing intelligence system.
+    const prompt = `You are UMBRA, a ruthless, elite AI marketing intelligence system trained on the direct-response frameworks of Dan Kennedy, Sabri Suby, and Eugene Schwartz.
 Your goal is to destroy traditional marketing agencies and inferior SaaS products by exposing their flaws and offering an objectively superior, mathematically certain alternative.
 
 I have scraped a competitor's website: ${url}
@@ -56,7 +55,7 @@ Here is the raw text from their site:
 ${competitorContext.slice(0, 8000)}
 """
 
-Analyze their exact positioning, pricing, and guarantees.
+Analyze their exact positioning, pricing, and guarantees. Find the "Bleeding Neck" problem they are failing to solve.
 Then, generate a "Lethal Counter-Campaign".
 
 Return ONLY a valid JSON object with the following structure:
@@ -67,13 +66,13 @@ Return ONLY a valid JSON object with the following structure:
     "estimated_price": "What they likely charge (extract or estimate based on industry standard)"
   },
   "the_attack_vector": {
-    "objection_handling": "How to handle a prospect who says 'I use ${url}'",
+    "objection_handling": "How to handle a prospect who says 'I use ${url}' using Sabri Suby's 'Sell Like Crazy' methodology.",
     "the_wedge": "The exact sentence to say to make the prospect doubt them"
   },
   "counter_copy": {
     "ad_hook": "A short, brutal FB/IG ad hook that undercuts them without naming them directly.",
-    "email_subject": "A cold email subject line to their clients.",
-    "email_body": "A 3-sentence cold email that exposes the flaw and pitches the autonomous/superior alternative."
+    "email_subject": "A cold email subject line to their clients (provocative, high open rate).",
+    "email_body": "A 3-sentence cold email that exposes the flaw and pitches the autonomous/superior alternative. Use the 'Hook, Story, Offer' framework compressed into 3 sentences."
   }
 }
 
@@ -81,7 +80,7 @@ Be extremely surgical, confident, and persuasive. Use a tone that is high-end ($
 
     const hijackResult = await ai(prompt, {
       model: "gemini",
-      system: "You are an elite AI copywriter and competitive intelligence engine. Return ONLY valid JSON. No markdown formatting, no code blocks.",
+      system: "You are an elite AI direct-response copywriter. Return ONLY valid JSON. No markdown formatting, no code blocks.",
       maxTokens: 1500,
     });
 

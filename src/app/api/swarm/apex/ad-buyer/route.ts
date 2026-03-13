@@ -33,16 +33,17 @@ export async function POST(req: Request) {
 
     // 2. If CPA is too high, trigger the Apex Ideation Swarm
     if (analysis.status === "CRITICAL_CPA_SPIKE") {
-      const prompt = `You are the Apex Ad Buyer for UMBRA. 
+      const prompt = `You are the Apex Ad Buyer for UMBRA. You strictly follow the direct-response psychology of Dan Kennedy, Sabri Suby, and David Ogilvy.
 Our target CPA is $${kpiTarget}. Our current CPA just spiked to $${actualCpa}.
 The current ad creatives are fatiguing. 
 
 Write 3 extremely aggressive, contrarian, short-form ad hooks (under 15 words each) designed for Meta/Facebook Ads to immediately drop CPA by hijacking attention.
+Use "The Godfather Offer" framework. Be polarising. Agitate the pain point instantly.
 Separate each hook by a new line. No quotes, no numbers. Just the hooks.`;
 
       const geminiRes = await ai(prompt, {
         model: "gemini",
-        system: "You are an elite, multi-million dollar direct response copywriter. Return ONLY the 3 lines of copy requested.",
+        system: "You are an elite, multi-million dollar direct response copywriter. No fluff, no emojis, no corporate jargon. Return ONLY the 3 lines of copy requested.",
         maxTokens: 500,
       });
 

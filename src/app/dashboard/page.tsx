@@ -116,16 +116,31 @@ export default function DashboardOverview() {
         {/* Quick Actions */}
         <motion.div {...fade(5)} className="glass-card p-5">
           <h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-2">
+          <motion.div 
+            className="grid grid-cols-2 gap-2"
+            variants={{
+              show: { transition: { staggerChildren: 0.1 } }
+            }}
+            initial="hidden"
+            animate="show"
+          >
             {QUICK_ACTIONS.map((a, i) => (
-              <Link key={i} href={a.href} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-onyx/50 border border-glass-border hover:border-electric/30 transition-all group">
-                <div className={`w-8 h-8 ${a.color} rounded-lg flex items-center justify-center`}>
-                  <a.icon className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-[10px] font-bold text-text-secondary group-hover:text-white transition-colors">{a.label}</span>
-              </Link>
+              <motion.div 
+                key={i} 
+                variants={{
+                  hidden: { opacity: 0, scale: 0.9 },
+                  show: { opacity: 1, scale: 1 }
+                }}
+              >
+                <Link href={a.href} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-onyx/50 border border-glass-border hover:border-electric/50 transition-all hover:bg-electric/5 group h-full">
+                  <div className={`w-8 h-8 ${a.color} rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+                    <a.icon className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-[10px] font-bold text-text-secondary group-hover:text-white transition-colors">{a.label}</span>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
