@@ -5,7 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, LogOut, BarChart3, Shield,
-  Workflow, FlaskConical, GitBranch, Wrench, FileText
+  Workflow, FlaskConical, GitBranch, Wrench, FileText,
+  Send, Sparkles, Building2
 } from "lucide-react";
 
 const NAV = [
@@ -14,6 +15,9 @@ const NAV = [
   { href: "/dashboard/memory", label: "God-Brain", icon: Brain },
   { href: "/dashboard/swarm", label: "Swarm Critic", icon: Code },
   { href: "/dashboard/coder", label: "Claude Coder", icon: Laptop },
+  { href: "/dashboard/playground", label: "AI Playground", icon: Sparkles },
+  { href: "/dashboard/social", label: "Social", icon: Send },
+  { href: "/dashboard/clients", label: "Clients", icon: Building2 },
   { href: "/dashboard/leads", label: "Leads", icon: Users },
   { href: "/dashboard/nurture", label: "Nurture", icon: Mail },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
