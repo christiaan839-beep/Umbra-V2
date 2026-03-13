@@ -6,13 +6,14 @@ import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, LogOut, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network
 } from "lucide-react";
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/treasury", label: "Treasury", icon: DollarSign },
   { href: "/dashboard/omnipresence", label: "Omnipresence", icon: Workflow },
+  { href: "/dashboard/nexus", label: "The Nexus", icon: Network },
   { href: "/dashboard/voice", label: "Voice Swarm", icon: Mic },
   { href: "/dashboard/ghost-mode", label: "Ghost Mode", icon: Ghost },
   { href: "/dashboard/memory", label: "God-Brain", icon: Brain },
