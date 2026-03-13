@@ -1,209 +1,251 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Search, Loader2, User, Building2, Mail, Flame, Filter, ArrowUpRight, Zap, MessageCircle } from "lucide-react";
+import { Search, MapPin, Target, Loader2, Database, AlertTriangle, Building2, Zap, ArrowRight, Activity, CheckCircle2 } from "lucide-react";
 
-interface Lead {
-  id: string; name: string; email: string; company: string; score: number;
-  tier: "hot" | "warm" | "cold"; signals: string[]; source: string; lastActivity: string;
-}
-
-const TIER_STYLE = {
-  hot: { label: "🔥 Hot", bg: "bg-red-500/10", border: "border-red-500/20", text: "text-red-400" },
-  warm: { label: "🟡 Warm", bg: "bg-amber-500/10", border: "border-amber-500/20", text: "text-amber-400" },
-  cold: { label: "❄️ Cold", bg: "bg-blue-500/10", border: "border-blue-500/20", text: "text-blue-400" },
+type ProspectReport = {
+    business_name: string;
+    website: string;
+    detected_gap: string;
+    cold_email_subject: string;
+    cold_email_body: string;
 };
 
-export default function LeadsPage() {
-  const [industry, setIndustry] = useState("SaaS");
-  const [ideal, setIdeal] = useState("Agency owner doing $10k-$50k/mo");
-  const [filter, setFilter] = useState<"all" | "hot" | "warm" | "cold">("all");
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [scoredLeads, setScoredLeads] = useState<Lead[]>([]);
+const LOG_MESSAGES = [
+    "Establishing uplink with Tavily Web Search API...",
+    "Sweeping target location for independent businesses...",
+    "Filtering out franchise megacorps...",
+    "Extracting raw DOM structure from 3 valid targets...",
+    "Transmitting payload to Gemini 1.5 Pro for analysis...",
+    "Detecting marketing failure points (SEO, Schema, Offer)...",
+    "Synthesizing hyper-personalized cold outreach angles...",
+    "Committing gap analysis reports to The God-Brain...",
+];
 
-  // Load scored demo leads on mount
+export default function LeadsDashboard() {
+  const [niche, setNiche] = useState("");
+  const [location, setLocation] = useState("");
+  const [isSweeping, setIsSweeping] = useState(false);
+  const [logs, setLogs] = useState<string[]>([]);
+  const [reports, setReports] = useState<ProspectReport[]>([]);
+  const [sweepTarget, setSweepTarget] = useState("");
+  const logsEndRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const demo: Lead[] = [
-      { id: "l1", name: "Alex Rivera", email: "alex@techventures.co", company: "TechVentures", score: 92, tier: "hot", signals: ["Visited pricing 3x", "Downloaded ROI guide", "Budget: $5k+/mo"], source: "Demo", lastActivity: "12m ago" },
-      { id: "l2", name: "Riley Cooper", email: "riley@ecomboost.com", company: "EcomBoost", score: 88, tier: "hot", signals: ["Requested call", "Budget: $10k+/mo", "Currently using agency"], source: "Demo", lastActivity: "30m ago" },
-      { id: "l3", name: "Jordan Lee", email: "jordan@growthco.io", company: "GrowthCo", score: 78, tier: "hot", signals: ["Completed demo", "Asked about Ghost Mode", "Agency owner"], source: "Organic", lastActivity: "2h ago" },
-      { id: "l4", name: "Sam Torres", email: "sam@nextlevel.agency", company: "NextLevel Agency", score: 65, tier: "warm", signals: ["Shared with team", "Budget: $2-5k/mo"], source: "Referral", lastActivity: "1d ago" },
-      { id: "l5", name: "Casey Morgan", email: "casey@startupfuel.com", company: "StartupFuel", score: 51, tier: "warm", signals: ["Opened 3 emails", "Viewed features page"], source: "Email", lastActivity: "3d ago" },
-      { id: "l6", name: "Taylor Kim", email: "taylor@localfitness.com", company: "LocalFitness", score: 34, tier: "cold", signals: ["Single page visit", "No email opens"], source: "Ads", lastActivity: "1w ago" },
-    ];
-    setScoredLeads(demo);
-  }, []);
+    logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [logs]);
 
-  const prospect = async () => {
-    if (loading) return;
-    setLoading(true); setLeads([]);
-    try {
-      const res = await fetch("/api/agents", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ agent: "prospector", industry, idealClient: ideal }),
-      });
-      const data = await res.json();
-      if (data.leads) setLeads(data.leads);
-    } catch {} finally { setLoading(false); }
+  const executeSweep = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if(!niche || !location || isSweeping) return;
+
+      setIsSweeping(true);
+      setReports([]);
+      setSweepTarget(`${niche} in ${location}`);
+      
+      // Simulate real-time terminal logging
+      const logInterval = setInterval(() => {
+          setLogs(prev => {
+              if (prev.length < LOG_MESSAGES.length) {
+                  return [...prev, LOG_MESSAGES[prev.length]];
+              }
+              clearInterval(logInterval);
+              return prev;
+          });
+      }, 1500); // 1.5s per simulated step
+
+      try {
+          const res = await fetch("/api/swarm/prospector", {
+             method: "POST",
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify({ niche, location })
+          });
+          
+          const data = await res.json();
+          clearInterval(logInterval);
+          
+          if(data.success) {
+               setLogs(prev => [...prev, `[SUCCESS] ${data.prospects_analyzed} targets acquired and synchronized.`]);
+               setReports(data.reports);
+          } else {
+               setLogs(prev => [...prev, `[ERROR] Intelligence sweep failed: ${data.error}`]);
+          }
+      } catch (err) {
+          clearInterval(logInterval);
+          setLogs(prev => [...prev, "[FATAL] Connection to Prospector Node severed."]);
+      } finally {
+          setIsSweeping(false);
+      }
   };
 
-  const displayLeads = filter === "all" ? scoredLeads : scoredLeads.filter(l => l.tier === filter);
-  const hotCount = scoredLeads.filter(l => l.tier === "hot").length;
-  const warmCount = scoredLeads.filter(l => l.tier === "warm").length;
-
   return (
-    <div className="p-8 max-w-5xl">
-      <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-electric/10 border border-electric/20 text-electric text-xs font-bold uppercase tracking-wider mb-3">
-          <Users className="w-3 h-3" /> AI Lead Intelligence
-        </div>
-        <h1 className="text-2xl font-bold serif-text text-white">Lead Scoring & Prospecting</h1>
-        <p className="text-sm text-text-secondary mt-1">AI finds, qualifies, and auto-scores leads by engagement, budget, and fit.</p>
-      </div>
-
-      {/* Score Summary */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        {[
-          { label: "Hot Leads", count: hotCount, icon: Flame, color: "text-red-400", bg: "bg-red-500/10" },
-          { label: "Warm Leads", count: warmCount, icon: Zap, color: "text-amber-400", bg: "bg-amber-500/10" },
-          { label: "Total Pipeline", count: scoredLeads.length, icon: Users, color: "text-electric", bg: "bg-electric/10" },
-        ].map((s, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-            className="glass-card p-4 flex items-center gap-3">
-            <div className={`p-2 rounded-lg ${s.bg}`}><s.icon className={`w-4 h-4 ${s.color}`} /></div>
-            <div>
-              <p className="text-xl font-bold font-mono text-white">{s.count}</p>
-              <p className="text-[10px] uppercase tracking-widest text-text-secondary">{s.label}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Filter Bar */}
-      <div className="flex items-center gap-2 mb-6">
-        <Filter className="w-3.5 h-3.5 text-text-secondary" />
-        {(["all", "hot", "warm", "cold"] as const).map(f => (
-          <button key={f} onClick={() => setFilter(f)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${filter === f ? "bg-white text-midnight" : "text-text-secondary hover:text-white"}`}>
-            {f === "all" ? "All" : TIER_STYLE[f].label}
-          </button>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Live Communications Feed */}
-        <div className="lg:col-span-1 glass-card overflow-hidden flex flex-col h-[500px]">
-          <div className="px-5 py-4 border-b border-glass-border bg-black/20 flex items-center justify-between">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Live Comm Line
-            </h2>
-            <MessageCircle className="w-4 h-4 text-emerald-400/50" />
-          </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 font-sans text-sm hide-scrollbar">
-            {/* Mock Live Feed */}
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1">
-                <span>+1 (512) 555-0198</span>
-                <span>Just now</span>
-              </div>
-              <div className="bg-onyx/40 border border-glass-border rounded-xl rounded-tl-sm p-3 inline-block max-w-[90%] text-white text-xs">
-                Saw your post about GBP hijacking. Do you guys handle dental practices?
-              </div>
-            </div>
-            
-            <div className="space-y-1 flex flex-col items-end">
-              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1 w-full flex-row-reverse">
-                <span className="text-electric flex items-center gap-1"><Zap className="w-3 h-3" /> UMBRA C-35</span>
-                <span>Just now</span>
-              </div>
-              <div className="bg-electric/10 border border-electric/20 text-white rounded-xl rounded-tr-sm p-3 inline-block max-w-[90%] text-xs">
-                Yes. We currently track 244 dental competitors in Austin. Our system finds their blind spots and generates the exact copy needed to steal their local map traffic. Want to see a live audit of your clinic?
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1 mt-4">
-                <span>+1 (214) 555-0122</span>
-                <span>2m ago</span>
-              </div>
-              <div className="bg-onyx/40 border border-glass-border rounded-xl rounded-tl-sm p-3 inline-block max-w-[90%] text-white text-xs">
-                I'm looking for a new agency. Our current one is too slow.
-              </div>
-            </div>
-
-            <div className="space-y-1 flex flex-col items-end">
-              <div className="flex items-center justify-between text-[10px] text-text-secondary mb-1 w-full flex-row-reverse">
-                <span className="text-electric flex items-center gap-1"><Zap className="w-3 h-3" /> UMBRA C-35</span>
-                <span>1m ago</span>
-              </div>
-              <div className="bg-electric/10 border border-electric/20 text-white rounded-xl rounded-tr-sm p-3 inline-block max-w-[90%] text-xs">
-                We don't have employees, so we don't have delays. UMBRA executes campaigns 24/7 autonomously. I've sent you our autonomous pipeline demo. Let me know when you've reviewed it.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scored Leads Table */}
-        <div className="lg:col-span-2 glass-card overflow-hidden flex flex-col h-[500px]">
-          <div className="px-5 py-4 border-b border-glass-border flex items-center justify-between bg-black/20">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-text-secondary">Scored Pipeline</h2>
-            <span className="text-[10px] text-text-secondary bg-onyx/50 px-2 py-1 rounded border border-glass-border">{displayLeads.length} active</span>
-          </div>
-          <div className="divide-y divide-glass-border overflow-y-auto hide-scrollbar">
-          {displayLeads.map((l, i) => {
-            const style = TIER_STYLE[l.tier];
-            return (
-              <motion.div key={l.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
-                className="flex items-center gap-4 px-5 py-3.5 hover:bg-glass-bg/30 transition-colors">
-                {/* Score Circle */}
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold font-mono ${style.bg} ${style.border} border ${style.text}`}>
-                  {l.score}
-                </div>
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-white">{l.name}</p>
-                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${style.bg} ${style.border} border ${style.text}`}>{l.tier}</span>
-                  </div>
-                  <p className="text-xs text-text-secondary flex items-center gap-2">
-                    <Building2 className="w-3 h-3" />{l.company} · <Mail className="w-3 h-3" />{l.email}
-                  </p>
-                </div>
-                {/* Signals */}
-                <div className="hidden lg:flex flex-wrap gap-1 max-w-[200px]">
-                  {l.signals.slice(0, 2).map((s, j) => (
-                    <span key={j} className="text-[9px] px-1.5 py-0.5 rounded bg-onyx/50 border border-glass-border text-text-secondary">{s}</span>
-                  ))}
-                </div>
-                {/* Source + Activity */}
-                <div className="text-right shrink-0">
-                  <p className="text-[10px] text-text-secondary">{l.source}</p>
-                  <p className="text-[10px] text-text-secondary/50">{l.lastActivity}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-          </div>
+    <div className="space-y-6 max-w-7xl mx-auto h-[calc(100vh-6rem)] flex flex-col">
+      {/* Header */}
+      <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider mb-3">
+              <Search className="w-3 h-3" /> Outbound Node
+           </div>
+           <h1 className="text-3xl font-bold font-serif tracking-wide flex items-center gap-3 text-white">
+              Target Acquisition
+           </h1>
+           <p className="text-text-secondary mt-1 max-w-xl text-sm">Deploy the Prospector Swarm to scrape local businesses via Tavily, analyze their marketing gaps via Gemini, and autonomously script hyper-personalized cold outreach.</p>
         </div>
       </div>
 
-      {/* Prospector */}
-      <div className="glass-card p-5">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-text-secondary mb-4 flex items-center gap-2"><Search className="w-3 h-3" /> AI Prospector</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-          <input value={industry} onChange={e => setIndustry(e.target.value)} placeholder="Industry"
-            className="bg-onyx border border-glass-border rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-electric/50" />
-          <input value={ideal} onChange={e => setIdeal(e.target.value)} placeholder="Ideal client profile"
-            className="bg-onyx border border-glass-border rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-electric/50" />
-        </div>
-        <button onClick={prospect} disabled={loading}
-          className="w-full py-2.5 bg-white text-midnight font-bold rounded-xl hover:bg-gray-200 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm">
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-          {loading ? "Prospecting..." : "Find New Leads"}
-        </button>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
+          
+          {/* Sweep Configuration (Left Col) */}
+          <div className="lg:col-span-1 flex flex-col gap-6 h-full overflow-y-auto pr-2">
+              <div className="glass-card p-6 border border-glass-border">
+                  <h2 className="text-sm font-bold uppercase tracking-widest text-white mb-6 flex items-center gap-2">
+                      <Target className="w-4 h-4 text-electric" /> Command Sweep
+                  </h2>
+                  <form onSubmit={executeSweep} className="space-y-4">
+                       <div>
+                           <label className="text-[10px] text-stone-400 uppercase tracking-widest mb-2 block font-mono">Target Niche</label>
+                           <div className="relative">
+                               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                   <Building2 className="w-4 h-4 text-stone-500" />
+                               </div>
+                               <input 
+                                   type="text" required
+                                   value={niche} onChange={e => setNiche(e.target.value)}
+                                   placeholder="e.g., Roofers, Dentists, Med Spas"
+                                   className="w-full bg-onyx/50 border border-glass-border rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:border-electric transition-colors"
+                               />
+                           </div>
+                       </div>
+                       <div>
+                           <label className="text-[10px] text-stone-400 uppercase tracking-widest mb-2 block font-mono">Target Geo-Location</label>
+                           <div className="relative">
+                               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                   <MapPin className="w-4 h-4 text-stone-500" />
+                               </div>
+                               <input 
+                                   type="text" required
+                                   value={location} onChange={e => setLocation(e.target.value)}
+                                   placeholder="e.g., Austin TX, London UK"
+                                   className="w-full bg-onyx/50 border border-glass-border rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:border-electric transition-colors"
+                               />
+                           </div>
+                       </div>
+                       <button 
+                           type="submit" disabled={isSweeping || !niche || !location}
+                           className="w-full mt-4 bg-gradient-to-r from-blue-600 to-electric text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 uppercase tracking-widest text-xs disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(45,110,255,0.3)]"
+                       >
+                           {isSweeping ? <><Loader2 className="w-4 h-4 animate-spin" /> Sweeping Sector...</> : <><Search className="w-4 h-4" /> Execute Sweep</>}
+                       </button>
+                  </form>
+              </div>
+
+              {/* Terminal Logs */}
+              <div className="glass-card flex-1 border border-glass-border bg-black/60 flex flex-col overflow-hidden min-h-[300px]">
+                   <div className="p-3 border-b border-glass-border/50 bg-black/40 flex items-center gap-2 shrink-0">
+                        <Activity className="w-3 h-3 text-emerald-500 animate-pulse" />
+                        <span className="text-[10px] uppercase font-mono text-emerald-500/80 tracking-widest">Prospector Telemetry</span>
+                   </div>
+                   <div className="p-4 font-mono text-xs overflow-y-auto space-y-2 text-stone-400 h-full">
+                        {logs.length === 0 && <span className="text-stone-600">Awaiting sweep parameters...</span>}
+                        {logs.map((log, i) => (
+                             <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} key={i} className="flex gap-2">
+                                  <span className="shrink-0 text-stone-600">{`[+${(i * 1.5).toFixed(1)}s]`}</span>
+                                  <span className={log.includes("SUCCESS") ? "text-emerald-400 font-bold" : log.includes("ERROR") || log.includes("FATAL") ? "text-red-400" : "text-stone-300"}>
+                                      {log.includes("SUCCESS") || log.includes("ERROR") || log.includes("FATAL") ? log : `> ${log}`}
+                                  </span>
+                             </motion.div>
+                        ))}
+                        {isSweeping && logs.length < LOG_MESSAGES.length && (
+                             <div className="w-2 h-3 bg-electric/50 animate-pulse mt-1 ml-12" />
+                        )}
+                        <div ref={logsEndRef} />
+                   </div>
+              </div>
+          </div>
+
+          {/* Acquired Targets (Right Col) */}
+          <div className="lg:col-span-2 glass-card border border-glass-border h-full flex flex-col overflow-hidden">
+               <div className="p-5 border-b border-glass-border flex items-center justify-between shrink-0 bg-onyx/20">
+                    <h2 className="text-sm font-bold uppercase tracking-widest text-white flex items-center gap-2">
+                        <Database className="w-4 h-4 text-blue-400" /> Acquired Targets
+                    </h2>
+                    {reports.length > 0 && (
+                        <div className="text-[10px] font-mono text-stone-400 flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                            {reports.length} TARGETS FOUND IN: {sweepTarget.toUpperCase()}
+                        </div>
+                    )}
+               </div>
+
+               <div className="flex-1 overflow-y-auto p-6 bg-onyx/10">
+                    {!isSweeping && reports.length === 0 && (
+                         <div className="h-full flex flex-col items-center justify-center text-center text-stone-500 space-y-4">
+                             <Search className="w-12 h-12 text-stone-700" />
+                             <p className="font-mono text-xs uppercase tracking-widest">No target data. Execute a sweep.</p>
+                         </div>
+                    )}
+
+                    {isSweeping && reports.length === 0 && (
+                         <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
+                             <div className="relative">
+                                  <div className="absolute inset-0 border-2 border-electric/20 rounded-full animate-ping" />
+                                  <div className="w-24 h-24 rounded-full border-2 border-electric/40 flex items-center justify-center bg-electric/5 backdrop-blur-sm">
+                                      <Search className="w-8 h-8 text-electric animate-pulse" />
+                                  </div>
+                             </div>
+                             <div className="space-y-2">
+                                 <h3 className="font-mono text-electric text-sm tracking-widest uppercase">Deep Crawl Initiated</h3>
+                                 <p className="text-xs text-stone-500 max-w-xs mx-auto">Tavily is aggregating {niche} in {location}. Gemini is diagnosing marketing failures...</p>
+                             </div>
+                         </div>
+                    )}
+
+                    <div className="space-y-6">
+                        {reports.map((report, idx) => (
+                             <motion.div 
+                                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }}
+                                 key={idx} className="bg-onyx/60 border border-glass-border rounded-xl p-5 hover:border-blue-500/30 transition-colors"
+                             >
+                                 {/* Header */}
+                                 <div className="flex justify-between items-start mb-4 border-b border-glass-border/50 pb-4">
+                                      <div>
+                                          <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                                              {report.business_name}
+                                              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                          </h3>
+                                          <a href={report.website} target="_blank" rel="noreferrer" className="text-xs text-blue-400 hover:underline font-mono">
+                                              {report.website}
+                                          </a>
+                                      </div>
+                                      <div className="px-2 py-1 bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-widest rounded flex items-center gap-1">
+                                           <AlertTriangle className="w-3 h-3" /> Gap Detected
+                                      </div>
+                                 </div>
+
+                                 {/* Body */}
+                                 <div className="space-y-4">
+                                      <div>
+                                          <span className="text-[10px] text-stone-500 uppercase font-mono tracking-widest mb-1 block">Diagnosis Matrix:</span>
+                                          <p className="text-sm text-stone-300 leading-relaxed font-serif italic border-l-2 border-red-500/50 pl-3">"{report.detected_gap}"</p>
+                                      </div>
+                                      
+                                      <div className="bg-black/50 border border-glass-border rounded-lg p-4 font-mono">
+                                          <div className="flex items-center justify-between mb-3 border-b border-stone-800 pb-2">
+                                              <span className="text-[10px] text-electric uppercase tracking-widest flex items-center gap-1"><Zap className="w-3 h-3" /> Generated Outreach Script</span>
+                                              <button className="text-[10px] text-stone-500 hover:text-white transition-colors flex items-center gap-1">Push to Nexus <ArrowRight className="w-3 h-3" /></button>
+                                          </div>
+                                          <div className="text-xs text-stone-300 space-y-2">
+                                              <p><span className="text-stone-500">Subject:</span> <span className="text-white">{report.cold_email_subject}</span></p>
+                                              <p className="whitespace-pre-wrap leading-relaxed mt-2 pt-2 border-t border-stone-800/50">{report.cold_email_body}</p>
+                                          </div>
+                                      </div>
+                                 </div>
+                             </motion.div>
+                        ))}
+                    </div>
+               </div>
+          </div>
       </div>
     </div>
   );
