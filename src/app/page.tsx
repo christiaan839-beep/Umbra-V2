@@ -73,6 +73,24 @@ export default function Home() {
               }} className="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-emerald-400/30 bg-emerald-400/5 text-emerald-400 font-bold text-lg hover:bg-emerald-400/10 transition-all flex items-center justify-center gap-2 group cursor-pointer">
                 🇿🇦 Pay with PayFast — R8,997/mo
               </button>
+              <button 
+                 onClick={async () => {
+                   const res = await fetch("/api/paypal/create-order", {
+                     method: "POST",
+                     headers: { "Content-Type": "application/json" },
+                     body: JSON.stringify({ productId: "sovereign" }),
+                   });
+                   const data = await res.json();
+                   if (data.id) {
+                     window.location.href = `https://www.paypal.com/checkoutnow?token=${data.id}`;
+                   } else {
+                     alert("PayPal Error: " + data.error);
+                   }
+                 }}
+                 className="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-[#00457C]/50 bg-[#00457C]/10 text-white font-bold text-lg hover:bg-[#00457C]/30 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+              >
+                <Globe className="w-5 h-5 text-[#0079C1]" /> Global Pay — $497/mo
+              </button>
             </div>
             <Link href="/demo" className="px-8 py-3 text-text-secondary hover:text-white font-medium text-base transition-colors flex items-center justify-center gap-2">
               <Zap className="w-4 h-4 text-electric" /> Watch Live Demo
