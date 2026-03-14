@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Activity, MessageCircle, MapPin, Zap, ExternalLink, Calendar, Target, Plus, CheckCircle2 } from "lucide-react";
+import { Activity, MessageCircle, MapPin, Zap, ExternalLink, Target, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -9,9 +9,24 @@ interface Props {
   params: { clientId: string };
 }
 
+interface PortalMetricEvent {
+  id: string;
+  eventType: string;
+  payload: Record<string, unknown>;
+  timestamp: string;
+  action?: string;
+  detail?: string;
+  type?: string;
+  time?: string;
+}
+
 export default function ClientDashboard({ params }: Props) {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (!mounted) return null;
 
@@ -107,7 +122,7 @@ export default function ClientDashboard({ params }: Props) {
 }
 
 // Simple Icon Helpers to keep imports clean
-function ShieldCheckIcon(props: any) {
+function ShieldCheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>;
 }
 function GlobeIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -160,35 +175,38 @@ function KPIGrid({ clientId }: { clientId: string }) {
 }
 
 function LiveLogFeed({ clientId }: { clientId: string }) {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<PortalMetricEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await fetch("/api/memory", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: clientId, limit: 10 }),
-        });
+        const res = await fetch(`/api/portal/metrics?tenantId=${clientId}`);
         const data = await res.json();
         
-        let formattedLogs = (data.results || []).map((match: any) => {
+        if (!data.success) throw new Error(data.error);
+
+        let formattedLogs = (data.recentEvents || []).map((event: PortalMetricEvent) => {
           let type = "scan";
           let action = "System Action";
+          const payloadStr = JSON.stringify(event.payload);
           
-          if (match.metadata?.type === "programmatic-page") {
+          if (event.eventType.includes("programmatic") || event.eventType.includes("seo")) {
             type = "seo"; action = "SEO Page Generated";
-          } else if (match.metadata?.type === "outbound-prospect") {
-            type = "comms"; action = "Prospecting Sweep";
+          } else if (event.eventType.includes("lead") || event.eventType.includes("social") || event.eventType.includes("closer")) {
+            type = "comms"; action = "Swarm Outreach Executed";
+          } else if (event.eventType === "revenue_secured") {
+            type = "auth"; action = "High-Ticket Capital Secured";
           }
 
+          const parsedTime = event.timestamp ? new Date(event.timestamp) : new Date();
+
           return {
-            id: match.id,
+            id: event.id,
             action,
-            detail: match.metadata?.content || match.text || "Executed background operation",
+            detail: `Telemetry Event: ${event.eventType}. Payload matrix: ${payloadStr.substring(0, 100)}...`,
             type,
-            time: "Recently" // Pinecone doesn't natively store creation time unless we added it to metadata
+            time: parsedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           };
         });
 
@@ -204,7 +222,12 @@ function LiveLogFeed({ clientId }: { clientId: string }) {
         setLoading(false);
       }
     };
+    
     fetchLogs();
+    
+    // Auto-refresh the telemetry every 15 seconds for a "live" feel
+    const interval = setInterval(fetchLogs, 15000);
+    return () => clearInterval(interval);
   }, [clientId]);
 
   if (loading) return <div className="p-6 text-sm text-text-secondary animate-pulse">Syncing with God-Brain...</div>;

@@ -2,37 +2,55 @@
 
 import { motion } from "framer-motion";
 import { DollarSign, TrendingUp, Users, Target, ArrowUpRight, Zap } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface Props {
   params: { clientId: string };
 }
 
-export default function RevenueAttributionPage({ params }: Props) {
-  // In production, these would be fetched from the globalTelemetry table
-  // filtered by the client's tenantId. For now, we show the dashboard structure.
-  const metrics = {
-    totalRevenue: "$18,420",
-    leadsGenerated: 247,
-    leadsQualified: 89,
-    dealsClosed: 12,
-    conversionRate: "4.9%",
-    costPerLead: "$3.20",
+interface RevenueData {
+  metrics: {
+    totalRevenue: string;
+    leadsGenerated: number;
+    leadsQualified: number;
+    dealsClosed: number;
+    conversionRate: string;
+    costPerLead: string;
   };
+  pipeline: { stage: string; count: number; color: string; width: string }[];
+  recentDeals: { name: string; value: string; date: string; source: string }[];
+}
 
-  const pipeline = [
-    { stage: "Leads Captured", count: 247, color: "bg-blue-500", width: "100%" },
-    { stage: "Qualified", count: 89, color: "bg-indigo-500", width: "36%" },
-    { stage: "Proposal Sent", count: 34, color: "bg-violet-500", width: "14%" },
-    { stage: "Closed Won", count: 12, color: "bg-emerald-500", width: "5%" },
-  ];
+export default function RevenueAttributionPage({ params }: Props) {
+  const [data, setData] = useState<RevenueData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const recentDeals = [
-    { name: "Apex Fitness Co.", value: "$2,500", date: "Mar 12", source: "Instagram DM" },
-    { name: "NeuroStack Labs", value: "$1,000", date: "Mar 10", source: "SEO Lead" },
-    { name: "Velocity Trading", value: "$5,000", date: "Mar 8", source: "WhatsApp" },
-    { name: "Mindshift Coaching", value: "$1,000", date: "Mar 5", source: "Instagram DM" },
-    { name: "BioElite Systems", value: "$2,500", date: "Mar 3", source: "Programmatic" },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/portal/revenue?tenantId=${params.clientId}`);
+        const result = await res.json();
+        if (result.success) {
+          setData(result);
+        }
+      } catch (err) {
+        console.error("Failed to fetch revenue data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [params.clientId]);
+
+  if (loading || !data) {
+    return (
+      <div className="min-h-screen bg-midnight flex items-center justify-center text-emerald-400 font-mono text-sm animate-pulse">
+        CALCULATING ROI MATRIX...
+      </div>
+    );
+  }
+
+  const { metrics, pipeline, recentDeals } = data;
 
   return (
     <div className="min-h-screen bg-midnight font-sans text-text-primary">
@@ -103,6 +121,7 @@ export default function RevenueAttributionPage({ params }: Props) {
                   </div>
                 </motion.div>
               ))}
+              {pipeline.length === 0 && <div className="text-xs text-text-secondary">Gathering live conversion data...</div>}
             </div>
           </div>
 
@@ -114,7 +133,7 @@ export default function RevenueAttributionPage({ params }: Props) {
               </h2>
             </div>
             <div className="divide-y divide-glass-border">
-              {recentDeals.map((deal, i) => (
+              {recentDeals.length > 0 ? recentDeals.map((deal, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 5 }}
@@ -130,7 +149,9 @@ export default function RevenueAttributionPage({ params }: Props) {
                   </div>
                   <span className="text-lg font-bold font-mono text-emerald-400">{deal.value}</span>
                 </motion.div>
-              ))}
+              )) : (
+                <div className="p-6 text-xs text-text-secondary">No closed deals tracked via UMBRA telemetry yet.</div>
+              )}
             </div>
           </div>
         </div>

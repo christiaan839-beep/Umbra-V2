@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { db } from "@/db";
 import { tenants, globalTelemetry } from "@/db/schema";
+import { pusherServer } from "@/lib/pusher";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_123', {
-  apiVersion: '2023-10-16' as any,
+  // @ts-expect-error Ignoring type mismatch for apiVersion
+  apiVersion: '2023-10-16',
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || 'whsec_123';
@@ -18,8 +20,9 @@ export async function POST(req: Request) {
 
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-    } catch (err: any) {
-      console.error(`[Stripe Webhook Error] Signature verification failed: ${err.message}`);
+    } catch (err: unknown) {
+      const e = err as Error;
+      console.error(`[Stripe Webhook Error] Signature verification failed: ${e.message}`);
       return NextResponse.json({ error: 'Webhook signature verification failed.' }, { status: 400 });
     }
 
@@ -44,6 +47,14 @@ export async function POST(req: Request) {
           payload: JSON.stringify({ amount: session.amount_total, ccy: session.currency }),
         });
 
+        // Trigger real-time pulse across global dashboards
+        await pusherServer.trigger('umbra-global', 'telemetry_update', {
+          id: Math.random().toString(36).substr(2, 9),
+          location: "Stripe Payment Gateway",
+          action: `+ $${((session.amount_total || 500000) / 100).toLocaleString()} SOVEREIGN CAPITAL SECURED`,
+          isCapital: true
+        });
+
         console.log(`[Stripe Webhook] Node Provisioned: ${newTenant.nodeId}. Telemetry routed.`);
       } catch (dbErr) {
         console.error(`[Stripe Webhook / DB Error] Could not provision tenant:`, dbErr);
@@ -52,8 +63,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ received: true });
-  } catch (err: any) {
-    console.error(`[Stripe Webhook Internal Error] ${err.message}`);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const e = err as Error;
+    console.error(`[Stripe Webhook Internal Error] ${e.message}`);
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

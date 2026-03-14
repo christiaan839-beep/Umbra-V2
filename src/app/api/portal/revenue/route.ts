@@ -4,10 +4,10 @@ import { globalTelemetry } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 
 /**
- * Portal Revenue API
+ * Portal Revenue & Attribution API
  * 
- * Aggregates revenue-related telemetry events for a specific tenant.
- * Returns total revenue, lead counts, deal counts, and recent deal data.
+ * Returns live ROI and pipeline data for a specific tenant 
+ * by aggregating revenue and conversion events from telemetry.
  */
 export async function GET(req: Request) {
   try {
@@ -18,59 +18,85 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Missing tenantId parameter" }, { status: 400 });
     }
 
-    const events = await db
+    // Fetch all events for this tenant
+    const allEvents = await db
       .select()
       .from(globalTelemetry)
       .where(eq(globalTelemetry.tenantId, tenantId))
       .orderBy(desc(globalTelemetry.timestamp));
 
-    // Parse revenue events
-    let totalRevenue = 0;
-    let leadsGenerated = 0;
-    let leadsQualified = 0;
-    let dealsClosed = 0;
-    const recentDeals: Array<{ name: string; value: string; date: string; source: string }> = [];
-
-    for (const event of events) {
-      let payload;
-      try { payload = JSON.parse(event.payload); } catch { continue; }
-
-      if (event.eventType.includes("lead_scraped") || event.eventType.includes("lead_generated")) {
-        leadsGenerated++;
+    // Calculate core metrics
+    const revenueEvents = allEvents.filter(e => e.eventType === "revenue_secured");
+    const totalRevenueCents = revenueEvents.reduce((acc, current) => {
+      try {
+        const payload = JSON.parse(current.payload);
+        return acc + (payload.amount || 0);
+      } catch {
+        return acc;
       }
-      if (event.eventType.includes("lead_qualified")) {
-        leadsQualified++;
-      }
-      if (event.eventType.includes("deal_closed") || event.eventType.includes("invoice_paid")) {
-        dealsClosed++;
-        const amount = payload.amount || payload.value || 0;
-        totalRevenue += Number(amount);
-        recentDeals.push({
-          name: payload.clientName || payload.leadId || "Client",
-          value: `$${Number(amount).toLocaleString()}`,
-          date: event.timestamp ? new Date(event.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Recent",
-          source: payload.source || payload.platform || "Direct",
-        });
-      }
-    }
+    }, 0);
+    const totalRevenue = `$${(totalRevenueCents / 100).toLocaleString()}`; // Simplified USD formatting
 
-    const conversionRate = leadsGenerated > 0 ? ((dealsClosed / leadsGenerated) * 100).toFixed(1) : "0.0";
-    const costPerLead = leadsGenerated > 0 ? (totalRevenue * 0.1 / leadsGenerated).toFixed(2) : "0.00";
+    const leadsGenerated = allEvents.filter(e => e.eventType.includes("lead_captured")).length;
+    const leadsQualified = allEvents.filter(e => e.eventType.includes("lead_qualified")).length;
+    const proposalsSent = allEvents.filter(e => e.eventType.includes("proposal_sent")).length;
+    const dealsClosed = revenueEvents.length;
+
+    const conversionRate = leadsGenerated > 0 
+      ? `${((dealsClosed / leadsGenerated) * 100).toFixed(1)}%` 
+      : "0%";
+
+    // Dummy logic for cost calculation based on ad spend payload if available
+    const adSpendEvents = allEvents.filter(e => e.eventType === "ad_spend");
+    const totalAdSpend = adSpendEvents.reduce((acc, current) => {
+        try {
+          const payload = JSON.parse(current.payload);
+          return acc + (payload.amount || 0);
+        } catch {
+          return acc;
+        }
+    }, 0);
+    
+    const costPerLead = leadsGenerated > 0 && totalAdSpend > 0
+      ? `$${(totalAdSpend / leadsGenerated).toFixed(2)}`
+      : "$0.00";
+
+    // Format pipeline data with standard percentages based on highest pool (Leads Captured)
+    const pipeline = [
+      { stage: "Leads Captured", count: leadsGenerated, color: "bg-blue-500", width: "100%" },
+      { stage: "Qualified", count: leadsQualified, color: "bg-indigo-500", width: leadsGenerated ? `${(leadsQualified / leadsGenerated) * 100}%` : "0%" },
+      { stage: "Proposal Sent", count: proposalsSent, color: "bg-violet-500", width: leadsGenerated ? `${(proposalsSent / leadsGenerated) * 100}%` : "0%" },
+      { stage: "Closed Won", count: dealsClosed, color: "bg-emerald-500", width: leadsGenerated ? `${(dealsClosed / leadsGenerated) * 100}%` : "0%" },
+    ];
+
+    // Format recent deals directly from revenue_secured events
+    const recentDeals = revenueEvents.slice(0, 5).map(event => {
+      let parsed;
+      try { parsed = JSON.parse(event.payload); } catch { parsed = { amount: 0, ccy: 'usd' }; }
+      
+      return {
+        name: parsed.customerName || "Anonymous Conversion",
+        value: `$${((parsed.amount || 0) / 100).toLocaleString()}`,
+        date: event.timestamp ? new Date(event.timestamp).toLocaleDateString() : "Just Now",
+        source: parsed.source || "Autonomous Closing System",
+      };
+    });
 
     return NextResponse.json({
       success: true,
-      revenue: {
-        totalRevenue: `$${totalRevenue.toLocaleString()}`,
+      metrics: {
+        totalRevenue: totalRevenueCents > 0 ? totalRevenue : "$0",
         leadsGenerated,
         leadsQualified,
         dealsClosed,
-        conversionRate: `${conversionRate}%`,
-        costPerLead: `$${costPerLead}`,
-        recentDeals: recentDeals.slice(0, 10),
+        conversionRate,
+        costPerLead,
       },
+      pipeline,
+      recentDeals,
     });
   } catch (error) {
-    console.error("[Portal Revenue Error]:", error);
-    return NextResponse.json({ error: "Failed to fetch revenue data" }, { status: 500 });
+    console.error("[Portal Revenue API Error]:", error);
+    return NextResponse.json({ error: "Failed to fetch portal revenue data" }, { status: 500 });
   }
 }
