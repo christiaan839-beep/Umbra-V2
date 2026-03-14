@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import crypto from "crypto";
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -60,16 +63,23 @@ export async function POST(req: Request) {
 
       // Provision the user in the database
       if (email) {
-        const existing = db.users.findByEmail(email);
-        if (existing) {
-          db.users.updateTier(email, tier);
-          if (session.customer) db.users.setStripeCustomer(email, session.customer);
+        const existing = await db.select().from(users).where(eq(users.email, email.toLowerCase()));
+        
+        if (existing.length > 0) {
+          await db.update(users).set({ 
+            tier, 
+            ...(session.customer ? { stripeCustomerId: session.customer } : {})
+          }).where(eq(users.email, email.toLowerCase()));
         } else {
           // Auto-create account for new Stripe customers
-          const newUser = db.users.create(email, crypto.randomUUID().slice(0, 12));
-          db.users.updateTier(email, tier);
-          if (session.customer) db.users.setStripeCustomer(email, session.customer);
-          console.log(`[Stripe Webhook] Auto-created account for ${email}`);
+          await db.insert(users).values({
+            email: email.toLowerCase(),
+            passwordHash: `h_${crypto.randomUUID().slice(0, 12)}`, // dummy hash
+            name: email.split("@")[0],
+            tier,
+            ...(session.customer ? { stripeCustomerId: session.customer } : {})
+          });
+          console.log(`[Stripe Webhook] Auto-created Postgres account for ${email}`);
         }
       }
       break;
@@ -77,10 +87,12 @@ export async function POST(req: Request) {
 
     case "customer.subscription.deleted": {
       const subscription = event.data.object;
-      const user = db.users.findByStripeCustomer(subscription.customer);
-      if (user) {
-        db.users.updateTier(user.email, "sovereign"); // Downgrade to base tier
-        console.log(`[Stripe Webhook] ❌ Downgraded ${user.email} to sovereign (cancelled)`);
+      const existing = await db.select().from(users).where(eq(users.stripeCustomerId, subscription.customer));
+      
+      if (existing.length > 0) {
+        const user = existing[0];
+        await db.update(users).set({ tier: "sovereign" }).where(eq(users.email, user.email));
+        console.log(`[Stripe Webhook] ❌ Downgraded ${user.email} to base tier (cancelled)`);
       }
       break;
     }

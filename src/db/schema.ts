@@ -23,3 +23,19 @@ export const globalTelemetry = pgTable("global_telemetry", {
   payload: text("payload").notNull(), // JSON string representing the asset/data
   timestamp: timestamp("timestamp").defaultNow(),
 });
+
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  name: text("name").notNull(),
+  tier: text("tier").notNull().default("sovereign"),
+  stripeCustomerId: text("stripe_customer_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const settings = pgTable("settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull().unique(), // not doing formal FK to allow standalone keys
+  config: text("config").notNull().default('{}'), // JSON object stringified
+});
