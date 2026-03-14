@@ -34,6 +34,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Outfit:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="UMBRA" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
         {/* Plausible Analytics — Privacy-friendly, GDPR compliant, no cookies */}
         <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js" />
       </head>

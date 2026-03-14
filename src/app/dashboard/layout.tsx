@@ -43,7 +43,8 @@ const NAV_GROUPS = [
       { href: "/dashboard/leads", label: "Prospector Outbound", icon: Users },
       { href: "/dashboard/funnel-hacker", label: "Funnel Hijacker", icon: ShieldAlert },
       { href: "/dashboard/competitor", label: "Competitor Intel", icon: Shield },
-      { href: "/dashboard/analytics", label: "Conversion Funnel", icon: BarChart3 },
+      { href: "/dashboard/analytics", label: "Mission Telemetry", icon: BarChart3 },
+      { href: "/dashboard/launch", label: "Launch Center", icon: Target },
     ]
   },
   {

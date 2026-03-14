@@ -1,0 +1,43 @@
+{
+  "name": "UMBRA — Autonomous AI Marketing Intelligence",
+  "short_name": "UMBRA",
+  "description": "15 AI engines that market, sell, and scale while you sleep.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "Open the UMBRA command dashboard"
+    },
+    {
+      "name": "AI Scan",
+      "url": "/scan",
+      "description": "Run a free AI marketing scan"
+    },
+    {
+      "name": "Admin Panel",
+      "url": "/dashboard/admin",
+      "description": "View all client nodes"
+    }
+  ]
+}
