@@ -12,6 +12,10 @@ export default function CheckoutPage() {
   const [progress, setProgress] = useState(0);
   const [logs, setLogs] = useState<string[]>([]);
 
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
   // Simulate payment processing and provisioning
   useEffect(() => {
     if (stage === 'FORM' || stage === 'SUCCESS') return;
@@ -24,41 +28,40 @@ export default function CheckoutPage() {
         setProgress(p => {
           if (p >= 100) {
              clearInterval(interval);
-             setStage('PROVISIONING');
-             setProgress(0);
-             setLogs(['Payment Confirmed.', 'Establishing secure V-LAN...', 'Allocating dedicated NVIDIA H100 GPU block...']);
              return 100;
           }
-          return p + 2;
+          return p + 5;
         });
       }, ms);
     } 
-    else if (stage === 'PROVISIONING') {
-      const ms = 80;
-      interval = setInterval(() => {
-        setProgress(p => {
-          const current = p + 1.5;
-          if (current >= 100) {
-             clearInterval(interval);
-             setStage('SUCCESS');
-             return 100;
-          }
-          if (current === 30) setLogs(prev => [...prev, 'Injecting UMBRA core binaries...']);
-          if (current === 60) setLogs(prev => [...prev, 'Establishing Sub-Swarm telemetry...']);
-          if (current === 90) setLogs(prev => [...prev, 'SYSTEM ONLINE. Preparing Command Dashboard...']);
-          
-          return current;
-        });
-      }, ms);
-    }
 
     return () => clearInterval(interval);
   }, [stage]);
 
 
-  const handleCheckout = (e: React.FormEvent) => {
+  const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     setStage('PROCESSING');
+    
+    try {
+      const res = await fetch('/api/checkout/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, firstName, lastName }),
+      });
+      const data = await res.json();
+      
+      if (data.url) {
+        // Reroute the commander into the physical Stripe Checkout Hosted page
+        window.location.href = data.url;
+      } else {
+         console.error(data.error);
+         setStage('FORM');
+      }
+    } catch (e) {
+      console.error(e);
+      setStage('FORM');
+    }
   };
 
   return (
@@ -139,6 +142,8 @@ export default function CheckoutPage() {
                     <input 
                       type="email" 
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       placeholder="commander@your-agency.com"
                       className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-white placeholder-neutral-600 focus:outline-none focus:border-emerald-500/50 transition-colors"
                     />
@@ -149,6 +154,8 @@ export default function CheckoutPage() {
                       <input 
                         type="text" 
                         required
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
                         className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-emerald-500/50 transition-colors"
                       />
                     </div>
@@ -157,6 +164,8 @@ export default function CheckoutPage() {
                       <input 
                         type="text" 
                         required
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
                         className="w-full bg-[#0A0A0A] border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-emerald-500/50 transition-colors"
                       />
                     </div>
@@ -245,7 +254,7 @@ export default function CheckoutPage() {
               <div className="w-full space-y-4">
                  <div className="flex justify-between text-sm uppercase tracking-widest font-bold">
                    <span className={stage === 'PROCESSING' ? 'text-emerald-500' : 'text-[#00B7FF]'}>
-                     {stage === 'PROCESSING' ? 'Authorizing Payment' : 'Provisioning Node'}
+                     Initialize Payment Gateway...
                    </span>
                    <span className="text-white font-mono">{Math.floor(progress)}%</span>
                  </div>
