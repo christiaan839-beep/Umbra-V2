@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
-  Users, Mail, Settings, LogOut, BarChart3, Shield, DollarSign,
+  Users, Mail, Settings, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown
 } from "lucide-react";
 import ImmersiveNodeLayer from '@/components/3d/ImmersiveNodeLayer';
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -74,6 +74,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/reports", label: "Client Briefs", icon: FileText },
       { href: "/dashboard/webhooks", label: "Webhook Relays", icon: Webhook },
       { href: "/dashboard/compliance", label: "Compliance & Risk", icon: ShieldAlert },
+      { href: "/dashboard/admin", label: "Admin Panel", icon: Crown },
       { href: "/dashboard/settings", label: "Global Settings", icon: Settings },
     ]
   }
