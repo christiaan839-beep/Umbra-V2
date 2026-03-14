@@ -30,7 +30,7 @@ export async function POST() {
     `;
 
     const { text: apexThought } = await generateText({
-        model: google("gemini-1.5-pro"),
+        model: google("gemini-2.5-pro"),
         prompt,
     });
 

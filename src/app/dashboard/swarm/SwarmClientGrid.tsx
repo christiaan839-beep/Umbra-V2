@@ -7,15 +7,16 @@ import { Network, Server, Database, Activity, Scan, Film, Zap, Clock, ShieldChec
 // Simulated live telemetry data for UI presentation
 const MOCK_NODES = [
   { id: 'UMB-NX-77492', status: 'ACTIVE', load: 45, task: 'Omni-Scraping Lead Database', ping: 24, lastActive: 'Just now' },
-  { id: 'UMB-SYNTH-01', status: 'PROCESSING', load: 88, task: 'Rendering HeyGen Video [Alex Hormozi Style]', ping: 112, lastActive: '2s ago' },
+  { id: 'UMB-CLOSER-01', status: 'ACTIVE', load: 62, task: 'Gemini 3.1 Pro Lead Qualification', ping: 48, lastActive: '1s ago' },
+  { id: 'UMB-SOCIAL-04', status: 'ACTIVE', load: 38, task: 'Publishing Meta Graph Carousel', ping: 82, lastActive: '5s ago' },
   { id: 'UMB-DB-CORE', status: 'ACTIVE', load: 12, task: 'Ingesting Vector Embeddings', ping: 8, lastActive: 'Just now' },
 ];
 
 const MOCK_WEBHOOKS = [
   { id: 'wh_apollo_batch_992', source: 'Apollo API', action: 'Extracted 25 Leads', status: '200 OK', time: '12:04:33' },
+  { id: 'wh_gemini_dm_102', source: 'Instagram DM', action: 'Drafted Closer Payload', status: '200 OK', time: '12:03:55' },
   { id: 'wh_stripe_sub_551', source: 'Stripe Gateway', action: 'Captured $5,000 Retainer', status: '200 OK', time: '12:02:15' },
-  { id: 'wh_eleven_gen_114', source: 'ElevenLabs API', action: 'Synthesized Voice Profile CL', status: '200 OK', time: '11:59:42' },
-  { id: 'wh_heygen_rnd_882', source: 'HeyGen render', action: 'Video Synthesis Complete', status: '201 Created', time: '11:45:10' },
+  { id: 'wh_meta_post_009', source: 'Meta Graph API', action: 'Carousel Published: Sleep Protocol', status: '201 Created', time: '11:59:42' },
 ];
 
 interface SwarmClientProps {

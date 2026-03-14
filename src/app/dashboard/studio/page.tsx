@@ -11,31 +11,51 @@ export default function CinematicStudioPage() {
   const [topic, setTopic] = useState("Biohacking Protocol for CEO Focus");
   const [progress, setProgress] = useState(0);
 
-  const startPipeline = () => {
+  const [generatedScript, setGeneratedScript] = useState<string | null>(null);
+
+  const startPipeline = async () => {
     if (!topic || status !== "idle") return;
     
     setStatus("script");
     setProgress(15);
+    setGeneratedScript(null);
     
-    setTimeout(() => {
+    try {
+      // Step 1: Generate Script via Gemini 2.5 Pro
+      const scriptRes = await fetch("/api/swarm/cinematic/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic, style: "cinematic" }),
+      });
+      const scriptData = await scriptRes.json();
+      
+      if (scriptData.success) {
+        setGeneratedScript(scriptData.script);
+      }
+
       setStatus("voice");
       setProgress(40);
-    }, 2500);
 
-    setTimeout(() => {
+      // Step 2: Simulate Lyria Audio Generation (API not yet publicly available)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setStatus("avatar");
       setProgress(65);
-    }, 5000);
 
-    setTimeout(() => {
+      // Step 3: Simulate Veo Video Synthesis (API not yet publicly available)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setStatus("rendering");
       setProgress(85);
-    }, 7500);
 
-    setTimeout(() => {
+      // Step 4: Final Render
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       setStatus("deployed");
       setProgress(100);
-    }, 10000);
+
+    } catch (err) {
+      console.error("[Cinematic Pipeline Error]:", err);
+      setStatus("idle");
+      setProgress(0);
+    }
   };
 
   const getStepStatus = (step: string) => {

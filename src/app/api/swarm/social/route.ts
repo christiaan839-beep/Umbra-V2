@@ -1,93 +1,90 @@
 import { NextResponse } from "next/server";
-import { ai } from "@/lib/ai";
-import { remember } from "@/lib/memory";
+import { db } from "@/db";
+import { globalTelemetry } from "@/db/schema";
+import crypto from "crypto";
 
 export async function POST(req: Request) {
   try {
-    const { topic, context } = await req.json();
+    const { topic, platform = "all" } = await req.json();
 
     if (!topic) {
       return NextResponse.json({ error: "Missing campaign topic" }, { status: 400 });
     }
 
-    // 1. Generate the Master Content Brief
-    const prompt = `You are UMBRA's Lead Content Strategist.
-A new organic social media campaign has been requested.
-Topic: "${topic}"
-Context: "${context || 'No specific context provided. Assume a high-ticket B2B or elite consumer biohacking audience.'}"
+    // This Next.js API route acts as the secure reverse-proxy for the n8n Social Media Swarm.
+    // The actual orchestration (Gemini → Veo/Imagen → Meta API / YouTube API) 
+    // occurs inside the internal n8n nodes, initiated by these webhook triggers.
 
-Your job is to generate a master content brief that will be sent to the Instagram and YouTube autonomous publishing agents.
-The brief must be hyper-optimized for attention retention and direct-response psychology. No generic AI fluff. Use polarizing hooks, high-value payloads, and strong CTAs.
+    const logId = `soc_${crypto.randomUUID().slice(0, 8)}`;
+    let igDispatched = false;
+    let ytDispatched = false;
 
-Respond ONLY with a valid JSON object containing:
-{
-  "instagram": {
-    "format": "carousel",
-    "slide_count": 5,
-    "script": "The step-by-step text for the 5 carousel slides. Bold the hooks.",
-    "caption": "The Instagram caption, including 3 highly relevant hashtags."
-  },
-  "youtube": {
-    "format": "shorts",
-    "title": "A highly clickable title under 60 characters.",
-    "script": "A 60-second punchy video script.",
-    "description": "The video description with relevant keywords.",
-    "tags": ["3", "to", "5", "tags"]
-  }
-}`;
+    // Generate a visual asset via Google Imagen before dispatching
+    let generatedImage: string | null = null;
+    try {
+      const imagenRes = await fetch(new URL("/api/swarm/social/imagen", req.url).toString(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: topic }),
+      });
+      const imagenData = await imagenRes.json();
+      if (imagenData.success && imagenData.image?.data) {
+        generatedImage = imagenData.image.data;
+      }
+    } catch (err) {
+      console.warn("[Imagen] Visual generation skipped:", err);
+    }
 
-    const rawPlan = await ai(prompt, {
-      model: "gemini",
-      system: "You are the Social Media Router Swarm. You write elite, high-converting organic content.",
-      maxTokens: 1500,
+    // 1. Dispatch Instagram Webhook
+    if (platform === "all" || platform === "instagram") {
+      await fetch("http://localhost:5678/webhook/ig-auto-post", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic, logId, image: generatedImage })
+      }).catch(err => console.error("Instagram n8n webhook dispatch failed:", err));
+      igDispatched = true;
+    }
+
+    // 2. Dispatch YouTube Webhook
+    if (platform === "all" || platform === "youtube") {
+      await fetch("http://localhost:5678/webhook/yt-auto-upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic, logId })
+      }).catch(err => console.error("YouTube n8n webhook dispatch failed:", err));
+      ytDispatched = true;
+    }
+
+    // 3. Log into Neon Postgres for Swarm Dashboard Telemetry
+    await db.insert(globalTelemetry).values({
+      // Using a zero-UUID for system-level actions, or you could pass a specific tenantId
+      tenantId: "00000000-0000-0000-0000-000000000000", 
+      eventType: `social_media_deployed`,
+      payload: JSON.stringify({ 
+        campaignId: logId, 
+        topic, 
+        platforms: { instagram: igDispatched, youtube: ytDispatched },
+        timestamp: Date.now() 
+      }),
     });
 
-    const parsedPlan = JSON.parse(rawPlan.replace(/```json/g, "").replace(/```/g, "").trim());
-
-    // 2. Route the Briefs to Sub-Agents
-    // In production, these would trigger long-running background jobs/queues.
-    // For this tier, we will execute them synchronously via internal fetch calls (simulated).
-    
-    // Simulate routing latency
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    // Simulate Instagram Sub-Agent deployment
-    const igResponse = await fetch(`${req.headers.get('origin') || 'http://localhost:3000'}/api/swarm/social/instagram`, {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify(parsedPlan.instagram)
-    }).catch(e => ({ ok: false, statusText: e.message }));
-
-    // Simulate YouTube Sub-Agent deployment
-    const ytResponse = await fetch(`${req.headers.get('origin') || 'http://localhost:3000'}/api/swarm/social/youtube`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(parsedPlan.youtube)
-    }).catch(e => ({ ok: false, statusText: e.message }));
-
-    // 3. Log to God-Brain
-    const logId = `social_campaign_${Date.now()}`;
-    await remember(`SOCIAL SWARM DEPLOYED: Campaign "${topic}". Formats: IG Carousel & YT Shorts. Sub-agent status: IG (${igResponse.ok}), YT (${ytResponse.ok})`, {
-        type: "social-campaign",
-        campaignId: logId,
-        topic
-    });
+    console.log(`[Social Media Swarm] Dispatched topic: "${topic}" to ${platform}`);
 
     return NextResponse.json({
         success: true,
         message: `Swarm deployed for organic domination on topic: ${topic}`,
         data: {
           campaignId: logId,
-          contentPlan: parsedPlan,
           status: {
-            instagram_subagent: igResponse.ok ? "published" : `failed: ${igResponse.statusText}`,
-            youtube_subagent: ytResponse.ok ? "published" : `failed: ${ytResponse.statusText}`
+            instagram_subagent: igDispatched ? "dispatched" : "skipped",
+            youtube_subagent: ytDispatched ? "dispatched" : "skipped"
           }
         }
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Social Router Error]:", error);
-    return NextResponse.json({ error: error.message || "Failed to orchestrate social swarm" }, { status: 500 });
+    const msg = error instanceof Error ? error.message : "Failed to orchestrate social swarm";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
