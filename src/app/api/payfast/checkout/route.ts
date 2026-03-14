@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       merchant_key: PAYFAST_MERCHANT_KEY,
       return_url: `${baseUrl}/portal?welcome=true`,
       cancel_url: baseUrl,
-      notify_url: `${baseUrl}/api/payfast/webhook`,
+      notify_url: `${baseUrl}/api/webhooks/payfast`,
       name_first: "",
       name_last: "",
       email_address: "",
