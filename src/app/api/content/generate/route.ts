@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     const { text: contentJson } = await generateText({
       model: google("gemini-2.5-pro"),
-      prompt: `Generate a 7-day social media content calendar for an AI marketing agency.
+      prompt: `Act as a cynical, high-level marketing operator. You are generating a 7-day social media content calendar for an agency.
 
 INDUSTRY FOCUS: ${industry || "Digital Marketing & AI"}
 PLATFORMS: ${targetPlatforms.join(", ")}
@@ -39,14 +39,13 @@ Generate EXACTLY 7 posts in this JSON format:
   }
 ]
 
-RULES:
-- Each post should be for a different day (1-7)
-- Rotate platforms across the week
-- Captions under 150 words, engaging and value-driven
-- Include 5-8 relevant hashtags
-- imagePrompt should describe a visual that would perform well on that platform
-- bestTime in 24h format, optimized for engagement
-- Mix content types: educational, social proof, behind-the-scenes, tips, engagement
+CRITICAL "ANTI-SLOP" RULES (FAILURE IS UNACCEPTABLE):
+1. **NO AI SPEAK:** Never use words like "delve, testament, beacon, navigate, landscape, dynamic, synergy."
+2. **NO EMOJI VOMIT:** Use max 1 emoji per post, or 0.
+3. **TONE:** Sharp, opinionated, slightly contrarian, punchy. Write like a tired founder giving real advice, not a bubbly intern.
+4. **FORMAT:** Short sentences. 8th-grade reading level. 
+5. **PLATFORM NATIVE:** X/Twitter posts must be single-thought micro-rants. LinkedIn posts must be contrarian reality-checks, not humble-brags. Instagram captions must be direct and aesthetic.
+6. **CAPTIONS:** Keep them under 100 words. Cut the fluff. Start with a hook that pisses off conventional thinkers.
 
 Output ONLY the JSON array.`,
     });
