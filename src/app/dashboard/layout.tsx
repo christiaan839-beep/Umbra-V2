@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import ImmersiveNodeLayer from '@/components/3d/ImmersiveNodeLayer';
 import { UserButton, useUser } from "@clerk/nextjs";
+import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/TelemetryProvider';
 
 const NAV_GROUPS = [
   {
@@ -103,14 +104,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useUser();
+  const { isConnected, ping } = useGlobalTelemetry();
   
   // Generate a mock Node ID based on the user's ID for visual representation
   const nodeId = user ? `UMB-NX-${user.id.slice(-5).toUpperCase()}` : 'UMB-NX-OFFLINE';
 
   return (
-    <div className="flex min-h-screen bg-black text-white selection:bg-electric/30 relative overflow-hidden">
-      {/* 3D Global Background Layer */}
-      <ImmersiveNodeLayer />
+    <TelemetryProvider>
+      <div className="flex min-h-screen bg-black text-white selection:bg-electric/30 relative overflow-hidden">
+        {/* 3D Global Background Layer */}
+        <ImmersiveNodeLayer />
 
       {/* Cinematic Grid Lines Overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-[1]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
@@ -167,7 +170,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
              <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8 rounded-xl border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]" } }} />
              <div className="flex flex-col">
                <span className="text-xs font-bold text-white tracking-widest uppercase">Commander</span>
-               <span className="text-[9px] text-emerald-400 font-mono tracking-widest">{nodeId}</span>
+               <span className="text-[9px] text-emerald-400 font-mono tracking-widest flex items-center gap-2">
+                 {nodeId}
+                 {isConnected ? (
+                   <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> {ping}ms</span>
+                 ) : (
+                   <span className="flex items-center gap-1 text-red-500"><span className="w-1.5 h-1.5 bg-red-500 rounded-full" /> OFF</span>
+                 )}
+               </span>
              </div>
           </div>
         </div>
@@ -204,7 +214,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Settings className="w-5 h-5" />
             <span className="text-[8px] font-bold uppercase tracking-widest">Menu</span>
          </Link>
-      </nav>
-    </div>
+       </nav>
+      </div>
+    </TelemetryProvider>
   );
 }
