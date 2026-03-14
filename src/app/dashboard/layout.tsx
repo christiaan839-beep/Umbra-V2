@@ -54,6 +54,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/voice", label: "Voice Swarm", icon: Mic },
       { href: "/dashboard/social", label: "Social Router", icon: Send },
       { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
+      { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
       { href: "/dashboard/programmatic", label: "Factory Scale", icon: Layers },
       { href: "/dashboard/ghost-mode", label: "Ghost Mode", icon: Ghost },
       { href: "/dashboard/sequences", label: "Drip Sequences", icon: Mail },
