@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
 
     // 1. Forward to Python God-Brain Orchestrator
     try {
-        const pythonResponse = await fetch('http://localhost:8000/api/v1/commander/execute', {
+        const pythonResponse = await fetch('https://umbra-godbrain.onrender.com/api/v1/commander/execute', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ command: data.command, target_vector: 'GLOBAL' })
