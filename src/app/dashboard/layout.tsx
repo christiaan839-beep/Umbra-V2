@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, LogOut, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays
 } from "lucide-react";
 import ImmersiveNodeLayer from '@/components/3d/ImmersiveNodeLayer';
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -53,6 +53,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/studio", label: "Cinematic Studio", icon: Film },
       { href: "/dashboard/voice", label: "Voice Swarm", icon: Mic },
       { href: "/dashboard/social", label: "Social Router", icon: Send },
+      { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
       { href: "/dashboard/programmatic", label: "Factory Scale", icon: Layers },
       { href: "/dashboard/ghost-mode", label: "Ghost Mode", icon: Ghost },
       { href: "/dashboard/sequences", label: "Drip Sequences", icon: Mail },

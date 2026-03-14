@@ -39,3 +39,16 @@ export const settings = pgTable("settings", {
   userEmail: text("user_email").notNull().unique(), // not doing formal FK to allow standalone keys
   config: text("config").notNull().default('{}'), // JSON object stringified
 });
+
+export const scheduledContent = pgTable("scheduled_content", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id),
+  topic: text("topic").notNull(),
+  caption: text("caption"),
+  platform: text("platform").notNull().default("instagram"), // instagram, youtube, tiktok
+  scheduledAt: timestamp("scheduled_at").notNull(),
+  status: text("status").notNull().default("draft"), // draft, scheduled, published, failed
+  imagePrompt: text("image_prompt"), // Imagen-generated description
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
