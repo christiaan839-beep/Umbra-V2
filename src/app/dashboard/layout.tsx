@@ -74,6 +74,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/reports", label: "Client Briefs", icon: FileText },
       { href: "/dashboard/webhooks", label: "Webhook Relays", icon: Webhook },
       { href: "/dashboard/compliance", label: "Compliance & Risk", icon: ShieldAlert },
+      { href: "/dashboard/billing", label: "Billing & Plans", icon: DollarSign },
       { href: "/dashboard/admin", label: "Admin Panel", icon: Crown },
       { href: "/dashboard/settings", label: "Global Settings", icon: Settings },
     ]
