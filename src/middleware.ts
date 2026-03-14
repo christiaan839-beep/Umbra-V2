@@ -9,8 +9,10 @@ export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
     const session = await auth();
     if (!session.userId) {
-      // Redirect unauthenticated users trying to access the dashboard to the scan/checkout flow
-      return NextResponse.redirect(new URL("/checkout", req.url));
+      if (process.env.NEXT_PUBLIC_SKIP_STRIPE_PAYWALL !== "true") {
+        // Redirect unauthenticated users trying to access the dashboard to the scan/checkout flow
+        return NextResponse.redirect(new URL("/checkout", req.url));
+      }
     }
   }
 });

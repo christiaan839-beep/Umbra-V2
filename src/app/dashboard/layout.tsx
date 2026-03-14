@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -8,7 +9,7 @@ import {
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
   Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown
 } from "lucide-react";
-import ImmersiveNodeLayer from '@/components/3d/ImmersiveNodeLayer';
+import { NeuralWebGLBackground } from '@/components/3d/NeuralWebGLBackground';
 import { UserButton, useUser } from "@clerk/nextjs";
 import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/TelemetryProvider';
 
@@ -82,7 +83,7 @@ const NAV_GROUPS = [
   }
 ];
 
-function CrosshairIcon(props: any) {
+function CrosshairIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -107,10 +108,17 @@ function CrosshairIcon(props: any) {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const { user } = useUser();
   const { isConnected, ping } = useGlobalTelemetry();
   
+  // Temporary developer bypass to capture OmniSearch and WebGL environments
+  React.useEffect(() => {
+    if (process.env.NEXT_PUBLIC_SKIP_STRIPE_PAYWALL !== "true") {
+      // In a real environment, this logic might query your Database to check the user's Node access.
+      // We will skip this redirect entirely if SKIP_STRIPE_PAYWALL is active.
+    }
+  }, [user]);
+
   // Generate a mock Node ID based on the user's ID for visual representation
   const nodeId = user ? `UMB-NX-${user.id.slice(-5).toUpperCase()}` : 'UMB-NX-OFFLINE';
 
@@ -118,14 +126,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <TelemetryProvider>
       <div className="flex min-h-screen bg-black text-white selection:bg-electric/30 relative overflow-hidden">
         {/* 3D Global Background Layer */}
-        <ImmersiveNodeLayer />
+        <NeuralWebGLBackground />
 
       {/* Cinematic Grid Lines Overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-[1]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,183,255,0.04),transparent_60%)] pointer-events-none z-[2]" />
 
       {/* OS Sidebar (Desktop Only) */}
-      <aside className="hidden lg:flex w-64 border-r border-[#00B7FF]/10 bg-black/40 backdrop-blur-2xl flex-col shrink-0 overflow-hidden relative z-10 shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+      <aside className="hidden lg:flex w-64 border-r border-[#00B7FF]/10 bg-black/30 backdrop-blur-3xl flex-col shrink-0 overflow-hidden relative z-10 shadow-[0_0_80px_rgba(0,0,0,0.8)]">
         {/* Subtle grid background */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
         
@@ -189,7 +197,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </aside>
 
       {/* OS Main Content Panel */}
-      <main className="flex-1 overflow-y-auto bg-transparent relative z-10 pb-24 lg:pb-0">
+      <main className="flex-1 overflow-y-auto bg-black/40 backdrop-blur-3xl relative z-10 pb-24 lg:pb-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,183,255,0.03),transparent_40%)] pointer-events-none" />
         <div className="relative z-10 w-full min-h-full">
            {children}

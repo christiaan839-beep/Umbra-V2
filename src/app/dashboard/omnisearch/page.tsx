@@ -2,199 +2,231 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrainCircuit, Search, Upload, Play, FileText, Image as ImageIcon, Volume2, Database, Zap, Activity } from 'lucide-react';
+import { BrainCircuit, Search, Play, Volume2, DatabaseZap, Clock, ArrowRight, Zap, Target, FileText } from 'lucide-react';
 
-export default function OmnisearchTerminal() {
+interface SearchResult {
+  id: string;
+  type: 'video' | 'audio' | 'document';
+  title: string;
+  relevance: number;
+  timestamp?: string; // e.g., "01:24" where the exact phrase was said
+  excerpt: string;
+}
+
+export default function OmnisearchDashboard() {
   const [query, setQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SearchResult[] | null>(null);
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query) return;
-    
-    setIsSearching(true);
-    setResults([]);
+    if (!query.trim()) return;
 
-    // Simulate pinging the Gemini Multimodal Embeddings 2.0 API & Pinecone
+    setIsSearching(true);
+    setResults(null);
+
+    // Simulate calling the Pinecone Vector DB with Gemini Multimodal Embeddings
     setTimeout(() => {
       setResults([
         {
-          id: 'vec_9482',
+          id: 'vid_994a8x',
           type: 'video',
-          title: 'Competitor_Ad_Hook_Variant_B.mp4',
-          match: '98.4%',
-          snippet: '[00:00 - 00:05] Fast-paced B2B SaaS hook with aggressive text overlay.',
-          icon: Play,
-          color: 'text-rose-400',
-          bg: 'bg-rose-500/10'
+          title: 'Meta Ad A - "Stop Biohacking" Hook',
+          relevance: 98.4,
+          timestamp: '00:04',
+          excerpt: "...because 99% of what you are doing is literally destroying your baseline dopamine. Here is what we found in the biometric data..."
         },
         {
-          id: 'vec_1102',
+          id: 'aud_112z',
           type: 'audio',
-          title: 'High_Ticket_Sales_Call_Objection.wav',
-          match: '92.1%',
-          snippet: '[14:22] Handling the "too expensive" psychological objection using the UMBRA framework.',
-          icon: Volume2,
-          color: 'text-amber-400',
-          bg: 'bg-amber-500/10'
+          title: 'Closing Call - High Ticket Prospect (Dr. Evans)',
+          relevance: 92.1,
+          timestamp: '14:22',
+          excerpt: "...exactly. And when you bypass the standard digestive limits using our protocol, the cognitive ROI is immediate. That's why the $5k retainer is..."
         },
         {
-          id: 'vec_7731',
-          type: 'pdf',
-          title: 'Elite_Agency_Pitch_Deck_2025.pdf',
-          match: '88.7%',
-          snippet: 'Page 12: Conversion architecture and psychological color theory breakdowns.',
-          icon: FileText,
-          color: 'text-emerald-400',
-          bg: 'bg-emerald-500/10'
+          id: 'doc_55x',
+          type: 'document',
+          title: 'Phase 2: The Sleep Optimization Protocol',
+          relevance: 84.7,
+          excerpt: "Implementing strict chromatic light filtering at 19:00 leads to a 2.4x median decrease in sleep latency across our executive cohort."
         }
       ]);
       setIsSearching(false);
-    }, 2400);
+    }, 2800);
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] p-8 md:p-12 font-sans text-neutral-200">
+    <div className="flex-1 p-8 space-y-8 relative overflow-hidden bg-black/40 backdrop-blur-3xl min-h-screen">
       
       {/* Header */}
-      <div className="mb-12 border-b border-neutral-800/50 pb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <motion.div 
-            animate={{ boxShadow: ['0 0 0px #8b5cf6', '0 0 20px #8b5cf6', '0 0 0px #8b5cf6'] }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="w-10 h-10 rounded border border-violet-500/30 flex items-center justify-center bg-violet-500/10"
-          >
-            <BrainCircuit className="w-5 h-5 text-violet-400" />
-          </motion.div>
-          <h1 className="text-3xl font-light tracking-tight text-white">Omniscient Neural Memory</h1>
+      <div className="flex justify-between items-start">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-3">
+            <BrainCircuit className="w-6 h-6 text-[#00B7FF]" />
+            Omniscient Memory Retrieval
+          </h1>
+          <p className="text-xs font-mono uppercase tracking-widest text-[#00B7FF]/70">
+            Gemini 2.0 Multimodal Vector Database
+          </p>
         </div>
-        <p className="text-neutral-500 max-w-3xl tracking-wide">
-          Powered by Gemini Multimodal Embeddings 2.0. Ingest, vector-embed, and retrieve competitor videos, audio, PDFs, and images within a single unified RAG vector space spanning up to 120 seconds of raw continuous media.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        {/* Search Matrix */}
-        <div className="lg:col-span-3 space-y-6">
-          
-          <form onSubmit={handleSearch} className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="w-5 h-5 text-neutral-500 group-focus-within:text-violet-400 transition-colors" />
-            </div>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Query the God-Brain's multi-dimensional memory lake... (e.g., 'Aggressive B2B SaaS video hook')"
-              className="w-full bg-neutral-900/50 border border-neutral-800 rounded-xl py-4 pl-12 pr-4 text-white placeholder-neutral-600 focus:outline-none focus:border-violet-500/50 focus:bg-neutral-900 transition-all font-mono text-sm"
-            />
-            <button 
-               type="submit"
-               disabled={isSearching || !query}
-               className="absolute right-2 top-2 bottom-2 bg-violet-600 hover:bg-violet-500 text-white px-6 rounded-lg font-bold text-xs tracking-wider transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              RETRIEVE
-            </button>
-          </form>
-
-          {/* Results Area */}
-          <div className="bg-neutral-900/30 border border-neutral-800/60 rounded-xl min-h-[400px] p-6 backdrop-blur-md relative overflow-hidden">
-             
-             {isSearching ? (
-               <div className="absolute inset-0 flex flex-col items-center justify-center text-violet-400 z-10 bg-[#050505]/80 backdrop-blur-sm">
-                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, ease: "linear", repeat: Infinity }}>
-                   <Activity className="w-12 h-12 mb-4 opacity-50" />
-                 </motion.div>
-                 <p className="font-mono text-xs tracking-widest uppercase animate-pulse">Scanning 8,192-dimensional vector space...</p>
-                 <p className="text-[10px] text-neutral-500 mt-2 font-mono">Cross-referencing video, audio, and PDF embeddings.</p>
-               </div>
-             ) : results.length > 0 ? (
-               <div className="space-y-4">
-                 <h3 className="text-xs uppercase tracking-widest text-neutral-500 mb-4 font-mono">Top Semantic Matches (Cosine Similarity)</h3>
-                 <AnimatePresence>
-                   {results.map((result, i) => (
-                     <motion.div 
-                       key={result.id}
-                       initial={{ opacity: 0, x: -20 }}
-                       animate={{ opacity: 1, x: 0 }}
-                       transition={{ delay: i * 0.1 }}
-                       className="flex items-start gap-4 p-4 bg-neutral-800/40 border border-neutral-800 rounded-lg group hover:border-violet-500/30 transition-colors cursor-pointer"
-                     >
-                       <div className={`p-3 rounded-lg ${result.bg} border border-neutral-800 group-hover:border-violet-500/20 transition-colors`}>
-                         <result.icon className={`w-5 h-5 ${result.color}`} />
-                       </div>
-                       <div className="flex-1">
-                         <div className="flex justify-between items-start mb-1">
-                           <h4 className="text-white font-medium text-sm flex items-center gap-2">
-                             {result.title}
-                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-400 uppercase tracking-widest font-mono border border-neutral-700">
-                               {result.type}
-                             </span>
-                           </h4>
-                           <span className="text-xs font-mono font-bold text-violet-400 bg-violet-500/10 px-2 py-1 rounded border border-violet-500/20">
-                             {result.match} Match
-                           </span>
-                         </div>
-                         <p className="text-sm text-neutral-400 mb-2">{result.snippet}</p>
-                         <div className="text-[10px] text-neutral-600 font-mono flex items-center gap-4">
-                           <span className="flex items-center gap-1"><Database className="w-3 h-3" /> Vector ID: {result.id}</span>
-                           <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Embed Dims: 768</span>
-                         </div>
-                       </div>
-                     </motion.div>
-                   ))}
-                 </AnimatePresence>
-               </div>
-             ) : (
-               <div className="h-full flex flex-col items-center justify-center text-neutral-600">
-                 <Database className="w-16 h-16 mb-4 opacity-20" />
-                 <p className="font-mono text-sm">Vector Data Lake Ideled.</p>
-                 <p className="text-xs text-neutral-700 mt-2">Awaiting multimodal query input.</p>
-               </div>
-             )}
-          </div>
-
-        </div>
-
-        {/* Right Sidebar: Ingestion Status */}
-        <div className="lg:col-span-1 space-y-6">
-           <div className="bg-neutral-900/40 border border-neutral-800/60 rounded-xl p-6 backdrop-blur-md">
-            <h3 className="text-sm uppercase tracking-widest text-neutral-500 mb-6 flex items-center gap-2">
-              <Upload className="w-4 h-4 text-violet-400" />
-              Live Ingestion Node
-            </h3>
-
-            <div className="space-y-4 font-mono text-xs">
-              <div className="flex justify-between items-center bg-black/50 p-3 rounded border border-neutral-800">
-                <span className="text-neutral-400 flex items-center gap-2"><Play className="w-4 h-4 text-rose-400" /> Videos</span>
-                <span className="text-white">12,402</span>
-              </div>
-              <div className="flex justify-between items-center bg-black/50 p-3 rounded border border-neutral-800">
-                <span className="text-neutral-400 flex items-center gap-2"><ImageIcon className="w-4 h-4 text-sky-400" /> Images</span>
-                <span className="text-white">84,191</span>
-              </div>
-              <div className="flex justify-between items-center bg-black/50 p-3 rounded border border-neutral-800">
-                <span className="text-neutral-400 flex items-center gap-2"><Volume2 className="w-4 h-4 text-amber-400" /> Audio</span>
-                <span className="text-white">3,892</span>
-              </div>
-              <div className="flex justify-between items-center bg-black/50 p-3 rounded border border-neutral-800">
-                <span className="text-neutral-400 flex items-center gap-2"><FileText className="w-4 h-4 text-emerald-400" /> PDFs</span>
-                <span className="text-white">1,024</span>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-neutral-800">
-                <p className="text-[10px] text-neutral-500 uppercase tracking-widest mb-2 font-sans font-bold">Vector Database Status</p>
-                <div className="flex items-center gap-2 text-emerald-400 bg-emerald-500/10 px-3 py-2 rounded border border-emerald-500/20">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                  Pinecone Cluster Online
-                </div>
-              </div>
-            </div>
+        <div className="flex gap-4">
+           <div className="px-3 py-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Nodes Connected</span>
+           </div>
+           <div className="px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 flex items-center gap-2">
+              <DatabaseZap className="w-3.5 h-3.5 text-neutral-400" />
+              <span className="text-[10px] font-mono tracking-widest text-neutral-400">14,392 Vectors</span>
            </div>
         </div>
+      </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         <div className="col-span-1 lg:col-span-2 space-y-8">
+            {/* The Search Terminal */}
+            <div className="bg-black/40 border border-[#00B7FF]/10 rounded-2xl p-6 shadow-[0_0_30px_rgba(0,183,255,0.05)] backdrop-blur-xl relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-4 opacity-10">
+                 <BrainCircuit className="w-32 h-32 text-[#00B7FF]" />
+               </div>
+               
+               <form onSubmit={handleSearch} className="relative z-10">
+                 <label className="block text-xs font-medium text-neutral-500 mb-4 uppercase tracking-wide">Enter Natural Language Query</label>
+                 <div className="relative group">
+                    <Search className="absolute left-4 top-4 w-5 h-5 text-neutral-500 group-focus-within:text-[#00B7FF] transition-colors" />
+                    <input 
+                      type="text"
+                      className="w-full bg-black/50 border border-white/10 focus:border-[#00B7FF]/50 rounded-xl py-4 pl-12 pr-4 text-white placeholder-neutral-600 transition-all outline-none font-mono text-sm"
+                      placeholder="e.g., 'Find the exact moment I explained the $5k offer on a sales call last week'"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                    />
+                 </div>
+                 <div className="mt-4 flex justify-between items-center">
+                    <p className="text-[10px] text-neutral-500 uppercase tracking-widest flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-[#00B7FF]" /> Cross-modal search enabled (Video, Audio, Docs)
+                    </p>
+                    <button 
+                      type="submit"
+                      disabled={isSearching}
+                      className="px-6 py-2 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-[#00B7FF] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSearching ? 'Querying God-Brain...' : 'Extract Context'}
+                    </button>
+                 </div>
+               </form>
+            </div>
+
+            {/* Results Area */}
+            <AnimatePresence mode="wait">
+               {isSearching && (
+                 <motion.div 
+                   initial={{ opacity: 0, y: 10 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   exit={{ opacity: 0, y: -10 }}
+                   className="w-full h-48 border border-dashed border-[#00B7FF]/30 rounded-2xl flex flex-col items-center justify-center space-y-4"
+                 >
+                    <div className="relative w-12 h-12 flex items-center justify-center">
+                       <motion.div 
+                         animate={{ rotate: 360 }}
+                         transition={{ duration: 2, ease: "linear", repeat: Infinity }}
+                         className="absolute inset-0 rounded-full border border-dashed border-[#00B7FF]/50"
+                       />
+                       <DatabaseZap className="w-5 h-5 text-[#00B7FF] animate-pulse" />
+                    </div>
+                    <span className="text-xs font-mono text-[#00B7FF] uppercase tracking-widest">Traversing Latent Space...</span>
+                 </motion.div>
+               )}
+
+               {results && (
+                 <motion.div
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   className="space-y-4 text-left"
+                 >
+                    <h3 className="text-xs font-bold text-neutral-400 tracking-widest uppercase mb-4">Extracted Nodes ({results.length})</h3>
+                    
+                    {results.map((result, i) => (
+                      <motion.div 
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        key={result.id}
+                        className="bg-black/30 border border-white/5 p-5 rounded-xl hover:border-[#00B7FF]/30 transition-colors group relative"
+                      >
+                         <div className="absolute right-5 top-5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button className="text-xs text-[#00B7FF] uppercase font-bold tracking-widest flex items-center gap-1">
+                              Access Node <ArrowRight className="w-3 h-3" />
+                            </button>
+                         </div>
+
+                         <div className="flex items-start gap-4">
+                            <div className={`p-3 rounded-lg flex items-center justify-center shrink-0 ${
+                              result.type === 'video' ? 'bg-rose-500/10 text-rose-500' :
+                              result.type === 'audio' ? 'bg-amber-500/10 text-amber-500' :
+                              'bg-indigo-500/10 text-indigo-500'
+                            }`}>
+                               {result.type === 'video' && <Play className="w-5 h-5" />}
+                               {result.type === 'audio' && <Volume2 className="w-5 h-5" />}
+                               {result.type === 'document' && <FileText className="w-5 h-5" />}
+                            </div>
+                            
+                            <div className="space-y-2 pr-24">
+                               <div className="flex items-center gap-3">
+                                  <h4 className="text-sm font-semibold text-white">{result.title}</h4>
+                                  <span className="px-2 py-0.5 rounded text-[9px] font-mono tracking-widest bg-emerald-500/10 text-emerald-500">
+                                    {(result.relevance).toFixed(1)}% MATCH
+                                  </span>
+                               </div>
+                               
+                               <div className="bg-black/50 p-3 rounded-lg border border-white/5 relative mt-3">
+                                  {result.timestamp && (
+                                    <span className="absolute -top-2.5 right-3 bg-[#0A0A0A] px-2 text-[10px] font-mono text-neutral-400 border border-white/10 rounded">
+                                      <Clock className="inline w-3 h-3 mr-1" />{result.timestamp}
+                                    </span>
+                                  )}
+                                  <p className="text-sm text-neutral-300 italic font-serif opacity-80 leading-relaxed">
+                                    "{result.excerpt}"
+                                  </p>
+                               </div>
+                            </div>
+                         </div>
+                      </motion.div>
+                    ))}
+                 </motion.div>
+               )}
+            </AnimatePresence>
+         </div>
+
+         {/* Sidebar Stats */}
+         <div className="col-span-1 space-y-6">
+            <div className="bg-black/30 border border-white/5 rounded-2xl p-6">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-[#5C667A] mb-6">Cluster Statistics</h3>
+                <div className="space-y-4">
+                   <div className="flex justify-between items-center pb-4 border-b border-white/5">
+                      <span className="text-sm text-neutral-400">Audio Memos Embedded</span>
+                      <span className="text-white font-mono">1,402</span>
+                   </div>
+                   <div className="flex justify-between items-center pb-4 border-b border-white/5">
+                      <span className="text-sm text-neutral-400">Video Ads Ingested</span>
+                      <span className="text-white font-mono">344</span>
+                   </div>
+                   <div className="flex justify-between items-center">
+                      <span className="text-sm text-neutral-400">Protocol Documents</span>
+                      <span className="text-white font-mono">82</span>
+                   </div>
+                </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-[#00B7FF]/10 to-transparent border border-[#00B7FF]/20 rounded-2xl p-6 relative overflow-hidden">
+               <Target className="absolute top-0 right-0 w-24 h-24 text-[#00B7FF] opacity-10 -mr-6 -mt-6" />
+               <h3 className="text-sm font-bold text-white mb-2 relative z-10">Strategic Advantage</h3>
+               <p className="text-xs text-[#00B7FF]/80 leading-relaxed relative z-10">
+                 Standard LLMs cannot watch video or listen to audio calls. UMBRA utilizes Gemini's native multimodal capabilities to encode the literal pixels and soundwaves of your high-converting assets into semantic space.
+               </p>
+            </div>
+         </div>
       </div>
     </div>
   );
