@@ -216,25 +216,57 @@ export default function AGIAuditorPage() {
               </div>
 
               <div className="bg-gradient-to-br from-neutral-900 to-black border border-white/10 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+                <div className="absolute inset-0 bg-[url(&apos;https://grainy-gradients.vercel.app/noise.svg&apos;)] opacity-20" />
                 
                 <div className="relative z-10 max-w-2xl mx-auto">
                   <div className="w-16 h-16 bg-red-500/10 rounded-full border border-red-500/20 flex items-center justify-center mx-auto mb-6">
                      <Lock className="w-8 h-8 text-red-500" />
                   </div>
                   <h3 className="text-3xl md:text-5xl font-light mb-6 leading-tight">Your infrastructure is <span className="text-red-500 font-medium">bleeding capital.</span></h3>
-                  <p className="text-neutral-400 mb-10 text-lg">
-                    UMBRA is an autonomous Swarm engineered to permanently seal funnel leakage, deploy hyper-targeted capital, and execute revenue operations without human drag. Let the AGI take control.
+                  <p className="text-neutral-400 mb-8 text-lg">
+                    UMBRA is an autonomous Swarm engineered to permanently seal funnel leakage. Enter your email to get a free live demo dashboard — see exactly what UMBRA would do for <span className="text-white font-medium">{targetUrl}</span>.
                   </p>
                   
-                  <Link href="/checkout">
-                    <button className="group relative inline-flex items-center gap-4 px-10 py-5 bg-white text-black rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
-                      <span className="relative z-10 font-bold tracking-wide uppercase text-sm">Initiate Rescue Protocol (Deploy UMBRA)</span>
-                      <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-[#00B7FF] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 bg-gradient-to-r from-pink-500 to-[#00B7FF]" />
+                  {/* Email capture + auto demo provision */}
+                  <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-6">
+                    <input 
+                      type="email" 
+                      placeholder="your@email.com"
+                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white placeholder-neutral-500 outline-none focus:border-[#00B7FF]/50 transition-all"
+                      id="scan-email"
+                    />
+                    <button 
+                      onClick={async () => {
+                        const emailInput = document.getElementById('scan-email') as HTMLInputElement;
+                        const email = emailInput?.value;
+                        if (!email) return;
+                        
+                        // Auto-provision demo
+                        const demoRes = await fetch('/api/demo/provision', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ email, businessName: targetUrl }),
+                        });
+                        const demo = await demoRes.json();
+                        
+                        // Auto-trigger nurture sequence
+                        fetch('/api/nurture/sequence', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ leadName: email.split('@')[0], email, industry: 'Digital Business', painPoints: 'Funnel leakage, manual marketing, scaling' }),
+                        });
+                        
+                        // Redirect to live demo
+                        if (demo.portalUrl) {
+                          window.location.href = demo.portalUrl;
+                        }
+                      }}
+                      className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-black rounded-xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.3)] font-bold tracking-wide uppercase text-sm"
+                    >
+                      See My Demo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
-                  </Link>
+                  </div>
+                  <p className="text-xs text-neutral-500">No credit card required. Instant access to your personalized UMBRA dashboard.</p>
                 </div>
               </div>
             </motion.div>
