@@ -3,6 +3,7 @@
   "regions": ["iad1"],
   "crons": [
     { "path": "/api/cron/the-conductor", "schedule": "0 4 * * *" },
-    { "path": "/api/cron/self-optimize", "schedule": "0 2 * * *" }
+    { "path": "/api/cron/self-optimize", "schedule": "0 2 * * *" },
+    { "path": "/api/cron/content-publisher", "schedule": "*/5 * * * *" }
   ]
 }
