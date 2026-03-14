@@ -1,0 +1,124 @@
+{
+  "name": "UMBRA Physical Scraper Node",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "umbra-scraper-trigger",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://dummyjson.com/users?limit=3",
+        "options": {}
+      },
+      "name": "Execute Apollo/LinkedIn Scrape",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "event",
+              "value": "lead_extracted"
+            },
+            {
+              "name": "source",
+              "value": "n8n_physical_node"
+            }
+          ],
+          "number": [],
+          "boolean": []
+        },
+        "options": {}
+      },
+      "name": "Format Lead Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/api/v1/commander/webhook/re-entry",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "leads",
+              "value": "={{$node[\"Execute Apollo/LinkedIn Scrape\"].json[\"users\"]}}"
+            },
+            {
+              "name": "status",
+              "value": "success"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "God-Brain Re-entry POST",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        850,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execute Apollo/LinkedIn Scrape",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Apollo/LinkedIn Scrape": {
+      "main": [
+        [
+          {
+            "node": "Format Lead Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Lead Payload": {
+      "main": [
+        [
+          {
+            "node": "God-Brain Re-entry POST",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "umbra-scraper-node"
+}

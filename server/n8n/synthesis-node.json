@@ -1,0 +1,111 @@
+{
+  "name": "UMBRA Synthetic Media Node",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "umbra-synthesis-trigger",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/simulated",
+        "options": {}
+      },
+      "name": "ElevenLabs Voice Synthesis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.heygen.com/v1/video/simulated",
+        "options": {}
+      },
+      "name": "HeyGen Avatar Render",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "event",
+              "value": "video_synthesized"
+            },
+            {
+              "name": "source",
+              "value": "n8n_synthesis_node"
+            },
+            {
+              "name": "video_url",
+              "value": "https://framerusercontent.com/assets/m5k2YSTeQGtdX5Xl8N38iM0.mp4"
+            },
+            {
+              "name": "thumbnail",
+              "value": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1974&auto=format&fit=crop"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Format Video Payload",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/api/v1/commander/webhook/re-entry",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "event",
+              "value": "={{$node[\"Format Video Payload\"].json[\"event\"]}}"
+            },
+            {
+              "name": "video_url",
+              "value": "={{$node[\"Format Video Payload\"].json[\"video_url\"]}}"
+            },
+            {
+              "name": "thumbnail",
+              "value": "={{$node[\"Format Video Payload\"].json[\"thumbnail\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "God-Brain Re-entry POST",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{"node": "ElevenLabs Voice Synthesis", "type": "main", "index": 0}]]
+    },
+    "ElevenLabs Voice Synthesis": {
+      "main": [[{"node": "HeyGen Avatar Render", "type": "main", "index": 0}]]
+    },
+    "HeyGen Avatar Render": {
+      "main": [[{"node": "Format Video Payload", "type": "main", "index": 0}]]
+    },
+    "Format Video Payload": {
+      "main": [[{"node": "God-Brain Re-entry POST", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "umbra-synthesis-node"
+}

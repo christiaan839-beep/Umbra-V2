@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Zap, Target, BrainCircuit, Globe, CheckCircle2, XCircle, ShieldAlert, Cpu } from "lucide-react";
 import Link from "next/link";
+import { SignInButton } from "@clerk/nextjs";
 
 import { UmbraLogo } from "@/components/ui/UmbraLogo";
 
@@ -18,7 +19,9 @@ export default function Home() {
             <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">UMBRA</span>
           </div>
           <div className="flex items-center gap-6">
-             <Link href="/login" className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Client Login</Link>
+             <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
+               <button className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Client Login</button>
+             </SignInButton>
              <Link href="/sovereign" className="px-5 py-2 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white hover:bg-white/5 transition-colors">Start Free Trial</Link>
           </div>
         </div>

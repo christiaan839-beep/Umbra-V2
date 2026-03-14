@@ -55,8 +55,8 @@ export default function CinematicStudioPage() {
           <Film className="w-3 h-3" /> Synthesis Engine
         </div>
         <h1 className="text-3xl font-bold font-mono text-white tracking-tight">Cinematic Studio</h1>
-        <p className="text-sm text-[#8A95A5] mt-2 max-w-2xl font-mono uppercase tracking-widest">
-          Autonomous Content Pipeline: Script → Voice → HeyGen Avatar → Social
+        <p className="text-sm text-[#8A95A5] mt-2 max-w-2xl font-mono uppercase tracking-widest flex items-center gap-2">
+          Autonomous Generation: <span className="text-indigo-400 font-bold">Lyria (Audio)</span> + <span className="text-emerald-400 font-bold">Veo (Video)</span>
         </p>
       </div>
 
@@ -84,17 +84,19 @@ export default function CinematicStudioPage() {
 
             <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Voice Clone</label>
-                  <select disabled={status !== "idle"} className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-xs text-white outline-none cursor-pointer appearance-none">
-                    <option>CEO - Authority (11Labs)</option>
-                    <option>Sales - Energetic (11Labs)</option>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2 flex items-center gap-1">Audio Synthesis <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span></label>
+                  <select disabled={status !== "idle"} className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-xs text-white outline-none cursor-pointer appearance-none border-indigo-500/30">
+                    <option>Google Lyria (Cinematic Score)</option>
+                    <option>Google Lyria (Dynamic Voice)</option>
+                    <option>Gemini Audio (Real-time TTS)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Visual Avatar</label>
-                  <select disabled={status !== "idle"} className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-xs text-white outline-none cursor-pointer appearance-none">
-                    <option>Studio - Suit (HeyGen)</option>
-                    <option>Casual - Office (HeyGen)</option>
+                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2 flex items-center gap-1">Visual Synthesizer <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span></label>
+                  <select disabled={status !== "idle"} className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-xs text-white outline-none cursor-pointer appearance-none border-emerald-500/30">
+                    <option>Google Veo (Hyper-Realistic)</option>
+                    <option>Google Veo (Cinematic 4K)</option>
+                    <option>Legacy Avatar (HeyGen)</option>
                   </select>
                 </div>
             </div>
@@ -154,16 +156,16 @@ export default function CinematicStudioPage() {
                  
                  {/* Step 2 */}
                  <PipelineNode 
-                   title="Voice Clone Generation" 
-                   agent="ElevenLabs API" 
+                   title="Lyria Audio Generation" 
+                   agent="Google Lyria Engine" 
                    icon={Mic} 
                    status={getStepStatus("voice")} 
                  />
 
                  {/* Step 3 */}
                  <PipelineNode 
-                   title="Avatar Rendering" 
-                   agent="HeyGen Matrix" 
+                   title="Veo Video Synthesis" 
+                   agent="Google Veo API" 
                    icon={UserSquare2} 
                    status={getStepStatus("avatar")} 
                  />

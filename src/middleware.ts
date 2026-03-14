@@ -1,29 +1,25 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
-  // Routes that require authentication
-  const protectedRoutes = ['/dashboard', '/portal'];
-  const isProtected = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route));
+const isProtectedRoute = createRouteMatcher([
+  "/dashboard(.*)",
+]);
 
-  // Check for the session cookie
-  const session = request.cookies.get('umbra_session');
-
-  // If accessing a protected route without a session, redirect to login
-  if (isProtected && !session) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('from', request.nextUrl.pathname);
-    return NextResponse.redirect(loginUrl);
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) {
+    const session = await auth();
+    if (!session.userId) {
+      // Redirect unauthenticated users trying to access the dashboard to the scan/checkout flow
+      return NextResponse.redirect(new URL("/checkout", req.url));
+    }
   }
-
-  // If accessing login while already authenticated, redirect to dashboard
-  if (request.nextUrl.pathname === '/login' && session) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-
-  return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/portal/:path*', '/login'],
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
 };

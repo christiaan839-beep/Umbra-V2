@@ -6,9 +6,10 @@ import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, LogOut, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2
 } from "lucide-react";
 import ImmersiveNodeLayer from '@/components/3d/ImmersiveNodeLayer';
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const NAV_GROUPS = [
   {
@@ -101,11 +102,10 @@ function CrosshairIcon(props: any) {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const handleLogout = async () => {
-    await fetch("/api/auth", { method: "POST", body: JSON.stringify({ action: "logout" }) });
-    router.push("/login");
-    router.refresh();
-  };
+  const { user } = useUser();
+  
+  // Generate a mock Node ID based on the user's ID for visual representation
+  const nodeId = user ? `UMB-NX-${user.id.slice(-5).toUpperCase()}` : 'UMB-NX-OFFLINE';
 
   return (
     <div className="flex min-h-screen bg-black text-white selection:bg-electric/30 relative overflow-hidden">
@@ -116,8 +116,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-[1]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,183,255,0.04),transparent_60%)] pointer-events-none z-[2]" />
 
-      {/* OS Sidebar */}
-      <aside className="w-64 border-r border-[#00B7FF]/10 bg-black/40 backdrop-blur-2xl flex flex-col shrink-0 overflow-hidden relative z-10 shadow-[0_0_80px_rgba(0,0,0,0.8)]">
+      {/* OS Sidebar (Desktop Only) */}
+      <aside className="hidden lg:flex w-64 border-r border-[#00B7FF]/10 bg-black/40 backdrop-blur-2xl flex-col shrink-0 overflow-hidden relative z-10 shadow-[0_0_80px_rgba(0,0,0,0.8)]">
         {/* Subtle grid background */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
         
@@ -162,21 +162,49 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           ))}
         </nav>
 
-        <div className="p-4 border-t border-[#00B7FF]/10 z-10 bg-black/20 backdrop-blur-sm">
-          <button className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-xs font-bold text-text-secondary hover:text-rose-glow hover:bg-rose-glow/10 border border-transparent hover:border-rose-glow/20 transition-all group" onClick={handleLogout}>
-            <LogOut className="w-4 h-4 group-hover:text-rose-glow transition-colors" />
-            DISCONNECT
-          </button>
+        <div className="p-4 border-t border-[#00B7FF]/10 z-10 bg-black/20 backdrop-blur-sm flex items-center justify-between">
+          <div className="flex items-center gap-3">
+             <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8 rounded-xl border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]" } }} />
+             <div className="flex flex-col">
+               <span className="text-xs font-bold text-white tracking-widest uppercase">Commander</span>
+               <span className="text-[9px] text-emerald-400 font-mono tracking-widest">{nodeId}</span>
+             </div>
+          </div>
         </div>
       </aside>
 
       {/* OS Main Content Panel */}
-      <main className="flex-1 overflow-y-auto bg-transparent relative z-10">
+      <main className="flex-1 overflow-y-auto bg-transparent relative z-10 pb-24 lg:pb-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,183,255,0.03),transparent_40%)] pointer-events-none" />
         <div className="relative z-10 w-full min-h-full">
            {children}
         </div>
       </main>
+
+      {/* Mobile Glassmorphic Bottom Navigation (PWA) */}
+      <nav className="lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-2xl flex items-center justify-around p-3 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+         <Link href="/dashboard" className={`flex flex-col items-center gap-1 ${pathname === '/dashboard' ? 'text-white' : 'text-neutral-500'}`}>
+            <LayoutDashboard className="w-5 h-5" />
+            <span className="text-[8px] font-bold uppercase tracking-widest">Command</span>
+         </Link>
+         <Link href="/dashboard/apex-strategy" className={`flex flex-col items-center gap-1 ${pathname === '/dashboard/apex-strategy' ? 'text-[#00B7FF]' : 'text-neutral-500'}`}>
+            <BrainCircuit className="w-5 h-5" />
+            <span className="text-[8px] font-bold uppercase tracking-widest">Apex</span>
+         </Link>
+         <div className="relative -mt-6">
+            <Link href="/dashboard/omnipresence" className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-rose-500 to-rose-700 border border-white/20 shadow-[0_0_20px_rgba(244,63,94,0.4)] text-white">
+               <Globe2 className="w-5 h-5" />
+            </Link>
+         </div>
+         <Link href="/dashboard/funnel-hacker" className={`flex flex-col items-center gap-1 ${pathname === '/dashboard/funnel-hacker' ? 'text-rose-500' : 'text-neutral-500'}`}>
+            <ShieldAlert className="w-5 h-5" />
+            <span className="text-[8px] font-bold uppercase tracking-widest">Hijack</span>
+         </Link>
+         <Link href="/dashboard/settings" className={`flex flex-col items-center gap-1 ${pathname === '/dashboard/settings' ? 'text-white' : 'text-neutral-500'}`}>
+            <Settings className="w-5 h-5" />
+            <span className="text-[8px] font-bold uppercase tracking-widest">Menu</span>
+         </Link>
+      </nav>
     </div>
   );
 }

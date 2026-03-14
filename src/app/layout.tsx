@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -36,7 +37,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Plausible Analytics — Privacy-friendly, GDPR compliant, no cookies */}
         <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js" />
       </head>
-      <body className="bg-midnight text-white antialiased">{children}</body>
+      <ClerkProvider>
+        <body className="bg-midnight text-white antialiased">{children}</body>
+      </ClerkProvider>
     </html>
   );
 }

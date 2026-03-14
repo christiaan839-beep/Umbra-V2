@@ -2,236 +2,222 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrainCircuit, Send, Activity, Cpu, Film, Target, Globe2, Shield, Zap, Bot } from 'lucide-react';
+import { Terminal, Send, Cpu, Brain, Film, PenTool, ShieldAlert, Zap, Network } from 'lucide-react';
+import { io, Socket } from 'socket.io-client';
 
-interface AgentMessage {
+type Agent = 'COMMANDER' | 'GOVERNOR' | 'AD-BUYER' | 'COPYWRITER' | 'VIDEO-SYNTH';
+
+interface Message {
   id: string;
-  agent: string;
-  color: string;
-  icon: any;
+  agent: Agent;
   text: string;
-  timestamp: string;
+  timestamp: Date;
+  videoUrl?: string;
 }
 
-const AGENTS: Record<string, { color: string; icon: any; glow: string }> = {
-  'GOD-BRAIN': { color: 'text-[#00B7FF]', icon: BrainCircuit, glow: 'shadow-[0_0_15px_rgba(0,183,255,0.4)]' },
-  'APEX': { color: 'text-rose-400', icon: Target, glow: 'shadow-[0_0_15px_rgba(244,63,94,0.4)]' },
-  'TAVILY': { color: 'text-amber-400', icon: Globe2, glow: 'shadow-[0_0_15px_rgba(251,191,36,0.4)]' },
-  'CINEMATIC': { color: 'text-pink-400', icon: Film, glow: 'shadow-[0_0_15px_rgba(244,114,182,0.4)]' },
-  'AD-BUYER': { color: 'text-emerald-400', icon: Zap, glow: 'shadow-[0_0_15px_rgba(52,211,153,0.4)]' },
-  'GOVERNOR': { color: 'text-violet-400', icon: Shield, glow: 'shadow-[0_0_15px_rgba(167,139,250,0.4)]' },
+const AGENT_CONFIG = {
+  'COMMANDER': { color: 'text-white', bg: 'bg-white/10', border: 'border-white/20', icon: Terminal },
+  'GOVERNOR': { color: 'text-[#00B7FF]', bg: 'bg-[#00B7FF]/10', border: 'border-[#00B7FF]/20', icon: Brain },
+  'AD-BUYER': { color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/20', icon: Zap },
+  'COPYWRITER': { color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20', icon: PenTool },
+  'VIDEO-SYNTH': { color: 'text-pink-500', bg: 'bg-pink-500/10', border: 'border-pink-500/20', icon: Film },
 };
 
-const ORCHESTRATION_SEQUENCES: Record<string, AgentMessage[]> = {
-  default: [
-    { id: '1', agent: 'GOD-BRAIN', color: '', icon: null, text: 'Decomposing strategic objective into sub-tasks. Routing to specialist nodes...', timestamp: '' },
-    { id: '2', agent: 'TAVILY', color: '', icon: null, text: 'Initiating cross-domain intelligence extraction. Scanning competitive landscape across 12 verticals. Aggregating SERP dominance scores, backlink authority curves, and social velocity metrics...', timestamp: '' },
-    { id: '3', agent: 'APEX', color: '', icon: null, text: 'TAVILY data ingested. Identifying vulnerability vectors in competitor positioning. Weak CTA structure detected. Pricing page has 34% lower conversion efficiency than market average. Formulating counter-strategy...', timestamp: '' },
-    { id: '4', agent: 'CINEMATIC', color: '', icon: null, text: 'Synthesizing 3 video hook variants targeting identified vulnerability. Generating UGC-style testimonial (11Labs voice clone) + motion graphics explainer (HeyGen avatar). ETA: 45 seconds.', timestamp: '' },
-    { id: '5', agent: 'AD-BUYER', color: '', icon: null, text: 'Campaign architecture ready. Allocating $150/day across 4 adsets. Lookalike audience seeded from competitor\'s top 1000 engaged followers. Projected ROAS: 4.2x within 72hrs.', timestamp: '' },
-    { id: '6', agent: 'GOVERNOR', color: '', icon: null, text: '⚡ Compliance scan PASSED. Ad copy clear of restricted claims. Creative assets verified against Meta Advertising Standards. All systems green for deployment.', timestamp: '' },
-    { id: '7', agent: 'GOD-BRAIN', color: '', icon: null, text: '✅ STRATEGIC DEPLOYMENT AUTHORIZED. All 6 sub-tasks routed and confirmed. Campaign goes live in T-minus 60 seconds. God-Tier Output: ENGAGED.', timestamp: '' },
-  ],
-};
-
-export default function ApexWarRoom() {
-  const [messages, setMessages] = useState<AgentMessage[]>([]);
-  const [input, setInput] = useState('');
+// Active WebSocket Hook connecting to Executive Operations Server
+function useApexTelemetry(initialMessages: Message[]) {
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [currentTyping, setCurrentTyping] = useState<string | null>(null);
-  const feedRef = useRef<HTMLDivElement>(null);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (feedRef.current) {
-      feedRef.current.scrollTop = feedRef.current.scrollHeight;
-    }
-  }, [messages, currentTyping]);
-
-  const executeOrchestration = async (userPrompt: string) => {
-    setIsProcessing(true);
+    socketRef.current = io('http://127.0.0.1:3011');
     
-    // Add user message
-    const userMsg: AgentMessage = {
-      id: `user-${Date.now()}`,
-      agent: 'COMMANDER',
-      color: 'text-white',
-      icon: Cpu,
-      text: userPrompt,
-      timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
-    };
-    setMessages(prev => [...prev, userMsg]);
+    socketRef.current.on('apex_response', (data) => {
+      setMessages(prev => [...prev, { id: Math.random().toString(36).substr(2, 9), agent: data.agent, text: data.text, timestamp: new Date() }]);
+    });
 
-    const sequence = ORCHESTRATION_SEQUENCES.default;
+    socketRef.current.on('live_lead_stream', (data) => {
+      if (data.event === 'video_synthesized') {
+        const text = `[RE-ENTRY WEBHOOK] Synthetic Representation Asset Retrieved. Target URL injected into feed:`;
+        setMessages(prev => [...prev, { 
+          id: Math.random().toString(36).substr(2, 9), 
+          agent: 'VIDEO-SYNTH', 
+          text: text, 
+          timestamp: new Date(),
+          videoUrl: data.video_url
+        }]);
+      } else {
+        const payloadString = JSON.stringify(data, null, 2);
+        const text = `[RE-ENTRY WEBHOOK] Physical Scraper Node returned payload:\n\n${payloadString}`;
+        setMessages(prev => [...prev, { 
+          id: Math.random().toString(36).substr(2, 9), 
+          agent: 'GOVERNOR', 
+          text: text, 
+          timestamp: new Date() 
+        }]);
+      }
+      setIsProcessing(false);
+    });
 
-    for (let i = 0; i < sequence.length; i++) {
-      const msg = sequence[i];
-      const agentInfo = AGENTS[msg.agent];
-      
-      // Show typing indicator
-      setCurrentTyping(msg.agent);
-      await new Promise(r => setTimeout(r, 800 + Math.random() * 1200));
-      
-      // Add the message
-      const fullMsg: AgentMessage = {
-        ...msg,
-        id: `agent-${Date.now()}-${i}`,
-        color: agentInfo.color,
-        icon: agentInfo.icon,
-        timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
-      };
-      
-      setCurrentTyping(null);
-      setMessages(prev => [...prev, fullMsg]);
-      
-      await new Promise(r => setTimeout(r, 400));
+    socketRef.current.on('apex_complete', () => {
+       setIsProcessing(false);
+    });
+
+    return () => {
+       socketRef.current?.disconnect();
     }
+  }, []);
 
-    setIsProcessing(false);
+  const dispatchCommand = async (command: string) => {
+    if (!socketRef.current) return;
+    setIsProcessing(true);
+    socketRef.current.emit('execute_command', { command });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  return { messages, isProcessing, dispatchCommand };
+}
+
+export default function ApexStrategyTerminal() {
+  const { messages, isProcessing, dispatchCommand } = useApexTelemetry([
+    {
+      id: '1',
+      agent: 'GOVERNOR',
+      text: 'God-Brain sequence initiated. Swarm nodes standing by for command injection.',
+      timestamp: new Date()
+    }
+  ]);
+  const [input, setInput] = useState('');
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleCommand = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isProcessing) return;
-    const prompt = input;
+
+    dispatchCommand(input);
     setInput('');
-    executeOrchestration(prompt);
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-2rem)] max-w-5xl mx-auto p-4 lg:p-8">
+    <div className="p-8 max-w-6xl mx-auto h-[calc(100vh-2rem)] flex flex-col relative z-10">
       
       {/* Header */}
-      <div className="backdrop-blur-3xl bg-black/40 border border-[#00B7FF]/20 rounded-2xl p-6 mb-6 shadow-[0_0_50px_rgba(0,183,255,0.05)]">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-light text-white tracking-widest flex items-center gap-3 font-mono">
-              <BrainCircuit className="w-7 h-7 text-[#00B7FF]" />
-              [ APEX WAR ROOM ]
-            </h1>
-            <p className="text-neutral-400 text-xs tracking-widest uppercase mt-1">
-              Multi-Agent Strategic Command Interface • Direct Neural Uplink
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            {Object.entries(AGENTS).slice(0, 4).map(([name, info]) => (
-              <div key={name} className={`w-2 h-2 rounded-full ${info.color.replace('text-', 'bg-')} ${isProcessing ? 'animate-pulse' : ''}`}
-                style={{ boxShadow: isProcessing ? `0 0 8px currentColor` : 'none' }}
-              />
-            ))}
-            <span className="text-[9px] uppercase tracking-widest text-neutral-500 ml-2 font-mono">
-              {isProcessing ? 'PROCESSING' : '6 AGENTS ONLINE'}
-            </span>
-          </div>
+      <div className="mb-6 flex items-end justify-between">
+        <div>
+          <h1 className="text-3xl font-light text-white tracking-widest font-mono flex items-center gap-3">
+            <Terminal className="w-8 h-8 text-[#00B7FF]" /> 
+            APEX COMMAND TERMINAL
+          </h1>
+          <p className="text-[#8A95A5] uppercase tracking-[0.2em] text-xs mt-2 font-bold">
+            Direct Natural Language Injection • Multi-Agent Swarm Logic
+          </p>
+        </div>
+        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md px-4 py-2 rounded-xl border border-[#00B7FF]/20 shadow-[0_0_15px_rgba(0,183,255,0.1)]">
+           <Network className="w-4 h-4 text-[#00B7FF] animate-pulse" />
+           <span className="text-xs font-mono font-bold text-[#00B7FF] uppercase tracking-widest">
+             {isProcessing ? 'Swarm Synthesizing...' : 'Swarm Idle'}
+           </span>
         </div>
       </div>
 
-      {/* Chat Feed */}
-      <div ref={feedRef} className="flex-1 overflow-y-auto space-y-4 mb-6 pr-2 custom-scrollbar">
+      {/* Main Terminal Window */}
+      <div className="flex-1 bg-black/60 backdrop-blur-3xl border border-[#00B7FF]/20 rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] flex flex-col relative">
         
-        {messages.length === 0 && !isProcessing && (
-          <div className="flex flex-col items-center justify-center h-full text-neutral-600">
-            <BrainCircuit className="w-16 h-16 mb-6 opacity-20" />
-            <p className="text-sm uppercase tracking-widest font-mono mb-2">Neural Uplink Awaiting Input</p>
-            <p className="text-xs text-neutral-700 max-w-md text-center">
-              Type a strategic order below. The God-Brain will decompose it into sub-tasks and route them to specialist agents in real-time.
-            </p>
-            <div className="mt-8 space-y-2 text-[10px] text-neutral-700 font-mono">
-              <p className="opacity-50">Try: "Analyze competitor domain acme.com and launch a counter-campaign"</p>
-              <p className="opacity-50">Try: "Generate a viral video campaign for B2B SaaS founders"</p>
-              <p className="opacity-50">Try: "Deploy a cold outreach sequence to 500 qualified leads"</p>
-            </div>
-          </div>
-        )}
-
-        <AnimatePresence>
-          {messages.map((msg) => {
-            const isUser = msg.agent === 'COMMANDER';
-            const agentInfo = !isUser ? AGENTS[msg.agent] : null;
-            const IconComponent = isUser ? Cpu : msg.icon;
-
-            return (
-              <motion.div
-                key={msg.id}
-                initial={{ opacity: 0, y: 15, filter: 'blur(3px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 0.4 }}
-                className={`flex gap-4 ${isUser ? 'justify-end' : ''}`}
-              >
-                {!isUser && (
-                  <div className={`w-9 h-9 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center shrink-0 ${agentInfo?.glow}`}>
-                    <IconComponent className={`w-4 h-4 ${msg.color}`} />
+        {/* Cinematic Grid Lines Overlay */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        
+        {/* Chat Area */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10 custom-scrollbar">
+          <AnimatePresence>
+            {messages.map((msg, i) => {
+              const config = AGENT_CONFIG[msg.agent];
+              const Icon = config.icon;
+              const isCommander = msg.agent === 'COMMANDER';
+              
+              return (
+                <motion.div
+                  key={msg.id}
+                  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  className={`flex w-full ${isCommander ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`flex gap-4 max-w-[80%] ${isCommander ? 'flex-row-reverse' : 'flex-row'}`}>
+                    
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-[0_0_15px_rgba(0,0,0,0.5)] flex-col ${config.bg} ${config.border}`}>
+                      <Icon className={`w-5 h-5 ${config.color}`} />
+                    </div>
+                    
+                    <div className={`flex flex-col ${isCommander ? 'items-end' : 'items-start'}`}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-[10px] font-bold uppercase tracking-widest ${config.color}`}>
+                          [{msg.agent}]
+                        </span>
+                        <span className="text-[10px] font-mono text-neutral-500">
+                           {msg.timestamp.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        </span>
+                      </div>
+                      
+                      <div className={`p-4 rounded-xl font-mono text-sm leading-relaxed border ${
+                          isCommander 
+                            ? 'bg-white/5 border-white/10 text-white rounded-tr-none' 
+                            : 'bg-[#0B0C10]/80 border-glass-border text-neutral-300 rounded-tl-none'
+                        } shadow-lg`}
+                      >
+                         <p className="whitespace-pre-wrap">{msg.text}</p>
+                         
+                         {msg.videoUrl && (
+                           <div className="mt-4 rounded-xl overflow-hidden border border-pink-500/20 shadow-[0_0_20px_rgba(236,72,153,0.15)] bg-black">
+                              <div className="bg-pink-500/10 px-3 py-2 border-b border-pink-500/20 flex items-center justify-between">
+                                <span className="text-xs font-bold text-pink-500 tracking-widest uppercase flex items-center gap-2">
+                                  <Film className="w-3 h-3" /> SYNTHESIZED_ASSET.MP4
+                                </span>
+                                <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
+                              </div>
+                              <video 
+                                src={msg.videoUrl} 
+                                controls 
+                                className="w-full max-w-sm rounded-b-xl object-cover"
+                                autoPlay
+                                loop
+                                muted
+                              />
+                           </div>
+                         )}
+                      </div>
+                    </div>
                   </div>
-                )}
-                
-                <div className={`max-w-[75%] ${isUser ? 'bg-[#00B7FF]/10 border-[#00B7FF]/30' : 'bg-black/50 border-white/10'} border backdrop-blur-2xl rounded-2xl p-4`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`text-[9px] font-bold uppercase tracking-[0.2em] ${isUser ? 'text-[#00B7FF]' : msg.color}`}>
-                      {msg.agent}
-                    </span>
-                    <span className="text-[9px] text-neutral-600 font-mono">{msg.timestamp}</span>
-                  </div>
-                  <p className="text-sm text-neutral-200 leading-relaxed font-sans">{msg.text}</p>
-                </div>
-
-                {isUser && (
-                  <div className="w-9 h-9 rounded-xl bg-[#00B7FF]/10 border border-[#00B7FF]/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(0,183,255,0.3)]">
-                    <Cpu className="w-4 h-4 text-[#00B7FF]" />
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-
-        {/* Typing Indicator */}
-        {currentTyping && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center gap-3 pl-1"
-          >
-            <div className={`w-9 h-9 rounded-xl bg-black/60 border border-white/10 flex items-center justify-center ${AGENTS[currentTyping]?.glow}`}>
-              {React.createElement(AGENTS[currentTyping]?.icon || Bot, { className: `w-4 h-4 ${AGENTS[currentTyping]?.color}` })}
-            </div>
-            <div className="flex items-center gap-1.5 bg-black/50 border border-white/10 rounded-2xl px-4 py-3">
-              <span className={`text-[9px] font-bold uppercase tracking-[0.2em] ${AGENTS[currentTyping]?.color} mr-2`}>{currentTyping}</span>
-              <div className="flex gap-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-neutral-500 animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-1.5 h-1.5 rounded-full bg-neutral-500 animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-1.5 h-1.5 rounded-full bg-neutral-500 animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </div>
-
-      {/* Command Input */}
-      <form onSubmit={handleSubmit} className="relative">
-        <div className="backdrop-blur-3xl bg-black/60 border border-[#00B7FF]/20 rounded-2xl p-2 flex items-center gap-3 shadow-[0_0_50px_rgba(0,183,255,0.05)]">
-          <div className="pl-4">
-            <BrainCircuit className="w-5 h-5 text-[#00B7FF]/50" />
-          </div>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={isProcessing ? "Agents are processing..." : "Enter a strategic directive for the God-Brain..."}
-            disabled={isProcessing}
-            className="flex-1 bg-transparent text-white text-sm placeholder:text-neutral-600 outline-none font-mono disabled:opacity-50"
-          />
-          <button
-            type="submit"
-            disabled={isProcessing || !input.trim()}
-            className="p-3 rounded-xl bg-[#00B7FF]/10 border border-[#00B7FF]/30 hover:bg-[#00B7FF]/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            {isProcessing ? (
-              <Activity className="w-4 h-4 text-[#00B7FF] animate-spin" />
-            ) : (
-              <Send className="w-4 h-4 text-[#00B7FF]" />
-            )}
-          </button>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+          <div ref={bottomRef} />
         </div>
-      </form>
+
+        {/* Command Input Area */}
+        <div className="p-4 border-t border-[#00B7FF]/20 bg-[#0B0C10]/90 z-10 relative">
+          <form onSubmit={handleCommand} className="relative flex items-center">
+             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00B7FF]/50 font-mono font-bold">&gt;</div>
+             <input
+               type="text"
+               value={input}
+               onChange={(e) => setInput(e.target.value)}
+               placeholder="Inject command into God-Brain... (e.g., 'Analyze competitor.com and launch counter-campaign')"
+               disabled={isProcessing}
+               className="w-full bg-black/50 border border-[#00B7FF]/30 rounded-xl py-4 pl-10 pr-16 text-white font-mono text-sm focus:outline-none focus:border-[#00B7FF] focus:shadow-[0_0_20px_rgba(0,183,255,0.2)] transition-all placeholder:text-neutral-600 disabled:opacity-50"
+             />
+             <button
+               type="submit"
+               disabled={!input.trim() || isProcessing}
+               className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-[#00B7FF]/10 text-[#00B7FF] rounded-lg border border-[#00B7FF]/30 hover:bg-[#00B7FF]/20 transition-all disabled:opacity-50"
+             >
+               {isProcessing ? <Cpu className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+             </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

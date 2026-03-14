@@ -57,7 +57,7 @@ export default function VoiceSwarmHub() {
                     <Mic className="text-electric w-8 h-8" />
                     Voice Swarm
                 </h1>
-                <p className="text-text-secondary uppercase tracking-widest text-xs mt-2">Autonomous Telephony Node // Vapi/Twilio Uplink</p>
+                <p className="text-text-secondary uppercase tracking-widest text-xs mt-2">Autonomous Telephony Node // <span className="text-[#00B7FF] font-bold">Gemini Real-Time Audio Uplink</span></p>
             </div>
             <div className="flex items-center gap-6">
                  <div className="flex flex-col items-end">
@@ -95,7 +95,7 @@ export default function VoiceSwarmHub() {
 
                     <button disabled={isDialing} type="submit" className="w-full py-4 mt-4 bg-gradient-to-r from-electric to-rose-glow rounded-md text-white font-bold uppercase tracking-wider text-xs hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                          {isDialing ? (
-                             <><Radio className="w-4 h-4 animate-spin text-white" /> Establishing SIP Link...</>
+                             <><Radio className="w-4 h-4 animate-spin text-white" /> Establishing Gemini Audio Socket...</>
                          ) : (
                              <><PhoneCall className="w-4 h-4" /> Dispatch Voice Agent</>
                          )}

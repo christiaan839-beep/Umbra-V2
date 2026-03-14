@@ -13,10 +13,10 @@ type ProspectReport = {
 };
 
 const LOG_MESSAGES = [
-    "Establishing uplink with Tavily Web Search API...",
-    "Sweeping target location for independent businesses...",
+    "Establishing uplink with Google Maps Builder API...",
+    "Extracting spatial B2B nodes via Maps Places API...",
     "Filtering out franchise megacorps...",
-    "Extracting raw DOM structure from 3 valid targets...",
+    "Extracting raw DOM structure & dynamic reviews from 3 Map pins...",
     "Transmitting payload to Gemini 1.5 Pro for analysis...",
     "Detecting marketing failure points (SEO, Schema, Offer)...",
     "Synthesizing hyper-personalized cold outreach angles...",
@@ -90,7 +90,7 @@ export default function LeadsDashboard() {
            <h1 className="text-3xl font-bold font-serif tracking-wide flex items-center gap-3 text-white">
               Target Acquisition
            </h1>
-           <p className="text-text-secondary mt-1 max-w-xl text-sm">Deploy the Prospector Swarm to scrape local businesses via Tavily, analyze their marketing gaps via Gemini, and autonomously script hyper-personalized cold outreach.</p>
+           <p className="text-text-secondary mt-1 max-w-xl text-sm">Deploy the Prospector Swarm to scrape local businesses via Google Maps Builder, analyze their marketing gaps via Gemini, and autonomously script hyper-personalized cold outreach.</p>
         </div>
       </div>
 
@@ -195,8 +195,8 @@ export default function LeadsDashboard() {
                                   </div>
                              </div>
                              <div className="space-y-2">
-                                 <h3 className="font-mono text-electric text-sm tracking-widest uppercase">Deep Crawl Initiated</h3>
-                                 <p className="text-xs text-stone-500 max-w-xs mx-auto">Tavily is aggregating {niche} in {location}. Gemini is diagnosing marketing failures...</p>
+                                 <h3 className="font-mono text-electric text-sm tracking-widest uppercase">Deep Spatial Crawl Initiated</h3>
+                                 <p className="text-xs text-stone-500 max-w-xs mx-auto">Google Maps Builder is plotting {niche} inside {location}. Gemini 2.0 is diagnosing marketing failures...</p>
                              </div>
                          </div>
                     )}

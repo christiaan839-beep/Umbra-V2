@@ -1,0 +1,22 @@
+{
+  "name": "umbra-websocket-server",
+  "version": "1.0.0",
+  "description": "Global telemetry and command broadcasting engine for UMBRA.",
+  "main": "ws.js",
+  "scripts": {
+    "start": "ts-node ws.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

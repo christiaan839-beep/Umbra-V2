@@ -1,0 +1,108 @@
+{
+  "name": "UMBRA Core Router",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "umbra-genesis",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "rules": [
+            {
+              "conditions": {
+                "string": [
+                  {
+                    "value1": "={{$json.body.vector}}",
+                    "operation": "contains",
+                    "value2": "LEAD_SCRAPER"
+                  }
+                ]
+              },
+              "output": 0
+            },
+            {
+              "conditions": {
+                "string": [
+                  {
+                    "value1": "={{$json.body.vector}}",
+                    "operation": "contains",
+                    "value2": "META_ADS"
+                  }
+                ]
+              },
+              "output": 1
+            },
+            {
+              "conditions": {
+                "string": [
+                  {
+                    "value1": "={{$json.body.vector}}",
+                    "operation": "contains",
+                    "value2": "SYNTHESIS"
+                  }
+                ]
+              },
+              "output": 2
+            }
+          ]
+        }
+      },
+      "name": "Swarm Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Lead Scraper Configured\nHits Google Places API"
+      },
+      "name": "Lead Scraper Node",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [800, 100]
+    },
+    {
+      "parameters": {
+        "content": "## Meta Ads Injector\nDeploys capital via API"
+      },
+      "name": "Meta Ads Node",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "content": "## Veo / Lyria Synthesis\nGenerates media assets"
+      },
+      "name": "Synthesis Node",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [800, 500]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Swarm Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": "umbra-core-router"
+}
