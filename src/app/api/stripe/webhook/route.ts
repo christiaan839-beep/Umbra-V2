@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, tenants } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
 
@@ -80,6 +80,26 @@ export async function POST(req: Request) {
             ...(session.customer ? { stripeCustomerId: session.customer } : {})
           });
           console.log(`[Stripe Webhook] Auto-created Postgres account for ${email}`);
+        }
+
+        // Auto-provision a tenant/Swarm node for this client
+        try {
+          const nodeId = `UMB-NX-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+          const userRecord = await db.select().from(users).where(eq(users.email, email.toLowerCase()));
+          if (userRecord.length > 0) {
+            // Check if tenant already exists for this clerk user
+            const existingTenant = await db.select().from(tenants).where(eq(tenants.clerkUserId, userRecord[0].id));
+            if (existingTenant.length === 0) {
+              await db.insert(tenants).values({
+                clerkUserId: userRecord[0].id,
+                nodeId,
+                plan: tier === "franchise" ? "franchise" : "black-card",
+              });
+              console.log(`[Stripe Webhook] Auto-provisioned UMBRA Node ${nodeId} for ${email}`);
+            }
+          }
+        } catch (tenantErr) {
+          console.error("[Stripe Webhook] Tenant provisioning error:", tenantErr);
         }
       }
       break;

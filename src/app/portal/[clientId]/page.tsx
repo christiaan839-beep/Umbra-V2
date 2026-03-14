@@ -46,29 +46,7 @@ export default function ClientDashboard({ params }: Props) {
         </div>
 
         {/* Core KPI Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: "Active Lead Conversations", value: "14", trend: "+3 today", icon: MessageCircle, color: "text-blue-400", bg: "bg-blue-400/10" },
-            { label: "Keywords Hijacked", value: "89", trend: "+12 this week", icon: Target, color: "text-rose-400", bg: "bg-rose-400/10" },
-            { label: "New SEO Pages Rendered", value: "244", trend: "Live Deployment", icon: MapPin, color: "text-emerald-400", bg: "bg-emerald-400/10" },
-            { label: "Autonomous Actions", value: "1,402", trend: "Last 30 days", icon: Zap, color: "text-electric", bg: "bg-electric/10" },
-          ].map((stat, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-              className="glass-card p-5 border border-glass-border relative overflow-hidden group">
-              <div className={`absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity`}>
-                 <stat.icon className={`w-20 h-20 ${stat.color}`} />
-              </div>
-              <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-4`}>
-                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
-              </div>
-              <p className="text-[11px] font-bold text-text-secondary uppercase tracking-widest mb-1">{stat.label}</p>
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-bold font-mono text-white">{stat.value}</span>
-                <span className={`text-[10px] ${stat.color}`}>{stat.trend}</span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <KPIGrid clientId={params.clientId} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Autonomous Action Log Feed */}
@@ -132,8 +110,53 @@ export default function ClientDashboard({ params }: Props) {
 function ShieldCheckIcon(props: any) {
   return <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>;
 }
-function GlobeIcon(props: any) {
+function GlobeIcon(props: React.SVGProps<SVGSVGElement>) {
   return <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>;
+}
+
+function KPIGrid({ clientId }: { clientId: string }) {
+  const [metrics, setMetrics] = useState({ leadConversations: 0, seoPages: 0, socialPosts: 0, totalActions: 0 });
+
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const res = await fetch(`/api/portal/metrics?tenantId=${clientId}`);
+        const data = await res.json();
+        if (data.success) setMetrics(data.metrics);
+      } catch (err) {
+        console.error("Failed to fetch portal metrics:", err);
+      }
+    };
+    fetchMetrics();
+  }, [clientId]);
+
+  const kpis = [
+    { label: "Active Lead Conversations", value: metrics.leadConversations.toLocaleString(), trend: "Live", icon: MessageCircle, color: "text-blue-400", bg: "bg-blue-400/10" },
+    { label: "Social Posts Generated", value: metrics.socialPosts.toLocaleString(), trend: "Live", icon: Target, color: "text-rose-400", bg: "bg-rose-400/10" },
+    { label: "SEO Pages Rendered", value: metrics.seoPages.toLocaleString(), trend: "Live Deployment", icon: MapPin, color: "text-emerald-400", bg: "bg-emerald-400/10" },
+    { label: "Autonomous Actions", value: metrics.totalActions.toLocaleString(), trend: "All Time", icon: Zap, color: "text-electric", bg: "bg-electric/10" },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      {kpis.map((stat, i) => (
+        <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+          className="glass-card p-5 border border-glass-border relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+             <stat.icon className={`w-20 h-20 ${stat.color}`} />
+          </div>
+          <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center mb-4`}>
+             <stat.icon className={`w-5 h-5 ${stat.color}`} />
+          </div>
+          <p className="text-[11px] font-bold text-text-secondary uppercase tracking-widest mb-1">{stat.label}</p>
+          <div className="flex items-baseline gap-3">
+            <span className="text-3xl font-bold font-mono text-white">{stat.value}</span>
+            <span className={`text-[10px] ${stat.color}`}>{stat.trend}</span>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
 }
 
 function LiveLogFeed({ clientId }: { clientId: string }) {
