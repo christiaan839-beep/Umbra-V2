@@ -147,10 +147,20 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <button onClick={() => checkout(t.tier)}
-                className={`w-full py-3 font-bold rounded-xl transition-all flex items-center justify-center gap-2 ${t.featured ? "bg-white text-midnight hover:bg-gray-200 shadow-[0_0_30px_rgba(255,255,255,0.1)]" : "border border-glass-border text-white hover:bg-glass-bg"}`}>
-                Get {t.name} <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="flex flex-col gap-2 w-full">
+                <button onClick={() => checkout(t.tier)}
+                  className={`w-full py-3 font-bold rounded-xl transition-all flex items-center justify-center gap-2 ${t.featured ? "bg-white text-midnight hover:bg-gray-200 shadow-[0_0_30px_rgba(255,255,255,0.1)]" : "border border-glass-border text-white hover:bg-glass-bg"}`}>
+                  Get {t.name} <ArrowRight className="w-4 h-4" />
+                </button>
+                <button onClick={async () => {
+                  const res = await fetch("/api/checkout/crypto", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tier: t.tier }) });
+                  const data = await res.json();
+                  if (data.url) window.location.href = data.url;
+                }}
+                  className="w-full py-3 font-bold rounded-xl transition-all flex items-center justify-center gap-2 border border-[#0052FF]/30 text-[#0052FF] hover:bg-[#0052FF]/10 text-xs uppercase tracking-widest mt-1">
+                  Pay with Crypto
+                </button>
+              </div>
             </motion.div>
           ))}
         </div>
