@@ -2,27 +2,31 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, ShieldCheck, CreditCard, ChevronRight, Zap, ArrowRight, Cpu, CheckCircle } from 'lucide-react';
+import { Lock, ShieldCheck, ChevronRight, Zap, ArrowRight, Cpu, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { loadStripe } from '@stripe/stripe-js';
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 
-type CheckoutStage = 'FORM' | 'PROCESSING' | 'PROVISIONING' | 'SUCCESS';
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
+type CheckoutStage = 'FORM' | 'PROCESSING' | 'PAYMENT' | 'PROVISIONING' | 'SUCCESS';
 
 export default function CheckoutPage() {
   const [stage, setStage] = useState<CheckoutStage>('FORM');
   const [progress, setProgress] = useState(0);
-  const [logs, setLogs] = useState<string[]>([]);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  // Simulate payment processing and provisioning
+  // Simulate initial processing
   useEffect(() => {
-    if (stage === 'FORM' || stage === 'SUCCESS') return;
+    if (stage === 'FORM' || stage === 'SUCCESS' || stage === 'PAYMENT') return;
 
     let interval: NodeJS.Timeout;
 
-    if (stage === 'PROCESSING') {
+    if (stage === 'PROCESSING' && !clientSecret) {
       const ms = 60;
       interval = setInterval(() => {
         setProgress(p => {
@@ -36,8 +40,7 @@ export default function CheckoutPage() {
     } 
 
     return () => clearInterval(interval);
-  }, [stage]);
-
+  }, [stage, clientSecret]);
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,9 +54,10 @@ export default function CheckoutPage() {
       });
       const data = await res.json();
       
-      if (data.url) {
-        // Reroute the commander into the physical Stripe Checkout Hosted page
-        window.location.href = data.url;
+      if (data.clientSecret) {
+        setClientSecret(data.clientSecret);
+        // Add a slight delay for dramatic processing effect before mounting Stripe
+        setTimeout(() => setStage('PAYMENT'), 1500);
       } else {
          console.error(data.error);
          setStage('FORM');
@@ -120,7 +124,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Right Pane - Form / Processing Flow */}
-      <div className="relative z-10 w-full md:w-7/12 p-8 md:p-16 flex flex-col justify-center bg-transparent min-h-[60vh]">
+      <div className="relative z-10 w-full md:w-7/12 p-8 md:p-16 flex flex-col justify-center bg-transparent min-h-[60vh] overflow-y-auto">
         <AnimatePresence mode="wait">
           
           {stage === 'FORM' && (
@@ -172,40 +176,6 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* Secure Card Input Mock */}
-                <div className="pt-6">
-                  <div className="flex items-center justify-between mb-2">
-                     <label className="block text-xs font-medium text-neutral-500 uppercase tracking-wide">Payment Asset</label>
-                     <div className="flex gap-2">
-                       <CreditCard className="w-4 h-4 text-neutral-600" />
-                       <Lock className="w-4 h-4 text-neutral-600" />
-                     </div>
-                  </div>
-                  
-                  <div className="bg-[#0A0A0A] border border-white/10 rounded-xl overflow-hidden focus-within:border-emerald-500/50 transition-colors">
-                    <input 
-                      type="text" 
-                      placeholder="Card number" 
-                      required
-                      className="w-full bg-transparent px-4 py-4 text-white placeholder-neutral-600 outline-none border-b border-white/5"
-                    />
-                    <div className="grid grid-cols-2">
-                       <input 
-                         type="text" 
-                         placeholder="MM / YY" 
-                         required
-                         className="w-full bg-transparent px-4 py-4 text-white placeholder-neutral-600 outline-none border-r border-white/5"
-                       />
-                       <input 
-                         type="text" 
-                         placeholder="CVC" 
-                         required
-                         className="w-full bg-transparent px-4 py-4 text-white placeholder-neutral-600 outline-none"
-                       />
-                    </div>
-                  </div>
-                </div>
-
                 {/* Submit */}
                 <div className="pt-8">
                   <button 
@@ -213,7 +183,7 @@ export default function CheckoutPage() {
                     className="w-full relative group inline-flex items-center justify-center p-4 bg-white text-black font-bold uppercase tracking-widest text-sm rounded-xl overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(255,255,255,0.1)]"
                   >
                     <span className="relative z-10 flex items-center gap-2">
-                       Authorize $5,000 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                       Initialize Secure Gateway <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </span>
                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-100 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </button>
@@ -221,18 +191,18 @@ export default function CheckoutPage() {
                     <Lock className="w-3 h-3" /> Processed securely via proprietary encryption.
                   </p>
                 </div>
-
               </form>
             </motion.div>
           )}
 
-          {/* Processing / Provisioning States */}
+          {/* Processing States */}
           {(stage === 'PROCESSING' || stage === 'PROVISIONING') && (
             <motion.div 
               key="processing-stage"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-xl mx-auto flex flex-col items-center justify-center space-y-12"
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="w-full max-w-xl mx-auto flex flex-col items-center justify-center space-y-12 h-full"
             >
               <div className="relative w-40 h-40 flex items-center justify-center">
                  {/* Outer rotating ring */}
@@ -267,24 +237,21 @@ export default function CheckoutPage() {
                    />
                  </div>
               </div>
+            </motion.div>
+          )}
 
-              {/* Terminal Output */}
-              <div className="w-full h-48 bg-[#0A0A0A] border border-white/5 rounded-2xl p-6 font-mono text-sm text-neutral-400 overflow-hidden relative shadow-inner">
-                 <div className="space-y-3 flex flex-col justify-end h-full">
-                    {logs.map((log, i) => (
-                      <motion.div 
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        key={i}
-                        className="flex gap-3"
-                      >
-                        <span className={stage === 'PROCESSING' ? 'text-emerald-500' : 'text-[#00B7FF]'}>{'>'}</span>
-                        <span className="text-neutral-300">{log}</span>
-                      </motion.div>
-                    ))}
-                 </div>
-                 {/* Fading overlay to keep focus on latest logs */}
-                 <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-[#0A0A0A] to-transparent pointer-events-none" />
+          {/* Stripe Embedded Payment Gateway */}
+          {stage === 'PAYMENT' && clientSecret && (
+            <motion.div
+              key="payment-stage"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full max-w-xl mx-auto"
+            >
+              <div className="bg-[#0A0A0A]/90 p-1 md:p-6 rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
               </div>
             </motion.div>
           )}
