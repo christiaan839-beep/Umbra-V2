@@ -19,6 +19,7 @@ export default function Home() {
             <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">UMBRA</span>
           </div>
           <div className="flex items-center gap-6">
+             <Link href="/showcase" className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Proof of Work</Link>
              <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
                <button className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Client Login</button>
              </SignInButton>
@@ -48,7 +49,7 @@ export default function Home() {
           </h1>
 
           <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12">
-            Meet the world's first Autonomous AGI Acquisition Swarm. A self-directed, self-improving ecosystem that controls text, voice, video, strategy, and execution—without human intervention.
+            Meet the world&apos;s first Autonomous AGI Acquisition Swarm. A self-directed, self-improving ecosystem that controls text, voice, video, strategy, and execution—without human intervention.
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-20">
