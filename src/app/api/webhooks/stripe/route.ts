@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { db } from "@/db";
+import { tenants, globalTelemetry } from "@/db/schema";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_123', {
   apiVersion: '2023-10-16' as any,
@@ -23,12 +25,30 @@ export async function POST(req: Request) {
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
-      console.log(`[Stripe Webhook] 💰 Capital Secured! $5,000/mo retainer initiated. Session ID: ${session.id}`);
+      const clerkId = session.client_reference_id || `GUEST_${session.id.substring(0, 8)}`;
       
-      // In a live environment, this is where we would map the Clerk User ID 
-      // from session.metadata and run the Neon Drizzle DB query to flip the commander's status to ACTIVE.
-      console.log(`[Stripe Webhook] Bootstrapping Multi-Tenant Isolation for Commander...`);
-      console.log(`[Stripe Webhook] Node Provisioned. Routing telemetry payload.`);
+      console.log(`[Stripe Webhook] 💰 Checkout Complete! Session ID: ${session.id}`);
+      
+      // Provision the multi-tenant node in Neon DB
+      try {
+        const [newTenant] = await db.insert(tenants).values({
+          clerkUserId: clerkId,
+          nodeId: `UMB-NX-${Math.floor(Math.random() * 90000) + 10000}`,
+          plan: "sovereign",
+        }).returning();
+
+        // Log the MRR event to Global Telemetry
+        await db.insert(globalTelemetry).values({
+          tenantId: newTenant.id,
+          eventType: "revenue_secured",
+          payload: JSON.stringify({ amount: session.amount_total, ccy: session.currency }),
+        });
+
+        console.log(`[Stripe Webhook] Node Provisioned: ${newTenant.nodeId}. Telemetry routed.`);
+      } catch (dbErr) {
+        console.error(`[Stripe Webhook / DB Error] Could not provision tenant:`, dbErr);
+        // We still return 200 so Stripe doesn't retry infinitely just because our DB had a hiccup
+      }
     }
 
     return NextResponse.json({ received: true });
