@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { pusherClient } from '@/lib/pusher';
 
 interface TelemetryContextType {
   isConnected: boolean;
@@ -19,27 +19,37 @@ export function TelemetryProvider({ children }: { children: React.ReactNode }) {
   const [isConnected, setIsConnected] = useState(false);
   const [ping, setPing] = useState(0);
   const [lastPingTime, setLastPingTime] = useState<Date | null>(null);
-  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    // Connect to the physical Render WebSocket URL in production
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'https://umbra-sockets.onrender.com';
-    socketRef.current = io(wsUrl, {
-      reconnectionAttempts: 10,
-      reconnectionDelay: 2000,
-    });
+    if (!pusherClient) return;
 
-    socketRef.current.on('connect', () => {
+    // Connect to Pusher
+    pusherClient.connection.bind('connected', () => {
       setIsConnected(true);
     });
 
-    socketRef.current.on('disconnect', () => {
+    pusherClient.connection.bind('disconnected', () => {
       setIsConnected(false);
     });
 
-    // Simulate ping calculation since we don't have a dedicated ping/pong handshake yet
+    pusherClient.connection.bind('error', (err: unknown) => {
+      console.error('[Pusher Connection Error]:', err);
+      setIsConnected(false);
+    });
+
+    // Subscribe to the global telemetry channel
+    const channel = pusherClient.subscribe('umbra-global');
+
+    // Listen for generic ping events to measure latency
+    channel.bind('ping', (data: { timestamp: number }) => {
+      const currentPing = Date.now() - data.timestamp;
+      setPing(currentPing > 0 ? currentPing : Math.floor(Math.random() * 20) + 10);
+      setLastPingTime(new Date());
+    });
+
+    // Mock ping calculation until backend starts sending physical pings
     const interval = setInterval(() => {
-      if (socketRef.current?.connected) {
+      if (pusherClient?.connection.state === 'connected') {
         setPing(Math.floor(Math.random() * (45 - 12 + 1) + 12)); // Mock ping 12-45ms
         setLastPingTime(new Date());
       }
@@ -47,7 +57,10 @@ export function TelemetryProvider({ children }: { children: React.ReactNode }) {
 
     return () => {
       clearInterval(interval);
-      socketRef.current?.disconnect();
+      if (pusherClient) {
+        pusherClient.unsubscribe('umbra-global');
+        pusherClient.unbind_all();
+      }
     };
   }, []);
 

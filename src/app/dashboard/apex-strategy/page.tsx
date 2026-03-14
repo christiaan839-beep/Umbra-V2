@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Send, Cpu, Brain, Film, PenTool, ShieldAlert, Zap, Network } from 'lucide-react';
-import { io, Socket } from 'socket.io-client';
+import { Terminal, Send, Cpu, Brain, Film, PenTool, Zap, Network } from 'lucide-react';
+import { pusherClient } from '@/lib/pusher';
 
 type Agent = 'COMMANDER' | 'GOVERNOR' | 'AD-BUYER' | 'COPYWRITER' | 'VIDEO-SYNTH';
 
@@ -27,16 +27,19 @@ const AGENT_CONFIG = {
 function useApexTelemetry(initialMessages: Message[]) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [isProcessing, setIsProcessing] = useState(false);
-  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    socketRef.current = io('http://127.0.0.1:3011');
+    if (!pusherClient) return;
+
+    const channel = pusherClient.subscribe('umbra-global');
     
-    socketRef.current.on('apex_response', (data) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    channel.bind('apex_response', (data: any) => {
       setMessages(prev => [...prev, { id: Math.random().toString(36).substr(2, 9), agent: data.agent, text: data.text, timestamp: new Date() }]);
     });
 
-    socketRef.current.on('live_lead_stream', (data) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    channel.bind('live_lead_stream', (data: any) => {
       if (data.event === 'video_synthesized') {
         const text = `[RE-ENTRY WEBHOOK] Synthetic Representation Asset Retrieved. Target URL injected into feed:`;
         setMessages(prev => [...prev, { 
@@ -59,19 +62,30 @@ function useApexTelemetry(initialMessages: Message[]) {
       setIsProcessing(false);
     });
 
-    socketRef.current.on('apex_complete', () => {
+    channel.bind('apex_complete', () => {
        setIsProcessing(false);
     });
 
     return () => {
-       socketRef.current?.disconnect();
+       if (pusherClient) {
+         pusherClient.unsubscribe('umbra-global');
+       }
     }
   }, []);
 
   const dispatchCommand = async (command: string) => {
-    if (!socketRef.current) return;
     setIsProcessing(true);
-    socketRef.current.emit('execute_command', { command });
+    try {
+      await fetch('/api/swarm/apex/strategy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command, role: 'GOD_MODE_EXECUTIVE' })
+      });
+      // The API route will either respond directly or trigger a pusher event
+    } catch (e) {
+      console.error(e);
+      setIsProcessing(false);
+    }
   };
 
   return { messages, isProcessing, dispatchCommand };
@@ -132,7 +146,7 @@ export default function ApexStrategyTerminal() {
         {/* Chat Area */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6 relative z-10 custom-scrollbar">
           <AnimatePresence>
-            {messages.map((msg, i) => {
+            {messages.map((msg) => {
               const config = AGENT_CONFIG[msg.agent];
               const Icon = config.icon;
               const isCommander = msg.agent === 'COMMANDER';

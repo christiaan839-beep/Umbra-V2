@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { ai } from "@/lib/ai";
 import { remember } from "@/lib/memory";
+import { generateText } from "ai";
+import { google } from "@ai-sdk/google";
 
 /**
  * Autonomous Prospecting API
@@ -41,28 +42,31 @@ export async function POST(req: Request) {
 
     // 2. Generate Gap Reports for each
     for (const business of businesses) {
-      const prompt = `You are UMBRA, an autonomous AI marketing system.
-Analyze this local business:
+      try {
+        const { text: result } = await generateText({
+          model: google("gemini-2.5-pro"),
+          prompt: `You are UMBRA, an elite autonomous B2B AI.
+Analyze this scraped local business:
 Name/URL: ${business.title} / ${business.url}
 Context: ${business.content}
 
 Detect their likely marketing gaps (e.g., no SEO, bad offer, missing schema).
-Write a 3-sentence hyper-personalized cold email designed to book a meeting. The email must expose their gap and offer to fix it for free.
+Write a hyper-personalized cold email designed to book a meeting. 
 
-Return ONLY valid JSON:
+CRITICAL "ANTI-SLOP" RULES:
+1. NEVER say "I hope this email finds you well."
+2. NEVER use emojis.
+3. Keep it under 4 sentences. Brutally concise.
+4. Expose their gap and offer to fix it via a "Free Audit".
+
+Return EXACTLY valid JSON, ensuring the keys match exactly:
 {
-  "business_name": "Name",
+  "business_name": "${business.title || 'Unknown Business'}",
   "website": "${business.url}",
   "detected_gap": "The specific marketing flaw",
-  "cold_email_subject": "Subject",
-  "cold_email_body": "Body"
-}`;
-
-      try {
-        const result = await ai(prompt, {
-          model: "gemini",
-          system: "You are an elite B2B SDR AI. Return ONLY valid JSON.",
-          maxTokens: 800, 
+  "cold_email_subject": "3 word aggressive subject",
+  "cold_email_body": "The brutally concise email body"
+}`,
         });
 
         const cleaned = result.replace(/```json/g, "").replace(/```/g, "").trim();
@@ -91,7 +95,7 @@ Return ONLY valid JSON:
       timestamp: new Date().toISOString()
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Autonomous Prospector Error]:", error);
     return NextResponse.json({ error: "Failed to run prospecting sweep" }, { status: 500 });
   }

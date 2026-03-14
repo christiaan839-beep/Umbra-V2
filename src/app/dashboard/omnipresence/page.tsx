@@ -3,9 +3,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Globe2, Activity, MapPin, Database, Server, Zap, Target } from 'lucide-react';
+import { Globe2, Activity, MapPin, Database, Target } from 'lucide-react';
 import * as THREE from 'three';
-import { io } from 'socket.io-client';
+import { pusherClient } from '@/lib/pusher';
+
+interface TelemetryLog {
+  id: string | number;
+  location: string;
+  action: string;
+  isCapital?: boolean;
+}
 
 // 3D Rotating Earth Component
 function NeuralEarth() {
@@ -27,7 +34,7 @@ function NeuralEarth() {
     return temp;
   }, []);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (earthRef.current) {
        earthRef.current.rotation.y += 0.002;
     }
@@ -69,12 +76,14 @@ function NeuralEarth() {
 
 // Active WebSocket Hook connecting to Executive Operations Server
 function useOmnipresenceStream() {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<TelemetryLog[]>([]);
 
   useEffect(() => {
-    const socket = io('http://localhost:3011');
+    if (!pusherClient) return;
+
+    const channel = pusherClient.subscribe('umbra-global');
     
-    socket.on('telemetry_update', (data) => {
+    channel.bind('telemetry_update', (data: TelemetryLog) => {
       setLogs(prev => {
         const newLogs = [data, ...prev];
         return newLogs.slice(0, 8);
@@ -82,7 +91,9 @@ function useOmnipresenceStream() {
     });
 
     return () => {
-      socket.disconnect();
+      if (pusherClient) {
+        pusherClient.unsubscribe('umbra-global');
+      }
     };
   }, []);
 
@@ -132,7 +143,7 @@ export default function GlobalOmnipresenceGlobe() {
             
             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
                <AnimatePresence>
-                 {logs.map(log => (
+                 {logs.map((log) => (
                     <motion.div 
                       key={log.id} 
                       initial={{ opacity: 0, x: -20 }} 
