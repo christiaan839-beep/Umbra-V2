@@ -1,60 +1,114 @@
 import { NextResponse } from "next/server";
-import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
-import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { db } from "@/db";
+import { globalTelemetry } from "@/db/schema";
+import crypto from "crypto";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export const maxDuration = 60;
+// Initialize Gemini (using Google AI Ultra capability for classification)
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!);
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-pro",
+  systemInstruction: "You are an elite B2B prospect qualifier for Sovereign Systems. Given raw scraped profile data (website copy, social bios, reviews), determine if this entity qualifies for 'The Clarity Protocol' (high-ticket coaching/optimization). Return ONLY a JSON object: { \"qualified\": boolean, \"rationale\": \"brief reason\", \"estimated_budget_tier\": \"high\" | \"medium\" | \"low\", \"personalization_angle\": \"specific hook based on their data\" }. Qualify if they show signs of burnout, need for systemization, or are high-performers (founders, agency owners, athletes)."
+});
 
 export async function POST(req: Request) {
   try {
-    const ip = req.headers.get("x-forwarded-for") || "anonymous";
-    const { allowed } = rateLimit(`outbound:${ip}`);
-    if (!allowed) return rateLimitResponse();
+    const { niche, location, maxLeads = 5 } = await req.json();
 
-    const { niche, location, count } = await req.json();
-
-    if (!niche || typeof niche !== "string" || niche.length > 200) {
-      return NextResponse.json({ error: "Invalid or missing niche (max 200 chars)." }, { status: 400 });
+    if (!niche || !location) {
+      return NextResponse.json({ error: "Missing niche or location parameters" }, { status: 400 });
     }
 
-    const systemPrompt = `You are the UMBRA Autonomous Outbound Engine. You generate hyper-personalized cold outreach emails for acquiring new agency clients.
+    const logId = `outbound_${crypto.randomUUID().slice(0, 8)}`;
+    console.log(`[Outbound Swarm] Initiating hunt for: ${niche} in ${location}`);
 
-OUTPUT FORMAT: Return ONLY a valid JSON array of objects. Each object must have these exact keys:
-- "prospect": The fictional but realistic business name and owner name
-- "subject": A compelling, short email subject line (under 60 chars)
-- "body": The full email body (2-3 paragraphs, professional but bold)
+    // 1. Trigger the Scraper (OpenClaw/Apify mock)
+    // In production, this would hit your locally running OpenClaw instance or an API like Apify.
+    // For now, we simulate the scraped return data based on the requested niche + location.
+    const mockScrapedLeads = [
+      {
+        name: `${location} Apex Functional Fitness`,
+        website: `apexfit-${location.toLowerCase().replace(/\s+/g, '')}.com`,
+        bio: `Elite hybrid training facility in ${location}. We build unbroken athletes.`,
+        metaDescription: `Premier functional fitness gym in ${location}. Struggling to scale our classes.`,
+        contactEmail: `owner@apexfit-${location.toLowerCase().replace(/\s+/g, '')}.com`
+      },
+      {
+        name: `Zenith Meal Prep - ${location}`,
+        website: `zenithmeals-${location.toLowerCase().replace(/\s+/g, '')}.com`,
+        bio: `${niche} organic, macros-tracked meals delivered.`,
+        metaDescription: `Healthy eating made simple for ${niche} professionals.`,
+        contactEmail: `hello@zenithmeals-${location.toLowerCase().replace(/\s+/g, '')}.com`
+      }
+    ].slice(0, maxLeads);
 
-RULES:
-1. Do NOT include markdown, backticks, or any text outside the JSON array.
-2. Each email must feel deeply personal — reference the prospect's industry pain points.
-3. Position the sender as running a proprietary AI system that delivers results in 30 days.
-4. Include a clear CTA (book a call, reply, etc).
-5. Never use generic filler. Every sentence must carry weight.
-6. The tone should be confident, direct, and high-value — like a $10K/mo consultant reaching out.`;
+    const qualifiedLeads = [];
 
-    const userPrompt = `Generate ${count || 3} cold outreach emails targeting "${niche}" businesses${location ? ` in ${location}` : ""}. Make each prospect unique with different pain points and angles.`;
+    // 2. Data Ingestion & Qualification via Gemini 2.5 Pro
+    for (const lead of mockScrapedLeads) {
+      try {
+        const prompt = `Analyze this lead:\nName: ${lead.name}\nWebsite: ${lead.website}\nBio: ${lead.bio}\nMeta Description: ${lead.metaDescription}`;
+        const result = await model.generateContent(prompt);
+        let textResult = result.response.text();
+        
+        // Strip markdown blocks if present
+        textResult = textResult.replace(/```json/g, "").replace(/```/g, "").trim();
+        const analysis = JSON.parse(textResult);
 
-    const { text } = await generateText({
-      model: google("gemini-2.5-pro"),
-      prompt: `${systemPrompt}\n\n${userPrompt}`,
+        if (analysis.qualified) {
+          qualifiedLeads.push({
+            ...lead,
+            qualificationData: analysis
+          });
+        }
+      } catch (err) {
+        console.warn(`[Outbound Swarm] Failed to qualify lead ${lead.name}:`, err);
+      }
+    }
+
+    console.log(`[Outbound Swarm] Qualified ${qualifiedLeads.length} out of ${mockScrapedLeads.length} leads.`);
+
+    // 3. N8N Handoff (Trigger the Drip Sequence)
+    // Dispatch qualified leads to the N8N central hub to add to CRM and start email/WhatsApp sequences
+    let crmDispatched = false;
+    if (qualifiedLeads.length > 0) {
+       await fetch("http://localhost:5678/webhook/outbound-lead-ingest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ batchId: logId, leads: qualifiedLeads, niche, location })
+      }).then(() => {
+        crmDispatched = true;
+        console.log(`[Outbound Swarm] Dispatched payload to N8N webhook.`);
+      }).catch(err => console.error("N8N CRM webhook dispatch failed:", err));
+    }
+
+    // 4. Telemetry Logging
+    await db.insert(globalTelemetry).values({
+      tenantId: "00000000-0000-0000-0000-000000000000",
+      eventType: "outbound_swarm_deployed",
+      payload: JSON.stringify({ 
+        batchId: logId,
+        searchParams: { niche, location, maxLeads },
+        results: { scraped: mockScrapedLeads.length, qualified: qualifiedLeads.length },
+        crmDispatched,
+        timestamp: Date.now() 
+      }),
     });
 
-    let cleanText = text.trim();
-    // Strip markdown code blocks
-    cleanText = cleanText.replace(/^```[a-z]*\n/i, "").replace(/\n```$/i, "");
-    
-    // Find JSON array boundaries
-    const startIdx = cleanText.indexOf("[");
-    const endIdx = cleanText.lastIndexOf("]") + 1;
-    if (startIdx === -1 || endIdx === 0) throw new Error("Model did not return valid JSON.");
-    cleanText = cleanText.substring(startIdx, endIdx);
+    return NextResponse.json({
+        success: true,
+        message: `Outbound hunt complete. Gathered and qualified leads.`,
+        data: {
+          batchId: logId,
+          metrics: { scraped: mockScrapedLeads.length, qualified: qualifiedLeads.length },
+          dispatchedToCRM: crmDispatched,
+          leads: qualifiedLeads
+        }
+    });
 
-    const emails = JSON.parse(cleanText);
-
-    return NextResponse.json({ emails });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("Outbound Engine Error:", message);
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[Outbound Swarm Error]:", error);
+    const msg = error instanceof Error ? error.message : "Failed to orchestrate outbound swarm";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

@@ -56,6 +56,26 @@ export async function POST(req: Request) {
         });
 
         console.log(`[Stripe Webhook] Node Provisioned: ${newTenant.nodeId}. Telemetry routed.`);
+
+        // Phase 7: The Fulfillment Layer Handoff (N8N)
+        console.log(`[Stripe Webhook] Triggering Fulfillment Layer in N8N...`);
+        try {
+            await fetch("http://localhost:5678/webhook/stripe-onboarding", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    tenantId: newTenant.id,
+                    nodeId: newTenant.nodeId,
+                    amount: session.amount_total,
+                    customerEmail: session.customer_details?.email,
+                    customerName: session.customer_details?.name,
+                    timestamp: Date.now()
+                }),
+            });
+            console.log(`[Stripe Webhook] N8N Fulfillment sequence triggered successfully.`);
+        } catch (n8nErr) {
+            console.error(`[Stripe Webhook] Failed to trigger N8N fulfillment sequence:`, n8nErr);
+        }
       } catch (dbErr) {
         console.error(`[Stripe Webhook / DB Error] Could not provision tenant:`, dbErr);
         // We still return 200 so Stripe doesn't retry infinitely just because our DB had a hiccup

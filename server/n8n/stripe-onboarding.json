@@ -1,0 +1,159 @@
+{
+  "name": "Sovereign-V2 Client Onboarding",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-onboarding",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "e1cd5e9a-cd81-4357-bb6e-440639f72740",
+      "name": "Stripe Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "name": "={{ $json.body.customerName || 'New Client' }} - Elite Context",
+        "options": {}
+      },
+      "id": "1b0849ed-3ee2-4bf5-b97c-9ef49179efd8",
+      "name": "Google Drive (Create Folder)",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        450,
+        300
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "YOUR_CREDS_ID",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "title": "={{ $json.body.customerName || 'Client' }} Intake Protocol",
+        "folderId": "={{ $json.id }}",
+        "options": {}
+      },
+      "id": "90e1fcbb-cd8a-4db5-ac3f-0361fbcc5256",
+      "name": "Google Docs (Create Intake Form)",
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ],
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "YOUR_CREDS_ID",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gemini-2.5-pro",
+        "prompt": "You are the UMBRA onboarding AI. Draft a hyper-personalized welcome email for a new high-ticket client named {{ $('Stripe Webhook Trigger').item.json.body.customerName }}. Welcome them to the Elite Context. Instruct them to fill out the Google Doc at {{ $json.documentUrl }}. Be extremely professional and cold, referencing a 30-day optimization timeline.",
+        "options": {}
+      },
+      "id": "673cfbd4-ec40-410a-81a6-a4f6644ebfc6",
+      "name": "Gemini Ultra (Draft Email)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        850,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Stripe Webhook Trigger').item.json.body.customerEmail || 'test@example.com' }}",
+        "subject": "Welcome to the Elite Context.",
+        "message": "={{ $json.text || 'Welcome. Please complete your intake form.' }}",
+        "appendAttribution": false,
+        "options": {}
+      },
+      "id": "921df348-18e8-4b2a-8eb8-498c41ec354d",
+      "name": "Gmail (Send Welcome)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [
+        1050,
+        300
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_CREDS_ID",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Stripe Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Drive (Create Folder)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive (Create Folder)": {
+      "main": [
+        [
+          {
+            "node": "Google Docs (Create Intake Form)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs (Create Intake Form)": {
+      "main": [
+        [
+          {
+            "node": "Gemini Ultra (Draft Email)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Ultra (Draft Email)": {
+      "main": [
+        [
+          {
+            "node": "Gmail (Send Welcome)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f2ccf326-7a8e-4a6c-941c-8e4a9e701918",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "8P21yQpB6Jvw3E90",
+  "tags": []
+}
