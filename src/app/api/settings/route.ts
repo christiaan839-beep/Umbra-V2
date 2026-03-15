@@ -31,7 +31,9 @@ export async function POST(req: Request) {
       if (mergedConfig.META_ACCESS_TOKEN) process.env.META_ACCESS_TOKEN = mergedConfig.META_ACCESS_TOKEN;
       if (mergedConfig.META_AD_ACCOUNT_ID) process.env.META_AD_ACCOUNT_ID = mergedConfig.META_AD_ACCOUNT_ID;
       if (mergedConfig.TELEGRAM_BOT_TOKEN) process.env.TELEGRAM_BOT_TOKEN = mergedConfig.TELEGRAM_BOT_TOKEN;
-      if (mergedConfig.TELEGRAM_ADMIN_CHAT_ID) process.env.TELEGRAM_ADMIN_CHAT_ID = mergedConfig.TELEGRAM_ADMIN_CHAT_ID;
+      if (mergedConfig.TELEGRAM_OWNER_CHAT_ID) process.env.TELEGRAM_OWNER_CHAT_ID = mergedConfig.TELEGRAM_OWNER_CHAT_ID;
+      if (mergedConfig.PINECONE_API_KEY) process.env.PINECONE_API_KEY = mergedConfig.PINECONE_API_KEY;
+      if (mergedConfig.PINECONE_INDEX) process.env.PINECONE_INDEX = mergedConfig.PINECONE_INDEX;
 
       return NextResponse.json({ success: true, message: "Settings saved to Neon DB." });
     }
@@ -52,7 +54,8 @@ export async function POST(req: Request) {
         META_AD_ACCOUNT_ID: !!process.env.META_AD_ACCOUNT_ID,
         STRIPE_SECRET_KEY: !!process.env.STRIPE_SECRET_KEY,
         TELEGRAM_BOT_TOKEN: !!process.env.TELEGRAM_BOT_TOKEN,
-        TELEGRAM_ADMIN_CHAT_ID: !!process.env.TELEGRAM_ADMIN_CHAT_ID,
+        TELEGRAM_OWNER_CHAT_ID: !!process.env.TELEGRAM_OWNER_CHAT_ID,
+        PINECONE_API_KEY: !!process.env.PINECONE_API_KEY,
         GEMINI_API_KEY: !!process.env.GEMINI_API_KEY,
         ANTHROPIC_API_KEY: !!process.env.ANTHROPIC_API_KEY,
       };

@@ -73,6 +73,51 @@ export async function GET() {
     services.push({ name: "pusher", status: "down", latencyMs: 0, message: e instanceof Error ? e.message : "Not configured" });
   }
 
+  // 6. N8N Orchestrator (Docker)
+  try {
+    const n8nStart = Date.now();
+    // Assuming N8N is running locally on port 5678
+    const res = await fetch("http://localhost:5678/healthz", { signal: AbortSignal.timeout(2000) }).catch(() => null);
+    services.push({
+      name: "n8n",
+      status: res?.ok ? "operational" : "down",
+      latencyMs: Date.now() - n8nStart,
+      message: res?.ok ? undefined : "N8N Orchestrator unreachable on localhost:5678",
+    });
+  } catch {
+    services.push({ name: "n8n", status: "down", latencyMs: 0, message: "Connection timeout or failed" });
+  }
+
+  // 7. Pinecone Vector Memory
+  try {
+    const pcStart = Date.now();
+    const pcKey = process.env.PINECONE_API_KEY;
+    if (!pcKey) throw new Error("PINECONE_API_KEY not configured");
+    // Just a structural check for keys for health, actual connection tested in agents
+    services.push({ name: "pinecone", status: "operational", latencyMs: Date.now() - pcStart });
+  } catch (e) {
+    services.push({ name: "pinecone", status: "down", latencyMs: 0, message: e instanceof Error ? e.message : "Not configured" });
+  }
+
+  // Self-Healing / Alerting: Send Telegram ping if critical systems are down
+  const downServices = services.filter((s) => s.status === "down" && s.name !== "pusher"); // Exclude pusher from critical alerts for now
+  if (downServices.length > 0) {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_OWNER_CHAT_ID;
+    if (botToken && chatId) {
+      try {
+        const text = `🚨 *Sovereign-V2 Health Alert*\n\nThe following systems are down:\n${downServices.map(s => `- ${s.name}: ${s.message}`).join('\n')}`;
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chatId, text, parse_mode: "Markdown" })
+        }).catch(() => null); // Fail silently for the health check response
+      } catch (err) {
+        console.error("Failed to send Telegram health alert", err);
+      }
+    }
+  }
+
   const overallStatus = services.every((s) => s.status === "operational")
     ? "operational"
     : services.some((s) => s.status === "down")

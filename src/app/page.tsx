@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 
 import { UmbraLogo } from "@/components/ui/UmbraLogo";
+import { DynamicCopy } from "@/components/ui/DynamicCopy";
 
 export default function Home() {
   return (
@@ -44,12 +45,18 @@ export default function Home() {
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight drop-shadow-2xl">
-            The Agency is Dead.<br/>
+            <DynamicCopy 
+               copyKey="hero_headline" 
+               fallbackText="The Agency is Dead."
+            /><br/>
             <span className="bg-gradient-to-r from-electric via-white to-rose-glow bg-clip-text text-transparent">The Swarm is Here.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12">
-            Meet the world&apos;s first Autonomous AGI Acquisition Swarm. A self-directed, self-improving ecosystem that controls text, voice, video, strategy, and execution—without human intervention.
+             <DynamicCopy 
+               copyKey="hero_sub" 
+               fallbackText="Meet the world's first Autonomous AGI Acquisition Swarm. A self-directed, self-improving ecosystem that controls text, voice, video, strategy, and execution—without human intervention."
+             />
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-20">
