@@ -7,7 +7,11 @@ import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown, Mic2,
+  Phone,
+  Terminal,
+  Clock,
+  PenTool,
 } from "lucide-react";
 import { NeuralWebGLBackground } from '@/components/3d/NeuralWebGLBackground';
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -43,6 +47,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard/ad-buyer", label: "Capital Deployer", icon: Target },
       { href: "/dashboard/leads", label: "Prospector Outbound", icon: Users },
+      { href: "/dashboard/outbound", label: "Outbound Engine", icon: Send },
       { href: "/dashboard/funnel-hacker", label: "Funnel Hijacker", icon: ShieldAlert },
       { href: "/dashboard/competitor", label: "Competitor Intel", icon: Shield },
       { href: "/dashboard/analytics", label: "Mission Telemetry", icon: BarChart3 },
@@ -54,6 +59,7 @@ const NAV_GROUPS = [
     icon: Film,
     items: [
       { href: "/dashboard/studio", label: "Cinematic Studio", icon: Film },
+      { href: "/dashboard/studio/vectors", label: "Synthesis V2", icon: PenTool },
       { href: "/dashboard/voice", label: "Voice Swarm", icon: Mic },
       { href: "/dashboard/social", label: "Social Router", icon: Send },
       { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
@@ -70,6 +76,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard/clients", label: "Client Portal", icon: Building2 },
       { href: "/dashboard/coder", label: "Autonomous Coder", icon: Laptop },
+      { href: "/dashboard/architect", label: "Agentic Architect", icon: LayoutDashboard },
       { href: "/dashboard/factory", label: "Tool Forge", icon: Wrench },
       { href: "/dashboard/skills", label: "Skill Modules", icon: FlaskConical },
       { href: "/dashboard/pipelines", label: "Data Pipelines", icon: GitBranch },

@@ -52,3 +52,14 @@ export const scheduledContent = pgTable("scheduled_content", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const whitelabelConfig = pgTable("whitelabel_config", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  domain: text("domain").notNull().unique(), // e.g. "portal.clientagency.com" or just slug
+  agencyName: text("agency_name").notNull().default("UMBRA"),
+  logoUrl: text("logo_url"),
+  primaryColor: text("primary_color").default("#00B7FF"),
+  supportEmail: text("support_email"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
