@@ -75,6 +75,7 @@ const NAV_GROUPS = [
     icon: FlaskConical,
     items: [
       { href: "/dashboard/clients", label: "Client Portal", icon: Building2 },
+      { href: "/dashboard/demo", label: "Live Demo", icon: Sparkles },
       { href: "/dashboard/coder", label: "Autonomous Coder", icon: Laptop },
       { href: "/dashboard/architect", label: "Agentic Architect", icon: LayoutDashboard },
       { href: "/dashboard/factory", label: "Tool Forge", icon: Wrench },
@@ -83,6 +84,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/playground", label: "AGI Sandbox", icon: Sparkles },
       { href: "/dashboard/reports", label: "Client Briefs", icon: FileText },
       { href: "/dashboard/webhooks", label: "Webhook Relays", icon: Webhook },
+      { href: "/dashboard/audit", label: "Audit Trail", icon: ShieldAlert },
       { href: "/dashboard/compliance", label: "Compliance & Risk", icon: ShieldAlert },
       { href: "/dashboard/billing", label: "Billing & Plans", icon: DollarSign },
       { href: "/dashboard/admin", label: "Admin Panel", icon: Crown },

@@ -1,201 +1,214 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TerminalSquare, ShieldCheck, Zap, ArrowRight, BrainCircuit, ScanLine, Loader2, CheckCircle2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { UmbraLogo } from "@/components/ui/UmbraLogo";
+import { Building2, Globe2, Rocket, ChevronRight, ChevronLeft, CheckCircle2, Loader2, Zap } from "lucide-react";
 
-const LOG_MESSAGES = [
-   "Establishing secure uplink to The God-Brain...",
-   "Bypassing standard human latency structures...",
-   "Initializing sub-swarm cluster (Nodes 001 - 045)...",
-   "Injecting brand contextual vectors...",
-   "Pre-warming Nexus pipeline sequences...",
+const STEPS = [
+  { id: "business", title: "Business Profile", icon: Building2 },
+  { id: "channels", title: "Connect Channels", icon: Globe2 },
+  { id: "launch", title: "Launch Campaign", icon: Rocket },
 ];
 
-export default function GenesisOnboarding() {
-  const router = useRouter();
-  const [url, setUrl] = useState("");
-  const [step, setStep] = useState<"input" | "provisioning" | "complete">("input");
-  const [logs, setLogs] = useState<string[]>([]);
-  const [architecture, setArchitecture] = useState<string[]>([]);
-  const logsEndRef = useRef<HTMLDivElement>(null);
+export default function OnboardingWizard() {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isLaunching, setIsLaunching] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
-  // Auto-scroll logs
-  useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [logs]);
+  const [formData, setFormData] = useState({
+    businessName: "",
+    industry: "",
+    location: "",
+    website: "",
+    instagram: "",
+    googleBusiness: "",
+    facebook: "",
+    campaignGoal: "lead-generation",
+    targetAudience: "",
+    monthlyBudget: "1000",
+  });
 
-  const handleProvision = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if(!url || !url.includes(".")) return;
-    
-    setStep("provisioning");
-    
-    // Simulate streaming initial terminal logs before API completes
-    const logInterval = setInterval(() => {
-        setLogs(prev => {
-           const nextLog = LOG_MESSAGES[prev.length];
-           if(nextLog) return [...prev, nextLog];
-           clearInterval(logInterval);
-           return prev;
-        });
-    }, 800);
-
-    try {
-        const res = await fetch("/api/swarm/genesis/provision", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ url })
-        });
-
-        const data = await res.json();
-        clearInterval(logInterval);
-
-        if(data.success) {
-            setLogs(prev => [...prev, `[SUCCESS] Sub-Swarm provisioned for ${url}.`]);
-            setArchitecture(data.data.architecture);
-            setTimeout(() => setStep("complete"), 1500);
-        } else {
-             setLogs(prev => [...prev, `[ERROR] Connection failed. Fallback engaged.`]);
-        }
-    } catch(err) {
-        setLogs(prev => [...prev, `[FATAL] Provisioning suspended.`]);
-    }
+  const update = (key: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
+  const canProceed = () => {
+    if (currentStep === 0) return formData.businessName.trim() && formData.industry.trim();
+    if (currentStep === 1) return true;
+    if (currentStep === 2) return formData.targetAudience.trim();
+    return false;
+  };
+
+  const handleLaunch = async () => {
+    setIsLaunching(true);
+    // Simulate API call to create tenant and configure initial campaign
+    await new Promise((r) => setTimeout(r, 3000));
+    setIsLaunching(false);
+    setIsComplete(true);
+  };
+
+  if (isComplete) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-lg w-full text-center"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", delay: 0.2 }}
+            className="w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6"
+          >
+            <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+          </motion.div>
+          <h1 className="text-3xl font-light text-white tracking-wider mb-3">UMBRA Node Activated</h1>
+          <p className="text-neutral-400 mb-8">Your AI marketing engine is now configured and initializing its first autonomous cycle for <strong className="text-white">{formData.businessName}</strong>.</p>
+          <a
+            href="/dashboard"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 text-cyan-400 rounded-xl uppercase tracking-widest font-bold font-mono text-xs hover:from-cyan-500/20 transition-all"
+          >
+            <Zap className="w-4 h-4" /> Enter Command Center
+          </a>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center p-6 relative font-sans overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-electric/10 rounded-full blur-[150px] pointer-events-none" />
-
-        <div className="absolute top-8 left-8 flex items-center gap-3">
-             <UmbraLogo size="sm" />
-             <span className="text-sm font-bold tracking-[0.2em] uppercase text-white font-serif">UMBRA // Genesis Node</span>
+    <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full">
+        {/* Logo */}
+        <div className="text-center mb-10">
+          <h1 className="text-xl font-light text-white tracking-[0.3em] font-mono">UMBRA</h1>
+          <p className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">Deploy Your AI Marketing Engine</p>
         </div>
 
-        <div className="w-full max-w-2xl relative z-10">
-            <AnimatePresence mode="wait">
-                
-                {/* Step 1: Input URL */}
-                {step === "input" && (
-                    <motion.div 
-                        key="input"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="glass-card p-10 border border-electric/30 shadow-[0_0_50px_rgba(45,110,255,0.1)]"
-                    >
-                        <div className="flex justify-center mb-6">
-                             <div className="w-16 h-16 rounded-full bg-electric/10 border border-electric/30 flex items-center justify-center">
-                                 <ScanLine className="w-8 h-8 text-electric" />
-                             </div>
-                        </div>
-                        <h1 className="text-3xl font-bold text-center mb-2 serif-text text-white">Target Acquisition</h1>
-                        <p className="text-text-secondary text-center max-w-md mx-auto mb-8 leading-relaxed">
-                            Payment verified. Welcome to the Swarm. Enter your primary web domain to unleash UMBRA. 
-                        </p>
-
-                        <form onSubmit={handleProvision} className="flex flex-col gap-4">
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <TerminalSquare className="h-5 w-5 text-electric/50" />
-                                </div>
-                                <input 
-                                    type="text" 
-                                    className="block w-full pl-12 pr-4 py-4 border-2 border-glass-border rounded-lg bg-onyx/30 text-white placeholder-text-secondary/50 focus:ring-0 focus:border-electric transition-colors"
-                                    placeholder="https://your-company.com"
-                                    value={url}
-                                    onChange={(e) => setUrl(e.target.value)}
-                                    required
-                                    autoFocus
-                                />
-                            </div>
-                            <button 
-                                type="submit"
-                                disabled={!url}
-                                className="w-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold py-4 rounded-lg uppercase tracking-widest text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity flex items-center justify-center gap-2"
-                            >
-                                Initiate Provisioning <Zap className="w-4 h-4 ml-2" />
-                            </button>
-                        </form>
-                    </motion.div>
-                )}
-
-                {/* Step 2: Provisioning Terminal */}
-                {step === "provisioning" && (
-                     <motion.div 
-                        key="provisioning"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        className="glass-card p-8 border border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.1)]"
-                    >
-                         <h2 className="text-xl font-bold mb-6 flex items-center gap-3 border-b border-glass-border pb-4 uppercase tracking-[0.1em] text-emerald-400">
-                             <Loader2 className="w-6 h-6 animate-spin text-emerald-400" /> Genesis Engine Active
-                         </h2>
-                         
-                         <div className="bg-black/60 border border-glass-border p-4 rounded-lg h-64 overflow-y-auto font-mono text-xs text-emerald-500/80 space-y-2">
-                             {logs.map((log, i) => (
-                                 <motion.div 
-                                    initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} 
-                                    key={i} className="flex gap-2"
-                                 >
-                                     <span className="text-text-secondary shrink-0">{`[+${i*0.8}s]`}</span>
-                                     <span className={log.includes("SUCCESS") ? "text-white font-bold" : ""}>{`> ${log}`}</span>
-                                 </motion.div>
-                             ))}
-                             {/* Blinking cursor */}
-                             {logs.length < LOG_MESSAGES.length + 1 && (
-                                <div className="w-2 h-4 bg-emerald-500 animate-pulse mt-2" />
-                             )}
-                             <div ref={logsEndRef} />
-                         </div>
-                    </motion.div>
-                )}
-
-                {/* Step 3: Complete / Architecture Output */}
-                {step === "complete" && (
-                    <motion.div 
-                        key="complete"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="glass-card p-10 border border-electric/30 shadow-[0_0_50px_rgba(45,110,255,0.15)]"
-                    >
-                         <div className="flex justify-center mb-6">
-                             <div className="w-16 h-16 rounded-full bg-electric/10 border border-electric/30 flex items-center justify-center">
-                                 <ShieldCheck className="w-8 h-8 text-electric" />
-                             </div>
-                        </div>
-                        <h2 className="text-2xl font-bold text-center mb-2 serif-text text-white">Swarm Synchronized</h2>
-                        <p className="text-text-secondary text-center max-w-md mx-auto mb-8 leading-relaxed text-sm">
-                            Your bespoke UMBRA subdivision is online. Based on the deep crawl of <span className="text-electric">{url}</span>, the Apex Node has compiled your Initial Campaign Architecture:
-                        </p>
-
-                        <div className="space-y-3 mb-10">
-                            {architecture.map((item, index) => (
-                                <motion.div 
-                                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.2 }}
-                                    key={index} className="bg-electric/5 border border-electric/20 p-4 rounded-lg flex items-start gap-3"
-                                >
-                                    <CheckCircle2 className="w-5 h-5 text-electric shrink-0 mt-0.5" />
-                                    <span className="text-sm text-stone-300 leading-relaxed font-mono">{item}</span>
-                                </motion.div>
-                            ))}
-                        </div>
-
-                        <button 
-                            onClick={() => router.push("/dashboard")}
-                            className="w-full bg-white text-midnight font-bold py-4 rounded-lg uppercase tracking-widest text-sm hover:translate-y-[1px] shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center gap-2"
-                        >
-                            Enter The Dashboard <ArrowRight className="w-4 h-4 ml-2" />
-                        </button>
-                    </motion.div>
-                )}
-
-            </AnimatePresence>
+        {/* Step Indicators */}
+        <div className="flex items-center justify-center gap-4 mb-8">
+          {STEPS.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <React.Fragment key={step.id}>
+                <div className="flex items-center gap-2">
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${i <= currentStep ? "bg-cyan-500/10 border border-cyan-500/30" : "bg-white/5 border border-white/10"}`}>
+                    <Icon className={`w-4 h-4 ${i <= currentStep ? "text-cyan-400" : "text-neutral-600"}`} />
+                  </div>
+                  <span className={`text-[10px] uppercase tracking-widest font-bold hidden sm:block ${i <= currentStep ? "text-cyan-400" : "text-neutral-600"}`}>{step.title}</span>
+                </div>
+                {i < STEPS.length - 1 && <div className={`w-10 h-px ${i < currentStep ? "bg-cyan-500/30" : "bg-white/10"}`} />}
+              </React.Fragment>
+            );
+          })}
         </div>
+
+        {/* Form Card */}
+        <div className="bg-black/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 shadow-2xl">
+          <AnimatePresence mode="wait">
+            {currentStep === 0 && (
+              <motion.div key="business" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <h2 className="text-lg font-light text-white tracking-wider mb-6">Tell us about your business</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="sm:col-span-2">
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Business Name *</label>
+                    <input value={formData.businessName} onChange={(e) => update("businessName", e.target.value)} placeholder="e.g. Apex Dental Group" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
+                  </div>
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Industry *</label>
+                    <select value={formData.industry} onChange={(e) => update("industry", e.target.value)} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-500/50 font-mono">
+                      <option value="">Select Industry</option>
+                      <option value="medspa">MedSpa / Aesthetics</option>
+                      <option value="dental">Dental</option>
+                      <option value="realestate">Real Estate</option>
+                      <option value="fitness">Fitness / Gym</option>
+                      <option value="saas">SaaS / Tech</option>
+                      <option value="ecommerce">E-Commerce</option>
+                      <option value="agency">Marketing Agency</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Location</label>
+                    <input value={formData.location} onChange={(e) => update("location", e.target.value)} placeholder="e.g. Miami, FL" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Website</label>
+                    <input value={formData.website} onChange={(e) => update("website", e.target.value)} placeholder="e.g. https://apexdental.com" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 1 && (
+              <motion.div key="channels" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <h2 className="text-lg font-light text-white tracking-wider mb-2">Connect your channels</h2>
+                <p className="text-xs text-neutral-500 mb-6">Optional — UMBRA can operate without these, but connected channels enable full automation.</p>
+                <div className="space-y-4">
+                  {[
+                    { key: "instagram", label: "Instagram Handle", placeholder: "@yourbusiness" },
+                    { key: "googleBusiness", label: "Google Business Profile URL", placeholder: "https://g.co/..." },
+                    { key: "facebook", label: "Facebook Page URL", placeholder: "https://facebook.com/..." },
+                  ].map((ch) => (
+                    <div key={ch.key}>
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">{ch.label}</label>
+                      <input value={(formData as Record<string, string>)[ch.key]} onChange={(e) => update(ch.key, e.target.value)} placeholder={ch.placeholder} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 2 && (
+              <motion.div key="launch" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <h2 className="text-lg font-light text-white tracking-wider mb-6">Configure your first campaign</h2>
+                <div className="space-y-5">
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Campaign Goal</label>
+                    <select value={formData.campaignGoal} onChange={(e) => update("campaignGoal", e.target.value)} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-500/50 font-mono">
+                      <option value="lead-generation">Lead Generation</option>
+                      <option value="brand-awareness">Brand Awareness</option>
+                      <option value="competitor-domination">Competitor Domination</option>
+                      <option value="content-scale">Content at Scale</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Target Audience *</label>
+                    <input value={formData.targetAudience} onChange={(e) => update("targetAudience", e.target.value)} placeholder="e.g. Women 25-45 interested in Botox and facial treatments" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
+                  </div>
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Monthly Budget</label>
+                    <select value={formData.monthlyBudget} onChange={(e) => update("monthlyBudget", e.target.value)} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-500/50 font-mono">
+                      <option value="500">$500/mo</option>
+                      <option value="1000">$1,000/mo</option>
+                      <option value="2500">$2,500/mo</option>
+                      <option value="5000">$5,000/mo</option>
+                      <option value="10000">$10,000+/mo</option>
+                    </select>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
+            <button onClick={() => setCurrentStep((p) => Math.max(0, p - 1))} disabled={currentStep === 0} className="px-5 py-2.5 text-neutral-500 flex items-center gap-2 disabled:opacity-30 uppercase tracking-widest font-bold font-mono text-[10px]">
+              <ChevronLeft className="w-4 h-4" /> Back
+            </button>
+            {currentStep < 2 ? (
+              <button onClick={() => setCurrentStep((p) => p + 1)} disabled={!canProceed()} className="px-6 py-2.5 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 text-cyan-400 rounded-xl flex items-center gap-2 uppercase tracking-widest font-bold font-mono text-[10px] disabled:opacity-30 hover:from-cyan-500/20 transition-all">
+                Continue <ChevronRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <button onClick={handleLaunch} disabled={!canProceed() || isLaunching} className="px-8 py-3 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 text-emerald-400 rounded-xl flex items-center gap-2 uppercase tracking-widest font-bold font-mono text-[10px] disabled:opacity-30 hover:from-emerald-500/20 transition-all">
+                {isLaunching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Rocket className="w-4 h-4" />}
+                {isLaunching ? "Deploying Node..." : "Launch UMBRA Node"}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
