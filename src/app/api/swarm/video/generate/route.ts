@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const { allowed } = rateLimit(`video:${ip}`);
+    if (!allowed) return rateLimitResponse();
+
     const { prompt, platform, duration } = await req.json();
 
-    if (!prompt) {
-      return NextResponse.json({ error: "Missing video prompt." }, { status: 400 });
+    if (!prompt || typeof prompt !== "string" || prompt.length > 1000) {
+      return NextResponse.json({ error: "Invalid or missing prompt (max 1000 chars)." }, { status: 400 });
     }
 
     const systemPrompt = `You are the UMBRA Video Synthesis Engine. You generate detailed production scripts for short-form video ads.

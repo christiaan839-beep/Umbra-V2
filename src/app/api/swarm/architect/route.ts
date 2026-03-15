@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export const maxDuration = 60; // Allow 60 seconds for Vercel Edge synthesis
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const { allowed } = rateLimit(`architect:${ip}`);
+    if (!allowed) return rateLimitResponse();
+
     const { prompt } = await req.json();
 
-    if (!prompt) {
-      return NextResponse.json({ error: "Missing design prompt." }, { status: 400 });
+    if (!prompt || typeof prompt !== "string" || prompt.length > 2000) {
+      return NextResponse.json({ error: "Invalid or missing design prompt (max 2000 chars)." }, { status: 400 });
     }
 
     const systemPrompt = `
@@ -42,8 +47,9 @@ CRITICAL RULES:
     cleanCode = cleanCode.replace(/^```[a-z]*\n/i, '').replace(/\n```$/i, '');
 
     return NextResponse.json({ code: cleanCode });
-  } catch (error: any) {
-    console.error("Architect Engine Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "An unexpected error occurred";
+    console.error("Architect Engine Error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

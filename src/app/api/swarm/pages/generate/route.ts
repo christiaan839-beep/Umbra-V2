@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const { allowed } = rateLimit(`pages:${ip}`);
+    if (!allowed) return rateLimitResponse();
+
     const { keyword, niche, location, style } = await req.json();
 
-    if (!keyword || !niche) {
-      return NextResponse.json({ error: "Missing keyword or niche." }, { status: 400 });
+    if (!keyword || !niche || typeof keyword !== "string" || typeof niche !== "string") {
+      return NextResponse.json({ error: "Missing or invalid keyword/niche." }, { status: 400 });
     }
 
     const systemPrompt = `You are the UMBRA AI Landing Page Factory. You generate complete, production-ready landing page code (HTML with inline Tailwind CSS via CDN) optimized for SEO and conversion.

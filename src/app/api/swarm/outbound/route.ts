@@ -1,15 +1,20 @@
 import { NextResponse } from "next/server";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const { allowed } = rateLimit(`outbound:${ip}`);
+    if (!allowed) return rateLimitResponse();
+
     const { niche, location, count } = await req.json();
 
-    if (!niche) {
-      return NextResponse.json({ error: "Missing target niche." }, { status: 400 });
+    if (!niche || typeof niche !== "string" || niche.length > 200) {
+      return NextResponse.json({ error: "Invalid or missing niche (max 200 chars)." }, { status: 400 });
     }
 
     const systemPrompt = `You are the UMBRA Autonomous Outbound Engine. You generate hyper-personalized cold outreach emails for acquiring new agency clients.
