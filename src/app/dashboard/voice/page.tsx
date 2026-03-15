@@ -50,7 +50,7 @@ export default function VoiceSwarmHub() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 min-h-screen bg-midnight text-white font-mono">
+    <div className="p-8 max-w-7xl mx-auto space-y-8 min-h-screen bg-transparent text-white font-mono">
         <div className="flex items-center justify-between">
             <div>
                 <h1 className="text-3xl font-bold tracking-[0.2em] uppercase flex items-center gap-3">
@@ -78,7 +78,7 @@ export default function VoiceSwarmHub() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             {/* Command Trigger */}
-            <div className="col-span-1 border border-glass-border bg-onyx/30 backdrop-blur-md rounded-xl p-6">
+            <div className="col-span-1 border border-glass-border bg-black/40 backdrop-blur-2xl rounded-xl p-6">
                 <h2 className="text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-2 border-b border-glass-border pb-4">
                     <PhoneCall className="w-4 h-4 text-electric" /> Initiate Outbound Extraction
                 </h2>
@@ -102,13 +102,13 @@ export default function VoiceSwarmHub() {
                     </button>
                     
                     <p className="text-[10px] text-text-secondary mt-4 text-center leading-relaxed">
-                        UMBRA will synthesize an opening hook explicitly tailored to extract pain points regarding inefficient agency execution and high CAC within the target's industry profile.
+                        UMBRA will synthesize an opening hook explicitly tailored to extract pain points regarding inefficient agency execution and high CAC within the target&apos;s industry profile.
                     </p>
                 </form>
             </div>
 
             {/* Live Call Intercept Theatre */}
-            <div className="col-span-1 lg:col-span-2 border border-glass-border bg-onyx/30 backdrop-blur-md rounded-xl flex flex-col overflow-hidden relative min-h-[500px]">
+            <div className="col-span-1 lg:col-span-2 border border-glass-border bg-black/40 backdrop-blur-2xl rounded-xl flex flex-col overflow-hidden relative min-h-[500px]">
                 
                 <div className="p-4 border-b border-glass-border flex items-center justify-between bg-midnight/50 backdrop-blur-md z-10 relative">
                     <h2 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2">
@@ -168,7 +168,7 @@ export default function VoiceSwarmHub() {
                                               <motion.p key="connected" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white text-sm">Synthesizing vocal payload (Gemini 1.5 Pro). Transcribing...</motion.p>
                                          )}
                                          {callStatus === "completed" && (
-                                              <motion.p key="completed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white text-sm leading-relaxed font-sans mt-2 p-4 bg-white/5 rounded-md border-l-2 border-electric">"{transcript}"</motion.p>
+                                              <motion.p key="completed" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white text-sm leading-relaxed font-sans mt-2 p-4 bg-white/5 rounded-md border-l-2 border-electric">&quot;{transcript}&quot;</motion.p>
                                          )}
                                     </AnimatePresence>
                                 </div>

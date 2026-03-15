@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Film, Play, Upload, MessageSquare, Mic, UserSquare2, RefreshCcw, Send, CheckCircle2 } from "lucide-react";
 
 type RenderStatus = "idle" | "script" | "voice" | "avatar" | "rendering" | "deployed";
@@ -11,14 +11,14 @@ export default function CinematicStudioPage() {
   const [topic, setTopic] = useState("Biohacking Protocol for CEO Focus");
   const [progress, setProgress] = useState(0);
 
-  const [generatedScript, setGeneratedScript] = useState<string | null>(null);
+
 
   const startPipeline = async () => {
     if (!topic || status !== "idle") return;
     
     setStatus("script");
     setProgress(15);
-    setGeneratedScript(null);
+
     
     try {
       // Step 1: Generate Script via Gemini 2.5 Pro
@@ -30,7 +30,7 @@ export default function CinematicStudioPage() {
       const scriptData = await scriptRes.json();
       
       if (scriptData.success) {
-        setGeneratedScript(scriptData.script);
+        console.log("Script generation complete", scriptData.script.length);
       }
 
       setStatus("voice");
@@ -83,7 +83,7 @@ export default function CinematicStudioPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
         
         {/* Input & Control Panel */}
-        <div className="lg:col-span-1 glass-card border flex flex-col overflow-hidden bg-[#0B0C10]/95 border-glass-border">
+        <div className="lg:col-span-1 glass-card border flex flex-col overflow-hidden bg-black/40 backdrop-blur-2xl border-glass-border">
           <div className="p-8 flex items-center justify-between border-b border-glass-border bg-black/40">
             <h3 className="text-white font-bold font-mono flex items-center gap-2 text-sm uppercase tracking-widest">
               <Upload className="w-4 h-4 text-indigo-400" /> Vector Input
@@ -134,7 +134,7 @@ export default function CinematicStudioPage() {
         </div>
 
         {/* Pipeline Visualizer */}
-        <div className="lg:col-span-2 glass-card border flex flex-col overflow-hidden bg-[#0B0C10]/95 border-glass-border relative">
+        <div className="lg:col-span-2 glass-card border flex flex-col overflow-hidden bg-black/40 backdrop-blur-2xl border-glass-border relative">
             <div className="p-4 border-b border-glass-border bg-black/40 flex flex-col shrink-0 gap-3">
                <div className="flex justify-between items-center">
                   <h3 className="text-sm font-bold text-white font-mono">Telemetry: Real-Time Render</h3>
@@ -208,7 +208,7 @@ export default function CinematicStudioPage() {
   );
 }
 
-function PipelineNode({ title, agent, icon: Icon, status }: { title: string, agent: string, icon: any, status: "pending" | "active" | "completed" }) {
+function PipelineNode({ title, agent, icon: Icon, status }: { title: string, agent: string, icon: React.ComponentType<{ className?: string }>, status: "pending" | "active" | "completed" }) {
   return (
     <div className={`relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-500 
       ${status === 'active' ? 'bg-indigo-500/10 border-indigo-500/50 shadow-[0_0_30px_rgba(79,70,229,0.15)] scale-105 z-10' : 
