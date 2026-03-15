@@ -2,15 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Ghost, Brain, Code, Laptop,
   Users, Mail, Settings, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown, Mic2, Activity,
-  Phone,
-  Terminal,
-  Clock,
+  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown, Activity,
   PenTool,
 } from "lucide-react";
 import { NeuralWebGLBackground } from '@/components/3d/NeuralWebGLBackground';
