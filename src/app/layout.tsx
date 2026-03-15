@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -45,7 +47,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js" />
       </head>
       <ClerkProvider>
-        <body className="bg-midnight text-white antialiased">{children}</body>
+        <body className="bg-midnight text-white antialiased">
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </body>
       </ClerkProvider>
     </html>
   );
