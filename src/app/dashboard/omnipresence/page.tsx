@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useState, useEffect } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe2, Activity, MapPin, Database, Target } from 'lucide-react';
-import * as THREE from 'three';
 import { pusherClient } from '@/lib/pusher';
 
 interface TelemetryLog {
@@ -14,65 +13,12 @@ interface TelemetryLog {
   isCapital?: boolean;
 }
 
-// 3D Rotating Earth Component
-function NeuralEarth() {
-  const earthRef = useRef<THREE.Mesh>(null);
-  const nodesGroupRef = useRef<THREE.Group>(null);
-  
-  // Create random nodes on the sphere surface
-  const nodes = React.useMemo(() => {
-    const temp = [];
-    const radius = 2; // match sphere radius
-    for (let i = 0; i < 40; i++) {
-        const phi = Math.acos(-1 + (2 * i) / 40);
-        const theta = Math.sqrt(40 * Math.PI) * phi;
-        const x = radius * Math.cos(theta) * Math.sin(phi);
-        const y = radius * Math.sin(theta) * Math.sin(phi);
-        const z = radius * Math.cos(phi);
-        temp.push(new THREE.Vector3(x, y, z));
-    }
-    return temp;
-  }, []);
+import dynamic from 'next/dynamic';
 
-  useFrame(() => {
-    if (earthRef.current) {
-       earthRef.current.rotation.y += 0.002;
-    }
-    if (nodesGroupRef.current) {
-       nodesGroupRef.current.rotation.y += 0.002;
-    }
-  });
-
-  return (
-    <group>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1} color="#00B7FF" />
-      <pointLight position={[-10, -10, -10]} intensity={0.5} color="#34d399" />
-      
-      {/* Hollow / Wireframe Earth */}
-      <mesh ref={earthRef}>
-        <sphereGeometry args={[2, 32, 32]} />
-        <meshBasicMaterial 
-          color="#001824" 
-          transparent={true} 
-          opacity={0.8}
-          wireframe={true}
-        />
-      </mesh>
-
-      {/* Neural Nodes */}
-      <group ref={nodesGroupRef}>
-        {nodes.map((pos, i) => (
-          <mesh key={i} position={pos}>
-            <sphereGeometry args={[0.04, 8, 8]} />
-            <meshBasicMaterial color={i % 3 === 0 ? "#34d399" : "#00B7FF"} />
-          </mesh>
-        ))}
-      </group>
-    </group>
-  );
-}
-
+const GlobalStrikeMap = dynamic(
+  () => import('@/components/3d/GlobalStrikeMap').then((mod) => mod.GlobalStrikeMap),
+  { ssr: false }
+);
 
 // Active WebSocket Hook connecting to Executive Operations Server
 function useOmnipresenceStream() {
@@ -169,8 +115,8 @@ export default function GlobalOmnipresenceGlobe() {
 
        {/* 3D Canvas Background (Takes up remaining space) */}
        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(0,183,255,0.05),transparent_60%)]">
-          <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-             <NeuralEarth />
+          <Canvas camera={{ position: [0, 0, 80], fov: 45 }}>
+             <GlobalStrikeMap logs={logs} />
           </Canvas>
           
           {/* Target HUD Overlay */}

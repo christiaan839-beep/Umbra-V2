@@ -12,6 +12,7 @@ import {
 import { NeuralWebGLBackground } from '@/components/3d/NeuralWebGLBackground';
 import { UserButton, useUser } from "@clerk/nextjs";
 import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/TelemetryProvider';
+import { JarvisSocket } from '@/components/JarvisSocket';
 
 const NAV_GROUPS = [
   {
@@ -202,6 +203,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="relative z-10 w-full min-h-full">
            {children}
         </div>
+        <JarvisSocket />
       </main>
 
       {/* Mobile Glassmorphic Bottom Navigation (PWA) */}
