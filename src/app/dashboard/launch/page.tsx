@@ -16,13 +16,21 @@ export default function LaunchPage() {
     if (!prospectName || !businessName) return;
     setGenerating(true);
     try {
-      const res = await fetch("/api/launch/outreach", {
+      const res = await fetch("/api/agents/outbound", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prospectName, businessName, industry }),
+        body: JSON.stringify({ prospectName, prospectCompany: businessName, prospectIndustry: industry, yourOffer: "AI-powered marketing automation that replaces your entire agency", channels: ["email"], sequenceLength: 2 }),
       });
       const data = await res.json();
-      if (data.success) setEmail(data.email);
+      if (data.success && data.sequence?.length > 0) {
+        const first = data.sequence[0];
+        const followUp = data.sequence[1];
+        setEmail({
+          subject: first.subject || "Your growth is stalling",
+          body: first.message || "",
+          followUp: followUp?.message || "Following up on my previous email...",
+        });
+      }
     } catch (err) {
       console.error("Outreach generation failed:", err);
     } finally {

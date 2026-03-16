@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard, Ghost, Brain, Code, Laptop,
+  LayoutDashboard, Brain, Code, Laptop,
   Users, Mail, Settings, BarChart3, Shield, DollarSign,
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
   Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown, Activity,
@@ -101,10 +101,8 @@ const NAV_GROUPS = [
       { href: "/dashboard/social", label: "Social Router", icon: Send },
       { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
       { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
-      { href: "/dashboard/programmatic", label: "Factory Scale", icon: Layers },
-      { href: "/dashboard/ghost-mode", label: "Ghost Mode", icon: Ghost },
-      { href: "/dashboard/sequences", label: "Drip Sequences", icon: Mail },
-      { href: "/dashboard/nurture", label: "Email Broadcaster", icon: Mail },
+      { href: "/dashboard/programmatic", label: "Programmatic SEO", icon: Layers },
+      { href: "/dashboard/nurture", label: "Nurture Matrix", icon: Mail },
     ]
   },
   {

@@ -8,16 +8,30 @@ export default function NurtureMatrix() {
   const [pipelineActive, setPipelineActive] = useState(false);
   const [activeNode, setActiveNode] = useState(0);
 
-  const simulatePipeline = () => {
+  const simulatePipeline = async () => {
     setPipelineActive(true);
     setActiveNode(1);
-    
-    setTimeout(() => setActiveNode(2), 2000);
-    setTimeout(() => setActiveNode(3), 4000);
-    setTimeout(() => {
-      setActiveNode(4);
-      setTimeout(() => setPipelineActive(false), 2000);
-    }, 6000);
+
+    try {
+      const res = await fetch("/api/agents/email-sequence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "nurture", topic: "High-Ticket Agency Service", audience: "B2B decision makers", steps: 4 }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Animate through the pipeline steps
+        for (let i = 2; i <= 4; i++) {
+          await new Promise(r => setTimeout(r, 1500));
+          setActiveNode(i);
+        }
+        await new Promise(r => setTimeout(r, 1500));
+        setPipelineActive(false);
+      }
+    } catch (err) {
+      console.error("[Nurture Matrix] Pipeline error:", err);
+      setPipelineActive(false);
+    }
   };
 
   const sequenceSteps = [
