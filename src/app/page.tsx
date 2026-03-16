@@ -7,12 +7,12 @@ import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
 
 import { UmbraLogo } from "@/components/ui/UmbraLogo";
-import { SwarmDemo } from "@/components/ui/SwarmDemo";
 import { ROICalculator } from "@/components/ui/ROICalculator";
 import { Pricing } from "@/components/ui/Pricing";
 import { SplashIntro } from "@/components/ui/SplashIntro";
 import { ParticleGrid } from "@/components/ui/ParticleGrid";
 import { ToolShowcase } from "@/components/ui/SocialProof";
+import { AnimatedVSL } from "@/components/ui/AnimatedVSL";
 
 function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { end: number; suffix?: string; prefix?: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -124,17 +124,8 @@ export default function Home() {
            </div>
           
 
-          {/* Glassmorphic VSL Placeholder */}
-          <div id="vsl" className="w-full max-w-4xl mx-auto aspect-video rounded-3xl bg-black/40 backdrop-blur-3xl border border-white/10 shadow-[0_0_100px_rgba(0,183,255,0.15)] flex flex-col items-center justify-center relative overflow-hidden group cursor-pointer mb-24">
-             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
-             <div className="w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-md z-10">
-                <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-2" />
-             </div>
-              <p className="mt-6 text-sm font-medium tracking-widest uppercase text-neutral-400 z-10">See It In Action</p>
-          </div>
-
-          {/* Interactive Swarm Demo */}
-          <SwarmDemo />
+          {/* Animated Product Walkthrough */}
+          <AnimatedVSL />
 
         </motion.div>
 
@@ -172,8 +163,8 @@ export default function Home() {
                   color: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20"
                 }
               ].map((feature, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 + (i * 0.1) }}
-                  className="glass-card p-8 border border-glass-border hover:border-electric/30 transition-all duration-500 group">
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
+                  className="glass-card p-8 border border-glass-border hover:border-white/15 transition-all duration-500 group">
                   <div className={`w-14 h-14 rounded-2xl ${feature.bg} ${feature.border} border flex items-center justify-center mb-6`}>
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
@@ -193,8 +184,8 @@ export default function Home() {
               { end: 30, suffix: "s", label: "Content Generation", icon: TrendingUp, color: "text-amber-400" },
               { end: 90, suffix: "%", prefix: "", label: "Cost Savings vs Agency", icon: DollarSign, color: "text-rose-400" },
             ].map((stat, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 + (i * 0.1) }}
-                className="glass-card p-6 border border-glass-border text-center group hover:border-electric/30 transition-all">
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="glass-card p-6 border border-glass-border text-center group hover:border-white/15 transition-all">
                 <stat.icon className={`w-5 h-5 ${stat.color} mx-auto mb-2 group-hover:scale-110 transition-transform`} />
                 <div className={`text-3xl font-bold ${stat.color} font-mono`}>
                   <AnimatedCounter end={stat.end} suffix={stat.suffix} prefix={stat.prefix} />
@@ -243,8 +234,8 @@ export default function Home() {
          <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-6">Stop Paying Retainers.</h2>
-              <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-                Human agencies are slow, expensive, and inconsistent. UMBRA is a mathematical certainty.
+              <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
+                Why pay R15,000+ per month for slow, inconsistent work?
               </p>
             </div>
 
@@ -283,17 +274,17 @@ export default function Home() {
                 <div className="absolute -top-[1px] -left-[1px] w-[20%] h-[2px] bg-gradient-to-r from-emerald-400 to-transparent" />
                 
                 <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-400" /> UMBRA V2 Architecture
+                  <CheckCircle2 className="w-6 h-6 text-emerald-400" /> UMBRA Platform
                 </h3>
                 <p className="text-emerald-400 font-mono font-bold text-xl mb-8">From R2,750 / month</p>
                 
                 <ul className="space-y-4">
                   {[
-                    "Deploys full campaigns in 3.4 seconds",
-                    "Generates 50+ programmatic local SEO pages instantly",
-                    "Constantly scans 200+ competitors autonomously",
-                    "Autonomously texts and closes leads via WhatsApp",
-                    "Executes perfectly 24/7/365 without sleep"
+                    "Content generated in under 30 seconds",
+                    "Programmatic SEO pages for local search",
+                    "Competitor landing page analysis on demand",
+                    "AI booking agent qualifies leads for you",
+                    "Runs 24/7 — no holidays, no sick days"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-white">
                       <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
@@ -308,34 +299,6 @@ export default function Home() {
             <ROICalculator />
 
          </div>
-      </section>
-
-
-
-
-      {/* Client Results / Social Proof */}
-      <section className="py-24 bg-black/60 border-y border-glass-border px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,183,255,0.03),transparent_60%)]" />
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white serif-text mb-4">What The Platform Delivers</h2>
-            <p className="text-neutral-400">Real capabilities, not hype.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { metric: "29", label: "AI Tools", detail: "Every marketing function covered — from content and SEO to lead prospecting and client reporting.", color: "text-emerald-400" },
-              { metric: "30s", label: "Content Generation", detail: "Blog posts, ad creatives, email sequences, and landing pages generated in seconds.",  color: "text-[#00B7FF]" },
-              { metric: "90%", label: "Cost Reduction", detail: "Fraction of what you\u0027d pay a traditional agency retainer, with more output.", color: "text-amber-400" },
-            ].map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className="text-center p-8 glass-card border border-glass-border">
-                <div className={`text-5xl font-bold ${item.color} font-mono mb-2`}>{item.metric}</div>
-                <div className="text-sm font-bold text-white uppercase tracking-widest mb-3">{item.label}</div>
-                <p className="text-xs text-text-secondary leading-relaxed">{item.detail}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* Pricing Section */}
