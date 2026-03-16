@@ -125,15 +125,9 @@ export default function Home() {
 
           <div className="flex flex-col items-center gap-4 mb-16">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-              <button 
-                onClick={() => {
-                  document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-                }} 
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-[#00B7FF] to-[#a855f7] text-white font-bold text-lg cta-glow transition-all flex items-center justify-center gap-2 group cursor-pointer"
-              >
-                Get Started Free
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              <a href="#pricing" className="inline-flex px-10 py-5 rounded-full bg-gradient-to-r from-[#00B7FF] to-[#a855f7] text-lg font-bold text-white shadow-[0_0_40px_rgba(0,183,255,0.3)] cta-glow items-center gap-3 hover:-translate-y-1 transition-all">
+                Get Started Free <ArrowRight className="w-6 h-6" />
+              </a>
               <button 
                  onClick={() => {
                    document.getElementById("vsl")?.scrollIntoView({ behavior: "smooth" });
@@ -204,7 +198,7 @@ export default function Home() {
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
                   <h3 className="text-lg font-bold text-white mb-3">{feature.title}</h3>
-                  <p className="text-xs text-text-secondary leading-relaxed">{feature.desc}</p>
+                   <p className="text-sm text-neutral-400 leading-relaxed">{feature.desc}</p>
                 </motion.div>
               ))}
            </div>
@@ -225,7 +219,7 @@ export default function Home() {
                 <div className={`text-3xl font-bold ${stat.color} font-mono`}>
                   <AnimatedCounter end={stat.end} suffix={stat.suffix} prefix={stat.prefix} />
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-text-secondary mt-1">{stat.label}</div>
+                <div className="text-xs uppercase tracking-widest text-neutral-400 mt-1">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -254,10 +248,10 @@ export default function Home() {
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg`}>
                     <feature.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-[9px] uppercase tracking-widest text-text-secondary font-bold bg-white/5 px-2 py-0.5 rounded">{feature.tag}</span>
+                   <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold bg-white/5 px-2 py-1 rounded">{feature.tag}</span>
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-sm text-text-secondary leading-relaxed">{feature.desc}</p>
+                <p className="text-sm text-neutral-400 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -293,10 +287,10 @@ export default function Home() {
                     "Expects YOU to close the leads",
                     "Takes weekends and holidays off"
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-text-secondary">
-                      <XCircle className="w-5 h-5 text-rose-500/50 shrink-0 mt-0.5" />
-                      <span>{item}</span>
-                    </li>
+                     <li key={i} className="flex items-start gap-3 text-neutral-400">
+                       <XCircle className="w-5 h-5 text-rose-500/50 shrink-0 mt-0.5" />
+                       <span className="text-sm">{item}</span>
+                     </li>
                   ))}
                 </ul>
               </div>
