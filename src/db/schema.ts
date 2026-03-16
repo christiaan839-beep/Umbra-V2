@@ -38,6 +38,8 @@ export const settings = pgTable("settings", {
   id: uuid("id").primaryKey().defaultRandom(),
   userEmail: text("user_email").notNull().unique(), // not doing formal FK to allow standalone keys
   config: text("config").notNull().default('{}'), // JSON object stringified
+  apiKeys: text("api_keys").default('{}'), // Store Gemini/Tavily etc
+  webhooks: text("webhooks").default('{}'), // Store user saved webhooks
 });
 
 export const scheduledContent = pgTable("scheduled_content", {
@@ -54,8 +56,7 @@ export const scheduledContent = pgTable("scheduled_content", {
 
 export const whitelabelConfig = pgTable("whitelabel_config", {
   id: uuid("id").primaryKey().defaultRandom(),
-  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
-  domain: text("domain").notNull().unique(), // e.g. "portal.clientagency.com" or just slug
+  userEmail: text("user_email").notNull().unique(),
   agencyName: text("agency_name").notNull().default("UMBRA"),
   logoUrl: text("logo_url"),
   primaryColor: text("primary_color").default("#00B7FF"),
@@ -63,3 +64,81 @@ export const whitelabelConfig = pgTable("whitelabel_config", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const customSkills = pgTable("custom_skills", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  systemPrompt: text("system_prompt").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ═══════════════════════════════════════════
+// Phase 5: Revenue Engine Tables
+// ═══════════════════════════════════════════
+
+export const bookings = pgTable("bookings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull(), // agency owner
+  leadName: text("lead_name").notNull(),
+  leadEmail: text("lead_email").notNull(),
+  leadPhone: text("lead_phone"),
+  businessName: text("business_name"),
+  date: text("date").notNull(),        // ISO date string for the appointment
+  time: text("time").notNull(),        // time slot like "10:00 AM"
+  status: text("status").notNull().default("confirmed"), // confirmed, completed, no-show, cancelled
+  qualificationNotes: text("qualification_notes"), // AI agent's notes from the conversation
+  source: text("source").default("website"), // website, instagram, whatsapp, manual
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const leads = pgTable("leads", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull(),
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  businessName: text("business_name"),
+  source: text("source").default("organic"), // organic, paid, referral, scraper
+  status: text("status").notNull().default("new"), // new, contacted, qualified, booked, closed, lost
+  score: text("score").default("0"),   // 0-100 lead quality score
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const adCreatives = pgTable("ad_creatives", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull(),
+  platform: text("platform").notNull().default("meta"), // meta, tiktok, google
+  headline: text("headline").notNull(),
+  primaryText: text("primary_text").notNull(),
+  callToAction: text("call_to_action").default("Learn More"),
+  targetAudience: text("target_audience"),
+  hook: text("hook"),                  // the opening line / attention grabber
+  style: text("style").default("direct-response"), // direct-response, storytelling, ugc, testimonial
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ═══════════════════════════════════════════
+// Phase 6: Email Sequence Engine
+// ═══════════════════════════════════════════
+
+export const emailSequences = pgTable("email_sequences", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull(),
+  name: text("name").notNull(), // e.g., "Welcome Sequence", "Upsell Drip"
+  trigger: text("trigger").notNull().default("manual"), // manual, stripe_checkout, lead_qualified, booking_confirmed
+  status: text("status").notNull().default("draft"), // draft, active, paused
+  totalSteps: text("total_steps").default("0"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const sequenceSteps = pgTable("sequence_steps", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  sequenceId: uuid("sequence_id").references(() => emailSequences.id).notNull(),
+  stepNumber: text("step_number").notNull(), // "1", "2", "3"
+  subject: text("subject").notNull(),
+  body: text("body").notNull(), // HTML or plain text
+  delayDays: text("delay_days").notNull().default("0"), // days after previous step
+  createdAt: timestamp("created_at").defaultNow(),
+});

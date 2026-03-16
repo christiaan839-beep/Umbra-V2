@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Search, Zap, CheckCircle2, Copy } from "lucide-react";
+import PdfExportButton from "@/components/ui/PdfExportButton";
 
 export default function GBPHijackPage() {
   const [competitorUrl, setCompetitorUrl] = useState("");
@@ -93,8 +94,12 @@ export default function GBPHijackPage() {
         {/* Results Panel */}
         <div className="lg:col-span-2">
           {results ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6" id="report-content">
               
+              <div className="flex justify-end mb-4 print:hidden">
+                <PdfExportButton fileName={`GBP_Hijack_${city.replace(/\W+/g, "_") || "Report"}`} />
+              </div>
+
               <div className="glass-card p-6 border-emerald-500/20 bg-emerald-500/5">
                 <div className="flex items-center gap-2 mb-4">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400" />

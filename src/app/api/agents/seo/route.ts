@@ -5,6 +5,7 @@ import {
   schemaAudit,
   gbpHijack,
 } from "@/agents/seo-dominator";
+import { fireUserWebhook } from "@/lib/webhooks";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await competitorXRay(urls, business);
+        await fireUserWebhook("SEO Dominator", "Competitor X-Ray", result);
         return NextResponse.json(result);
       }
 
@@ -40,6 +42,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await contentGapKiller(domain, competitors, niche);
+        await fireUserWebhook("SEO Dominator", "Content Gap", result);
         return NextResponse.json(result);
       }
 
@@ -52,6 +55,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await schemaAudit(url, businessType);
+        await fireUserWebhook("SEO Dominator", "Schema Audit", result);
         return NextResponse.json(result);
       }
 
@@ -64,6 +68,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await gbpHijack(business, location, services);
+        await fireUserWebhook("SEO Dominator", "GBP Hijack", result);
         return NextResponse.json(result);
       }
 

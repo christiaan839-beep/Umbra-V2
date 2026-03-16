@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAvailablePipelines, runPipeline } from "@/agents/orchestrator";
+import { fireUserWebhook } from "@/lib/webhooks";
 
 export async function GET() {
   const pipelines = getAvailablePipelines();
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await runPipeline(pipelineId, params || {});
+    await fireUserWebhook("Orchestrator", `Pipeline: ${pipelineId}`, result);
     return NextResponse.json(result);
   } catch (error) {
     console.error("[Orchestrator] Error:", error);

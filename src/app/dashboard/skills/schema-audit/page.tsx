@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Code2, Search, Zap, AlertCircle, CheckCircle2, Copy } from "lucide-react";
+import PdfExportButton from "@/components/ui/PdfExportButton";
 
 export default function SchemaAuditPage() {
   const [url, setUrl] = useState("");
@@ -80,8 +81,12 @@ export default function SchemaAuditPage() {
         {/* Results Panel */}
         <div className="lg:col-span-2">
           {results ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6" id="report-content">
                
+               <div className="flex justify-end mb-4 print:hidden">
+                 <PdfExportButton fileName={`Schema_Audit_${new URL(url).hostname || "Report"}`} />
+               </div>
+
                <div className="grid grid-cols-2 gap-4">
                  {/* Verdict Card */}
                 <div className={`p-6 rounded-2xl border ${

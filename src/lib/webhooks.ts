@@ -4,10 +4,50 @@
  * Fires real HTTP requests to external services when UMBRA events occur.
  */
 
+import { currentUser } from "@clerk/nextjs/server";
+import { db } from "@/db";
+import { settings } from "@/db/schema";
+import { eq } from "drizzle-orm";
+
 interface WebhookPayload {
   event: string;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: string;
+}
+
+export async function fireUserWebhook(agent: string, task: string, payload: unknown) {
+  try {
+    const user = await currentUser();
+    if (!user?.primaryEmailAddress?.emailAddress) return false;
+
+    const userSettings = await db.query.settings.findFirst({
+      where: eq(settings.userEmail, user.primaryEmailAddress.emailAddress)
+    });
+
+    if (!userSettings?.webhooks) return false;
+
+    const webhooks = JSON.parse(userSettings.webhooks);
+    const webhookUrl = webhooks.onComplete;
+
+    if (!webhookUrl || !webhookUrl.startsWith("http")) return false;
+
+    // Fire and forget
+    fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "umbra.agent.completed",
+        timestamp: new Date().toISOString(),
+        userEmail: user.primaryEmailAddress.emailAddress,
+        data: { agent, task, payload }
+      })
+    }).catch(e => console.error("[Webhook Error]:", e));
+
+    return true;
+  } catch (err) {
+    console.error("[Webhook Exception]:", err);
+    return false;
+  }
 }
 
 // In a real production app, this would be fetched from a database (Supabase/Postgres).

@@ -10,7 +10,9 @@ import {
   Workflow, FlaskConical, GitBranch, Wrench, FileText,
   Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown, Activity,
   PenTool, Search, ChevronDown, Rocket, Palette, Factory, X, Menu,
+  CalendarCheck, Megaphone, CopySlash, MessageSquare,
 } from "lucide-react";
+// Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
 import { NeuralWebGLBackground } from '@/components/3d/NeuralWebGLBackground';
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -48,6 +50,20 @@ const NAV_GROUPS = [
       { href: "/dashboard/seo-dominator", label: "SEO Domination", icon: Search },
       { href: "/dashboard/designer", label: "Design Agency", icon: Palette },
       { href: "/dashboard/content-factory", label: "Content Factory", icon: Factory },
+    ]
+  },
+  {
+    group: "Revenue Engine",
+    icon: DollarSign,
+    items: [
+      { href: "/dashboard/skills/booking-agent", label: "AI Booking Agent", icon: CalendarCheck },
+      { href: "/dashboard/skills/ad-creator", label: "Ad Creative Gen", icon: Megaphone },
+      { href: "/dashboard/skills/chat-widget", label: "Chat Widget", icon: MessageSquare },
+      { href: "/dashboard/skills/email-sequences", label: "Email Sequences", icon: Mail },
+      { href: "/dashboard/skills/organic-content", label: "Content Studio", icon: PenTool },
+      { href: "/dashboard/skills/client-reports", label: "Client Reports", icon: FileText },
+      { href: "/dashboard/skills/reputation", label: "Reputation AI", icon: Target },
+      { href: "/dashboard/skills/custom", label: "Custom Skills", icon: CopySlash },
     ]
   },
   {

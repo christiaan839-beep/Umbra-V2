@@ -5,6 +5,7 @@ import {
   generateSocialPack,
   generateVideoScript,
 } from "@/agents/content-factory";
+import { fireUserWebhook } from "@/lib/webhooks";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await generateBlogPost(topic, keywords || [], tone);
+        await fireUserWebhook("Content Factory", "Blog Post", result);
         return NextResponse.json(result);
       }
 
@@ -40,6 +42,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await generateEmailSequence(product, audience, steps);
+        await fireUserWebhook("Content Factory", "Email Sequence", result);
         return NextResponse.json(result);
       }
 
@@ -52,6 +55,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await generateSocialPack(topic, platforms);
+        await fireUserWebhook("Content Factory", "Social Pack", result);
         return NextResponse.json(result);
       }
 
@@ -64,6 +68,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await generateVideoScript(topic, duration, style);
+        await fireUserWebhook("Content Factory", "Video Script", result);
         return NextResponse.json(result);
       }
 

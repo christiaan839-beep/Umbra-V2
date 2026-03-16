@@ -4,6 +4,7 @@ import {
   generateBrandIdentity,
   generateUISpec,
 } from "@/agents/designer";
+import { fireUserWebhook } from "@/lib/webhooks";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await generateLandingPageBrief(product, audience, goal);
+        await fireUserWebhook("Design Architect", "Landing Page", result);
         return NextResponse.json(result);
       }
 
@@ -39,6 +41,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await generateBrandIdentity(businessName, industry, personality, targetAudience);
+        await fireUserWebhook("Design Architect", "Brand Identity", result);
         return NextResponse.json(result);
       }
 
@@ -51,6 +54,7 @@ export async function POST(req: NextRequest) {
           );
         }
         const result = await generateUISpec(appDescription, screens, style);
+        await fireUserWebhook("Design Architect", "UI Spec", result);
         return NextResponse.json(result);
       }
 

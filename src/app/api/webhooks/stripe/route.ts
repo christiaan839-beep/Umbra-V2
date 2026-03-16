@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { db } from "@/db";
-import { tenants, globalTelemetry } from "@/db/schema";
+import { tenants, globalTelemetry, settings, leads } from "@/db/schema";
 import { pusherServer } from "@/lib/pusher";
+import { eq } from "drizzle-orm";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_123', {
   // @ts-expect-error Ignoring type mismatch for apiVersion
@@ -75,6 +76,35 @@ export async function POST(req: Request) {
             console.log(`[Stripe Webhook] N8N Fulfillment sequence triggered successfully.`);
         } catch (n8nErr) {
             console.error(`[Stripe Webhook] Failed to trigger N8N fulfillment sequence:`, n8nErr);
+        }
+
+        // Auto-provision user settings (BYOK, webhooks, etc.)
+        const customerEmail = session.customer_details?.email;
+        if (customerEmail) {
+          const existingSettings = await db.query.settings.findFirst({
+            where: eq(settings.userEmail, customerEmail)
+          });
+          if (!existingSettings) {
+            await db.insert(settings).values({
+              userEmail: customerEmail,
+              config: JSON.stringify({ plan: "sovereign", nodeId: newTenant.nodeId, onboardedAt: new Date().toISOString() }),
+              apiKeys: "{}",
+              webhooks: "{}",
+            });
+            console.log(`[Stripe Webhook] Auto-provisioned settings for ${customerEmail}`);
+          }
+
+          // Log as closed lead
+          await db.insert(leads).values({
+            userEmail: customerEmail,
+            name: session.customer_details?.name || "New Client",
+            email: customerEmail,
+            source: "stripe",
+            status: "closed",
+            score: "100",
+            notes: `Paid $${((session.amount_total || 0) / 100).toFixed(2)} — Node: ${newTenant.nodeId}`,
+          });
+          console.log(`[Stripe Webhook] Lead logged as closed: ${customerEmail}`);
         }
       } catch (dbErr) {
         console.error(`[Stripe Webhook / DB Error] Could not provision tenant:`, dbErr);

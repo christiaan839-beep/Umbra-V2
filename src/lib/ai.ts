@@ -1,15 +1,36 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Anthropic from "@anthropic-ai/sdk";
 import { tavily } from "@tavily/core";
+import { currentUser } from "@clerk/nextjs/server";
+import { db } from "@/db";
+import { settings } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import type { AIModel, AIOptions } from "@/types";
 
-const geminiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || "";
-const anthropicKey = process.env.ANTHROPIC_API_KEY || "";
-const tavilyKey = process.env.TAVILY_API_KEY || "tvly-demo";
+const globalGeminiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || "";
+const globalAnthropicKey = process.env.ANTHROPIC_API_KEY || "";
+const globalTavilyKey = process.env.TAVILY_API_KEY || "tvly-demo";
 
-const genAI = new GoogleGenerativeAI(geminiKey);
-const anthropic = new Anthropic({ apiKey: anthropicKey });
-const tvly = tavily({ apiKey: tavilyKey });
+async function getUserKeys(): Promise<{ gemini?: string, tavily?: string, anthropic?: string, ollama?: string }> {
+  try {
+    const user = await currentUser();
+    if (user?.primaryEmailAddress?.emailAddress) {
+      const userSettings = await db.query.settings.findFirst({
+        where: eq(settings.userEmail, user.primaryEmailAddress.emailAddress)
+      });
+      if (userSettings?.apiKeys) {
+        return JSON.parse(userSettings.apiKeys);
+      }
+    }
+  } catch (e) {
+    console.error("Failed to load user API keys in ai.ts:", e);
+  }
+  return {};
+}
+
+// Fallback global clients
+const globalGenAI = new GoogleGenerativeAI(globalGeminiKey);
+const globalAnthropic = new Anthropic({ apiKey: globalAnthropicKey });
 
 /**
  * Unified AI text generation router.
@@ -17,15 +38,45 @@ const tvly = tavily({ apiKey: tavilyKey });
  */
 export async function ai(prompt: string, options: AIOptions = {}): Promise<string> {
   const { model = "gemini", system, maxTokens = 2000 } = options;
+  
+  const userKeys = await getUserKeys();
+  if (userKeys.ollama) {
+    return ollamaText(prompt, system, userKeys.ollama);
+  }
 
   if (model === "claude") {
-    return claudeText(prompt, system, maxTokens);
+    return claudeText(prompt, system, maxTokens, userKeys);
   }
-  return geminiText(prompt, system, maxTokens);
+  return geminiText(prompt, system, maxTokens, userKeys);
 }
 
-async function geminiText(prompt: string, system?: string, maxTokens: number = 2000): Promise<string> {
-  const model = genAI.getGenerativeModel({ 
+async function ollamaText(prompt: string, system?: string, ollamaUrl: string = "http://localhost:11434"): Promise<string> {
+  try {
+    const url = new URL("/api/generate", ollamaUrl).toString();
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "qwen2.5-coder", // Defaulting to Qwen as per the audio and user request
+        prompt: prompt,
+        system: system || "",
+        stream: false
+      })
+    });
+    if (!res.ok) throw new Error("Ollama request failed");
+    const data = await res.json();
+    return data.response;
+  } catch (err) {
+    console.error("Local Ollama Node failed:", err);
+    throw err;
+  }
+}
+
+async function geminiText(prompt: string, system?: string, maxTokens: number = 2000, userKeys: any = {}): Promise<string> {
+  const keys = Object.keys(userKeys).length > 0 ? userKeys : await getUserKeys();
+  const client = keys.gemini ? new GoogleGenerativeAI(keys.gemini) : globalGenAI;
+  
+  const model = client.getGenerativeModel({ 
     model: "gemini-2.0-flash",
     systemInstruction: system || undefined,
     generationConfig: { maxOutputTokens: maxTokens }
@@ -34,8 +85,11 @@ async function geminiText(prompt: string, system?: string, maxTokens: number = 2
   return result.response.text();
 }
 
-async function claudeText(prompt: string, system?: string, maxTokens: number = 2000): Promise<string> {
-  const response = await anthropic.messages.create({
+async function claudeText(prompt: string, system?: string, maxTokens: number = 2000, userKeys: any = {}): Promise<string> {
+  const keys = Object.keys(userKeys).length > 0 ? userKeys : await getUserKeys();
+  const client = keys.anthropic ? new Anthropic({ apiKey: keys.anthropic }) : globalAnthropic;
+
+  const response = await client.messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: maxTokens,
     ...(system ? { system } : {}),
@@ -52,8 +106,11 @@ async function claudeText(prompt: string, system?: string, maxTokens: number = 2
  */
 export async function research_ai(query: string, prompt: string, options: AIOptions = {}): Promise<string> {
   try {
+    const userKeys = await getUserKeys();
+    const searchClient = tavily({ apiKey: userKeys.tavily || globalTavilyKey });
+
     // 1. Fetch live context
-    const searchResult = await tvly.search(query, {
+    const searchResult = await searchClient.search(query, {
       searchDepth: "advanced",
       includeImages: false,
       includeRawContent: false,
@@ -119,7 +176,10 @@ export async function adaptive_ai(prompt: string, options: AIOptions = {}): Prom
  * Generate embeddings using Gemini for vector memory.
  */
 export async function embed(text: string): Promise<number[]> {
-  const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
+  const userKeys = await getUserKeys();
+  const client = userKeys.gemini ? new GoogleGenerativeAI(userKeys.gemini) : globalGenAI;
+  
+  const model = client.getGenerativeModel({ model: "text-embedding-004" });
   const result = await model.embedContent(text);
   return result.embedding.values;
 }

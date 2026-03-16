@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { CopySlash, Search, Zap, AlertCircle, FileText, Globe } from "lucide-react";
+import PdfExportButton from "@/components/ui/PdfExportButton";
 
 export default function GapKillerPage() {
   const [urls, setUrls] = useState(["", "", ""]);
@@ -97,8 +98,12 @@ export default function GapKillerPage() {
         {/* Results Panel */}
         <div className="lg:col-span-2">
           {results ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6" id="report-content">
               
+              <div className="flex justify-end mb-4 print:hidden">
+                <PdfExportButton fileName={`Content_Gap_Report_${new URL(urls[0] || "https://example.com").hostname}`} />
+              </div>
+
               <div className="glass-card p-6 border-amber-500/20 bg-amber-500/5">
                 <div className="flex items-center gap-2 mb-4">
                   <AlertCircle className="w-5 h-5 text-amber-500" />

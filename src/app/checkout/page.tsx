@@ -121,6 +121,35 @@ export default function CheckoutPage() {
              Secure, military-grade transaction environment. Your telemetry and payment data are end-to-end encrypted. Cancel anytime.
           </p>
         </div>
+
+        {/* What's Included */}
+        <div className="mt-8 space-y-3">
+          <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold">Included in your deployment</p>
+          {[
+            "15+ Autonomous AI Agents",
+            "AI Booking Agent (Speed-to-Lead)",
+            "Dynamic Ad Creative Generator",
+            "SEO Dominator Suite",
+            "Content Factory (Unlimited Output)",
+            "Custom Skill Pack Builder",
+            "Lead Prospector & Outbound Engine",
+            "White-Label PDF Exports",
+            "BYOK Engine (Zero API Costs)",
+            "Webhook Integrations (Zapier/Make)",
+          ].map((item, i) => (
+            <div key={i} className="flex items-center gap-3 text-sm text-neutral-400">
+              <CheckCircle className="w-4 h-4 text-emerald-500/60 shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        {/* Guarantee */}
+        <div className="mt-8 p-4 rounded-xl border border-amber-500/10 bg-amber-500/5">
+          <p className="text-xs text-amber-400/80 leading-relaxed">
+            <span className="font-bold">30-Day Performance Guarantee</span> &mdash; If the UMBRA Swarm doesn&apos;t generate measurable results within 30 days, we&apos;ll refund your investment. No questions asked.
+          </p>
+        </div>
       </div>
 
       {/* Right Pane - Form / Processing Flow */}
