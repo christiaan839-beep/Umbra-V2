@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description: "29 AI marketing tools that handle content, ads, SEO, and lead generation — running 24/7. From R2,750/month.",
     type: "website",
     siteName: "UMBRA",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "UMBRA — AI Marketing Platform" }],
   },
   twitter: {
     card: "summary_large_image",

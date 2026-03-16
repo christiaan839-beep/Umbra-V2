@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, Zap, Target, BrainCircuit, Globe, CheckCircle2, XCircle, ShieldAlert, Cpu, TrendingUp, Clock, DollarSign, Users, Megaphone, CalendarCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Zap, Target, BrainCircuit, Globe, CheckCircle2, XCircle, ShieldAlert, Cpu, TrendingUp, Clock, DollarSign, Users, Megaphone, CalendarCheck, Sparkles, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
@@ -34,6 +34,23 @@ function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { e
   return <span ref={ref}>{prefix}{count.toLocaleString()}{suffix}</span>;
 }
 
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-b border-white/5">
+      <button
+        className="w-full flex items-center justify-between py-6 text-left group"
+        onClick={() => setOpen(!open)}
+      >
+        <span className="text-sm md:text-base font-semibold text-white group-hover:text-[#00B7FF] transition-colors pr-4">{question}</span>
+        <ChevronDown className={`w-5 h-5 text-neutral-500 transition-transform flex-shrink-0 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-40 pb-6' : 'max-h-0'}`}>
+        <p className="text-sm text-neutral-400 leading-relaxed">{answer}</p>
+      </div>
+    </div>
+  );
+}
 export default function Home() {
   const [showSite, setShowSite] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -342,8 +359,47 @@ export default function Home() {
       </section>
       <div className="section-divider" />
 
+      {/* FAQ Section */}
+      <section className="py-24 bg-[#050505] px-6 border-t border-glass-border">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-4">Frequently Asked Questions</h2>
+            <p className="text-neutral-400">Everything you need to know before getting started.</p>
+          </div>
+          
+          {[
+            {
+              q: "What exactly is UMBRA?",
+              a: "UMBRA is an AI-powered marketing platform with 29 tools that handle content creation, ad generation, SEO, lead prospecting, outbound emails, and more. It replaces the work of a traditional marketing agency at a fraction of the cost."
+            },
+            {
+              q: "How does the free trial work?",
+              a: "You get full access to the Starter plan for 7 days — no credit card required. If you decide it's not for you, simply don't subscribe. No hidden charges, no lock-in."
+            },
+            {
+              q: "Can I cancel anytime?",
+              a: "Yes. All plans are month-to-month with no contracts. You can cancel, upgrade, or downgrade at any time from your billing dashboard. Your data stays available for 30 days after cancellation."
+            },
+            {
+              q: "How is this different from ChatGPT or other AI tools?",
+              a: "ChatGPT is a general-purpose chatbot. UMBRA is a purpose-built marketing system — it generates campaigns, publishes content, tracks competitors, prospects leads, and runs 24/7 without you needing to prompt it. Think of it as an AI agency, not a chatbot."
+            },
+            {
+              q: "Why is pricing in ZAR?",
+              a: "We're a South African company building for the African market first. All payments are processed in ZAR through Paystack — supporting card payments, bank transfers, and more. No hidden currency conversion fees."
+            },
+            {
+              q: "What kind of support do you offer?",
+              a: "All plans include email support. Growth and Enterprise plans include priority support with faster response times. We're a small, focused team, so you'll always talk to someone who knows the product."
+            },
+          ].map((faq, i) => (
+            <FAQItem key={i} question={faq.q} answer={faq.a} />
+          ))}
+        </div>
+      </section>
+
       {/* Footer CTA */}
-      <footer className="py-32 text-center px-6 relative overflow-hidden">
+      <section className="py-32 text-center px-6 relative overflow-hidden bg-[#050505] border-t border-glass-border">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(0,183,255,0.08),transparent_60%)]" />
         <div className="relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
@@ -355,19 +411,56 @@ export default function Home() {
             <p className="mt-6 text-xs text-neutral-500 uppercase tracking-[0.2em]">No credit card required • Cancel anytime</p>
           </motion.div>
         </div>
+      </section>
 
-        <div className="mt-24 pt-12 border-t border-glass-border max-w-5xl mx-auto">
+      {/* Professional Footer */}
+      <footer className="bg-[#020202] border-t border-glass-border px-6">
+        <div className="max-w-6xl mx-auto py-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-3 mb-4">
+                <UmbraLogo size="sm" />
+                <span className="text-sm font-bold tracking-[0.15em] uppercase text-white">UMBRA</span>
+              </div>
+              <p className="text-xs text-neutral-500 leading-relaxed">AI-powered marketing platform for businesses that want agency-level results without agency-level costs.</p>
+            </div>
+
+            {/* Product */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-400 mb-4">Product</h4>
+              <ul className="space-y-3">
+                <li><Link href="/showcase" className="text-xs text-neutral-500 hover:text-white transition-colors">Proof of Work</Link></li>
+                <li><Link href="/#pricing" className="text-xs text-neutral-500 hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="/dashboard" className="text-xs text-neutral-500 hover:text-white transition-colors">Dashboard</Link></li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-400 mb-4">Company</h4>
+              <ul className="space-y-3">
+                <li><a href="mailto:support@umbra.co.za" className="text-xs text-neutral-500 hover:text-white transition-colors">Contact</a></li>
+                <li><Link href="/privacy" className="text-xs text-neutral-500 hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="text-xs text-neutral-500 hover:text-white transition-colors">Terms of Service</Link></li>
+              </ul>
+            </div>
+
+            {/* Connect */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-400 mb-4">Connect</h4>
+              <ul className="space-y-3">
+                <li><a href="mailto:support@umbra.co.za" className="text-xs text-neutral-500 hover:text-white transition-colors">support@umbra.co.za</a></li>
+                <li><span className="text-xs text-neutral-600">Cape Town, South Africa</span></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="section-divider mb-8" />
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <UmbraLogo size="sm" />
-              <span className="text-sm font-bold tracking-[0.15em] uppercase text-neutral-500">UMBRA</span>
-            </div>
-            <div className="flex gap-6">
-              <Link href="/showcase" className="text-xs text-neutral-500 hover:text-white transition-colors">Proof of Work</Link>
-              <Link href="/dashboard" className="text-xs text-neutral-500 hover:text-white transition-colors">Dashboard</Link>
-              <a href="mailto:support@umbra.ai" className="text-xs text-neutral-500 hover:text-white transition-colors">Support</a>
-            </div>
-            <p className="text-xs text-neutral-600">&copy; 2026 UMBRA. All rights reserved.</p>
+            <p className="text-[10px] text-neutral-600 uppercase tracking-[0.15em]">© 2026 UMBRA. All rights reserved.</p>
+            <p className="text-[10px] text-neutral-600 uppercase tracking-[0.15em]">Secure payments via Paystack • Built in South Africa 🇿🇦</p>
           </div>
         </div>
       </footer>
