@@ -7,13 +7,12 @@ import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
 
 import { UmbraLogo } from "@/components/ui/UmbraLogo";
-import { DynamicCopy } from "@/components/ui/DynamicCopy";
 import { SwarmDemo } from "@/components/ui/SwarmDemo";
 import { ROICalculator } from "@/components/ui/ROICalculator";
 import { Pricing } from "@/components/ui/Pricing";
 import { SplashIntro } from "@/components/ui/SplashIntro";
 import { ParticleGrid } from "@/components/ui/ParticleGrid";
-import { Testimonials, ToolShowcase } from "@/components/ui/SocialProof";
+import { ToolShowcase } from "@/components/ui/SocialProof";
 
 function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { end: number; suffix?: string; prefix?: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -76,23 +75,17 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
           
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-electric/10 border border-electric/20 text-electric text-xs font-bold uppercase tracking-[0.2em] mb-8 shadow-[0_0_15px_rgba(45,110,255,0.2)]">
-            <BrainCircuit className="w-4 h-4" /> UMBRA V2: Autonomous AGI
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium uppercase tracking-[0.15em] mb-8">
+            AI-Powered Marketing Platform
           </motion.div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight drop-shadow-2xl">
-            <DynamicCopy 
-               copyKey="hero_headline" 
-               fallbackText="The Agency is Dead."
-            /><br/>
-            <span className="bg-gradient-to-r from-electric via-white to-rose-glow bg-clip-text text-transparent">The Swarm is Here.</span>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight">
+            Replace Your Agency.<br/>
+            <span className="bg-gradient-to-r from-[#00B7FF] via-white to-[#00B7FF] bg-clip-text text-transparent">Keep The Results.</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed mb-12">
-             <DynamicCopy 
-               copyKey="hero_sub" 
-               fallbackText="Meet the world's first Autonomous AGI Acquisition Swarm. A self-directed, self-improving ecosystem that controls text, voice, video, strategy, and execution—without human intervention."
-             />
+          <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
+            29 AI agents that handle your content, ads, SEO, outreach, and lead qualification — running 24/7 at a fraction of what you pay a traditional agency.
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-16">
@@ -103,7 +96,7 @@ export default function Home() {
                 }} 
                 className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold text-lg shadow-[0_0_30px_rgba(45,110,255,0.4)] hover:shadow-[0_0_50px_rgba(45,110,255,0.6)] transition-all flex items-center justify-center gap-2 group cursor-pointer"
               >
-                Deploy the Swarm
+                Get Started Free
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <button 
@@ -112,26 +105,24 @@ export default function Home() {
                  }}
                  className="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-2 group cursor-pointer"
               >
-                <Globe className="w-5 h-5 text-[#00B7FF]" /> Watch Video Demo
+                <Globe className="w-5 h-5 text-[#00B7FF]" /> See How It Works
               </button>
             </div>
           </div>
 
           {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-8 mb-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-neutral-400">
-               <Target className="w-5 h-5" /> PayFast + Paystack Secured
-             </div>
-             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-neutral-400">
-               <BrainCircuit className="w-5 h-5" /> Powered by Google AI
-             </div>
-             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-neutral-400">
-               <ShieldAlert className="w-5 h-5" /> 256-bit Encryption
-             </div>
-             <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-neutral-400">
-               <CheckCircle2 className="w-5 h-5 text-emerald-500" /> 99.9% Uptime
-             </div>
-          </div>
+          <div className="flex flex-wrap items-center justify-center gap-8 mb-20 opacity-50">
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500">
+                <ShieldAlert className="w-4 h-4" /> 256-bit Encryption
+              </div>
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500">
+                <CheckCircle2 className="w-4 h-4" /> Powered by Google Gemini
+              </div>
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500">
+                <Target className="w-4 h-4" /> Secure ZAR Payments
+              </div>
+           </div>
+          
 
           {/* Glassmorphic VSL Placeholder */}
           <div id="vsl" className="w-full max-w-4xl mx-auto aspect-video rounded-3xl bg-black/40 backdrop-blur-3xl border border-white/10 shadow-[0_0_100px_rgba(0,183,255,0.15)] flex flex-col items-center justify-center relative overflow-hidden group cursor-pointer mb-24">
@@ -139,7 +130,7 @@ export default function Home() {
              <div className="w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-md z-10">
                 <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-2" />
              </div>
-             <p className="mt-6 text-sm font-bold tracking-widest uppercase text-white z-10">Watch The Swarm Eradicate Humans</p>
+              <p className="mt-6 text-sm font-medium tracking-widest uppercase text-neutral-400 z-10">See It In Action</p>
           </div>
 
           {/* Interactive Swarm Demo */}
@@ -150,34 +141,34 @@ export default function Home() {
         {/* The 2026 Stack Architecture Grid */}
         <div className="w-full max-w-7xl mx-auto relative z-10 mt-10">
            <div className="text-center mb-16">
-             <h2 className="text-3xl font-bold text-white serif-text mb-4">The AGI Swarm Matrix</h2>
-             <p className="text-text-secondary uppercase tracking-[0.2em] text-xs">A comprehensive intelligence network</p>
-           </div>
+              <h2 className="text-3xl font-bold text-white serif-text mb-4">How It Works</h2>
+              <p className="text-neutral-400 text-sm">Four core systems working together to grow your business</p>
+            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
                   icon: BrainCircuit,
-                  title: "Apex Intelligence",
-                  desc: "The CEO node. Continuously aggregates global God-Brain telemetry to autonomously formulate cross-channel marketing strategies.",
+                  title: "Strategy Engine",
+                  desc: "AI-powered marketing strategy that analyzes your market, competitors, and audience to create data-driven campaigns.",
                   color: "text-rose-glow", bg: "bg-rose-glow/10", border: "border-rose-glow/20"
                 },
                 {
                   icon: Target,
-                  title: "The Nexus",
-                  desc: "Visual workflow orchestrator. Drag-and-drop agent pipelines to construct multi-step acquisition funnels that run automatically.",
+                  title: "Lead Generation",
+                  desc: "Automated prospecting and outreach. Find potential clients, score them, and generate personalized cold outreach sequences.",
                   color: "text-electric", bg: "bg-electric/10", border: "border-electric/20"
                 },
                 {
                   icon: Globe,
-                  title: "Outbound Engine",
-                  desc: "Multi-step cold outreach sequences across email, LinkedIn, and DM. Generates hyper-personalized messaging that converts strangers into booked calls.",
+                  title: "Content Automation",
+                  desc: "Blog posts, social media content, ad creatives, email sequences, and landing pages — all generated in your brand voice.",
                   color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20"
                 },
                 {
                   icon: Zap,
-                  title: "Funnel X-Ray",
-                  desc: "Reverse-engineers any competitor's landing page. Extracts conversion psychology, pricing strategy, and synthesizes a superior variant.",
+                  title: "Competitive Intel",
+                  desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.",
                   color: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20"
                 }
               ].map((feature, i) => (
@@ -197,10 +188,10 @@ export default function Home() {
         <div className="w-full max-w-6xl mx-auto relative z-10 mt-10 mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { end: 15, suffix: "+", label: "AI Agents", icon: BrainCircuit, color: "text-electric" },
-              { end: 847, suffix: "%", label: "Avg. ROI Increase", icon: TrendingUp, color: "text-emerald-400" },
-              { end: 3, suffix: ".4s", label: "Avg. Deploy Time", icon: Clock, color: "text-amber-400" },
-              { end: 0, suffix: "", prefix: "$", label: "Marginal Cost", icon: DollarSign, color: "text-rose-400" },
+              { end: 29, suffix: "", label: "AI Tools", icon: BrainCircuit, color: "text-electric" },
+              { end: 24, suffix: "/7", label: "Always Running", icon: Clock, color: "text-emerald-400" },
+              { end: 30, suffix: "s", label: "Content Generation", icon: TrendingUp, color: "text-amber-400" },
+              { end: 90, suffix: "%", prefix: "", label: "Cost Savings vs Agency", icon: DollarSign, color: "text-rose-400" },
             ].map((stat, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 + (i * 0.1) }}
                 className="glass-card p-6 border border-glass-border text-center group hover:border-electric/30 transition-all">
@@ -218,17 +209,17 @@ export default function Home() {
         <div className="w-full max-w-7xl mx-auto relative z-10 mb-24">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-4">Everything You Need.<br/><span className="bg-gradient-to-r from-emerald-400 to-electric bg-clip-text text-transparent">Nothing You Don&apos;t.</span></h2>
-            <p className="text-text-secondary max-w-2xl mx-auto">Every tool a $10,000/month agency uses — automated, autonomous, and available 24/7.</p>
+            <p className="text-neutral-400 max-w-2xl mx-auto">Every tool your marketing team needs — automated and available around the clock.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: CalendarCheck, title: "AI Booking Agent", desc: "Qualifies leads with AI scoring (0-100), handles objections, and books appointments automatically. 5-minute response time, 24/7.", tag: "SPEED-TO-LEAD", color: "from-emerald-500 to-teal-500" },
-              { icon: Megaphone, title: "Ad Creative Generator", desc: "Generates 5 scroll-stopping ad variations using proven psychological frameworks. Pain→Solution, Social Proof, Urgency, Curiosity, and Direct Benefit.", tag: "INFINITE CREATIVES", color: "from-rose-500 to-pink-500" },
-              { icon: Target, title: "SEO Dominator", desc: "Full Schema Audit, Competition Gap Killer, and GBP Hijack. Reverse-engineer competitors and outrank them algorithmically.", tag: "RANK #1", color: "from-blue-500 to-electric" },
-              { icon: Globe, title: "Content Factory", desc: "Blog posts, social captions, email sequences, and ad copy — all generated with your brand voice and published automatically.", tag: "AUTOPILOT CONTENT", color: "from-violet-500 to-fuchsia-500" },
-              { icon: Sparkles, title: "Custom Skill Packs", desc: "Upload a .txt system prompt and instantly deploy a specialized AI agent. No coding required. Infinite extensibility.", tag: "BUILD YOUR OWN", color: "from-amber-500 to-orange-500" },
-              { icon: Users, title: "Prospector Outbound", desc: "Scrape local businesses via Google Maps, detect marketing gaps with AI, and auto-generate hyper-personalized cold outreach.", tag: "LEAD GEN ON AUTOPILOT", color: "from-cyan-500 to-blue-500" },
+              { icon: CalendarCheck, title: "AI Booking Agent", desc: "Qualifies leads with AI scoring, handles objections, and books calls automatically. Responds in minutes, runs 24/7.", tag: "LEAD QUALIFICATION", color: "from-emerald-500 to-teal-500" },
+              { icon: Megaphone, title: "Ad Creative Generator", desc: "Generates 5 ad variations using proven copywriting frameworks. Each one tailored to your audience and ready to deploy.", tag: "AD CREATIVES", color: "from-rose-500 to-pink-500" },
+              { icon: Target, title: "SEO & Search", desc: "Competitor analysis, schema audits, keyword research, and programmatic page generation to dominate local search.", tag: "SEARCH RANKING", color: "from-blue-500 to-sky-500" },
+              { icon: Globe, title: "Content Engine", desc: "Blog posts, social captions, email sequences, and landing pages — all generated in your brand voice.", tag: "CONTENT CREATION", color: "from-violet-500 to-fuchsia-500" },
+              { icon: Sparkles, title: "Custom AI Agents", desc: "Create your own specialized agents with a simple text prompt. No coding required.", tag: "EXTENSIBLE", color: "from-amber-500 to-orange-500" },
+              { icon: Users, title: "Lead Prospecting", desc: "Find local businesses, analyze their marketing gaps, and generate personalized outreach sequences.", tag: "PROSPECTING", color: "from-cyan-500 to-blue-500" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="group relative glass-card p-8 border border-glass-border hover:border-white/20 transition-all duration-500 overflow-hidden">
@@ -266,7 +257,7 @@ export default function Home() {
                 <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
                   <XCircle className="w-6 h-6 text-rose-500" /> Traditional Agency
                 </h3>
-                <p className="text-rose-500 font-mono font-bold text-xl mb-8">$3,000 - $10,000 / month</p>
+                <p className="text-rose-400 font-mono font-bold text-xl mb-8">R15,000 – R50,000 / month</p>
                 
                 <ul className="space-y-4">
                   {[
@@ -294,7 +285,7 @@ export default function Home() {
                 <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
                   <CheckCircle2 className="w-6 h-6 text-emerald-400" /> UMBRA V2 Architecture
                 </h3>
-                <p className="text-emerald-400 font-mono font-bold text-xl mb-8">$497 / month (Infinite Scale)</p>
+                <p className="text-emerald-400 font-mono font-bold text-xl mb-8">From R2,750 / month</p>
                 
                 <ul className="space-y-4">
                   {[
@@ -327,14 +318,14 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,183,255,0.03),transparent_60%)]" />
         <div className="max-w-5xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white serif-text mb-4">Built Different. Proven Results.</h2>
-            <p className="text-text-secondary">What happens when you replace human bottlenecks with autonomous intelligence.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-white serif-text mb-4">What The Platform Delivers</h2>
+            <p className="text-neutral-400">Real capabilities, not hype.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { metric: "847%", label: "ROI Increase", detail: "Average return across all active campaigns running on the UMBRA Swarm.", color: "text-emerald-400" },
-              { metric: "3.4s", label: "Campaign Deploy", detail: "From strategy to live execution. Traditional agencies take 4-6 weeks.",  color: "text-electric" },
-              { metric: "$0", label: "Marginal Cost", detail: "BYOK + Ollama means your AI workforce costs exactly nothing to run.", color: "text-amber-400" },
+              { metric: "29", label: "AI Tools", detail: "Every marketing function covered — from content and SEO to lead prospecting and client reporting.", color: "text-emerald-400" },
+              { metric: "30s", label: "Content Generation", detail: "Blog posts, ad creatives, email sequences, and landing pages generated in seconds.",  color: "text-[#00B7FF]" },
+              { metric: "90%", label: "Cost Reduction", detail: "Fraction of what you\u0027d pay a traditional agency retainer, with more output.", color: "text-amber-400" },
             ].map((item, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="text-center p-8 glass-card border border-glass-border">
@@ -350,7 +341,6 @@ export default function Home() {
       {/* Pricing Section */}
       <section id="pricing" className="py-24 bg-[#050505] relative border-t border-glass-border">
          <ToolShowcase />
-         <Testimonials />
          <Pricing />
       </section>
 
@@ -368,12 +358,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(0,183,255,0.08),transparent_60%)]" />
         <div className="relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 serif-text">Your Competitors Are Already<br/><span className="bg-gradient-to-r from-electric to-rose-glow bg-clip-text text-transparent">Using AI Against You.</span></h2>
-            <p className="text-lg text-text-secondary max-w-xl mx-auto mb-12">The question isn&apos;t whether to automate. It&apos;s whether you&apos;ll be the one who does it first.</p>
-            <Link href="/sovereign" className="inline-flex px-12 py-5 bg-white text-midnight font-bold rounded-full text-lg shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all items-center gap-3 hover:-translate-y-1 group">
-              Deploy the Swarm Now <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 serif-text">Your Competitors Are<br/>Already Using AI.</h2>
+            <p className="text-lg text-neutral-400 max-w-xl mx-auto mb-12">The question isn&apos;t whether to automate. It&apos;s whether you&apos;ll do it before they do.</p>
+            <Link href="/sovereign" className="inline-flex px-12 py-5 bg-white text-black font-bold rounded-full text-lg shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] transition-all items-center gap-3 hover:-translate-y-1 group">
+              Start Your Free Trial <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <p className="mt-6 text-xs text-text-secondary uppercase tracking-[0.2em]">No credit card required • 7-day free trial • Cancel anytime</p>
+            <p className="mt-6 text-xs text-neutral-500 uppercase tracking-[0.2em]">No credit card required • Cancel anytime</p>
           </motion.div>
         </div>
 

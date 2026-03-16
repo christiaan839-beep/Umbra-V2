@@ -4,15 +4,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BOOT_LINES = [
-  { text: "UMBRA SYSTEMS v2.0.7", delay: 0 },
-  { text: "Initializing Sovereign AI Core...", delay: 200 },
+  { text: "UMBRA PLATFORM v2.0", delay: 0 },
+  { text: "Connecting to AI infrastructure...", delay: 200 },
   { text: "█████████████████████ 100%", delay: 500 },
-  { text: "Gemini 2.5 Pro: ONLINE", delay: 900 },
-  { text: "29 AI Agents: ARMED", delay: 1100 },
-  { text: "Anti-Slop Engine: ACTIVE", delay: 1300 },
-  { text: "Threat Level: ZERO COMPETITION", delay: 1500 },
+  { text: "Google Gemini 2.5: CONNECTED", delay: 900 },
+  { text: "29 AI Marketing Tools: READY", delay: 1100 },
+  { text: "Content Engine: ACTIVE", delay: 1300 },
+  { text: "Payment Systems: SECURE", delay: 1500 },
   { text: "", delay: 1700 },
-  { text: "SWARM OPERATIONAL.", delay: 1800 },
+  { text: "PLATFORM READY.", delay: 1800 },
 ];
 
 export function SplashIntro({ onComplete }: { onComplete: () => void }) {
