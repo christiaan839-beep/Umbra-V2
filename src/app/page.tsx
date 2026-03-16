@@ -36,6 +36,7 @@ function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { e
 
 export default function Home() {
   const [showSite, setShowSite] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <>
@@ -49,14 +50,31 @@ export default function Home() {
             <UmbraLogo size="md" />
             <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">UMBRA</span>
           </div>
-          <div className="flex items-center gap-6">
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-6">
              <Link href="/showcase" className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Proof of Work</Link>
              <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
                <button className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Client Login</button>
              </SignInButton>
              <Link href="/sovereign" className="px-5 py-2 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white hover:bg-white/5 transition-colors">Start Free Trial</Link>
           </div>
+          {/* Mobile hamburger */}
+          <button className="md:hidden flex flex-col gap-1.5 p-2" onClick={() => setMobileNavOpen(!mobileNavOpen)} aria-label="Toggle menu">
+            <span className={`w-6 h-0.5 bg-white transition-all ${mobileNavOpen ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`w-6 h-0.5 bg-white transition-all ${mobileNavOpen ? 'opacity-0' : ''}`} />
+            <span className={`w-6 h-0.5 bg-white transition-all ${mobileNavOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          </button>
         </div>
+        {/* Mobile dropdown */}
+        {mobileNavOpen && (
+          <div className="md:hidden bg-[#050505]/95 backdrop-blur-lg border-t border-white/5 px-6 py-6 flex flex-col gap-4 animate-fade-in">
+            <Link href="/showcase" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Proof of Work</Link>
+            <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
+              <button className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors text-left" onClick={() => setMobileNavOpen(false)}>Client Login</button>
+            </SignInButton>
+            <Link href="/sovereign" className="px-5 py-3 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white text-center hover:bg-white/5 transition-colors" onClick={() => setMobileNavOpen(false)}>Start Free Trial</Link>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}

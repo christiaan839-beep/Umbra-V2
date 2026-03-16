@@ -34,67 +34,40 @@ function CrosshairIcon(props: React.SVGProps<SVGSVGElement>) {
 
 const NAV_GROUPS = [
   {
-    group: "Command & Control",
-    icon: Server,
+    group: "Dashboard",
+    icon: LayoutDashboard,
     items: [
-      { href: "/dashboard", label: "Command Center", icon: LayoutDashboard },
-      { href: "/dashboard/omnipresence", label: "Global Telemetry", icon: Workflow },
-      { href: "/dashboard/treasury", label: "Treasury Matrix", icon: DollarSign },
+      { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+      { href: "/dashboard/analytics", label: "Analytics", icon: Workflow },
+      { href: "/dashboard/agency-hub", label: "Agency Hub", icon: Rocket },
     ]
   },
   {
-    group: "Agency Swarm",
+    group: "Marketing Tools",
     icon: Rocket,
     items: [
-      { href: "/dashboard/agency-hub", label: "Agency Hub", icon: Rocket },
-      { href: "/dashboard/seo-dominator", label: "SEO Domination", icon: Search },
-      { href: "/dashboard/designer", label: "Design Agency", icon: Palette },
-      { href: "/dashboard/content-factory", label: "Content Factory", icon: Factory },
+      { href: "/dashboard/content-factory", label: "Content Hub", icon: Factory },
+      { href: "/dashboard/seo-dominator", label: "SEO Tools", icon: Search },
+      { href: "/dashboard/designer", label: "Design Studio", icon: Palette },
+      { href: "/dashboard/social", label: "Social Media", icon: Send },
+      { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
+      { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
     ]
   },
   {
-    group: "Revenue Engine",
-    icon: DollarSign,
-    items: [
-      { href: "/dashboard/skills/booking-agent", label: "AI Booking Agent", icon: CalendarCheck },
-      { href: "/dashboard/skills/ad-creator", label: "Ad Creative Gen", icon: Megaphone },
-      { href: "/dashboard/skills/chat-widget", label: "Chat Widget", icon: MessageSquare },
-      { href: "/dashboard/skills/email-sequences", label: "Email Sequences", icon: Mail },
-      { href: "/dashboard/skills/organic-content", label: "Content Studio", icon: PenTool },
-      { href: "/dashboard/skills/client-reports", label: "Client Reports", icon: FileText },
-      { href: "/dashboard/skills/reputation", label: "Reputation AI", icon: Target },
-      { href: "/dashboard/skills/custom", label: "Custom Skills", icon: CopySlash },
-    ]
-  },
-  {
-    group: "Targeting & Acquisition",
+    group: "Lead Generation",
     icon: CrosshairIcon,
     items: [
       { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
       { href: "/dashboard/outbound", label: "Outbound Engine", icon: Send },
-      { href: "/dashboard/funnel-hacker", label: "Funnel X-Ray", icon: ShieldAlert },
-      { href: "/dashboard/competitor", label: "Competitor Intel", icon: Shield },
-      { href: "/dashboard/launch", label: "Launch Center", icon: Target },
+      { href: "/dashboard/competitor", label: "Competitor Analysis", icon: Shield },
       { href: "/dashboard/programmatic", label: "Programmatic SEO", icon: Layers },
     ]
   },
   {
-    group: "Content & Publishing",
-    icon: PenTool,
-    items: [
-      { href: "/dashboard/social", label: "Social Router", icon: Send },
-      { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
-      { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
-      { href: "/dashboard/nurture", label: "Nurture Matrix", icon: Mail },
-    ]
-  },
-  {
-    group: "System",
+    group: "Settings",
     icon: Settings,
     items: [
-      { href: "/dashboard/clients", label: "Client Portal", icon: Building2 },
-      { href: "/dashboard/status", label: "System Status", icon: Activity },
-      { href: "/dashboard/webhooks", label: "Webhook Relays", icon: Webhook },
       { href: "/dashboard/billing", label: "Billing & Plans", icon: DollarSign },
       { href: "/dashboard/settings", label: "Settings", icon: Settings },
     ]
