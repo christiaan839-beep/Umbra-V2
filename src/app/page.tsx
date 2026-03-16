@@ -11,6 +11,9 @@ import { DynamicCopy } from "@/components/ui/DynamicCopy";
 import { SwarmDemo } from "@/components/ui/SwarmDemo";
 import { ROICalculator } from "@/components/ui/ROICalculator";
 import { Pricing } from "@/components/ui/Pricing";
+import { SplashIntro } from "@/components/ui/SplashIntro";
+import { ParticleGrid } from "@/components/ui/ParticleGrid";
+import { Testimonials, ToolShowcase } from "@/components/ui/SocialProof";
 
 function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { end: number; suffix?: string; prefix?: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -33,8 +36,12 @@ function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { e
 }
 
 export default function Home() {
+  const [showSite, setShowSite] = useState(false);
+
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-electric/30 font-sans">
+    <>
+      {!showSite && <SplashIntro onComplete={() => setShowSite(true)} />}
+    <div className={`min-h-screen bg-[#050505] text-white selection:bg-electric/30 font-sans transition-opacity duration-500 ${showSite ? 'opacity-100' : 'opacity-0'}`}>
       
       {/* Navigation */}
       <nav className="fixed top-0 inset-x-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-white/5">
@@ -59,6 +66,11 @@ export default function Home() {
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-electric/10 rounded-full blur-[150px]" />
           <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-rose-glow/10 rounded-full blur-[120px]" />
+        </div>
+
+        {/* Interactive Particle Grid */}
+        <div className="absolute inset-0 pointer-events-auto">
+          <ParticleGrid />
         </div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
@@ -337,13 +349,15 @@ export default function Home() {
 
       {/* Pricing Section */}
       <section id="pricing" className="py-24 bg-[#050505] relative border-t border-glass-border">
+         <ToolShowcase />
+         <Testimonials />
          <Pricing />
       </section>
 
       {/* Tech Stack Bar */}
       <section className="py-12 bg-black/40 border-y border-glass-border px-6">
         <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-8 opacity-40 hover:opacity-80 transition-opacity duration-1000">
-          {["Google Gemini 2.0", "Anthropic Claude", "Neon Postgres", "Clerk Auth", "Stripe", "Vercel Edge", "Pinecone", "Ollama", "Pusher", "Tavily"].map(tech => (
+          {["Google Gemini 2.5", "Neon Postgres", "Clerk Auth", "PayFast", "Paystack", "Vercel Edge", "Pinecone", "Tavily", "Resend"].map(tech => (
             <span key={tech} className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold font-mono">{tech}</span>
           ))}
         </div>
@@ -379,5 +393,6 @@ export default function Home() {
         </div>
       </footer>
     </div>
+    </>
   );
 }
