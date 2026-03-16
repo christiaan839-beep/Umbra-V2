@@ -10,91 +10,116 @@ export function Pricing() {
     {
       name: "Starter",
       description: "For solo marketers & consultants.",
-      priceMonthly: 197,
-      priceAnnual: 157,
+      priceMonthly: 2750,
+      priceAnnual: 2200,
       icon: Zap,
       color: "text-[#00B7FF]",
       bg: "bg-[#00B7FF]/5",
       border: "border-[#00B7FF]/20",
       features: [
-        "Content Factory Agent",
-        "SEO Dominator",
-        "100 AI Generations/mo",
-        "Community Support"
+        "AI Booking Agent",
+        "Chat Widget",
+        "Content Studio",
+        "Email Sequences",
+        "100 AI Generations/mo"
       ],
-      stripeUrl: "#", // Replace with real links later
+      planId: "starter",
       buttonText: "Deploy Starter"
     },
     {
-      name: "Sovereign",
+      name: "Growth",
       description: "For agencies & fast-scaling startups.",
-      priceMonthly: 497,
-      priceAnnual: 397,
+      priceMonthly: 5500,
+      priceAnnual: 4400,
       icon: BrainCircuit,
       color: "text-emerald-400",
       bg: "bg-emerald-500/10",
       border: "border-emerald-500/40",
       isPopular: true,
       features: [
-        "Full Agency Swarm Access",
-        "Unlimited Generations*",
-        "White-label PDF Exports",
-        "Webhook CRM Integrations",
-        "Priority 24/7 Support"
+        "Everything in Starter",
+        "Ad Creative Gen",
+        "Outbound Engine",
+        "Client Reports",
+        "Reputation AI",
+        "Unlimited Generations"
       ],
-      stripeUrl: "#", // Replace with real links later
-      buttonText: "Deploy Sovereign"
+      planId: "growth",
+      buttonText: "Deploy Growth"
     },
     {
       name: "Enterprise",
       description: "For high-volume operations.",
-      priceMonthly: 1997,
-      priceAnnual: 1597,
+      priceMonthly: 9500,
+      priceAnnual: 7600,
       icon: Server,
       color: "text-rose-400",
       bg: "bg-rose-500/5",
       border: "border-rose-500/20",
       features: [
-        "Everything in Sovereign",
-        "BYOK (Bring Your Own Key)",
-        "Dedicated Database Instance",
-        "Custom API Access",
-        "1-on-1 Implementation"
+        "Everything in Growth",
+        "Funnel X-Ray",
+        "Competitor Intel",
+        "Programmatic SEO",
+        "Page Builder",
+        "Custom Skills",
+        "Priority Support"
       ],
-      stripeUrl: "#", // Replace with real links later
-      buttonText: "Contact Sales"
+      planId: "enterprise",
+      buttonText: "Deploy Enterprise"
     }
   ];
 
-  const handleCheckout = async (tierName: string) => {
-    if (tierName === "Enterprise") {
-      window.location.assign("mailto:sales@umbrav2.com");
-      return;
-    }
-    
-    // Using the existing checkout endpoint, we pass the tier
+  const handleCheckout = async (planId: string) => {
+    // Try PayFast first, fallback to Paystack
     try {
-      const res = await fetch("/api/stripe/checkout", {
+      const res = await fetch("/api/payments/payfast/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier: tierName.toLowerCase(), isAnnual }),
+        body: JSON.stringify({ plan: planId }),
       });
       const data = await res.json();
-      if (data.url) {
-        window.location.assign(data.url);
+
+      if (data.success && data.formHtml) {
+        // PayFast: inject form and auto-submit
+        const container = document.createElement("div");
+        container.innerHTML = data.formHtml;
+        document.body.appendChild(container);
+        const form = container.querySelector("form");
+        if (form) form.submit();
+        return;
       }
+
+      // Fallback to Paystack
+      const psRes = await fetch("/api/payments/paystack/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planId }),
+      });
+      const psData = await psRes.json();
+
+      if (psData.success && psData.authorizationUrl) {
+        window.location.assign(psData.authorizationUrl);
+        return;
+      }
+
+      alert("Payment providers are being configured. Please contact us to subscribe.");
     } catch (e) {
       console.error(e);
-      alert("Checkout failed to initialize.");
+      alert("Checkout failed to initialize. Please try again.");
     }
+  };
+
+  const formatZAR = (amount: number) => {
+    return `R${amount.toLocaleString()}`;
   };
 
   return (
     <div className="w-full max-w-7xl mx-auto py-24 relative z-10">
       <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold text-white serif-text mb-6">Choose Your Compute</h2>
+        <h2 className="text-4xl md:text-5xl font-bold text-white serif-text mb-6">Choose Your Plan</h2>
         <p className="text-neutral-400 max-w-2xl mx-auto mb-8">
-          Stop paying $10,000/mo for a human agency. Deploy an autonomous swarm for a fraction of the cost.
+          Stop paying R50,000/mo for a human agency. Deploy an autonomous AI swarm for a fraction of the cost.
         </p>
 
         {/* Billing Toggle */}
@@ -136,17 +161,17 @@ export function Pricing() {
             <div className="mb-8">
               <div className="flex items-end gap-2 mb-1">
                 <span className="text-4xl font-black text-white font-mono tracking-tighter">
-                  ${isAnnual ? tier.priceAnnual : tier.priceMonthly}
+                  {formatZAR(isAnnual ? tier.priceAnnual : tier.priceMonthly)}
                 </span>
                 <span className="text-neutral-500 font-bold tracking-widest uppercase text-xs mb-2">/ mo</span>
               </div>
               {isAnnual && (
-                <p className="text-xs text-emerald-400 font-medium">Billed explicitly ${tier.priceAnnual * 12}/year</p>
+                <p className="text-xs text-emerald-400 font-medium">Billed {formatZAR(tier.priceAnnual * 12)}/year</p>
               )}
             </div>
 
             <button 
-              onClick={() => handleCheckout(tier.name)}
+              onClick={() => handleCheckout(tier.planId)}
               className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-all mb-8 flex items-center justify-center gap-2 ${
                 tier.isPopular 
                   ? 'bg-emerald-400 hover:bg-emerald-300 text-black shadow-[0_0_20px_rgba(52,211,153,0.3)]' 
@@ -166,6 +191,13 @@ export function Pricing() {
             </ul>
           </div>
         ))}
+      </div>
+
+      {/* Payment Methods */}
+      <div className="mt-12 text-center">
+        <p className="text-xs text-neutral-500 uppercase tracking-widest">
+          Secure payments via PayFast (EFT, SnapScan, Cards) & Paystack (Cards, Bank Transfer)
+        </p>
       </div>
     </div>
   );

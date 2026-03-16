@@ -108,7 +108,7 @@ export default function Home() {
           {/* Trust Badges */}
           <div className="flex flex-wrap items-center justify-center gap-8 mb-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-neutral-400">
-               <Target className="w-5 h-5" /> Secured by Stripe
+               <Target className="w-5 h-5" /> PayFast + Paystack Secured
              </div>
              <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-neutral-400">
                <BrainCircuit className="w-5 h-5" /> Powered by Google AI
@@ -158,14 +158,14 @@ export default function Home() {
                 },
                 {
                   icon: Globe,
-                  title: "Cinematic Studio",
-                  desc: "Autonomous video synthesis. Creates scripts, generates AI voiceovers, and maps avatar lip-syncs to launch high-converting VSLs.",
+                  title: "Outbound Engine",
+                  desc: "Multi-step cold outreach sequences across email, LinkedIn, and DM. Generates hyper-personalized messaging that converts strangers into booked calls.",
                   color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20"
                 },
                 {
                   icon: Zap,
-                  title: "Ghost & Voice",
-                  desc: "Undetectable text prospecting on LinkedIn and conversational AI calling to automatically pre-qualify and close leads 24/7.",
+                  title: "Funnel X-Ray",
+                  desc: "Reverse-engineers any competitor's landing page. Extracts conversion psychology, pricing strategy, and synthesizes a superior variant.",
                   color: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20"
                 }
               ].map((feature, i) => (
