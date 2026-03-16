@@ -9,8 +9,8 @@ const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 /** Verify Stripe webhook signature using HMAC-SHA256 */
 async function verifyStripeSignature(payload: string, sigHeader: string): Promise<boolean> {
   if (!STRIPE_WEBHOOK_SECRET) {
-    console.warn("[Stripe Webhook] No STRIPE_WEBHOOK_SECRET set — skipping verification in dev mode.");
-    return true; // Allow in dev, but log warning
+    console.error("[Stripe Webhook] STRIPE_WEBHOOK_SECRET not set — rejecting request.");
+    return false;
   }
 
   const parts = sigHeader.split(",");
@@ -107,11 +107,11 @@ export async function POST(req: Request) {
 
         // Send welcome onboarding email
         try {
-          const baseUrl = process.env.NEXT_PUBLIC_URL || "https://omnia-os.vercel.app";
+          const baseUrl = process.env.NEXT_PUBLIC_URL || "https://umbra-v2-1o5x.vercel.app";
           const tierNames: Record<string, string> = {
-            sovereign: "UMBRA Core ($497/mo)",
-            ghost: "Ghost Mode ($997/mo)",
-            franchise: "Franchise License ($2,497)",
+            sovereign: "UMBRA Starter (R2,750/mo)",
+            ghost: "UMBRA Growth (R5,500/mo)",
+            franchise: "UMBRA Enterprise (R9,500/mo)",
           };
 
           await fetch(`${baseUrl}/api/email`, {
