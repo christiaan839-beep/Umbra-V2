@@ -42,9 +42,9 @@ export default function SocialHub() {
         <div>
           <h1 className="text-3xl font-light text-white tracking-widest flex items-center gap-3">
             <Share2 className="w-8 h-8 text-electric" />
-            <span className="font-bold">OMNI-CHANNEL</span> DOMINATION
+            <span className="font-bold">SOCIAL</span> MEDIA
           </h1>
-          <p className="text-text-secondary mt-2">Autonomous Social Media Generation & Publishing Swarm.</p>
+          <p className="text-text-secondary mt-2">Generate platform-optimized content for Instagram, LinkedIn, YouTube, and more.</p>
         </div>
       </motion.div>
 

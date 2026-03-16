@@ -247,7 +247,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
               <div>
                 <span className="text-sm font-semibold tracking-[0.15em] uppercase glow-text block font-mono">UMBRA</span>
-                <span className="text-[9px] uppercase tracking-widest text-text-secondary">v4.0.0 Alpha</span>
+                <span className="text-[9px] uppercase tracking-widest text-text-secondary">v1.0</span>
               </div>
             </Link>
           </div>
