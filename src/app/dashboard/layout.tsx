@@ -5,10 +5,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard, Brain, Code, Laptop,
-  Users, Mail, Settings, BarChart3, Shield, DollarSign,
-  Workflow, FlaskConical, GitBranch, Wrench, FileText,
-  Send, Sparkles, Building2, Webhook, Layers, ShieldAlert, Mic, Lightbulb, Network, Film, BrainCircuit, Target, Server, Globe2, CalendarDays, Crown, Activity,
+  LayoutDashboard,
+  Users, Mail, Settings, Shield, DollarSign,
+  Workflow, FileText,
+  Send, Building2, Webhook, Layers, ShieldAlert,
+  CalendarDays, Target, Server, Globe2, Activity,
   PenTool, Search, ChevronDown, Rocket, Palette, Factory, X, Menu,
   CalendarCheck, Megaphone, CopySlash, MessageSquare,
 } from "lucide-react";
@@ -39,7 +40,6 @@ const NAV_GROUPS = [
       { href: "/dashboard", label: "Command Center", icon: LayoutDashboard },
       { href: "/dashboard/omnipresence", label: "Global Telemetry", icon: Workflow },
       { href: "/dashboard/treasury", label: "Treasury Matrix", icon: DollarSign },
-      { href: "/dashboard/affiliates", label: "Affiliate Engine", icon: Users },
     ]
   },
   {
@@ -67,64 +67,36 @@ const NAV_GROUPS = [
     ]
   },
   {
-    group: "Core Intelligence",
-    icon: BrainCircuit,
-    items: [
-      { href: "/dashboard/apex-strategy", label: "The Apex Node", icon: BrainCircuit },
-      { href: "/dashboard/nexus", label: "The Nexus Graph", icon: Network },
-      { href: "/dashboard/memory", label: "God-Brain DB", icon: Brain },
-      { href: "/dashboard/omnisearch", label: "Omniscient Memory", icon: BrainCircuit },
-      { href: "/dashboard/optimizer", label: "Meta-Cognition", icon: Lightbulb },
-      { href: "/dashboard/swarm", label: "Swarm Critic", icon: Code },
-    ]
-  },
-  {
     group: "Targeting & Acquisition",
     icon: CrosshairIcon,
     items: [
-      { href: "/dashboard/ad-buyer", label: "Capital Deployer", icon: Target },
-      { href: "/dashboard/leads", label: "Prospector Outbound", icon: Users },
+      { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
       { href: "/dashboard/outbound", label: "Outbound Engine", icon: Send },
-      { href: "/dashboard/funnel-hacker", label: "Funnel Hijacker", icon: ShieldAlert },
+      { href: "/dashboard/funnel-hacker", label: "Funnel X-Ray", icon: ShieldAlert },
       { href: "/dashboard/competitor", label: "Competitor Intel", icon: Shield },
-      { href: "/dashboard/analytics", label: "Mission Telemetry", icon: BarChart3 },
       { href: "/dashboard/launch", label: "Launch Center", icon: Target },
+      { href: "/dashboard/programmatic", label: "Programmatic SEO", icon: Layers },
     ]
   },
   {
-    group: "Synthesis & Content",
-    icon: Film,
+    group: "Content & Publishing",
+    icon: PenTool,
     items: [
-      { href: "/dashboard/studio", label: "Cinematic Studio", icon: Film },
-      { href: "/dashboard/studio/vectors", label: "Synthesis V2", icon: PenTool },
-      { href: "/dashboard/voice", label: "Voice Swarm", icon: Mic },
       { href: "/dashboard/social", label: "Social Router", icon: Send },
       { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
       { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
-      { href: "/dashboard/programmatic", label: "Programmatic SEO", icon: Layers },
       { href: "/dashboard/nurture", label: "Nurture Matrix", icon: Mail },
     ]
   },
   {
-    group: "Systems Architecture",
-    icon: FlaskConical,
+    group: "System",
+    icon: Settings,
     items: [
       { href: "/dashboard/clients", label: "Client Portal", icon: Building2 },
-      { href: "/dashboard/demo", label: "Live Demo", icon: Sparkles },
-      { href: "/dashboard/coder", label: "Autonomous Coder", icon: Laptop },
-      { href: "/dashboard/architect", label: "Agentic Architect", icon: LayoutDashboard },
-      { href: "/dashboard/factory", label: "Tool Forge", icon: Wrench },
-      { href: "/dashboard/skills", label: "Skill Modules", icon: FlaskConical },
-      { href: "/dashboard/pipelines", label: "Data Pipelines", icon: GitBranch },
-      { href: "/dashboard/playground", label: "AGI Sandbox", icon: Sparkles },
-      { href: "/dashboard/reports", label: "Client Briefs", icon: FileText },
-      { href: "/dashboard/webhooks", label: "Webhook Relays", icon: Webhook },
-      { href: "/dashboard/audit", label: "Audit Trail", icon: ShieldAlert },
       { href: "/dashboard/status", label: "System Status", icon: Activity },
-      { href: "/dashboard/compliance", label: "Compliance & Risk", icon: ShieldAlert },
+      { href: "/dashboard/webhooks", label: "Webhook Relays", icon: Webhook },
       { href: "/dashboard/billing", label: "Billing & Plans", icon: DollarSign },
-      { href: "/dashboard/admin", label: "Admin Panel", icon: Crown },
-      { href: "/dashboard/settings", label: "Global Settings", icon: Settings },
+      { href: "/dashboard/settings", label: "Settings", icon: Settings },
     ]
   }
 ];
@@ -352,10 +324,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                  <Globe2 className="w-5 h-5" />
               </Link>
            </div>
-           <Link href="/dashboard/apex-strategy" className={`flex flex-col items-center gap-1 ${pathname === '/dashboard/apex-strategy' ? 'text-[#00B7FF]' : 'text-neutral-500'}`}>
-              <BrainCircuit className="w-5 h-5" />
-              <span className="text-[8px] font-bold uppercase tracking-widest">Apex</span>
-           </Link>
+           <Link href="/dashboard/leads" className={`flex flex-col items-center gap-1 ${pathname === '/dashboard/leads' ? 'text-[#00B7FF]' : 'text-neutral-500'}`}>
+               <Target className="w-5 h-5" />
+               <span className="text-[8px] font-bold uppercase tracking-widest">Leads</span>
+            </Link>
            <button
              onClick={() => setMobileMenuOpen(true)}
              className="flex flex-col items-center gap-1 text-neutral-500"
