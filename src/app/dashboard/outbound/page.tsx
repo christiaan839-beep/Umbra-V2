@@ -25,15 +25,20 @@ export default function OutboundEngine() {
     setStatus(null);
 
     try {
-      const res = await fetch("/api/swarm/outbound", {
+      const res = await fetch("/api/agents/outbound", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ niche, location, count }),
+        body: JSON.stringify({ prospectIndustry: niche, yourOffer: `AI-powered marketing for ${niche} in ${location}`, channels: ["email"], sequenceLength: count }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      setEmails(data.emails || []);
-      setStatus(`${data.emails?.length || 0} hyper-personalized emails synthesized.`);
+      const mapped = (data.sequence || []).map((step: { message: string; subject: string; channel: string }, i: number) => ({
+        prospect: `${niche} Prospect ${i + 1}`,
+        subject: step.subject || `Step ${i + 1}`,
+        body: step.message || "",
+      }));
+      setEmails(mapped);
+      setStatus(`${mapped.length} hyper-personalized outreach steps synthesized.`);
     } catch (err: any) {
       setStatus("Generation failed: " + err.message);
     } finally {

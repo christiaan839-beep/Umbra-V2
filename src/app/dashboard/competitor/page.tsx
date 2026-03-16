@@ -14,14 +14,24 @@ export default function CompetitorPage() {
     if (!competitor.trim() || loading) return;
     setLoading(true); setAnalysis(null);
     try {
-      const res = await fetch("/api/intelligence", {
+      const res = await fetch("/api/agents/competitor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tool: "competitor", competitor, business }),
+        body: JSON.stringify({ competitorName: competitor, yourBusiness: business, industry: business }),
       });
       const data = await res.json();
-      if (data.analysis) setAnalysis(data.analysis);
-    } catch {} finally { setLoading(false); }
+      if (data.success && data.intel) {
+        setAnalysis({
+          competitor: data.intel.competitorProfile?.name || competitor,
+          threatLevel: "high",
+          strengths: data.intel.strengths || [],
+          weaknesses: (data.intel.weaknesses || []).map((w: { weakness: string }) => typeof w === "string" ? w : w.weakness),
+          recentMoves: data.intel.marketGaps?.map((g: { gap: string }) => typeof g === "string" ? g : g.gap) || [],
+          opportunities: data.intel.battlePlan?.immediate || [],
+          recommendation: data.intel.messagingAnalysis?.superiorPositioning || "Analyze complete",
+        });
+      }
+    } catch { /* silently handle */ } finally { setLoading(false); }
   };
 
   const threatColor: Record<string, string> = {

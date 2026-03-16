@@ -20,14 +20,14 @@ export default function PageBuilderPage() {
     setGeneratedHtml(null);
 
     try {
-      const res = await fetch("/api/pages/generate", {
+      const res = await fetch("/api/agents/page-builder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ businessName, industry, offer, targetAudience }),
+        body: JSON.stringify({ businessName, businessType: industry, offer, style: "Dark, premium, modern", cta: "Get Started" }),
       });
       const data = await res.json();
       if (data.success) {
-        setGeneratedHtml(data.html);
+        setGeneratedHtml(data.page);
       }
     } catch (err) {
       console.error("Page generation failed:", err);

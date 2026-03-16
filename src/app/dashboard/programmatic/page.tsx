@@ -17,25 +17,56 @@ export default function ProgrammaticEngine() {
     setScraping(true);
     setLogs(["[SYSTEM] Initiating Programmatic SEO Swarm..."]);
     
-    // Simulate API call
-    setTimeout(() => {
-      setLogs(prev => [...prev, "[TAVILY] Scraping Google search console data..."]);
-      setTimeout(() => {
-         setLogs(prev => [...prev, "[GEMINI] Extracting semantic gaps from top 10 SERPs..."]);
-         setTimeout(() => {
-            setLogs(prev => [...prev, "[GEMINI] Drafting 2,400 word authoritative post..."]);
-            setTimeout(() => {
-               setLogs(prev => [...prev, "[NODE] Injected JSON-LD schema markup."]);
-               setLogs(prev => [...prev, "[DEPLOY] Pushed to /blog/autonomous-lead-gen"]);
-               setPosts([
-                 { keyword: "autonomous lead generation agent", volume: "11.2k", difficulty: "Medium", status: "Just Deployed" },
-                 ...posts
-               ]);
-               setScraping(false);
-            }, 1500);
-         }, 1500);
-      }, 1500);
-    }, 1000);
+    const nicheInput = (document.querySelector('input[type="text"]') as HTMLInputElement)?.value || "Automated Marketing AI";
+    
+    try {
+      setLogs(prev => [...prev, "[TAVILY] Discovering high-intent keyword gaps..."]);
+      
+      const discoverRes = await fetch('/api/agents/programmatic-seo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'discover', niche: nicheInput }),
+      });
+      const discoverData = await discoverRes.json();
+      
+      if (discoverData.success && discoverData.keywords?.length > 0) {
+        setLogs(prev => [...prev, `[GEMINI] Found ${discoverData.keywords.length} keyword opportunities`]);
+        
+        const topKeyword = discoverData.keywords[0];
+        setLogs(prev => [...prev, `[GEMINI] Targeting: "${topKeyword.keyword}" (${topKeyword.estimatedVolume} vol)`]);
+        setLogs(prev => [...prev, "[GEMINI] Drafting 2,400 word authoritative post..."]);
+        
+        const generateRes = await fetch('/api/agents/programmatic-seo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'generate', niche: nicheInput, keyword: topKeyword.keyword, contentAngle: topKeyword.contentAngle }),
+        });
+        const genData = await generateRes.json();
+        
+        if (genData.success) {
+          setLogs(prev => [...prev, "[NODE] Injected JSON-LD schema markup."]);
+          setLogs(prev => [...prev, `[DEPLOY] Post generated for "${topKeyword.keyword}"`]);
+          
+          setPosts(prev => [
+            { keyword: topKeyword.keyword, volume: topKeyword.estimatedVolume, difficulty: topKeyword.difficulty, status: "Just Deployed" },
+            ...prev
+          ]);
+        }
+        
+        // Add remaining discovered keywords
+        discoverData.keywords.slice(1, 4).forEach((kw: { keyword: string; estimatedVolume: string; difficulty: string }) => {
+          setPosts(prev => [
+            ...prev,
+            { keyword: kw.keyword, volume: kw.estimatedVolume, difficulty: kw.difficulty, status: "Queued" }
+          ]);
+        });
+      }
+    } catch (err) {
+      console.error('[Programmatic SEO]', err);
+      setLogs(prev => [...prev, "[ERROR] Swarm failed. Check API configuration."]);
+    }
+    
+    setScraping(false);
   };
 
   return (

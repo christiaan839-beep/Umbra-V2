@@ -7,24 +7,52 @@ import { Scan, Zap, Code, ShieldAlert, FileSearch, Sparkles, Box, LayoutTemplate
 export default function FunnelHijacker() {
   const [url, setUrl] = useState('');
   const [scanState, setScanState] = useState<'IDLE' | 'SCANNING' | 'ANALYZED' | 'SYNTHESIZING' | 'COMPLETE'>('IDLE');
+  const [analysisData, setAnalysisData] = useState<Record<string, unknown> | null>(null);
+  const [synthesisData, setSynthesisData] = useState<Record<string, unknown> | null>(null);
 
-  const handleScan = (e: React.FormEvent) => {
+  const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url || scanState !== 'IDLE') return;
 
     setScanState('SCANNING');
-    
-    // Simulate X-Ray Extraction
-    setTimeout(() => {
-      setScanState('ANALYZED');
-    }, 3000);
+    try {
+      const res = await fetch('/api/agents/funnel-xray', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'analyze', url }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAnalysisData(data.analysis);
+        setScanState('ANALYZED');
+      } else {
+        setScanState('IDLE');
+      }
+    } catch (err) {
+      console.error('[Funnel X-Ray]', err);
+      setScanState('IDLE');
+    }
   };
 
-  const synthesizeSuperior = () => {
+  const synthesizeSuperior = async () => {
     setScanState('SYNTHESIZING');
-    setTimeout(() => {
-      setScanState('COMPLETE');
-    }, 3500);
+    try {
+      const res = await fetch('/api/agents/funnel-xray', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'synthesize', analysis: analysisData }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSynthesisData(data.synthesis);
+        setScanState('COMPLETE');
+      } else {
+        setScanState('ANALYZED');
+      }
+    } catch (err) {
+      console.error('[Funnel Synthesis]', err);
+      setScanState('ANALYZED');
+    }
   };
 
   return (
