@@ -5,23 +5,23 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "UMBRA — Autonomous AI Marketing Intelligence",
-  description: "15 AI engines that market, sell, and scale while you sleep. Replace your entire marketing team with autonomous intelligence. Ghost Mode, Swarm Critic, God-Brain Memory, and 12 more engines — from $497/mo.",
-  keywords: ["AI marketing", "autonomous marketing", "AI agency", "ghost mode", "marketing automation", "AI ads", "swarm intelligence", "marketing AI platform"],
+  title: "UMBRA — AI Marketing Platform",
+  description: "29 AI tools that handle your content, ads, SEO, outreach, and lead qualification — running 24/7 at a fraction of what you pay a traditional agency. From R2,750/month.",
+  keywords: ["AI marketing", "marketing automation", "AI marketing platform", "content generation", "SEO automation", "lead generation", "South Africa", "ZAR"],
   authors: [{ name: "UMBRA" }],
   openGraph: {
-    title: "UMBRA — Autonomous AI Marketing Intelligence",
-    description: "15 AI engines. Zero employees. Replace your entire marketing team with shadow intelligence.",
+    title: "UMBRA — Replace Your Agency. Keep The Results.",
+    description: "29 AI marketing tools that handle content, ads, SEO, and lead generation — running 24/7. From R2,750/month.",
     type: "website",
     siteName: "UMBRA",
   },
   twitter: {
     card: "summary_large_image",
-    title: "UMBRA — 15 AI Engines, Zero Employees",
-    description: "Autonomous AI that markets, sells, and scales while you sleep. From $497/mo.",
+    title: "UMBRA — AI Marketing Platform",
+    description: "29 AI tools. 24/7 execution. Replace your agency. From R2,750/month.",
   },
   other: {
-    "theme-color": "#0a0a0f",
+    "theme-color": "#050505",
   },
 };
 

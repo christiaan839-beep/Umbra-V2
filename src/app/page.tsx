@@ -63,8 +63,8 @@ export default function Home() {
       <main className="pt-40 pb-20 px-6 relative overflow-hidden flex flex-col items-center">
         {/* Ambient glows */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-electric/10 rounded-full blur-[150px]" />
-          <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-rose-glow/10 rounded-full blur-[120px]" />
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#00B7FF]/10 rounded-full blur-[150px] animate-float" />
+          <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-float-delay" />
         </div>
 
         {/* Interactive Particle Grid */}
@@ -81,7 +81,7 @@ export default function Home() {
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight">
             Replace Your Agency.<br/>
-            <span className="bg-gradient-to-r from-[#00B7FF] via-white to-[#00B7FF] bg-clip-text text-transparent">Keep The Results.</span>
+            <span className="animated-gradient-text">Keep The Results.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
@@ -94,7 +94,7 @@ export default function Home() {
                 onClick={() => {
                   document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
                 }} 
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold text-lg shadow-[0_0_30px_rgba(45,110,255,0.4)] hover:shadow-[0_0_50px_rgba(45,110,255,0.6)] transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-[#00B7FF] to-[#a855f7] text-white font-bold text-lg cta-glow transition-all flex items-center justify-center gap-2 group cursor-pointer"
               >
                 Get Started Free
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -111,14 +111,14 @@ export default function Home() {
           </div>
 
           {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-8 mb-20 opacity-50">
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500">
+          <div className="flex flex-wrap items-center justify-center gap-8 mb-20">
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge">
                 <ShieldAlert className="w-4 h-4" /> 256-bit Encryption
               </div>
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500">
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '1s' }}>
                 <CheckCircle2 className="w-4 h-4" /> Powered by Google Gemini
               </div>
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500">
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '2s' }}>
                 <Target className="w-4 h-4" /> Secure ZAR Payments
               </div>
            </div>
@@ -164,7 +164,7 @@ export default function Home() {
                 }
               ].map((feature, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
-                  className="glass-card p-8 border border-glass-border hover:border-white/15 transition-all duration-500 group">
+                  className="gradient-border-card p-8 shimmer-effect group">
                   <div className={`w-14 h-14 rounded-2xl ${feature.bg} ${feature.border} border flex items-center justify-center mb-6`}>
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
@@ -307,14 +307,22 @@ export default function Home() {
          <Pricing />
       </section>
 
-      {/* Tech Stack Bar */}
-      <section className="py-12 bg-black/40 border-y border-glass-border px-6">
-        <div className="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-8 opacity-40 hover:opacity-80 transition-opacity duration-1000">
-          {["Google Gemini 2.5", "Neon Postgres", "Clerk Auth", "PayFast", "Paystack", "Vercel Edge", "Pinecone", "Tavily", "Resend"].map(tech => (
-            <span key={tech} className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold font-mono">{tech}</span>
-          ))}
+      {/* Tech Stack Bar — Animated Marquee */}
+      <div className="section-divider" />
+      <section className="py-12 bg-black/40 px-6 overflow-hidden">
+        <div className="max-w-5xl mx-auto overflow-hidden">
+          <div className="marquee-track gap-12">
+            {[...Array(2)].map((_, repeat) => (
+              <div key={repeat} className="flex gap-12 items-center px-6">
+                {["Google Gemini 2.5", "Neon Postgres", "Clerk Auth", "PayFast", "Paystack", "Vercel Edge", "Pinecone", "Tavily", "Resend"].map(tech => (
+                  <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold font-mono whitespace-nowrap">{tech}</span>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
+      <div className="section-divider" />
 
       {/* Footer CTA */}
       <footer className="py-32 text-center px-6 relative overflow-hidden">
