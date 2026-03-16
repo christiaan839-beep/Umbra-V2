@@ -8,12 +8,21 @@
   --color-onyx: #1a1014;
   --color-surface: #231820;
 
-  /* Accents */
+  /* Accents — Primary */
   --color-electric: #a855f7;
   --color-electric-light: #c084fc;
+  --color-electric-blue: #00B7FF;
+
+  /* Accents — Warm */
   --color-rose-glow: #631C2D;
   --color-gold: #d4a574;
   --color-emerald-glow: #34d399;
+
+  /* Agent Colors */
+  --color-agent-seo: #f43f5e;
+  --color-agent-designer: #8b5cf6;
+  --color-agent-content: #10b981;
+  --color-agent-closer: #f59e0b;
 
   /* Glass */
   --color-glass-bg: rgba(255, 255, 255, 0.03);
@@ -43,6 +52,10 @@ body {
   font-family: "Cormorant Garamond", serif;
 }
 
+.glow-text {
+  text-shadow: 0 0 20px rgba(0, 183, 255, 0.4), 0 0 60px rgba(0, 183, 255, 0.1);
+}
+
 /* ─── Glass Card ──────────────────────────────────── */
 
 .glass-card {
@@ -55,6 +68,13 @@ body {
 
 .glass-card:hover {
   border-color: rgba(168, 85, 247, 0.15);
+}
+
+.glass-panel {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 183, 255, 0.1);
+  border-radius: 1rem;
+  backdrop-filter: blur(24px);
 }
 
 /* ─── Scrollbar ───────────────────────────────────── */
@@ -95,3 +115,15 @@ input[type="range"]::-webkit-slider-thumb {
   border: 2px solid var(--color-midnight);
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
 }
+
+/* ─── Animations ──────────────────────────────────── */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+

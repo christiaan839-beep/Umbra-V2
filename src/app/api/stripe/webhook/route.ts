@@ -83,8 +83,9 @@ export async function POST(req: Request) {
         }
 
         // Auto-provision a tenant/Swarm node for this client
+        let nodeId = "";
         try {
-          const nodeId = `UMB-NX-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+          nodeId = `UMB-NX-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
           const userRecord = await db.select().from(users).where(eq(users.email, email.toLowerCase()));
           if (userRecord.length > 0) {
             // Check if tenant already exists for this clerk user
@@ -96,10 +97,46 @@ export async function POST(req: Request) {
                 plan: tier === "franchise" ? "franchise" : "black-card",
               });
               console.log(`[Stripe Webhook] Auto-provisioned UMBRA Node ${nodeId} for ${email}`);
+            } else {
+              nodeId = existingTenant[0].nodeId;
             }
           }
         } catch (tenantErr) {
           console.error("[Stripe Webhook] Tenant provisioning error:", tenantErr);
+        }
+
+        // Send welcome onboarding email
+        try {
+          const baseUrl = process.env.NEXT_PUBLIC_URL || "https://omnia-os.vercel.app";
+          const tierNames: Record<string, string> = {
+            sovereign: "UMBRA Core ($497/mo)",
+            ghost: "Ghost Mode ($997/mo)",
+            franchise: "Franchise License ($2,497)",
+          };
+
+          await fetch(`${baseUrl}/api/email`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              to: email,
+              subject: `Welcome to UMBRA — Your ${tierNames[tier] || tier} Node is Live`,
+              body: [
+                `Your UMBRA node ${nodeId} has been successfully provisioned.`,
+                ``,
+                `Plan: ${tierNames[tier] || tier}`,
+                `Node ID: ${nodeId}`,
+                `Dashboard: ${baseUrl}/dashboard`,
+                ``,
+                `Your AI marketing engine is now running 24/7.`,
+                `Log in to your dashboard to configure your first campaign.`,
+                ``,
+                `— The UMBRA System`,
+              ].join("\n"),
+            }),
+          });
+          console.log(`[Stripe Webhook] 📧 Welcome email sent to ${email}`);
+        } catch (emailErr) {
+          console.error("[Stripe Webhook] Welcome email failed (non-critical):", emailErr);
         }
       }
       break;

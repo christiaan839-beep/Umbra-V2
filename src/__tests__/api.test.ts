@@ -187,3 +187,149 @@ describe("Rate Limiter", () => {
     expect(result.allowed).toBe(false);
   });
 });
+
+// ============================================================
+// SEO Agent API Tests
+// ============================================================
+describe("SEO Agent API", () => {
+  it("should export a POST handler", async () => {
+    const mod = await import("@/app/api/agents/seo/route");
+    expect(mod.POST).toBeDefined();
+    expect(typeof mod.POST).toBe("function");
+  });
+
+  it("should reject requests without action", async () => {
+    const mod = await import("@/app/api/agents/seo/route");
+    const req = new Request("http://localhost/api/agents/seo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    const res = await mod.POST(req as any);
+    const data = await res.json();
+    expect(res.status).toBe(400);
+    expect(data.error).toContain("action");
+  });
+
+  it("should reject unknown actions", async () => {
+    const mod = await import("@/app/api/agents/seo/route");
+    const req = new Request("http://localhost/api/agents/seo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "nonexistent" }),
+    });
+    const res = await mod.POST(req as any);
+    const data = await res.json();
+    expect(res.status).toBe(400);
+    expect(data.error).toContain("Unknown action");
+  });
+});
+
+// ============================================================
+// Design Agent API Tests
+// ============================================================
+describe("Design Agent API", () => {
+  it("should export a POST handler", async () => {
+    const mod = await import("@/app/api/agents/design/route");
+    expect(mod.POST).toBeDefined();
+    expect(typeof mod.POST).toBe("function");
+  });
+
+  it("should reject requests without action", async () => {
+    const mod = await import("@/app/api/agents/design/route");
+    const req = new Request("http://localhost/api/agents/design", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    const res = await mod.POST(req as any);
+    const data = await res.json();
+    expect(res.status).toBe(400);
+    expect(data.error).toContain("action");
+  });
+
+  it("should reject unknown actions", async () => {
+    const mod = await import("@/app/api/agents/design/route");
+    const req = new Request("http://localhost/api/agents/design", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "nonexistent" }),
+    });
+    const res = await mod.POST(req as any);
+    const data = await res.json();
+    expect(res.status).toBe(400);
+    expect(data.error).toContain("Unknown action");
+  });
+});
+
+// ============================================================
+// Content Factory API Tests
+// ============================================================
+describe("Content Factory API", () => {
+  it("should export a POST handler", async () => {
+    const mod = await import("@/app/api/agents/content/route");
+    expect(mod.POST).toBeDefined();
+    expect(typeof mod.POST).toBe("function");
+  });
+
+  it("should reject requests without action", async () => {
+    const mod = await import("@/app/api/agents/content/route");
+    const req = new Request("http://localhost/api/agents/content", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    const res = await mod.POST(req as any);
+    const data = await res.json();
+    expect(res.status).toBe(400);
+    expect(data.error).toContain("action");
+  });
+
+  it("should reject unknown actions", async () => {
+    const mod = await import("@/app/api/agents/content/route");
+    const req = new Request("http://localhost/api/agents/content", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "nonexistent" }),
+    });
+    const res = await mod.POST(req as any);
+    const data = await res.json();
+    expect(res.status).toBe(400);
+    expect(data.error).toContain("Unknown action");
+  });
+});
+
+// ============================================================
+// Orchestrator API Tests
+// ============================================================
+describe("Orchestrator API", () => {
+  it("should export GET and POST handlers", async () => {
+    const mod = await import("@/app/api/agents/orchestrate/route");
+    expect(mod.GET).toBeDefined();
+    expect(mod.POST).toBeDefined();
+    expect(typeof mod.GET).toBe("function");
+    expect(typeof mod.POST).toBe("function");
+  });
+
+  it("should return pipelines on GET", async () => {
+    const mod = await import("@/app/api/agents/orchestrate/route");
+    const res = await mod.GET();
+    const data = await res.json();
+    expect(data.pipelines).toBeDefined();
+    expect(Array.isArray(data.pipelines)).toBe(true);
+    expect(data.pipelines.length).toBeGreaterThan(0);
+  });
+
+  it("should reject POST without pipelineId", async () => {
+    const mod = await import("@/app/api/agents/orchestrate/route");
+    const req = new Request("http://localhost/api/agents/orchestrate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    const res = await mod.POST(req as any);
+    const data = await res.json();
+    expect(res.status).toBe(400);
+    expect(data.error).toContain("pipelineId");
+  });
+});
