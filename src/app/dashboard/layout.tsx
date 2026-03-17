@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
-  Layers, Globe2,
+  Layers, Globe2, Network,
   Search, ChevronDown, Rocket, Palette, Factory, X, Menu,
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
@@ -60,6 +60,14 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
       { href: "/dashboard/programmatic", label: "Bulk Pages", icon: Layers },
+    ]
+  },
+  {
+    group: "God-Brain V3",
+    icon: Network,
+    items: [
+      { href: "/dashboard/voice", label: "Voice Execution", icon: Rocket },
+      { href: "/dashboard/knowledge", label: "Vertex Knowledge", icon: Shield },
     ]
   },
   {

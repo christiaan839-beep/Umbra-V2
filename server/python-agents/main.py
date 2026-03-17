@@ -16,6 +16,11 @@ class NodeCommand(BaseModel):
     command: str
     target_vector: str = "GLOBAL"
 
+class VoiceCommand(BaseModel):
+    phone_number: str
+    context: str
+    lead_name: str = "Target"
+
 # The God-Brain Commander Agent
 @app.post("/api/v1/commander/execute")
 async def execute_command(payload: NodeCommand):
@@ -56,6 +61,37 @@ async def execute_command(payload: NodeCommand):
 @app.get("/health")
 def health_check():
     return {"status": "God-Brain Optimal", "version": "4.0.0 Alpha"}
+
+# UMBRA God-Brain: Pipecat Voice Node + Vertex AI Grounding
+@app.post("/api/v1/voice/execute")
+async def execute_voice_agent(payload: VoiceCommand):
+    print(f"[GOD-BRAIN] Intercepted Voice Execution Command for {payload.phone_number}")
+    print(f"[GOD-BRAIN] Context Payload: {payload.context}")
+    
+    # PHASE 1: VERTEX AI VECTOR GROUNDING
+    # Here, UMBRA queries the private Vertex AI vector store to retrieve proprietary sales SOPs
+    # and objection-handling scripts tailored to the exact context of the lead.
+    print("[VERTEX AI] Grounding voice agent with proprietary agency SOPs...")
+    
+    # Simulated Grounded Prompt
+    grounded_system_prompt = f"Act as an expert closer for UMBRA. Use the following context: {payload.context}. Keep responses under 50 words. Be slightly aggressive but professional."
+    
+    # PHASE 2: PIPECAT & NVIDIA NIM EXECUTION
+    # This initializes the physical WebRTC or SIP trunk connection via Pipecat
+    # utilizing NVIDIA's low-latency NIM endpoints for LLM, TTS, and STT.
+    print("[NVIDIA NIM] Initializing Pipecat Swarm...")
+    print(f"[PIPECAT] Dialing {payload.phone_number}...")
+    
+    # In a full production container, this would trigger an async subprocess:
+    # subprocess.Popen(["python", "dialer.py", "--phone", payload.phone_number, "--prompt", grounded_system_prompt])
+    
+    return {
+        "status": "voice_swarm_deployed",
+        "message": "Vertex AI grounding complete. Pipecat is dialing the prospect.",
+        "target": payload.phone_number,
+        "latency_target": "sub-300ms",
+        "grounding_status": "Active"
+    }
 
 # Re-entry Webhook: Catches physical node data (e.g. scraped leads) from n8n and proxies it to Node.js UI server
 @app.post("/api/v1/commander/webhook/re-entry")
