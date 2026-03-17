@@ -6,12 +6,11 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Users, Mail, Settings, Shield, DollarSign,
-  Workflow, FileText,
-  Send, Building2, Webhook, Layers, ShieldAlert,
-  CalendarDays, Target, Server, Globe2, Activity,
-  PenTool, Search, ChevronDown, Rocket, Palette, Factory, X, Menu,
-  CalendarCheck, Megaphone, CopySlash, MessageSquare,
+  Users, Settings, Shield, DollarSign,
+  Workflow,
+  Send, Layers,
+  CalendarDays, Target, Globe2,
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu,
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,7 +38,6 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
       { href: "/dashboard/analytics", label: "Analytics", icon: Workflow },
-      { href: "/dashboard/agency-hub", label: "Agency Hub", icon: Rocket },
     ]
   },
   {
