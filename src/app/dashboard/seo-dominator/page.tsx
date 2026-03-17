@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Crosshair,
   Zap,
+  AlertTriangle,
 } from "lucide-react";
 
 type SEOAction = "xray" | "gap" | "schema" | "gbp";
@@ -89,18 +90,25 @@ export default function SEODominatorPage() {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   const handleExecute = async () => {
     if (!activeAction) return;
     setLoading(true);
     setResult(null);
+    setError(null);
 
     const action = ACTIONS.find((a) => a.id === activeAction)!;
-    const params: Record<string, any> = {};
+    const params: Record<string, string | string[]> = {};
 
     for (const field of action.fields) {
       const val = formData[field.name] || "";
+      if (!val.trim()) {
+        setError(`Please fill in "${field.label}"`);
+        setLoading(false);
+        return;
+      }
       if (field.name === "urls" || field.name === "competitors") {
         params[field.name] = val.split(",").map((s) => s.trim()).filter(Boolean);
       } else {
@@ -115,9 +123,14 @@ export default function SEODominatorPage() {
         body: JSON.stringify({ action: activeAction, params }),
       });
       const data = await res.json();
-      setResult(data.output || data.error || JSON.stringify(data, null, 2));
-    } catch (e: any) {
-      setResult(`Error: ${e.message}`);
+      if (!res.ok || data.error) {
+        setError(data.error || `Request failed (${res.status})`);
+      } else {
+        setResult(data.output || JSON.stringify(data, null, 2));
+      }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Unknown error";
+      setError(`Connection failed: ${msg}. Please try again.`);
     } finally {
       setLoading(false);
     }
@@ -238,6 +251,30 @@ export default function SEODominatorPage() {
         )}
       </AnimatePresence>
 
+      {/* Error State */}
+      <AnimatePresence>
+        {error && !loading && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="bg-black/60 backdrop-blur-3xl border border-rose-500/20 rounded-2xl overflow-hidden p-6 text-center"
+          >
+            <div className="w-10 h-10 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-3">
+              <AlertTriangle className="w-5 h-5 text-rose-400" />
+            </div>
+            <h3 className="text-sm font-bold text-white mb-1">Something went wrong</h3>
+            <p className="text-xs text-neutral-400 mb-4 max-w-sm mx-auto">{error}</p>
+            <button
+              onClick={() => { setError(null); handleExecute(); }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider hover:bg-rose-500/20 transition-all"
+            >
+              Try Again
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Results Panel */}
       <AnimatePresence>
         {result && (
@@ -261,6 +298,15 @@ export default function SEODominatorPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Empty State */}
+      {!result && !error && !loading && !activeAction && (
+        <div className="text-center py-16">
+          <Search className="w-8 h-8 text-neutral-700 mx-auto mb-3" />
+          <p className="text-sm text-neutral-500">Select a tool above to get started</p>
+          <p className="text-[10px] text-neutral-600 mt-1">Choose X-Ray, Gap Killer, Schema Audit, or GBP Hijack</p>
+        </div>
+      )}
     </div>
   );
 }

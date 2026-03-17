@@ -19,6 +19,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/TelemetryProvider';
 import { JarvisSocket } from '@/components/JarvisSocket';
 import { ToastProvider } from '@/components/ui/ToastProvider';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 function CrosshairIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -276,9 +277,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <main className="flex-1 overflow-y-auto bg-black/40 backdrop-blur-3xl relative z-10 pb-24 lg:pb-0">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,183,255,0.03),transparent_40%)] pointer-events-none" />
           <div className="relative z-10 w-full min-h-full">
-            <ToastProvider>
-              {children}
-            </ToastProvider>
+            <ErrorBoundary>
+              <ToastProvider>
+                {children}
+              </ToastProvider>
+            </ErrorBoundary>
           </div>
           <JarvisSocket />
         </main>
