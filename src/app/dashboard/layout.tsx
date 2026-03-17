@@ -59,7 +59,8 @@ const NAV_GROUPS = [
     icon: CrosshairIcon,
     items: [
       { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
-      { href: "/dashboard/programmatic", label: "Bulk Pages", icon: Layers },
+      { href: "/dashboard/funnel-hacker", label: "Funnel Hacker", icon: Layers },
+      { href: "/dashboard/omnipresence", label: "Omnipresence", icon: Globe2 },
     ]
   },
   {
@@ -300,9 +301,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <LayoutDashboard className="w-5 h-5" />
               <span className="text-[8px] font-bold uppercase tracking-widest">Command</span>
            </Link>
-           <Link href="/dashboard/agency-hub" className={`flex flex-col items-center gap-1 ${pathname?.startsWith('/dashboard/agency') ? 'text-[#00B7FF]' : 'text-neutral-500'}`}>
-              <Rocket className="w-5 h-5" />
-              <span className="text-[8px] font-bold uppercase tracking-widest">Agency</span>
+           <Link href="/dashboard/war-room" className={`flex flex-col items-center gap-1 ${pathname?.startsWith('/dashboard/war-room') ? 'text-[#00B7FF]' : 'text-neutral-500'}`}>
+              <Target className="w-5 h-5" />
+              <span className="text-[8px] font-bold uppercase tracking-widest">CRM</span>
            </Link>
            <div className="relative -mt-6">
               <Link href="/dashboard/omnipresence" className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-rose-500 to-rose-700 border border-white/20 shadow-[0_0_20px_rgba(244,63,94,0.4)] text-white">
