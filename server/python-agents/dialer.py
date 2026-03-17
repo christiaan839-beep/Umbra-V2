@@ -2,14 +2,21 @@ import argparse
 import time
 import sys
 
-def simulate_pipecat_execution(phone, prompt):
+def simulate_pipecat_execution(phone, prompt, enable_avatar=False):
     print(f"[NVIDIA NIM] Booting Language Models & TTS for target {phone}...", flush=True)
+    if enable_avatar:
+        print("[NVIDIA AUDIO2FACE] Initializing 3D Avatar WebRTC Stream...", flush=True)
+        time.sleep(0.5)
     time.sleep(1)
     
     print(f"[VERTEX AI GROUNDING] System Prompt Intercepted: {prompt}", flush=True)
     time.sleep(1)
     
-    print(f"[PIPECAT] Establishing SIP Trunk / WebRTC Connection to {phone}...", flush=True)
+    if enable_avatar:
+        print(f"[PIPECAT] Establishing Photorealistic Video Call via WebRTC to {phone}...", flush=True)
+    else:
+        print(f"[PIPECAT] Establishing Audio SIP Trunk Connection to {phone}...", flush=True)
+        
     time.sleep(1.5)
     
     print("[CALL CONNECTED]", flush=True)
@@ -28,6 +35,8 @@ def simulate_pipecat_execution(phone, prompt):
         time.sleep(2)
         
     print("\n--- CALL TERMINATED ---", flush=True)
+    if enable_avatar:
+        print("[NVIDIA AUDIO2FACE] Shutting down WebRTC video stream...", flush=True)
     print("[NVIDIA NIM] Resources Deallocated. Meeting successfully booked.", flush=True)
     sys.exit(0)
 
@@ -35,7 +44,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="UMBRA Pipecat Voice Executable")
     parser.add_argument("--phone", required=True, help="Target phone number")
     parser.add_argument("--prompt", required=True, help="Vertex AI Grounded Context")
+    parser.add_argument("--enable-avatar", default="false", help="Enable NVIDIA Audio2Face streaming (true/false)")
     
     args = parser.parse_args()
     
-    simulate_pipecat_execution(args.phone, args.prompt)
+    avatar_enabled = args.enable_avatar.lower() == "true"
+    
+    simulate_pipecat_execution(args.phone, args.prompt, avatar_enabled)
