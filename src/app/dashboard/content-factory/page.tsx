@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExportButtons } from "@/components/ui/ExportButtons";
+import { MarkdownRenderer } from "@/components/ui/MarkdownRenderer";
 import {
   FileText,
   Mail,
@@ -238,10 +239,8 @@ export default function ContentFactoryPage() {
               </div>
               <ExportButtons content={result || ""} filename="umbra-content" />
             </div>
-            <div className="p-6 max-h-[600px] overflow-y-auto">
-              <pre className="text-xs text-neutral-300 font-mono whitespace-pre-wrap leading-relaxed">
-                {result}
-              </pre>
+            <div className="p-6 max-h-[600px] overflow-y-auto custom-scrollbar">
+              <MarkdownRenderer content={result || ""} />
             </div>
           </motion.div>
         )}

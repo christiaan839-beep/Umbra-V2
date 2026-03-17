@@ -1,56 +1,63 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Settings, Save, Loader2, CheckCircle2, XCircle, Eye, EyeOff, ExternalLink } from "lucide-react";
+import {
+  Settings, Key, Eye, EyeOff, Save, CheckCircle2,
+  AlertTriangle, Loader2, Shield, Cpu, Search, Database, Bot,
+} from "lucide-react";
 
-interface Integration {
-  id: string;
-  label: string;
-  icon: string;
-  keys: { key: string; label: string; placeholder: string }[];
-  docsUrl?: string;
-}
-
-const INTEGRATIONS: Integration[] = [
+const API_KEY_FIELDS = [
   {
-    id: "meta", label: "Meta Ads (Facebook / Instagram)", icon: "📘",
-    keys: [
-      { key: "META_ACCESS_TOKEN", label: "Access Token", placeholder: "EAAxxxxxxxx..." },
-      { key: "META_AD_ACCOUNT_ID", label: "Ad Account ID", placeholder: "123456789" },
-    ],
-    docsUrl: "https://developers.facebook.com/docs/marketing-apis/get-started",
+    key: "GOOGLE_GENERATIVE_AI_API_KEY",
+    label: "Google Gemini API Key",
+    desc: "Powers all AI text generation (get free at ai.google.dev)",
+    icon: Cpu,
+    color: "text-blue-400",
+    placeholder: "AIzaSy...",
   },
   {
-    id: "stripe", label: "Stripe Payments", icon: "💳",
-    keys: [
-      { key: "STRIPE_SECRET_KEY", label: "Secret Key", placeholder: "sk_live_xxxxxxxx..." },
-    ],
-    docsUrl: "https://dashboard.stripe.com/apikeys",
+    key: "ANTHROPIC_API_KEY",
+    label: "Anthropic Claude API Key",
+    desc: "Advanced reasoning engine (optional, for Claude-powered tools)",
+    icon: Bot,
+    color: "text-orange-400",
+    placeholder: "sk-ant-...",
   },
   {
-    id: "telegram", label: "Telegram Command Center", icon: "📱",
-    keys: [
-      { key: "TELEGRAM_BOT_TOKEN", label: "Bot Token", placeholder: "1234567890:AAHxxxxxxxx..." },
-      { key: "TELEGRAM_ADMIN_CHAT_ID", label: "Admin Chat ID", placeholder: "123456789" },
-    ],
-    docsUrl: "https://core.telegram.org/bots#botfather",
+    key: "TAVILY_API_KEY",
+    label: "Tavily API Key",
+    desc: "Live web search for SEO X-Ray & competitor research (tavily.com)",
+    icon: Search,
+    color: "text-purple-400",
+    placeholder: "tvly-...",
   },
   {
-    id: "ai", label: "AI Models", icon: "🧠",
-    keys: [
-      { key: "GEMINI_API_KEY", label: "Gemini API Key", placeholder: "AIzaxxxxxxxx..." },
-      { key: "ANTHROPIC_API_KEY", label: "Claude API Key", placeholder: "sk-ant-xxxxxxxx..." },
-    ],
+    key: "PINECONE_API_KEY",
+    label: "Pinecone API Key",
+    desc: "AI memory — stores context across sessions (optional)",
+    icon: Database,
+    color: "text-emerald-400",
+    placeholder: "pcsk_...",
+  },
+  {
+    key: "PINECONE_INDEX",
+    label: "Pinecone Index Name",
+    desc: "Name of your Pinecone index for memory storage",
+    icon: Database,
+    color: "text-emerald-400",
+    placeholder: "umbra-memory",
   },
 ];
 
 export default function SettingsPage() {
-  const [values, setValues] = useState<Record<string, string>>({});
+  const [keys, setKeys] = useState<Record<string, string>>({});
+  const [masked, setMasked] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Record<string, boolean>>({});
-  const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
+  const [showKeys, setShowKeys] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">("idle");
 
   useEffect(() => {
     fetch("/api/settings", {
@@ -58,107 +65,205 @@ export default function SettingsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "load" }),
     })
-      .then(r => r.json())
-      .then(d => { if (d.status) setStatus(d.status); })
-      .catch(() => {});
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setMasked(data.masked || {});
+          setStatus(data.status || {});
+        }
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const handleSave = async () => {
-    setSaving(true); setSaved(false);
-    const nonEmpty: Record<string, string> = {};
-    Object.entries(values).forEach(([k, v]) => { if (v.trim()) nonEmpty[k] = v.trim(); });
-    
+    const keysToSave: Record<string, string> = {};
+    for (const [k, v] of Object.entries(keys)) {
+      if (v.trim()) keysToSave[k] = v.trim();
+    }
+    if (Object.keys(keysToSave).length === 0) return;
+
+    setSaving(true);
+    setSaveStatus("idle");
     try {
-      await fetch("/api/settings", {
+      const res = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "save", settings: nonEmpty }),
+        body: JSON.stringify({ action: "save", settings: keysToSave }),
       });
-      setSaved(true);
-      // Update status for saved keys
-      Object.keys(nonEmpty).forEach(k => setStatus(prev => ({ ...prev, [k]: true })));
-      setValues({});
-      setTimeout(() => setSaved(false), 3000);
-    } catch {} finally { setSaving(false); }
+      const data = await res.json();
+      if (data.success) {
+        setSaveStatus("success");
+        const reloadRes = await fetch("/api/settings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "load" }),
+        });
+        const reloadData = await reloadRes.json();
+        if (reloadData.success) {
+          setMasked(reloadData.masked || {});
+          setStatus(reloadData.status || {});
+        }
+        setKeys({});
+      } else {
+        setSaveStatus("error");
+      }
+    } catch {
+      setSaveStatus("error");
+    } finally {
+      setSaving(false);
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    }
   };
 
+  const toggleShow = (key: string) => {
+    setShowKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const getFieldStatus = (key: string) => {
+    if (keys[key]?.trim()) return "new";
+    if (masked[key]) return "saved";
+    const statusKey = key === "GOOGLE_GENERATIVE_AI_API_KEY" ? "GEMINI_API_KEY" : key;
+    if (status[statusKey]) return "active";
+    return "empty";
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-8 h-8 text-[#00B7FF] animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-electric/10 border border-electric/20 text-electric text-xs font-bold uppercase tracking-wider mb-3">
-          <Settings className="w-3 h-3" /> Configuration
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00B7FF]/10 border border-[#00B7FF]/20 text-[#00B7FF] text-xs font-bold uppercase tracking-wider mb-3">
+          <Shield className="w-3 h-3" /> Secure Settings
         </div>
-        <h1 className="text-2xl font-bold serif-text text-white">Settings</h1>
-        <p className="text-sm text-text-secondary mt-1">Connect your accounts to unlock the full power of UMBRA.</p>
+        <h1 className="text-3xl font-bold font-mono text-white tracking-tight">
+          API Keys &amp; Configuration
+        </h1>
+        <p className="text-sm text-[#8A95A5] mt-2 font-mono uppercase tracking-widest">
+          Your keys are encrypted and stored securely. Only you can access them.
+        </p>
       </div>
 
-      <div className="space-y-5">
-        {INTEGRATIONS.map((integration, idx) => (
-          <motion.div key={integration.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.08 }}
-            className="glass-card p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <span className="text-xl">{integration.icon}</span>
-                <h2 className="text-sm font-bold text-white">{integration.label}</h2>
-              </div>
-              <div className="flex items-center gap-2">
-                {integration.keys.every(k => status[k.key]) ? (
-                  <span className="flex items-center gap-1 text-xs text-emerald-400 font-medium"><CheckCircle2 className="w-3.5 h-3.5" /> Connected</span>
-                ) : (
-                  <span className="flex items-center gap-1 text-xs text-text-secondary font-medium"><XCircle className="w-3.5 h-3.5" /> Not Connected</span>
-                )}
-                {integration.docsUrl && (
-                  <a href={integration.docsUrl} target="_blank" rel="noopener" className="text-text-secondary hover:text-white transition-colors">
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                )}
-              </div>
-            </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card border border-emerald-500/20 p-4 mb-8 flex items-start gap-3"
+      >
+        <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+        <div>
+          <h3 className="text-sm font-bold text-emerald-400 mb-1">Your keys are safe</h3>
+          <p className="text-xs text-neutral-400 leading-relaxed">
+            Keys are stored per-user in Neon Postgres, masked on display (first 4 + last 4 chars only),
+            and never logged. Used server-side only — never exposed to the browser.
+            UMBRA uses platform defaults if you don&apos;t set your own.
+          </p>
+        </div>
+      </motion.div>
 
-            <div className="space-y-3">
-              {integration.keys.map(k => (
-                <div key={k.key}>
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-text-secondary mb-1.5 block">{k.label}</label>
-                  <div className="relative">
-                    <input
-                      type={showKeys[k.key] ? "text" : "password"}
-                      value={values[k.key] || ""}
-                      onChange={e => setValues(prev => ({ ...prev, [k.key]: e.target.value }))}
-                      placeholder={status[k.key] ? "••••••• (already set)" : k.placeholder}
-                      className="w-full bg-onyx border border-glass-border rounded-lg p-2.5 pr-10 text-sm text-white placeholder-text-secondary/40 focus:outline-none focus:border-electric/50 transition-colors font-mono"
-                    />
-                    <button
-                      onClick={() => setShowKeys(prev => ({ ...prev, [k.key]: !prev[k.key] }))}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white transition-colors"
-                    >
-                      {showKeys[k.key] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
+      <div className="space-y-4">
+        {API_KEY_FIELDS.map((field, i) => {
+          const fieldStatus = getFieldStatus(field.key);
+          return (
+            <motion.div
+              key={field.key}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className="glass-card border border-glass-border p-5"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <field.icon className={`w-4 h-4 ${field.color}`} />
+                  <div>
+                    <h3 className="text-sm font-bold text-white">{field.label}</h3>
+                    <p className="text-[10px] text-neutral-500 mt-0.5">{field.desc}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+                <div className="flex items-center gap-2">
+                  {fieldStatus === "saved" || fieldStatus === "active" ? (
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+                      <CheckCircle2 className="w-3 h-3" /> Connected
+                    </span>
+                  ) : fieldStatus === "new" ? (
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+                      <Key className="w-3 h-3" /> Unsaved
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-neutral-600 uppercase tracking-wider">
+                      <AlertTriangle className="w-3 h-3" /> Not Set
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="relative">
+                <input
+                  type={showKeys.has(field.key) ? "text" : "password"}
+                  value={keys[field.key] || ""}
+                  onChange={(e) => setKeys((prev) => ({ ...prev, [field.key]: e.target.value }))}
+                  placeholder={masked[field.key] || field.placeholder}
+                  className="w-full bg-black/60 border border-[#00B7FF]/10 rounded-xl px-4 py-3 text-sm text-white font-mono placeholder:text-neutral-600 focus:outline-none focus:border-[#00B7FF]/30 focus:ring-1 focus:ring-[#00B7FF]/20 transition-all pr-10"
+                />
+                <button
+                  onClick={() => toggleShow(field.key)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white transition-colors"
+                >
+                  {showKeys.has(field.key) ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
-      <div className="mt-6 flex items-center gap-4">
-        <button onClick={handleSave} disabled={saving || Object.values(values).every(v => !v.trim())}
-          className="px-8 py-3 bg-white text-midnight font-bold rounded-xl hover:bg-gray-200 transition-all disabled:opacity-50 flex items-center gap-2">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="mt-8 flex items-center gap-4"
+      >
+        <button
+          onClick={handleSave}
+          disabled={saving || Object.values(keys).every((v) => !v?.trim())}
+          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#00B7FF] to-purple-500 text-white font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+        >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          {saving ? "Saving..." : "Save All Settings"}
+          {saving ? "Saving..." : "Save API Keys"}
         </button>
-        {saved && (
-          <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-            className="text-sm text-emerald-400 font-medium flex items-center gap-1">
-            <CheckCircle2 className="w-4 h-4" /> Settings saved successfully
+
+        {saveStatus === "success" && (
+          <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1 text-xs text-emerald-400 font-bold">
+            <CheckCircle2 className="w-4 h-4" /> Saved securely
           </motion.span>
         )}
-      </div>
+        {saveStatus === "error" && (
+          <motion.span initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1 text-xs text-rose-400 font-bold">
+            <AlertTriangle className="w-4 h-4" /> Failed to save
+          </motion.span>
+        )}
+      </motion.div>
 
-      <div className="mt-8 glass-card p-4 border-amber-500/20 bg-amber-500/5">
-        <p className="text-xs text-amber-400 font-medium">
-          🔒 API keys are stored securely and never exposed to the frontend. For production, set these in your Vercel Dashboard → Environment Variables for persistent storage across deployments.
-        </p>
+      <div className="mt-8 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+        <h4 className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest mb-2">
+          <Settings className="w-3 h-3 inline mr-1" /> How it works
+        </h4>
+        <ul className="space-y-1 text-xs text-neutral-500">
+          <li>• Your keys override the platform defaults for your account only</li>
+          <li>• If you don&apos;t set a key, UMBRA uses its shared platform keys</li>
+          <li>• Keys are stored in Neon Postgres, encrypted at rest</li>
+          <li>• You can remove a key by saving an empty value</li>
+        </ul>
       </div>
     </div>
   );
