@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cpu, Terminal, Sparkles, Activity, ShieldAlert, Zap, Send, BrainCircuit, Maximize } from "lucide-react";
+import { Cpu, Terminal, Sparkles, Activity, ShieldAlert, Zap, Send, BrainCircuit, Maximize, Lock, Globe, Power } from "lucide-react";
 
 interface Message {
   role: "system" | "user" | "assistant";
@@ -22,6 +22,9 @@ export default function NemoClawPage() {
   const [input, setInput] = useState("");
   const [isInferencing, setIsInferencing] = useState(false);
   const [latency, setLatency] = useState("- ms");
+  const [privacyMode, setPrivacyMode] = useState<"secure" | "open">("secure");
+  const [isDeployed247, setIsDeployed247] = useState(false);
+  const [showGuardrails, setShowGuardrails] = useState(true);
   
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -129,8 +132,10 @@ export default function NemoClawPage() {
                 <span className="text-white">TensorRT-LLM</span>
               </div>
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                <span className="text-neutral-500">Guardrails</span>
-                <span className="text-[#00B7FF]">NeMo Shield</span>
+                <span className="text-neutral-500">OpenShell Guardrails</span>
+                <span className="text-emerald-400 flex items-center gap-1">
+                   <ShieldAlert className="w-3 h-3" /> Active
+                </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-neutral-500">Last Inference</span>
@@ -156,6 +161,50 @@ export default function NemoClawPage() {
             <button className="w-full mt-4 py-3 bg-white/5 border border-white/10 hover:bg-white/10 transition-colors rounded-xl text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
               <ShieldAlert className="w-4 h-4" /> Save Core Directive
             </button>
+          </div>
+
+          {/* Enterprise Controls */}
+          <div className="rounded-2xl bg-white/[0.02] border border-white/10 p-5 backdrop-blur-md">
+             <h3 className="text-xs font-bold uppercase tracking-widest text-[#00B7FF] mb-4 flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4" /> Agent Toolkit Controls
+             </h3>
+             
+             {/* Privacy Router */}
+             <div className="mb-4">
+               <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-2 block">Privacy Router</span>
+               <div className="flex bg-black/40 rounded-lg p-1 border border-white/10">
+                 <button 
+                   onClick={() => setPrivacyMode("secure")}
+                   className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${privacyMode === 'secure' ? 'bg-[#00B7FF]/20 text-[#00B7FF] border border-[#00B7FF]/30' : 'text-neutral-500 hover:text-white'}`}
+                 >
+                   <Lock className="w-3 h-3" /> Local (Secure)
+                 </button>
+                 <button 
+                   onClick={() => setPrivacyMode("open")}
+                   className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${privacyMode === 'open' ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30' : 'text-neutral-500 hover:text-white'}`}
+                 >
+                   <Globe className="w-3 h-3" /> Cloud (Internal API)
+                 </button>
+               </div>
+             </div>
+
+             {/* 24/7 Deployment */}
+             <button 
+               onClick={() => setIsDeployed247(!isDeployed247)}
+               className={`w-full py-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest transition-all ${
+                 isDeployed247 
+                   ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]'
+                   : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+               }`}
+             >
+               <Power className={`w-4 h-4 ${isDeployed247 ? 'animate-pulse' : ''}`} />
+               {isDeployed247 ? 'Agent Deployed 24/7' : 'Deploy 24/7 Node'}
+             </button>
+             {isDeployed247 && (
+               <p className="text-[9px] text-emerald-500/70 font-mono mt-2 text-center uppercase tracking-widest">
+                  Autonomous background process active.
+               </p>
+             )}
           </div>
 
         </div>
@@ -236,17 +285,24 @@ export default function NemoClawPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Initialize sequence... [Press Enter]"
-                className="w-full bg-black/50 border border-white/10 focus:border-[#00B7FF]/50 rounded-xl py-4 pl-4 pr-14 text-sm font-mono text-white outline-none transition-colors"
-                disabled={isInferencing}
+                className="w-full bg-black/50 border border-white/10 focus:border-[#00B7FF]/50 rounded-xl py-4 flex-1 pl-4 pr-14 text-sm font-mono text-white outline-none transition-colors"
+                disabled={isInferencing || isDeployed247}
               />
               <button 
                 onClick={handleSend}
-                disabled={!input.trim() || isInferencing}
+                disabled={!input.trim() || isInferencing || isDeployed247}
                 className="absolute right-2 p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg disabled:opacity-30 transition-colors"
               >
                 <Send className="w-4 h-4" />
               </button>
             </div>
+            
+            {showGuardrails && (
+               <div className="absolute top-0 right-4 -translate-y-full mb-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded text-[9px] font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-2 animate-fade-in shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                 <ShieldAlert className="w-3 h-3" /> OpenShell Safety Policy Enforced
+               </div>
+            )}
+
             <div className="mt-2 text-center">
                <span className="text-[9px] text-neutral-600 font-mono uppercase tracking-widest">
                  Live connection to NVIDIA NIM (mistral-nemotron)

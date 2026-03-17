@@ -121,7 +121,8 @@ export default function Home() {
           </h1>
 
           <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
-            29 AI agents that handle your content, ads, SEO, outreach, and lead qualification — running 24/7 at a fraction of what you pay a traditional agency.
+            Build and deploy secure, always-on AI assistants with a single command. 
+            NVIDIA NemoClaw adds policy-based privacy and security guardrails via OpenShell, giving you absolute control over how agents behave.
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-16">
@@ -245,11 +246,11 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Cpu, title: "NemoClaw Direct Access", desc: "Execute advanced reasoning loops natively on NVIDIA hardware via Mistral-Nemotron inside our cinematic Space Black terminal.", tag: "NVIDIA NIM", color: "from-emerald-500 to-teal-500" },
-              { icon: ShieldAlert, title: "Zero Hallucinations", desc: "Secured by NVIDIA NeMo Guardrails for absolute, un-hackable script adherence by all micro-agents.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
-              { icon: TrendingUp, title: "Advanced SEO Dominator", desc: "Reverse-engineer search intent, hijack local map packs, and inject advanced schema architectures directly into your sites.", tag: "SEO DOMINANCE", color: "from-blue-500 to-sky-500" },
+              { icon: Cpu, title: "NemoClaw Direct Access", desc: "Deploy autonomous software agents safely, instantly. Native integration with NVIDIA Agent Toolkit ensures 24/7 localized compute.", tag: "NVIDIA NIM", color: "from-emerald-500 to-teal-500" },
+              { icon: ShieldAlert, title: "OpenShell Guardrails", desc: "Enforce policy-based privacy and security guardrails directly within the runtime. Absolute control over how agents handle data.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
+              { icon: Globe, title: "Privacy Router", desc: "Tap open models like Mistral-Nemotron locally, or dynamically route to cloud-based frontier models within defined security guardrails.", tag: "DYNAMIC ROUTING", color: "from-blue-500 to-sky-500" },
               { icon: Zap, title: "Deep Competitor Intel", desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.", tag: "COMPETITOR X-RAY", color: "from-violet-500 to-fuchsia-500" },
-              { icon: Globe, title: "Dynamic Content Factory", desc: "Automate blog posts, social media schedules, ad creatives, and email sequences perfectly tuned to your brand voice.", tag: "CONTENT ENGINE", color: "from-amber-500 to-orange-500" },
+              { icon: TrendingUp, title: "Dynamic Content Factory", desc: "Automate blog posts, social media schedules, ad creatives, and email sequences perfectly tuned to your brand voice.", tag: "CONTENT ENGINE", color: "from-amber-500 to-orange-500" },
               { icon: Target, title: "Lead Prospector Matrix", desc: "Find ultra-qualified local business leads, analyze their specific marketing gaps, and generate personalized cold outreach.", tag: "OUTREACH", color: "from-cyan-500 to-blue-500" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
