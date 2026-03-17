@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, Zap, Target, BrainCircuit, Globe, CheckCircle2, XCircle, ShieldAlert, Cpu, TrendingUp, Clock, DollarSign, Users, Megaphone, CalendarCheck, Sparkles, ChevronDown } from "lucide-react";
+import { ArrowRight, Zap, Target, BrainCircuit, Globe, CheckCircle2, XCircle, ShieldAlert, Cpu, TrendingUp, Clock, DollarSign, Users, CalendarCheck, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
@@ -141,18 +141,18 @@ export default function Home() {
           </div>
 
           {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-8 mb-20">
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge">
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-20 max-w-4xl mx-auto">
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#00B7FF] trust-badge bg-[#00B7FF]/5 border border-[#00B7FF]/20 px-4 py-2 rounded-full">
                 <ShieldAlert className="w-4 h-4" /> Secured by Google Vertex AI
               </div>
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '1s' }}>
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '1s' }}>
                 <Cpu className="w-4 h-4" /> Powered by NVIDIA NIM APIs
               </div>
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '2s' }}>
-                <CheckCircle2 className="w-4 h-4" /> 29 Autonomous Micro-Agents
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '2s' }}>
+                <CheckCircle2 className="w-4 h-4" /> NVIDIA Riva Speech AI
               </div>
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '3s' }}>
-                <ShieldAlert className="w-4 h-4 text-emerald-500" /> NeMo Guardrails (Zero Hallucinations)
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-purple-400 trust-badge bg-purple-500/5 border border-purple-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '3s' }}>
+                <Zap className="w-4 h-4" /> TensorRT-LLM Microsecond Latency
               </div>
            </div>
 
@@ -245,12 +245,12 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: CalendarCheck, title: "Autonomous Call Agent", desc: "Powered by NVIDIA Pipecat. Physically dials prospects, handles live objections, and books calls 24/7.", tag: "VOICE SWARM", color: "from-emerald-500 to-teal-500" },
-              { icon: Megaphone, title: "God-Brain Knowledge", desc: "Securely grounds your agents using your proprietary SOPs via Google Cloud Vertex AI Vector Search.", tag: "AI MEMORY", color: "from-rose-500 to-pink-500" },
-              { icon: Target, title: "SEO & Search", desc: "Competitor analysis, schema audits, keyword research, and programmatic page generation to dominate local search.", tag: "SEARCH RANKING", color: "from-blue-500 to-sky-500" },
-              { icon: Globe, title: "Content Engine", desc: "Blog posts, social captions, email sequences, and landing pages — all generated in your brand voice.", tag: "CONTENT CREATION", color: "from-violet-500 to-fuchsia-500" },
-              { icon: ShieldAlert, title: "Zero Hallucinations", desc: "Your AI never goes rogue. Secured by Open-Source NVIDIA NeMo Guardrails for absolute, un-hackable script adherence.", tag: "ENTERPRISE SECURE", color: "from-amber-500 to-orange-500" },
-              { icon: Users, title: "Lead Prospecting", desc: "Find local businesses, analyze their marketing gaps, and generate personalized outreach sequences.", tag: "PROSPECTING", color: "from-cyan-500 to-blue-500" },
+              { icon: CalendarCheck, title: "Voice & Speech Engine", desc: "Powered by NVIDIA Pipecat & Riva. Physically dials prospects, handles live objections, and books calls 24/7.", tag: "VOICE SWARM", color: "from-emerald-500 to-teal-500" },
+              { icon: ShieldAlert, title: "Zero Hallucinations", desc: "Secured by NVIDIA NeMo Guardrails for absolute, un-hackable script adherence by all micro-agents.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
+              { icon: BrainCircuit, title: "Visual Logic Builder", desc: "Drag-and-drop conversational React Flow logic grids giving you ultimate granular control over the God-Brain.", tag: "PROGRAMMATIC AI", color: "from-blue-500 to-sky-500" },
+              { icon: Target, title: "Waterfall Enrichment", desc: "Military-grade scraping transparency. Watch the live AI mapping: Domain Ping -> Firmographic Match -> Contact Hash.", tag: "PROSPECTOR OS", color: "from-violet-500 to-fuchsia-500" },
+              { icon: CheckCircle2, title: "Live God-Brain Telemetry", desc: "A live streaming dashboard terminal mapping exactly what the LLM is thinking, scraping, and deciding.", tag: "AUDIT TRAIL", color: "from-amber-500 to-orange-500" },
+              { icon: Users, title: "Lead Generation", desc: "Find ultra-qualified local business leads, analyze their specific marketing gaps, and generate personalized cold outreach.", tag: "OUTREACH", color: "from-cyan-500 to-blue-500" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="group relative glass-card p-8 border border-glass-border hover:border-white/20 transition-all duration-500 overflow-hidden">
