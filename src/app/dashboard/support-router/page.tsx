@@ -1,0 +1,195 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Headphones, Mail, User, Phone, CheckCircle2, ShieldCheck, CreditCard, RotateCcw, AlertCircle, ArrowRight } from "lucide-react";
+
+interface TicketPayload {
+  id: string;
+  customer: string;
+  email: string;
+  intent: string;
+  body: string;
+  sentiment: string;
+  history: string;
+}
+
+export default function SupportRouterPage() {
+  const [pipelineState, setPipelineState] = useState<"idle" | "ingesting" | "analyzing" | "executing" | "resolved">("idle");
+  const [activeTicket, setActiveTicket] = useState<TicketPayload | null>(null);
+
+  const triggerIngestion = () => {
+    setPipelineState("ingesting");
+    
+    // Simulate webhook arrival
+    setTimeout(() => {
+      setActiveTicket({
+        id: "TCK-8924",
+        customer: "Michael Vance",
+        email: "m.vance@industrialops.net",
+        intent: "Refund Request - Defective Unit",
+        body: "The hydraulic pump system I ordered (Order #4401-B) arrived yesterday, but the primary gasket is ruptured. I need a full refund immediately, this is holding up our assembly line.",
+        sentiment: "Angry / Urgent",
+        history: "$42k LTV (14 Previous Orders)"
+      });
+      setPipelineState("analyzing");
+    }, 2000);
+
+    setTimeout(() => {
+      setPipelineState("executing");
+    }, 5500);
+
+    setTimeout(() => {
+      setPipelineState("resolved");
+    }, 9000);
+  };
+
+  return (
+    <div className="p-8 max-w-7xl mx-auto min-h-screen bg-[#050505] text-white">
+      <div className="mb-10">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider mb-3">
+          <Headphones className="w-3 h-3" /> Autonomous Support Router
+        </div>
+        <h1 className="text-3xl font-bold font-sans tracking-tight mb-2 flex items-center gap-3">
+          The Omni-Closer
+        </h1>
+        <p className="text-sm text-neutral-400 max-w-2xl">
+          Powered by Llama-3.1-Nemotron-70B and NeMo Retriever. This node ingests high-volume support emails/tickets, extracts LTV and purchase history, and physically executes refunds, RMAs, or technical support loops with zero human intervention.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* Left Col: Webhook Stream */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+           <div className="rounded-2xl bg-white/[0.02] border border-white/10 p-6 flex-1 flex flex-col">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-300 mb-6 flex items-center gap-2">
+                 <Mail className="w-4 h-4 text-blue-400" /> Webhook Ingestion
+              </h3>
+              
+              <div className="flex-1 flex items-center justify-center border-2 border-dashed border-white/10 rounded-xl bg-black/40 mb-6 p-6">
+                 {pipelineState === "idle" ? (
+                    <div className="text-center">
+                       <ShieldCheck className="w-12 h-12 text-neutral-700 mx-auto mb-3" />
+                       <p className="text-xs text-neutral-500 font-mono uppercase tracking-widest">Awaiting Stripe / Zendesk Webhook</p>
+                    </div>
+                 ) : (
+                    <div className="w-full">
+                       <div className="flex items-center justify-between mb-2">
+                          <span className="text-[10px] text-blue-400 uppercase font-bold tracking-widest animate-pulse">Incoming Payload Detected</span>
+                          <span className="text-[10px] text-neutral-500 font-mono">WSS://{Date.now()}</span>
+                       </div>
+                       <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                          <motion.div 
+                            initial={{ width: 0 }} 
+                            animate={{ width: pipelineState !== "ingesting" ? "100%" : "30%" }} 
+                            className="h-full bg-blue-500"
+                          />
+                       </div>
+                    </div>
+                 )}
+              </div>
+
+              <button 
+                 onClick={triggerIngestion}
+                 disabled={pipelineState !== "idle"}
+                 className="w-full py-4 rounded-xl font-bold uppercase tracking-widest text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-blue-500/20 text-blue-400 border border-blue-500/30 hover:bg-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.15)] flex justify-center items-center gap-2"
+              >
+                 Simulate Angry Customer Threat
+              </button>
+           </div>
+        </div>
+
+        {/* Right Col: The Execution Engine */}
+        <div className="lg:col-span-8">
+           <div className="h-full min-h-[600px] rounded-2xl bg-black border border-blue-500/20 flex flex-col overflow-hidden shadow-[0_0_50px_rgba(59,130,246,0.05)]">
+              {/* Terminal Header */}
+              <div className="h-12 border-b border-blue-500/20 bg-blue-500/5 flex items-center justify-between px-4">
+                 <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-blue-500" />
+                    <span className="text-[10px] font-mono text-blue-400 tracking-widest uppercase">NeMo Retriever Resolution Stream</span>
+                 </div>
+                 {pipelineState === "analyzing" || pipelineState === "executing" ? (
+                    <span className="text-[9px] text-blue-400 font-bold uppercase tracking-widest animate-pulse">Processing...</span>
+                 ) : pipelineState === "resolved" ? (
+                    <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1"><CheckCircle2 className="w-3 h-3"/> Closed</span>
+                 ) : null}
+              </div>
+
+              <div className="p-6 flex-1 flex flex-col bg-[url('/noise.png')] bg-repeat opacity-95">
+                 
+                 <AnimatePresence>
+                    {activeTicket && (
+                       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                             <div className="bg-white/5 border border-white/10 rounded-lg p-3">
+                                <span className="text-[9px] text-neutral-500 uppercase font-bold tracking-widest block mb-1">Customer LTV</span>
+                                <span className="text-sm font-mono text-emerald-400">{activeTicket.history}</span>
+                             </div>
+                             <div className="bg-white/5 border border-white/10 rounded-lg p-3">
+                                <span className="text-[9px] text-neutral-500 uppercase font-bold tracking-widest block mb-1">Sentiment Scan</span>
+                                <span className="text-sm font-mono text-rose-400">{activeTicket.sentiment}</span>
+                             </div>
+                             <div className="bg-white/5 border border-white/10 rounded-lg p-3 col-span-2">
+                                <span className="text-[9px] text-neutral-500 uppercase font-bold tracking-widest block mb-1">Extracted Intent</span>
+                                <span className="text-sm font-mono text-blue-400">{activeTicket.intent}</span>
+                             </div>
+                          </div>
+
+                          <div className="bg-rose-500/5 border border-rose-500/20 rounded-xl p-5 mb-6">
+                             <div className="flex items-center gap-3 mb-3 border-b border-rose-500/10 pb-3">
+                                <AlertCircle className="w-5 h-5 text-rose-500" />
+                                <div>
+                                   <div className="text-xs font-bold text-white">{activeTicket.customer}</div>
+                                   <div className="text-[10px] text-rose-400 font-mono">{activeTicket.email}</div>
+                                </div>
+                             </div>
+                             <p className="text-sm text-rose-100/80 leading-relaxed">"{activeTicket.body}"</p>
+                          </div>
+                       </motion.div>
+                    )}
+                 </AnimatePresence>
+
+                 {/* Action Execution Log */}
+                 <div className="flex-1 space-y-4 font-mono text-xs">
+                    {pipelineState === "analyzing" && (
+                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-blue-400/70 space-y-2">
+                          <p className="animate-pulse">&gt; Routing payload to Llama-3.1-Nemotron-70B...</p>
+                          <p className="animate-pulse delay-75">&gt; Cross-referencing Stripe payment logs...</p>
+                          <p className="animate-pulse delay-150">&gt; Retrieving RMA warehouse authorization matrices...</p>
+                       </motion.div>
+                    )}
+
+                    {pipelineState === "executing" && (
+                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-amber-400/80 space-y-3">
+                          <p>&gt; <span className="text-emerald-400">RAG Check:</span> High LTV Customer ($42k) detected. Bypassing human approval queue.</p>
+                          <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-300">
+                             <CreditCard className="w-4 h-4" /> Initiating Stripe Refund Command: chr_9982x...
+                          </div>
+                          <p className="animate-pulse">&gt; Generating 3D CAD schematic of replacement gasket...</p>
+                          <p className="animate-pulse">&gt; Drafting highly empathetic apology response...</p>
+                       </motion.div>
+                    )}
+
+                    {pipelineState === "resolved" && (
+                       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="pt-4 border-t border-blue-500/20 text-emerald-400 space-y-4">
+                          <p className="font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> TICKET RESOLVED IN 4.2 SECONDS (SAVED 3 HUMAN HOURS)</p>
+                          
+                          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
+                             <div className="text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <ArrowRight className="w-3 h-3" /> Autonomous Email Dispatch
+                             </div>
+                             <p className="text-sm text-emerald-100 leading-relaxed font-sans">
+                                "Hi Michael. I am incredibly sorry to hear the gasket on Order #4401-B ruptured. Because you've been a loyal partner to us for 14 orders, I have proactively bypassed our return department and issued a full refund to your card ending in 4492 right now. I have also FedEx overnighted the replacement unit. It will arrive by 9AM tomorrow so your assembly line doesn't stall. Please accept my personal apology."
+                             </p>
+                          </div>
+                       </motion.div>
+                    )}
+                 </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+}

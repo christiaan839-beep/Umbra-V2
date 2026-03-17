@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
   Layers, Globe2, Network,
-  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database, Headphones, FileVideo, Cuboid, Briefcase
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
@@ -55,6 +55,22 @@ const NAV_GROUPS = [
       { href: "/dashboard/vsl-hacker", label: "Cosmos VSL Hacker", icon: Video },
       { href: "/dashboard/omni-search", label: "Global RAG Search", icon: Database },
       { href: "/dashboard/cyber-audit", label: "Cyber Security Auditor", icon: ShieldAlert },
+      { href: "/dashboard/support-router", label: "Omni-Closer Support", icon: Headphones },
+    ]
+  },
+  {
+    group: "Extinction Protocol",
+    icon: Rocket,
+    items: [
+      { href: "/dashboard/deepfake-studio", label: "Executive Deepfake", icon: FileVideo },
+      { href: "/dashboard/edify-forge", label: "Edify 3D Forge", icon: Cuboid },
+    ]
+  },
+  {
+    group: "The Syndicate",
+    icon: Globe2,
+    items: [
+      { href: "/dashboard/agency-hub", label: "Reseller Hub", icon: Briefcase },
     ]
   },
   {
