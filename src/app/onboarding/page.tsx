@@ -41,10 +41,44 @@ export default function OnboardingWizard() {
 
   const handleLaunch = async () => {
     setIsLaunching(true);
-    // Simulate API call to create tenant and configure initial campaign
-    await new Promise((r) => setTimeout(r, 3000));
-    setIsLaunching(false);
-    setIsComplete(true);
+    try {
+      // Try PayFast checkout first
+      const pfRes = await fetch("/api/payments/payfast/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "starter", businessName: formData.businessName }),
+      });
+      const pfData = await pfRes.json();
+
+      if (pfData.success && pfData.formHtml) {
+        const container = document.createElement("div");
+        container.innerHTML = pfData.formHtml;
+        document.body.appendChild(container);
+        const form = container.querySelector("form");
+        if (form) { form.submit(); return; }
+      }
+
+      // Fallback to Paystack
+      const psRes = await fetch("/api/payments/paystack/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "starter", businessName: formData.businessName }),
+      });
+      const psData = await psRes.json();
+
+      if (psData.success && psData.authorizationUrl) {
+        window.location.assign(psData.authorizationUrl);
+        return;
+      }
+
+      // If no payment gateway configured yet, complete onboarding anyway
+      setIsLaunching(false);
+      setIsComplete(true);
+    } catch {
+      // Payment gateway not ready — complete onboarding gracefully
+      setIsLaunching(false);
+      setIsComplete(true);
+    }
   };
 
   if (isComplete) {

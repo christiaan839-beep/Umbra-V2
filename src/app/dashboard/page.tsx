@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from "@clerk/nextjs";
+import { QuickStartWizard } from "@/components/dashboard/QuickStartWizard";
 
 const TOOLS = [
   {
@@ -96,6 +97,9 @@ export default function DashboardOverview() {
           Your AI marketing engine is ready. Choose a tool below to generate content, analyze competitors, find leads, or build your next campaign.
         </p>
       </motion.div>
+
+      {/* Quick Start Guide */}
+      <QuickStartWizard />
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
