@@ -123,7 +123,20 @@ export default function ContentFactoryPage() {
       if (!res.ok || data.error) {
         setError(data.error || `Request failed (${res.status})`);
       } else {
-        setResult(data.output || JSON.stringify(data, null, 2));
+        const output = data.output || JSON.stringify(data, null, 2);
+        setResult(output);
+        // Auto-save to library
+        fetch("/api/generations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "save",
+            tool: "content-factory",
+            toolAction: activeTab,
+            inputSummary: `${activeTab}: ${formData[tab.fields[0]?.name] || ""}`.slice(0, 200),
+            output,
+          }),
+        }).catch(() => {}); // Silent
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";

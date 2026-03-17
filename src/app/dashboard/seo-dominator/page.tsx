@@ -126,7 +126,20 @@ export default function SEODominatorPage() {
       if (!res.ok || data.error) {
         setError(data.error || `Request failed (${res.status})`);
       } else {
-        setResult(data.output || JSON.stringify(data, null, 2));
+        const output = data.output || JSON.stringify(data, null, 2);
+        setResult(output);
+        // Auto-save to library
+        fetch("/api/generations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "save",
+            tool: "seo-dominator",
+            toolAction: activeAction,
+            inputSummary: `${activeAction}: ${formData[action.fields[0]?.name] || ""}`.slice(0, 200),
+            output,
+          }),
+        }).catch(() => {}); // Silent — don't block UI
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";

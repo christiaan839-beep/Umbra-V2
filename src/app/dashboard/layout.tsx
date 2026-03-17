@@ -65,11 +65,12 @@ const NAV_GROUPS = [
     ]
   },
   {
-    group: "Settings",
+    group: "Account",
     icon: Settings,
     items: [
+      { href: "/dashboard/library", label: "My Library", icon: Layers },
       { href: "/dashboard/billing", label: "Billing & Plans", icon: DollarSign },
-      { href: "/dashboard/settings", label: "Settings", icon: Settings },
+      { href: "/dashboard/settings", label: "API Keys", icon: Settings },
     ]
   }
 ];

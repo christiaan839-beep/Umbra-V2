@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, integer } from "drizzle-orm/pg-core";
 
 export const tenants = pgTable("tenants", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -140,5 +140,20 @@ export const sequenceSteps = pgTable("sequence_steps", {
   subject: text("subject").notNull(),
   body: text("body").notNull(), // HTML or plain text
   delayDays: text("delay_days").notNull().default("0"), // days after previous step
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// ═══════════════════════════════════════════
+// Phase 7: Result History & Usage Metering
+// ═══════════════════════════════════════════
+
+export const generations = pgTable("generations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull(),
+  tool: text("tool").notNull(),           // "seo-dominator", "content-factory", etc.
+  action: text("action").notNull(),        // "xray", "blog", "email", etc.
+  inputSummary: text("input_summary"),     // Brief input description for library display
+  output: text("output").notNull(),        // Full AI output
+  tokens: integer("tokens").default(0),    // Estimated token count
   createdAt: timestamp("created_at").defaultNow(),
 });
