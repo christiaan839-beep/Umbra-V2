@@ -161,3 +161,19 @@ export const generations = pgTable("generations", {
   index("gen_created_at_idx").on(table.createdAt),
 ]);
 
+// ═══════════════════════════════════════════
+// Phase 8: NVIDIA NIM Voice Agent (UMBRA Siren)
+// ═══════════════════════════════════════════
+
+export const voiceCalls = pgTable("voice_calls", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userEmail: text("user_email").notNull(),
+  targetPhone: text("target_phone").notNull(),
+  context: text("context"), // The system prompt / objective
+  status: text("status").notNull().default("initiated"), // initiated, ringing, connected, completed, failed
+  durationSeconds: integer("duration_seconds").default(0),
+  transcript: text("transcript"), // Full text transcript of the call
+  disposition: text("disposition"), // e.g., "Meeting Booked", "Left Voicemail", "Not Interested"
+  createdAt: timestamp("created_at").defaultNow(),
+});
+

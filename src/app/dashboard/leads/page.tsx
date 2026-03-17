@@ -2,12 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Target, Loader2, Database, AlertTriangle, Building2, Zap, ArrowRight, Activity, CheckCircle2 } from "lucide-react";
+import { Search, MapPin, Target, Loader2, Database, AlertTriangle, Building2, Zap, ArrowRight, Activity, CheckCircle2, Phone } from "lucide-react";
 import { useUsage } from "@/hooks/useUsage";
+import { useRouter } from "next/navigation";
 
 type ProspectReport = {
     business_name: string;
     website: string;
+    phone?: string;
     detected_gap: string;
     cold_email_subject: string;
     cold_email_body: string;
@@ -33,6 +35,7 @@ export default function LeadsDashboard() {
   const [sweepTarget, setSweepTarget] = useState("");
   const logsEndRef = useRef<HTMLDivElement>(null);
   const { canGenerate, refresh: refreshUsage } = useUsage();
+  const router = useRouter();
 
   useEffect(() => {
     logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -236,7 +239,15 @@ export default function LeadsDashboard() {
                                       <div className="bg-black/50 border border-glass-border rounded-lg p-4 font-mono">
                                           <div className="flex items-center justify-between mb-3 border-b border-stone-800 pb-2">
                                               <span className="text-[10px] text-electric uppercase tracking-widest flex items-center gap-1"><Zap className="w-3 h-3" /> Generated Outreach Script</span>
-                                              <button className="text-[10px] text-stone-500 hover:text-white transition-colors flex items-center gap-1">Push to Nexus <ArrowRight className="w-3 h-3" /></button>
+                                              <div className="flex gap-3">
+                                                <button 
+                                                  onClick={() => router.push(`/dashboard/voice?phone=${encodeURIComponent(report.phone || '')}&context=${encodeURIComponent(`Offer: Free SEO Audit + Review Sweeper based on diagnosis: ${report.detected_gap}`)}`)}
+                                                  className="text-[10px] text-emerald-400 hover:text-emerald-300 font-bold uppercase transition-colors flex items-center gap-1"
+                                                >
+                                                  <Phone className="w-3 h-3" /> Deploy Voice Swarm
+                                                </button>
+                                                <button className="text-[10px] text-stone-500 hover:text-white transition-colors flex items-center gap-1">Push to Nexus <ArrowRight className="w-3 h-3" /></button>
+                                              </div>
                                           </div>
                                           <div className="text-xs text-stone-300 space-y-2">
                                               <p><span className="text-stone-500">Subject:</span> <span className="text-white">{report.cold_email_subject}</span></p>
