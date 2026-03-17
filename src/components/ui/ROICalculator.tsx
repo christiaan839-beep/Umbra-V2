@@ -4,17 +4,17 @@ import React, { useState } from "react";
 import { DollarSign, TrendingUp, Users, ArrowRight } from "lucide-react";
 
 export function ROICalculator() {
-  const [adSpend, setAdSpend] = useState(10000);
-  const [agencyFee, setAgencyFee] = useState(4000);
+  const [adSpend, setAdSpend] = useState(100000);
+  const [agencyFee, setAgencyFee] = useState(40000);
   
-  const UMBRA_COST = 497;
+  const UMBRA_COST = 2750;
   const currentTotal = adSpend + agencyFee;
   const umbraTotal = adSpend + UMBRA_COST;
   const monthlySavings = currentTotal - umbraTotal;
   const yearlySavings = monthlySavings * 12;
 
   const formatCurrency = (val: number) => 
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+    `R${val.toLocaleString('en-ZA')}`;
 
   return (
     <div className="w-full max-w-4xl mx-auto my-24">
@@ -35,9 +35,9 @@ export function ROICalculator() {
             </div>
             <input 
               type="range" 
-              min="1000" 
-              max="100000" 
-              step="1000"
+              min="10000" 
+              max="1000000" 
+              step="10000"
               value={adSpend}
               onChange={(e) => setAdSpend(Number(e.target.value))}
               className="w-full accent-emerald-500 bg-white/10 h-2 rounded-lg appearance-none cursor-pointer"
@@ -53,9 +53,9 @@ export function ROICalculator() {
             </div>
             <input 
               type="range" 
-              min="1000" 
-              max="20000" 
-              step="500"
+              min="10000" 
+              max="200000" 
+              step="5000"
               value={agencyFee}
               onChange={(e) => setAgencyFee(Number(e.target.value))}
               className="w-full accent-rose-500 bg-white/10 h-2 rounded-lg appearance-none cursor-pointer"
