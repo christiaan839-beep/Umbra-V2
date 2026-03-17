@@ -18,7 +18,7 @@ export default function ArchitectDashboard() {
         setStatusIndicator(null);
         
         try {
-            const res = await fetch('/api/swarm/architect', {
+            const res = await fetch('/api/agents/page-builder', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt })

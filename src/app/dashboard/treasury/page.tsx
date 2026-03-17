@@ -22,7 +22,7 @@ export default function TreasuryHub() {
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/swarm/treasury/analytics")
+    fetch("/api/payments/paystack/checkout")
       .then(res => res.json())
       .then(d => {
         setData(d.data);
@@ -36,7 +36,7 @@ export default function TreasuryHub() {
     setLinkStatus("loading");
     setGeneratedLink(null);
     try {
-      const res = await fetch("/api/swarm/treasury/stripe", {
+      const res = await fetch("/api/payments/paystack/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productName, priceCents, customerEmail })
@@ -63,7 +63,7 @@ export default function TreasuryHub() {
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-400/10 border border-emerald-400/20 text-emerald-400 text-xs font-bold uppercase tracking-wider">
            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-           Stripe Sim Active
+           Paystack Ready
         </div>
       </motion.div>
 
@@ -117,7 +117,7 @@ export default function TreasuryHub() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-text-secondary mb-2 block uppercase tracking-wider">Price (Cents)</label>
+                    <label className="text-xs text-text-secondary mb-2 block uppercase tracking-wider">Price (Cents ZAR)</label>
                     <input 
                       type="number" 
                       value={priceCents}
@@ -127,9 +127,9 @@ export default function TreasuryHub() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-text-secondary mb-2 block uppercase tracking-wider">USD Total</label>
+                    <label className="text-xs text-text-secondary mb-2 block uppercase tracking-wider">ZAR Total</label>
                     <div className="w-full bg-onyx/50 border border-glass-border/50 text-white p-3 rounded-lg text-emerald-400 font-bold">
-                       ${(priceCents / 100).toFixed(2)}
+                       R{(priceCents / 100).toFixed(2)}
                     </div>
                   </div>
               </div>

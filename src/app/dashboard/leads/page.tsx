@@ -56,10 +56,10 @@ export default function LeadsDashboard() {
       }, 1500); // 1.5s per simulated step
 
       try {
-          const res = await fetch("/api/swarm/prospector", {
+          const res = await fetch("/api/agents/seo", {
              method: "POST",
              headers: { "Content-Type": "application/json" },
-             body: JSON.stringify({ niche, location })
+             body: JSON.stringify({ action: "xray", params: { urls: [niche], business: location || "business" } })
           });
           
           const data = await res.json();
