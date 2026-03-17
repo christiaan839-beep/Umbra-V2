@@ -3,13 +3,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  Factory, Search, Palette, Send, Users, Shield,
-  ArrowRight, Layers, Globe2, CalendarDays, Zap,
-  TrendingUp, BarChart3, Rocket,
+  Factory, Search, Palette, Users, Shield,
+  ArrowRight, Globe2, Zap, Swords,
+  TrendingUp, BarChart3, Rocket, Key,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from "@clerk/nextjs";
 import { QuickStartWizard } from "@/components/dashboard/QuickStartWizard";
+import { useUsage } from "@/hooks/useUsage";
 
 const TOOLS = [
   {
@@ -49,31 +50,25 @@ const TOOLS = [
     border: "border-amber-500/20",
   },
   {
-    label: "Outbound Engine",
-    description: "Multi-step cold email sequences personalized to each prospect.",
-    href: "/dashboard/outbound",
-    icon: Send,
-    color: "text-pink-400",
-    bg: "bg-pink-500/10",
-    border: "border-pink-500/20",
-  },
-  {
     label: "Competitor Intel",
     description: "AI-powered competitive analysis with threat detection and counter-strategies.",
     href: "/dashboard/competitor",
-    icon: Shield,
+    icon: Swords,
     color: "text-[#00B7FF]",
     bg: "bg-[#00B7FF]/10",
     border: "border-[#00B7FF]/20",
   },
+  {
+    label: "Page Builder",
+    description: "Generate production-ready landing pages with Gemini 2.5 Pro in seconds.",
+    href: "/dashboard/page-builder",
+    icon: Globe2,
+    color: "text-cyan-400",
+    bg: "bg-cyan-500/10",
+    border: "border-cyan-500/20",
+  },
 ];
 
-const STATS = [
-  { label: "AI Tools", value: "29", icon: Zap, color: "text-[#00B7FF]" },
-  { label: "Content Types", value: "4", icon: Factory, color: "text-emerald-400" },
-  { label: "SEO Actions", value: "4", icon: Search, color: "text-rose-400" },
-  { label: "Always Running", value: "24/7", icon: TrendingUp, color: "text-violet-400" },
-];
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 15 },
@@ -84,7 +79,14 @@ const fade = (delay = 0) => ({
 export default function DashboardOverview() {
   const { user } = useUser();
   const firstName = user?.firstName || "there";
+  const { today, limit, remaining, total, plan } = useUsage();
 
+  const STATS = [
+    { label: "Today", value: `${today}/${limit}`, icon: Zap, color: "text-[#00B7FF]" },
+    { label: "Remaining", value: `${remaining}`, icon: BarChart3, color: remaining > 5 ? "text-emerald-400" : remaining > 0 ? "text-amber-400" : "text-rose-400" },
+    { label: "All Time", value: `${total}`, icon: TrendingUp, color: "text-violet-400" },
+    { label: "Plan", value: plan === "starter" ? "Free" : plan.charAt(0).toUpperCase() + plan.slice(1), icon: Shield, color: plan === "starter" ? "text-neutral-400" : "text-emerald-400" },
+  ];
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8 relative z-10 p-4 lg:p-8">
       
@@ -147,30 +149,20 @@ export default function DashboardOverview() {
         </div>
       </div>
 
-      {/* Additional Tools */}
+      {/* API Key Nudge */}
       <motion.div {...fade(12)}>
-        <h2 className="text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-bold mb-4 flex items-center gap-2">
-          <BarChart3 className="w-3 h-3" /> More Tools
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: "Social Media", href: "/dashboard/social", icon: Globe2 },
-            { label: "Content Calendar", href: "/dashboard/calendar", icon: CalendarDays },
-            { label: "Programmatic SEO", href: "/dashboard/programmatic", icon: Layers },
-            { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-          ].map((item, i) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="bg-black/40 backdrop-blur-xl border border-[#00B7FF]/10 rounded-xl p-4 text-center hover:border-[#00B7FF]/30 transition-all group"
-            >
-              <item.icon className="w-5 h-5 mx-auto mb-2 text-neutral-500 group-hover:text-white transition-colors" />
-              <p className="text-[9px] uppercase tracking-widest text-neutral-500 group-hover:text-white transition-colors font-bold">
-                {item.label}
-              </p>
-            </Link>
-          ))}
-        </div>
+        <Link href="/dashboard/settings" className="block bg-black/40 backdrop-blur-xl border border-amber-500/20 rounded-2xl p-6 hover:border-amber-500/40 transition-all group">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+              <Key className="w-5 h-5 text-amber-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-bold text-white mb-1">Add Your API Key</h3>
+              <p className="text-xs text-neutral-500">Plug in your Gemini, Claude, or Tavily API key in Settings to unlock all AI tools. Free to add — you control your own usage.</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
       </motion.div>
 
       {/* ROI Comparison */}
@@ -188,7 +180,7 @@ export default function DashboardOverview() {
             <p className="text-[10px] text-neutral-500 uppercase tracking-widest mt-1">In-House Team</p>
           </div>
           <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-            <p className="text-lg font-mono font-bold text-emerald-400">From R2,750</p>
+            <p className="text-lg font-mono font-bold text-emerald-400">Free to Start</p>
             <p className="text-[10px] text-neutral-500 uppercase tracking-widest mt-1">UMBRA Platform</p>
           </div>
         </div>

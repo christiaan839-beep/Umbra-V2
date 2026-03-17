@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Target, Loader2, Database, AlertTriangle, Building2, Zap, ArrowRight, Activity, CheckCircle2 } from "lucide-react";
+import { useUsage } from "@/hooks/useUsage";
 
 type ProspectReport = {
     business_name: string;
@@ -31,6 +32,7 @@ export default function LeadsDashboard() {
   const [reports, setReports] = useState<ProspectReport[]>([]);
   const [sweepTarget, setSweepTarget] = useState("");
   const logsEndRef = useRef<HTMLDivElement>(null);
+  const { canGenerate, refresh: refreshUsage } = useUsage();
 
   useEffect(() => {
     logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,7 +40,7 @@ export default function LeadsDashboard() {
 
   const executeSweep = async (e: React.FormEvent) => {
       e.preventDefault();
-      if(!niche || !location || isSweeping) return;
+      if(!niche || !location || isSweeping || !canGenerate) return;
 
       setIsSweeping(true);
       setReports([]);
@@ -71,6 +73,7 @@ export default function LeadsDashboard() {
           } else {
                setLogs(prev => [...prev, `[ERROR] Intelligence sweep failed: ${data.error}`]);
           }
+          refreshUsage();
       } catch (err) {
           clearInterval(logInterval);
           setLogs(prev => [...prev, "[FATAL] Connection to Prospector Node severed."]);

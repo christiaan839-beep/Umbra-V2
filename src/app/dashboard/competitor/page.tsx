@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Shield, Search, Loader2, AlertTriangle, Target, Swords } from "lucide-react";
+import { useUsage } from "@/hooks/useUsage";
 
 export default function CompetitorPage() {
   const [competitor, setCompetitor] = useState("");
   const [business, setBusiness] = useState("AI Marketing Automation Platform");
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<any>(null);
+  const { canGenerate, refresh: refreshUsage } = useUsage();
 
   const analyze = async () => {
-    if (!competitor.trim() || loading) return;
+    if (!competitor.trim() || loading || !canGenerate) return;
     setLoading(true); setAnalysis(null);
     try {
       const res = await fetch("/api/agents/competitor", {
@@ -30,6 +32,19 @@ export default function CompetitorPage() {
           opportunities: data.intel.battlePlan?.immediate || [],
           recommendation: data.intel.messagingAnalysis?.superiorPositioning || "Analyze complete",
         });
+        // Auto-save to library
+        fetch("/api/generations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "save",
+            tool: "competitor",
+            toolAction: "analyze",
+            inputSummary: `Competitor: ${competitor} vs ${business}`.slice(0, 200),
+            output: JSON.stringify(data.intel, null, 2),
+          }),
+        }).catch(() => {});
+        refreshUsage();
       }
     } catch { /* silently handle */ } finally { setLoading(false); }
   };
