@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
   Layers, Globe2, Network,
-  Search, ChevronDown, Rocket, Palette, Factory, X, Menu,
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,6 +69,7 @@ const NAV_GROUPS = [
     group: "God-Brain V3",
     icon: Network,
     items: [
+      { href: "/dashboard/nemo-claw", label: "NemoClaw Builder", icon: Cpu },
       { href: "/dashboard/voice", label: "Voice Execution", icon: Rocket },
       { href: "/dashboard/war-room", label: "War Room CRM", icon: Target },
       { href: "/dashboard/knowledge", label: "Vertex Knowledge", icon: Shield },
