@@ -66,7 +66,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <UmbraLogo size="md" />
-            <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">UMBRA</span>
+            <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">Sovereign Matrix</span>
           </div>
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6">
@@ -307,7 +307,7 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* UMBRA System */}
+              {/* Sovereign Matrix System */}
               <div className="glass-card p-8 border border-emerald-500/30 bg-emerald-500/5 relative overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.1)]">
                 <div className="absolute top-0 right-0 p-4 opacity-10">
                    <Cpu className="w-32 h-32 text-emerald-500" />
@@ -315,7 +315,7 @@ export default function Home() {
                 <div className="absolute -top-[1px] -left-[1px] w-[20%] h-[2px] bg-gradient-to-r from-emerald-400 to-transparent" />
                 
                 <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-400" /> UMBRA Platform
+                  <CheckCircle2 className="w-6 h-6 text-emerald-400" /> Sovereign Matrix Platform
                 </h3>
                 <p className="text-emerald-400 font-mono font-bold text-xl mb-8">Free to Start — Pro from R997/mo</p>
                 
@@ -380,7 +380,7 @@ export default function Home() {
                 <span className="animated-gradient-text">Zero agency overhead.</span>
               </h2>
               <p className="text-neutral-400 leading-relaxed mb-6">
-                UMBRA was built to solve a problem I saw firsthand — businesses paying R15,000–R50,000/month for agency retainers and getting slow, mediocre results. So I built 29 AI agents that do the same work in seconds, at a fraction of the cost.
+                Sovereign Matrix was built to solve a problem I saw firsthand — businesses paying R15,000–R50,000/month for agency retainers and getting slow, mediocre results. So I built 29 AI agents that do the same work in seconds, at a fraction of the cost.
               </p>
               <p className="text-neutral-400 leading-relaxed mb-8">
                 Every tool runs on real AI — Google Gemini 2.5, NVIDIA Nemotron for voice, TensorRT-LLM for speed, and NeMo Guardrails for absolute security. No faked demos. No placeholder responses. Real marketing intelligence, real results.
@@ -437,8 +437,8 @@ export default function Home() {
           
           {[
             {
-              q: "What exactly is UMBRA?",
-              a: "UMBRA is an AI-powered marketing platform with 29 tools that handle content creation, ad generation, SEO, lead prospecting, outbound emails, and more. It replaces the work of a traditional marketing agency at a fraction of the cost."
+              q: "What exactly is Sovereign Matrix?",
+              a: "Sovereign Matrix is an AI-powered marketing platform with 29 tools that handle content creation, ad generation, SEO, lead prospecting, outbound emails, and more. It replaces the work of a traditional marketing agency at a fraction of the cost."
             },
             {
               q: "How does the free trial work?",
@@ -450,7 +450,7 @@ export default function Home() {
             },
             {
               q: "How is this different from ChatGPT or other AI tools?",
-              a: "ChatGPT is a general-purpose chatbot. UMBRA is a purpose-built marketing system — it generates campaigns, publishes content, tracks competitors, prospects leads, and runs 24/7 without you needing to prompt it. Think of it as an AI agency, not a chatbot."
+              a: "ChatGPT is a general-purpose chatbot. Sovereign Matrix is a purpose-built marketing system — it generates campaigns, publishes content, tracks competitors, prospects leads, and runs 24/7 without you needing to prompt it. Think of it as an AI agency, not a chatbot."
             },
             {
               q: "Why is pricing in ZAR?",
@@ -489,7 +489,7 @@ export default function Home() {
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-3 mb-4">
                 <UmbraLogo size="sm" />
-                <span className="text-sm font-bold tracking-[0.15em] uppercase text-white">UMBRA</span>
+                <span className="text-sm font-bold tracking-[0.15em] uppercase text-white">Sovereign Matrix</span>
               </div>
               <p className="text-xs text-neutral-500 leading-relaxed">AI-powered marketing platform for businesses that want agency-level results without agency-level costs.</p>
             </div>
@@ -527,7 +527,7 @@ export default function Home() {
           {/* Bottom bar */}
           <div className="section-divider mb-8" />
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-[10px] text-neutral-600 uppercase tracking-[0.15em]">© 2026 UMBRA. All rights reserved.</p>
+            <p className="text-[10px] text-neutral-600 uppercase tracking-[0.15em]">© 2026 Sovereign Matrix. All rights reserved.</p>
             <p className="text-[10px] text-neutral-600 uppercase tracking-[0.15em]">Secure payments via Paystack • Built in South Africa 🇿🇦</p>
           </div>
         </div>

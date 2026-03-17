@@ -5,20 +5,20 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "UMBRA — AI Marketing Platform",
+  title: "Sovereign Matrix — AI Marketing Platform",
   description: "AI marketing tools for content, SEO, lead gen, and competitor analysis — running 24/7. Free to start. Pro from R997/mo.",
   keywords: ["AI marketing", "marketing automation", "AI marketing platform", "content generation", "SEO automation", "lead generation", "South Africa", "ZAR"],
-  authors: [{ name: "UMBRA" }],
+  authors: [{ name: "Sovereign Matrix" }],
   openGraph: {
-    title: "UMBRA — Replace Your Agency. Keep The Results.",
+    title: "Sovereign Matrix — Replace Your Agency. Keep The Results.",
     description: "AI marketing tools for content, SEO, lead gen — running 24/7. Free to start. Pro from R997/mo.",
     type: "website",
-    siteName: "UMBRA",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "UMBRA — AI Marketing Platform" }],
+    siteName: "Sovereign Matrix",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Sovereign Matrix — AI Marketing Platform" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "UMBRA — AI Marketing Platform",
+    title: "Sovereign Matrix — AI Marketing Platform",
     description: "AI marketing tools. 24/7 execution. Free to start. Pro from R997/mo.",
   },
   other: {
@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="UMBRA" />
+        <meta name="apple-mobile-web-app-title" content="Sovereign Matrix" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         {/* Plausible Analytics — Privacy-friendly, GDPR compliant, no cookies */}
         <script defer data-domain={plausibleDomain} src="https://plausible.io/js/script.js" />

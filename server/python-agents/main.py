@@ -10,7 +10,7 @@ load_dotenv()
 # NVIDIA NIM API configuration
 NVIDIA_NIM_API_KEY = os.getenv("NVIDIA_NIM_API_KEY", "nvapi-required-for-production")
 
-app = FastAPI(title="UMBRA God-Brain API V4.0 - Sovereign Nemotron Edition")
+app = FastAPI(title="Sovereign Matrix God-Brain API V4.0 - Sovereign Nemotron Edition")
 
 class NodeCommand(BaseModel):
     command: str
@@ -70,20 +70,20 @@ async def execute_command(payload: NodeCommand):
 def health_check():
     return {"status": "God-Brain Optimal", "version": "3.1.0 NIM Edition", "components": ["NeMo Retriever", "Audio2Face", "Pipecat", "Twilio"]}
 
-# UMBRA God-Brain: Pipecat Voice Node + Vertex AI Grounding
+# Sovereign Matrix God-Brain: Pipecat Voice Node + Vertex AI Grounding
 @app.post("/api/v1/voice/execute")
 async def execute_voice_agent(payload: VoiceCommand):
     print(f"[GOD-BRAIN] Intercepted Voice Execution Command for {payload.phone_number}")
     print(f"[GOD-BRAIN] Context Payload: {payload.context}")
     
     # PHASE 1: NEMO RETRIEVER & NEMOTRON SUPER 120B GROUNDING
-    # UMBRA queries the private vector store using NeMo Retriever, 
+    # Sovereign Matrix queries the private vector store using NeMo Retriever, 
     # then routes the extracted context through Nemotron 3 Super (120B) for highly-accurate reasoning logic.
     print(f"[NVIDIA NIM] Extracting proprietary sales matrices via NeMo Retriever...")
     print(f"[NVIDIA NIM] Distilling context via Nemotron 3 Super 120B (API KEY: {NVIDIA_NIM_API_KEY[:5]}***)...")
     
     # Simulated Grounded Prompt via Retriever & Nemotron 120B
-    grounded_system_prompt = f"Act as an expert 120B-powered closer for UMBRA. Use this validated RAG context: {payload.context}. You have sub-300ms latency. Destroy objections."
+    grounded_system_prompt = f"Act as an expert 120B-powered closer for Sovereign Matrix. Use this validated RAG context: {payload.context}. You have sub-300ms latency. Destroy objections."
     
     # PHASE 2: PIPECAT, NEMOTRON SPEECH & AUDIO2FACE
     # Initializes the physical WebRTC or SIP trunk connection via Pipecat.
@@ -124,7 +124,7 @@ async def handle_n8n_reentry(payload: dict):
 async def handle_inbound_voice(request: Request):
     """
     Acts as the main Twilio Voice Webhook URL.
-    When a customer calls the UMBRA agency phone number, Twilio hits this endpoint.
+    When a customer calls the Sovereign Matrix agency phone number, Twilio hits this endpoint.
     The God-Brain intercepts the call and streams Pipecat TTS directly back into the TwiML stream.
     """
     form_data = await request.form()
@@ -136,7 +136,7 @@ async def handle_inbound_voice(request: Request):
     # In production, this proxies the media stream via websockets.
     twiml_response = f"""<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say voice="Polly.Matthew-Neural">Initializing Secure Connection to UMBRA God-Brain. Please hold while your neuro profile is analyzed.</Say>
+    <Say voice="Polly.Matthew-Neural">Initializing Secure Connection to Sovereign Matrix God-Brain. Please hold while your neuro profile is analyzed.</Say>
     <Connect>
         <Stream url="wss://umbra-godbrain.ngrok.app/api/v1/voice/stream/media" />
     </Connect>

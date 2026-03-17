@@ -262,11 +262,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="p-6 border-b border-[#00B7FF]/10 z-10 bg-black/20 backdrop-blur-sm">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative">
-                <Image src="/logo.png" alt="UMBRA Logo" width={32} height={32} className="object-cover rounded-md shadow-[0_0_15px_rgba(0,183,255,0.3)] group-hover:shadow-[0_0_25px_rgba(0,183,255,0.5)] transition-shadow duration-300" />
+                <Image src="/logo.png" alt="Sovereign Matrix Logo" width={32} height={32} className="object-cover rounded-md shadow-[0_0_15px_rgba(0,183,255,0.3)] group-hover:shadow-[0_0_25px_rgba(0,183,255,0.5)] transition-shadow duration-300" />
                 <div className="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#0B0C10]" />
               </div>
               <div>
-                <span className="text-sm font-semibold tracking-[0.15em] uppercase glow-text block font-mono">UMBRA</span>
+                <span className="text-sm font-semibold tracking-[0.15em] uppercase glow-text block font-mono">Sovereign Matrix</span>
                 <span className="text-[9px] uppercase tracking-widest text-text-secondary">v1.0</span>
               </div>
             </Link>
@@ -344,8 +344,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between p-6 border-b border-[#00B7FF]/10">
                 <div className="flex items-center gap-3">
-                  <Image src="/logo.png" alt="UMBRA" width={28} height={28} className="rounded-md" />
-                  <span className="text-sm font-bold tracking-[0.15em] uppercase font-mono text-white">UMBRA</span>
+                  <Image src="/logo.png" alt="Sovereign Matrix" width={28} height={28} className="rounded-md" />
+                  <span className="text-sm font-bold tracking-[0.15em] uppercase font-mono text-white">Sovereign Matrix</span>
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
