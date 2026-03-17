@@ -9,7 +9,7 @@ import {
 
 const API_KEY_FIELDS = [
   {
-    key: "GOOGLE_GENERATIVE_AI_API_KEY",
+    key: "gemini",
     label: "Google Gemini API Key",
     desc: "Powers all AI text generation (get free at ai.google.dev)",
     icon: Cpu,
@@ -17,7 +17,7 @@ const API_KEY_FIELDS = [
     placeholder: "AIzaSy...",
   },
   {
-    key: "ANTHROPIC_API_KEY",
+    key: "anthropic",
     label: "Anthropic Claude API Key",
     desc: "Advanced reasoning engine (optional, for Claude-powered tools)",
     icon: Bot,
@@ -25,7 +25,7 @@ const API_KEY_FIELDS = [
     placeholder: "sk-ant-...",
   },
   {
-    key: "TAVILY_API_KEY",
+    key: "tavily",
     label: "Tavily API Key",
     desc: "Live web search for SEO X-Ray & competitor research (tavily.com)",
     icon: Search,
@@ -33,7 +33,7 @@ const API_KEY_FIELDS = [
     placeholder: "tvly-...",
   },
   {
-    key: "PINECONE_API_KEY",
+    key: "pinecone_key",
     label: "Pinecone API Key",
     desc: "AI memory — stores context across sessions (optional)",
     icon: Database,
@@ -41,7 +41,7 @@ const API_KEY_FIELDS = [
     placeholder: "pcsk_...",
   },
   {
-    key: "PINECONE_INDEX",
+    key: "pinecone_index",
     label: "Pinecone Index Name",
     desc: "Name of your Pinecone index for memory storage",
     icon: Database,
@@ -128,8 +128,7 @@ export default function SettingsPage() {
   const getFieldStatus = (key: string) => {
     if (keys[key]?.trim()) return "new";
     if (masked[key]) return "saved";
-    const statusKey = key === "GOOGLE_GENERATIVE_AI_API_KEY" ? "GEMINI_API_KEY" : key;
-    if (status[statusKey]) return "active";
+    if (status[key]) return "active";
     return "empty";
   };
 
