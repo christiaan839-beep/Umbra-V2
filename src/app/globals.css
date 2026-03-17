@@ -57,7 +57,7 @@ body {
 }
 
 .glow-text {
-  text-shadow: 0 0 20px rgba(0, 183, 255, 0.4), 0 0 60px rgba(0, 183, 255, 0.1);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.05);
 }
 
 /* ─── Glass Card ──────────────────────────────────── */
@@ -144,11 +144,11 @@ input[type="range"]::-webkit-slider-thumb {
 .animated-gradient-text {
   background: linear-gradient(
     90deg,
-    #00B7FF 0%,
-    #ffffff 25%,
-    #00B7FF 50%,
-    #a855f7 75%,
-    #00B7FF 100%
+    #ffffff 0%,
+    #a3a3a3 25%,
+    #ffffff 50%,
+    #737373 75%,
+    #ffffff 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -159,8 +159,8 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Pulsing glow on CTA button */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(0, 183, 255, 0.3), 0 0 60px rgba(0, 183, 255, 0.1); }
-  50% { box-shadow: 0 0 30px rgba(0, 183, 255, 0.5), 0 0 80px rgba(0, 183, 255, 0.2); }
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1), 0 0 60px rgba(255, 255, 255, 0.05); }
+  50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.2), 0 0 80px rgba(255, 255, 255, 0.1); }
 }
 
 .cta-glow {
@@ -169,7 +169,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 .cta-glow:hover {
   animation: none;
-  box-shadow: 0 0 40px rgba(0, 183, 255, 0.6), 0 0 100px rgba(0, 183, 255, 0.3);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.3), 0 0 100px rgba(255, 255, 255, 0.2);
 }
 
 /* Floating / breathing animation */
@@ -230,9 +230,9 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .gradient-border-card:hover {
-  border-color: rgba(0, 183, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 0 30px rgba(0, 183, 255, 0.05);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
 }
 
 /* Badge glow — subtle hue rotate */
@@ -273,7 +273,7 @@ input[type="range"]::-webkit-slider-thumb {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(0, 183, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.1) 50%,
     transparent 100%
   );
 }

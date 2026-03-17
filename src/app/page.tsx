@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, BrainCircuit, CheckCircle2, Cpu, Globe, Target, Zap, ShieldAlert, ChevronDown, XCircle } from "lucide-react";
+import { ArrowRight, BrainCircuit, CheckCircle2, Cpu, Globe, Target, Zap, ShieldAlert, ChevronDown, XCircle, Clock, TrendingUp, DollarSign, MessageSquare, Webhook } from "lucide-react";
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
@@ -43,7 +43,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         className="w-full flex items-center justify-between py-6 text-left group"
         onClick={() => setOpen(!open)}
       >
-        <span className="text-sm md:text-base font-semibold text-white group-hover:text-[#00B7FF] transition-colors pr-4">{question}</span>
+        <span className="text-sm md:text-base font-semibold text-white group-hover:text-neutral-400 transition-colors pr-4">{question}</span>
         <ChevronDown className={`w-5 h-5 text-neutral-500 transition-transform flex-shrink-0 ${open ? 'rotate-180' : ''}`} />
       </button>
       <div className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-40 pb-6' : 'max-h-0'}`}>
@@ -52,6 +52,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
     </div>
   );
 }
+
 export default function Home() {
   const [showSite, setShowSite] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -59,10 +60,10 @@ export default function Home() {
   return (
     <>
       {!showSite && <SplashIntro onComplete={() => setShowSite(true)} />}
-    <div className={`min-h-screen bg-[#050505] text-white selection:bg-electric/30 font-sans transition-opacity duration-500 ${showSite ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`min-h-screen bg-black text-white selection:bg-white/20 font-sans transition-opacity duration-700 ${showSite ? 'opacity-100' : 'opacity-0'}`}>
       
       {/* Navigation */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-white/5">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-black/50 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <UmbraLogo size="md" />
@@ -70,11 +71,11 @@ export default function Home() {
           </div>
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6">
-             <Link href="/pricing" className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Proof of Work</Link>
+             <Link href="/pricing" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors">Proof of Work</Link>
              <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
-               <button className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Client Login</button>
+               <button className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors">Client Login</button>
              </SignInButton>
-             <Link href="/pricing" className="px-5 py-2 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white hover:bg-white/5 transition-colors">Start Free Trial</Link>
+             <Link href="/pricing" className="px-5 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-bold text-white hover:bg-white/10 transition-colors">Start Free Trial</Link>
           </div>
           {/* Mobile hamburger */}
           <button className="md:hidden flex flex-col gap-1.5 p-2" onClick={() => setMobileNavOpen(!mobileNavOpen)} aria-label="Toggle menu">
@@ -85,82 +86,79 @@ export default function Home() {
         </div>
         {/* Mobile dropdown */}
         {mobileNavOpen && (
-          <div className="md:hidden bg-[#050505]/95 backdrop-blur-lg border-t border-white/5 px-6 py-6 flex flex-col gap-4 animate-fade-in">
+          <div className="md:hidden bg-black/95 backdrop-blur-2xl border-t border-white/5 px-6 py-6 flex flex-col gap-4 animate-fade-in">
             <Link href="/pricing" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Proof of Work</Link>
             <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
               <button className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors text-left" onClick={() => setMobileNavOpen(false)}>Client Login</button>
             </SignInButton>
-            <Link href="/pricing" className="px-5 py-3 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white text-center hover:bg-white/5 transition-colors" onClick={() => setMobileNavOpen(false)}>Start Free Trial</Link>
+            <Link href="/pricing" className="px-5 py-3 rounded-full border border-white/10 bg-white/5 text-sm font-bold text-white text-center hover:bg-white/10 transition-colors" onClick={() => setMobileNavOpen(false)}>Start Free Trial</Link>
           </div>
         )}
       </nav>
 
       {/* Hero Section */}
       <main className="pt-40 pb-20 px-6 relative overflow-hidden flex flex-col items-center">
-        {/* Ambient glows */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#00B7FF]/10 rounded-full blur-[150px] animate-float" />
-          <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-float-delay" />
-        </div>
+        {/* Obsidian subtle background texture */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'url("/grid.svg")' }} />
 
         {/* Interactive Particle Grid */}
-        <div className="absolute inset-0 pointer-events-auto">
+        <div className="absolute inset-0 pointer-events-auto mix-blend-screen opacity-50">
           <ParticleGrid />
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
           
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium uppercase tracking-[0.15em] mb-8">
-            AI-Powered Marketing Platform
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-xs font-medium uppercase tracking-[0.2em] mb-8">
+            AI-Powered Defense-Grade Matrix
           </motion.div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 mb-8 serif-text leading-[1.1] tracking-tight">
             The Agency Extinction Protocol.<br/>
-            <span className="animated-gradient-text">Powered by NVIDIA Nemotron.</span>
+            <span className="text-neutral-400">Powered by NVIDIA Nemotron.</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
+          <p className="text-lg md:text-xl text-neutral-500 max-w-2xl mx-auto leading-relaxed mb-12">
             Build and deploy secure, Sovereign AI Infrastructure with a single command. 
             Command the Nano 30B Edge Daemon locally via OpenClaw, and scale to the Super 120B Omni-RAG cluster for absolute market dominance.
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-16">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-              <a href="#pricing" className="inline-flex px-10 py-5 rounded-full bg-gradient-to-r from-[#00B7FF] to-[#a855f7] text-lg font-bold text-white shadow-[0_0_40px_rgba(0,183,255,0.3)] cta-glow items-center gap-3 hover:-translate-y-1 transition-all">
+              <a href="#pricing" className="inline-flex px-10 py-5 rounded-full bg-white text-black text-lg font-bold shadow-[0_0_40px_rgba(255,255,255,0.15)] items-center gap-3 hover:-translate-y-1 hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] transition-all">
                 Initialize Sovereign Swarm V4 <ArrowRight className="w-6 h-6" />
               </a>
               <button 
                  onClick={() => {
                    document.getElementById("vsl")?.scrollIntoView({ behavior: "smooth" });
                  }}
-                 className="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-white/10 bg-white/5 text-white font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                 className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 bg-transparent text-white font-bold text-lg hover:bg-white/5 transition-all flex items-center justify-center gap-2 group cursor-pointer"
               >
-                <Globe className="w-5 h-5 text-[#00B7FF]" /> See How It Works
+                <Globe className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" /> See How It Works
               </button>
             </div>
           </div>
 
-          {/* Trust Badges */}
+          {/* Trust Badges - Obsidian Edition */}
           <div className="flex flex-wrap items-center justify-center gap-6 mb-20 max-w-4xl mx-auto">
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#00B7FF] trust-badge bg-[#00B7FF]/5 border border-[#00B7FF]/20 px-4 py-2 rounded-full">
-                <ShieldAlert className="w-4 h-4" /> Secured by Google Vertex AI
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full">
+                <ShieldAlert className="w-4 h-4 text-emerald-500" /> Secured by Google Vertex AI
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '1s' }}>
-                <Cpu className="w-4 h-4" /> Powered by NVIDIA NIM APIs
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full" style={{ animationDelay: '1s' }}>
+                <Cpu className="w-4 h-4 text-emerald-500" /> Powered by NVIDIA NIM APIs
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '2s' }}>
-                <CheckCircle2 className="w-4 h-4" /> NVIDIA Riva Speech AI
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full" style={{ animationDelay: '2s' }}>
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" /> NVIDIA Riva Speech AI
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-purple-400 trust-badge bg-purple-500/5 border border-purple-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '3s' }}>
-                <Zap className="w-4 h-4" /> TensorRT-LLM Microsecond Latency
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full" style={{ animationDelay: '3s' }}>
+                <Zap className="w-4 h-4 text-emerald-500" /> TensorRT-LLM Microsecond Latency
               </div>
            </div>
 
           {/* Live Demo Scanner */}
           <div className="w-full max-w-3xl mx-auto mb-20">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
-              <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-6">Try It Yourself — Free Competitor Scan</h2>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, ease: "easeOut" }}>
+              <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-6">Execution Telemetry — Live Target Scan</h2>
               <LiveDemoScanner />
             </motion.div>
           </div>
@@ -170,11 +168,11 @@ export default function Home() {
 
         </motion.div>
 
-        {/* The 2026 Stack Architecture Grid */}
+        {/* The 2026 Stack Architecture Grid - Obsidian Edition */}
         <div className="w-full max-w-7xl mx-auto relative z-10 mt-10">
            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-white serif-text mb-4">How It Works</h2>
-              <p className="text-neutral-400 text-sm">Four core systems working together to grow your business</p>
+              <h2 className="text-3xl font-bold text-white serif-text mb-4">Tactical Infrastructure</h2>
+              <p className="text-neutral-500 text-sm">Four core systems working in absolute unison.</p>
             </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -183,34 +181,33 @@ export default function Home() {
                   icon: BrainCircuit,
                   title: "Super 120B Omni-RAG",
                   desc: "Ground your sales and marketing in absolute truth using NVIDIA NeMo Retriever and the 120B Super open-weight reasoning model.",
-                  color: "text-rose-glow", bg: "bg-rose-glow/10", border: "border-rose-glow/20"
                 },
                 {
                   icon: Target,
                   title: "Nano 30B Edge Execution",
                   desc: "Command the swarm locally from your macOS terminal or WhatsApp via the highly-secure OpenClaw Daemon.",
-                  color: "text-electric", bg: "bg-electric/10", border: "border-electric/20"
                 },
                 {
                   icon: Globe,
                   title: "Nemotron Speech Pipeline",
-                  desc: "Deploy ultra-low latency voice closers powered by Nemotron Speech to secure $2,500 consulting retainers autonomously.",
-                  color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20"
+                  desc: "Deploy ultra-low latency voice closers powered by Nemotron Speech to secure retainers autonomously.",
                 },
                 {
                   icon: ShieldAlert,
                   title: "Morpheus Safety Shield",
                   desc: "Real-time PII redaction, brand alignment, and deepfake verification powered natively by NeMo Guardrails.",
-                  color: "text-violet-400", bg: "bg-violet-400/10", border: "border-violet-400/20"
                 }
               ].map((feature, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
-                  className="gradient-border-card p-8 shimmer-effect group">
-                  <div className={`w-14 h-14 rounded-2xl ${feature.bg} ${feature.border} border flex items-center justify-center mb-6`}>
-                    <feature.icon className={`w-7 h-7 ${feature.color}`} />
+                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors p-8 rounded-2xl group relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-10 transition-opacity">
+                    <feature.icon className="w-32 h-32 text-white" />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-3">{feature.title}</h3>
-                   <p className="text-sm text-neutral-400 leading-relaxed">{feature.desc}</p>
+                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 relative z-10">
+                    <feature.icon className="w-5 h-5 text-neutral-300 group-hover:text-white transition-colors" />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-3 relative z-10">{feature.title}</h3>
+                  <p className="text-sm text-neutral-500 leading-relaxed relative z-10">{feature.desc}</p>
                 </motion.div>
               ))}
            </div>
@@ -220,18 +217,18 @@ export default function Home() {
         <div className="w-full max-w-6xl mx-auto relative z-10 mt-10 mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { end: 29, suffix: "", label: "AI Tools", icon: BrainCircuit, color: "text-electric" },
-              { end: 24, suffix: "/7", label: "Always Running", icon: Clock, color: "text-emerald-400" },
-              { end: 30, suffix: "s", label: "Content Generation", icon: TrendingUp, color: "text-amber-400" },
-              { end: 90, suffix: "%", prefix: "", label: "Cost Savings vs Agency", icon: DollarSign, color: "text-rose-400" },
+              { end: 29, suffix: "", label: "AI Tools", icon: BrainCircuit },
+              { end: 24, suffix: "/7", label: "Always Running", icon: Clock },
+              { end: 30, suffix: "s", label: "Content Generation", icon: TrendingUp },
+              { end: 90, suffix: "%", prefix: "", label: "Cost Savings vs Agency", icon: DollarSign },
             ].map((stat, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="glass-card p-6 border border-glass-border text-center group hover:border-white/15 transition-all">
-                <stat.icon className={`w-5 h-5 ${stat.color} mx-auto mb-2 group-hover:scale-110 transition-transform`} />
-                <div className={`text-3xl font-bold ${stat.color} font-mono`}>
+                className="bg-black/50 border border-white/5 p-6 rounded-2xl text-center hover:border-white/10 transition-colors">
+                <stat.icon className="w-5 h-5 text-neutral-500 mx-auto mb-2" />
+                <div className="text-3xl font-bold text-white font-mono">
                   <AnimatedCounter end={stat.end} suffix={stat.suffix} prefix={stat.prefix} />
                 </div>
-                <div className="text-xs uppercase tracking-widest text-neutral-400 mt-1">{stat.label}</div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 mt-2 font-bold">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -240,58 +237,57 @@ export default function Home() {
         {/* What You Get — Revenue Engine Showcase */}
         <div className="w-full max-w-7xl mx-auto relative z-10 mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-4">Everything You Need.<br/><span className="bg-gradient-to-r from-emerald-400 to-electric bg-clip-text text-transparent">Nothing You Don&apos;t.</span></h2>
-            <p className="text-neutral-400 max-w-2xl mx-auto">Every tool your marketing team needs — automated and available around the clock.</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 serif-text mb-4">Total Omni-Channel Domination.</h2>
+            <p className="text-neutral-500 max-w-2xl mx-auto">Every tool your marketing team needs — automated and available around the clock.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Cpu, title: "NemoClaw Direct Access", desc: "Deploy autonomous software agents safely, instantly. Native integration with NVIDIA Agent Toolkit ensures 24/7 localized compute.", tag: "NVIDIA NIM", color: "from-emerald-500 to-teal-500" },
-              { icon: ShieldAlert, title: "OpenShell Guardrails", desc: "Enforce policy-based privacy and security guardrails directly within the runtime. Absolute control over how agents handle data.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
-              { icon: Globe, title: "Privacy Router", desc: "Tap open models like Mistral-Nemotron locally, or dynamically route to cloud-based frontier models within defined security guardrails.", tag: "DYNAMIC ROUTING", color: "from-blue-500 to-sky-500" },
-              { icon: Zap, title: "Deep Competitor Intel", desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.", tag: "COMPETITOR X-RAY", color: "from-violet-500 to-fuchsia-500" },
-              { icon: MessageSquare, title: "Mobile Command Center", desc: "Control your entire 24/7 autonomous marketing agency directly from Telegram. Fire webhooks, check stats, and deploy logic seamlessly.", tag: "TELEGRAM NATIVE", color: "from-amber-500 to-orange-500" },
-              { icon: Webhook, title: "Omni-Automation Network", desc: "100% autonomous background execution. Direct n8n secure routing handles content generation and lead scraping without human intervention.", tag: "WEBHOOK ROUTING", color: "from-cyan-500 to-blue-500" },
+              { icon: Cpu, title: "OpenClaw Direct Access", desc: "Deploy autonomous software agents safely, instantly. Native integration with NVIDIA Agent Toolkit ensures 24/7 localized compute.", tag: "NVIDIA NIM" },
+              { icon: ShieldAlert, title: "OpenShell Guardrails", desc: "Enforce policy-based privacy and security guardrails directly within the runtime. Absolute control over how agents handle data.", tag: "ENTERPRISE SECURE" },
+              { icon: Globe, title: "Privacy Router", desc: "Tap open models like Mistral-Nemotron locally, or dynamically route to cloud-based frontier models within defined security guardrails.", tag: "DYNAMIC ROUTING" },
+              { icon: Zap, title: "Deep Competitor Intel", desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.", tag: "COMPETITOR X-RAY" },
+              { icon: MessageSquare, title: "Mobile Command Center", desc: "Control your entire 24/7 autonomous marketing agency directly from Telegram. Fire webhooks, check stats, and deploy logic seamlessly.", tag: "TELEGRAM NATIVE" },
+              { icon: Webhook, title: "Omni-Automation Network", desc: "100% autonomous background execution. Direct n8n secure routing handles content generation and lead scraping without human intervention.", tag: "WEBHOOK ROUTING" },
             ].map((feature, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                className="group relative glass-card p-8 border border-glass-border hover:border-white/20 transition-all duration-500 overflow-hidden">
-                <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                className="group relative bg-white/[0.01] p-8 border border-white/5 hover:border-white/10 rounded-2xl transition-all duration-500">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg`}>
-                    <feature.icon className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center">
+                    <feature.icon className="w-4 h-4 text-neutral-400" />
                   </div>
-                   <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-bold bg-white/5 px-2 py-1 rounded">{feature.tag}</span>
+                   <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-500 font-bold bg-black/50 border border-white/5 px-3 py-1.5 rounded-full">{feature.tag}</span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-sm text-neutral-400 leading-relaxed">{feature.desc}</p>
+                <h3 className="text-lg font-bold text-neutral-200 mb-2">{feature.title}</h3>
+                <p className="text-sm text-neutral-500 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </main>
 
-      {/* The Brutal Comparison Section */}
-      <section className="py-32 bg-black/40 border-y border-glass-border px-6 relative">
+      {/* The Brutal Comparison Section - Obsidian */}
+      <section className="py-32 bg-black border-y border-white/5 px-6 relative">
          <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-6">Stop Paying Retainers.</h2>
-              <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
-                Why pay R15,000+ per month for slow, inconsistent work?
+              <p className="text-lg text-neutral-500 max-w-2xl mx-auto">
+                Why pay R15,000+ per month for slow, inconsistent operational work?
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
               {/* Human Agency */}
-              <div className="glass-card p-8 border border-rose-500/20 bg-rose-500/5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                   <Target className="w-32 h-32 text-rose-500" />
+              <div className="bg-neutral-900/50 p-8 border border-neutral-800 rounded-3xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-[0.02]">
+                   <Target className="w-48 h-48 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
-                  <XCircle className="w-6 h-6 text-rose-500" /> Traditional Agency
+                <h3 className="text-xl font-bold text-neutral-400 mb-2 flex items-center gap-3">
+                  <XCircle className="w-5 h-5 text-neutral-600" /> Traditional Agency
                 </h3>
-                <p className="text-rose-400 font-mono font-bold text-xl mb-8">R15,000 – R50,000 / month</p>
+                <p className="text-neutral-500 font-mono font-bold text-xl mb-8">R15,000 – R50,000 / month</p>
                 
-                <ul className="space-y-4">
+                <ul className="space-y-4 relative z-10">
                   {[
                     "Takes 4 weeks to launch campaigns",
                     "Writes 4 generic blog posts a month",
@@ -299,37 +295,36 @@ export default function Home() {
                     "Expects YOU to close the leads",
                     "Takes weekends and holidays off"
                   ].map((item, i) => (
-                     <li key={i} className="flex items-start gap-3 text-neutral-400">
-                       <XCircle className="w-5 h-5 text-rose-500/50 shrink-0 mt-0.5" />
-                       <span className="text-sm">{item}</span>
+                     <li key={i} className="flex items-start gap-3 text-neutral-600">
+                       <XCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                       <span className="text-sm font-medium">{item}</span>
                      </li>
                   ))}
                 </ul>
               </div>
 
               {/* Sovereign Matrix System */}
-              <div className="glass-card p-8 border border-emerald-500/30 bg-emerald-500/5 relative overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.1)]">
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                   <Cpu className="w-32 h-32 text-emerald-500" />
+              <div className="bg-white/[0.03] p-8 border border-white/10 rounded-3xl relative overflow-hidden shadow-[0_0_80px_rgba(255,255,255,0.02)]">
+                <div className="absolute top-0 right-0 p-4 opacity-[0.05]">
+                   <Cpu className="w-48 h-48 text-white" />
                 </div>
-                <div className="absolute -top-[1px] -left-[1px] w-[20%] h-[2px] bg-gradient-to-r from-emerald-400 to-transparent" />
                 
-                <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-400" /> Sovereign Matrix Platform
+                <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-neutral-300" /> Sovereign Matrix Platform
                 </h3>
-                <p className="text-emerald-400 font-mono font-bold text-xl mb-8">Free to Start — Pro from R997/mo</p>
+                <p className="text-neutral-300 font-mono font-bold text-xl mb-8">Deploy Instantly. Zero Overhead.</p>
                 
-                <ul className="space-y-4">
+                <ul className="space-y-4 relative z-10">
                   {[
                     "Content generated in under 30 seconds",
                     "NeMo Guardrails — zero AI hallucinations",
                     "Nemotron Voice Agent dials & books leads",
                     "Self-optimizing via NVIDIA Data Flywheel",
-                    "Runs 24/7 — no holidays, no sick days"
+                    "Runs 24/7 — absolute operational superiority"
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-white">
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                      <span className="font-medium">{item}</span>
+                    <li key={i} className="flex items-start gap-3 text-neutral-300">
+                      <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
+                      <span className="text-sm font-medium">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -337,198 +332,192 @@ export default function Home() {
             </div>
 
             {/* ROI Calculator */}
-            <ROICalculator />
+            <div className="mt-20">
+              <ROICalculator />
+            </div>
 
          </div>
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-[#050505] relative border-t border-glass-border">
-         <ToolShowcase />
+      <section id="pricing" className="py-24 bg-black relative border-t border-white/5">
+         <div className="mb-24">
+           <ToolShowcase />
+         </div>
          <Pricing />
       </section>
 
       {/* Tech Stack Bar — Animated Marquee */}
-      <div className="section-divider" />
-      <section className="py-12 bg-black/40 px-6 overflow-hidden">
+      <section className="py-12 bg-white/[0.02] border-y border-white/5 px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto overflow-hidden">
           <div className="marquee-track gap-12">
             {[...Array(2)].map((_, repeat) => (
               <div key={repeat} className="flex gap-12 items-center px-6">
-                {["Google Gemini 2.5", "NVIDIA Nemotron", "NVIDIA Riva STT/TTS", "TensorRT-LLM", "NeMo Guardrails", "NemoClaw", "Google Vertex AI", "Neon Postgres", "Pipecat WebRTC", "Vercel Edge", "Data Flywheel"].map(tech => (
-                  <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold font-mono whitespace-nowrap">{tech}</span>
+                {["Google Gemini 2.5", "NVIDIA Nemotron", "NVIDIA Riva STT/TTS", "TensorRT-LLM", "NeMo Guardrails", "OpenClaw", "Google Vertex AI", "Neon Postgres", "Pipecat WebRTC", "Vercel Edge", "Data Flywheel"].map(tech => (
+                  <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-bold font-mono whitespace-nowrap">{tech}</span>
                 ))}
               </div>
             ))}
           </div>
         </div>
       </section>
-      <div className="section-divider" />
 
-      {/* Founder & Trust Section */}
-      <section className="py-24 bg-[#050505] px-6 border-t border-glass-border">
+      {/* Founder & Trust Section - Obsidian */}
+      <section className="py-24 bg-black px-6">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Founder Message */}
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                Built in South Africa 🇿🇦
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                Engineered in South Africa
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white serif-text mb-6 leading-tight">
-                One person. 29 AI agents.<br/>
-                <span className="animated-gradient-text">Zero agency overhead.</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-white serif-text mb-6 leading-tight tracking-tight">
+                One Architect. 29 Swarm Agents.<br/>
+                <span className="text-neutral-500">Zero Execution Bloat.</span>
               </h2>
-              <p className="text-neutral-400 leading-relaxed mb-6">
-                Sovereign Matrix was built to solve a problem I saw firsthand — businesses paying R15,000–R50,000/month for agency retainers and getting slow, mediocre results. So I built 29 AI agents that do the same work in seconds, at a fraction of the cost.
+              <div className="w-12 h-1 bg-white/10 mb-6" />
+              <p className="text-neutral-500 leading-relaxed mb-6 text-sm">
+                Sovereign Matrix was engineered to execute one directive: eliminate the inefficiencies of human agency labor. Businesses bleed capital on R15,000–R50,000 retainers for slow, generic fulfillment. I have authored 29 autonomous agents that deploy identical output in milliseconds.
               </p>
-              <p className="text-neutral-400 leading-relaxed mb-8">
-                Every tool runs on real AI — Google Gemini 2.5, NVIDIA Nemotron for voice, TensorRT-LLM for speed, and NeMo Guardrails for absolute security. No faked demos. No placeholder responses. Real marketing intelligence, real results.
+              <p className="text-neutral-500 leading-relaxed mb-8 text-sm">
+                There is no &quot;AI Slop&quot;. Every node runs on deterministic routing — Gemini 2.5 for reasoning, Nemotron for voice, TensorRT-LLM for latency, and NeMo Guardrails for absolute security. No hallucinations, only executable intelligence.
               </p>
-              <a href="#pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#00B7FF] to-purple-500 text-white font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-all">
-                Start Your Free Trial
+              <a href="#pricing" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-black font-bold text-xs uppercase tracking-[0.2em] hover:bg-neutral-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                Deploy The Infrastructure
               </a>
             </div>
             {/* Right: Tech Stack */}
             <div className="space-y-6">
-              <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-4">Powered By</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-600 mb-6">Architecture Verification</h3>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { name: "Google Gemini 2.5", desc: "Core AI engine", color: "from-blue-500/10 to-cyan-500/10", border: "border-blue-500/20" },
-                  { name: "NVIDIA Nemotron", desc: "Voice & agentic LLM", color: "from-emerald-500/10 to-green-500/10", border: "border-emerald-500/20" },
-                  { name: "TensorRT-LLM", desc: "Microsecond inference", color: "from-orange-500/10 to-amber-500/10", border: "border-orange-500/20" },
-                  { name: "NeMo Guardrails", desc: "Zero hallucinations", color: "from-rose-500/10 to-pink-500/10", border: "border-rose-500/20" },
-                  { name: "NVIDIA Riva", desc: "Speech AI (STT/TTS)", color: "from-purple-500/10 to-violet-500/10", border: "border-purple-500/20" },
-                  { name: "Data Flywheel", desc: "Self-optimizing agents", color: "from-cyan-500/10 to-teal-500/10", border: "border-cyan-500/20" },
+                  { name: "Google Gemini 2.5", desc: "Core AI engine" },
+                  { name: "NVIDIA Nemotron", desc: "Voice & agentic LLM" },
+                  { name: "TensorRT-LLM", desc: "Microsecond inference" },
+                  { name: "NeMo Guardrails", desc: "Zero hallucinations" },
+                  { name: "NVIDIA Riva", desc: "Speech AI (STT/TTS)" },
+                  { name: "Data Flywheel", desc: "Self-optimizing agents" },
                 ].map((tech) => (
-                  <div key={tech.name} className={`p-4 rounded-xl bg-gradient-to-br ${tech.color} border ${tech.border}`}>
+                  <div key={tech.name} className="p-5 rounded-xl bg-white/[0.02] border border-white/5">
                     <p className="text-sm font-bold text-white mb-1">{tech.name}</p>
                     <p className="text-[10px] text-neutral-500 uppercase tracking-widest">{tech.desc}</p>
                   </div>
                 ))}
               </div>
-              <div className="flex flex-wrap gap-4 mt-6">
-                <div className="flex items-center gap-2 text-xs text-neutral-500">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  256-bit encryption
+              <div className="flex flex-wrap gap-6 mt-8 p-6 rounded-xl bg-white/[0.02] border border-white/5">
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold text-neutral-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  256-bit AES
                 </div>
-                <div className="flex items-center gap-2 text-xs text-neutral-500">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  POPIA compliant
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold text-neutral-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  POPIA Verified
                 </div>
-                <div className="flex items-center gap-2 text-xs text-neutral-500">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  ZAR payments
+                <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold text-neutral-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  Paystack Integration
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <div className="section-divider" />
 
       {/* FAQ Section */}
-      <section className="py-24 bg-[#050505] px-6 border-t border-glass-border">
+      <section className="py-32 bg-black px-6 border-t border-white/5">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-4">Frequently Asked Questions</h2>
-            <p className="text-neutral-400">Everything you need to know before getting started.</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-4">Operational Parameters</h2>
+            <p className="text-neutral-500">Declassification of core system mechanics and billing infrastructure.</p>
           </div>
           
-          {[
-            {
-              q: "What exactly is Sovereign Matrix?",
-              a: "Sovereign Matrix is an AI-powered marketing platform with 29 tools that handle content creation, ad generation, SEO, lead prospecting, outbound emails, and more. It replaces the work of a traditional marketing agency at a fraction of the cost."
-            },
-            {
-              q: "How does the free trial work?",
-              a: "You get full access to the Starter plan for 7 days — no credit card required. If you decide it's not for you, simply don't subscribe. No hidden charges, no lock-in."
-            },
-            {
-              q: "Can I cancel anytime?",
-              a: "Yes. All plans are month-to-month with no contracts. You can cancel, upgrade, or downgrade at any time from your billing dashboard. Your data stays available for 30 days after cancellation."
-            },
-            {
-              q: "How is this different from ChatGPT or other AI tools?",
-              a: "ChatGPT is a general-purpose chatbot. Sovereign Matrix is a purpose-built marketing system — it generates campaigns, publishes content, tracks competitors, prospects leads, and runs 24/7 without you needing to prompt it. Think of it as an AI agency, not a chatbot."
-            },
-            {
-              q: "Why is pricing in ZAR?",
-              a: "We're a South African company building for the African market first. All payments are processed in ZAR through Paystack — supporting card payments, bank transfers, and more. No hidden currency conversion fees."
-            },
-            {
-              q: "What kind of support do you offer?",
-              a: "All plans include email support. Growth and Enterprise plans include priority support with faster response times. We're a small, focused team, so you'll always talk to someone who knows the product."
-            },
-          ].map((faq, i) => (
-            <FAQItem key={i} question={faq.q} answer={faq.a} />
-          ))}
+          <div className="border border-white/5 rounded-2xl bg-white/[0.01] p-4">
+            {[
+              {
+                q: "What defines Sovereign Matrix?",
+                a: "It is an autonomous Omni-Channel orchestrator. It is not a chatbot. It is a cluster of 29 native AI agents generating campaigns, ripping competitive intelligence, and executing localized scraping autonomously. It replaces human agency dependencies."
+              },
+              {
+                q: "What are the local execution capabilities?",
+                a: "Using the proprietary OpenClaw daemon, the Matrix can execute workflows completely offline and air-gapped using your native macOS terminal and local Ollama weights (Mistral/Llama3), guaranteeing zero data leaks."
+              },
+              {
+                q: "Why use Paystack for localization?",
+                a: "For African deployments, Stripe presents heavy friction. We integrated Paystack directly into the Cartel Billing Engine to enable seamless $5,000/mo equivalent ZAR transactions for physical white-label provisioning."
+              },
+              {
+                q: "Can I sever my license connection?",
+                a: "Yes. All infrastructure licenses are deployed on a month-to-month, un-contracted chassis. You may terminate operations via your dashboard instantly without penalty."
+              },
+            ].map((faq, i) => (
+              <FAQItem key={i} question={faq.q} answer={faq.a} />
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Footer CTA */}
-      <section className="py-32 text-center px-6 relative overflow-hidden bg-[#050505] border-t border-glass-border">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(0,183,255,0.08),transparent_60%)]" />
+      <section className="py-32 text-center px-6 relative overflow-hidden bg-black border-t border-white/5">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.03),transparent_70%)]" />
         <div className="relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 serif-text">Your Competitors Are<br/>Already Using AI.</h2>
-            <p className="text-lg text-neutral-400 max-w-xl mx-auto mb-12">The question isn&apos;t whether to automate. It&apos;s whether you&apos;ll do it before they do.</p>
-            <Link href="/pricing" className="inline-flex px-12 py-5 bg-white text-black font-bold rounded-full text-lg shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] transition-all items-center gap-3 hover:-translate-y-1 group">
-              Start Your Free Trial <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 serif-text tracking-tight">Deployment Imminent.</h2>
+            <p className="text-lg text-neutral-500 max-w-xl mx-auto mb-12">The question isn&apos;t whether to automate. It&apos;s whether you&apos;ll establish sovereignty before your competitors do.</p>
+            <Link href="/pricing" className="inline-flex px-12 py-5 bg-white text-black font-bold rounded-full text-sm uppercase tracking-[0.2em] shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:bg-neutral-200 transition-colors items-center gap-3">
+              Initialize Matrix
             </Link>
-            <p className="mt-6 text-xs text-neutral-500 uppercase tracking-[0.2em]">No credit card required • Cancel anytime</p>
           </motion.div>
         </div>
       </section>
 
       {/* Professional Footer */}
-      <footer className="bg-[#020202] border-t border-glass-border px-6">
+      <footer className="bg-black border-t border-white/5 px-6">
         <div className="max-w-6xl mx-auto py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 px-4">
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center gap-3 mb-6">
                 <UmbraLogo size="sm" />
-                <span className="text-sm font-bold tracking-[0.15em] uppercase text-white">Sovereign Matrix</span>
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-white">Sovereign Matrix</span>
               </div>
-              <p className="text-xs text-neutral-500 leading-relaxed">AI-powered marketing platform for businesses that want agency-level results without agency-level costs.</p>
+              <p className="text-xs text-neutral-500 leading-relaxed max-w-xs">An elite, AI-driven defense-grade orchestration platform built to replace traditional marketing agency workflows.</p>
             </div>
 
             {/* Product */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-400 mb-4">Product</h4>
-              <ul className="space-y-3">
-                <li><Link href="/pricing" className="text-xs text-neutral-500 hover:text-white transition-colors">Proof of Work</Link></li>
-                <li><Link href="/#pricing" className="text-xs text-neutral-500 hover:text-white transition-colors">Pricing</Link></li>
-                <li><Link href="/dashboard" className="text-xs text-neutral-500 hover:text-white transition-colors">Dashboard</Link></li>
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-600 mb-6">Infrastructure</h4>
+              <ul className="space-y-4">
+                <li><Link href="/pricing" className="text-xs text-neutral-500 hover:text-white transition-colors">Architecture Overview</Link></li>
+                <li><Link href="/#pricing" className="text-xs text-neutral-500 hover:text-white transition-colors">Licensing Model</Link></li>
+                <li><Link href="/dashboard" className="text-xs text-neutral-500 hover:text-white transition-colors">Command Terminal</Link></li>
               </ul>
             </div>
 
             {/* Company */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-400 mb-4">Company</h4>
-              <ul className="space-y-3">
-                <li><a href="mailto:support@umbra.co.za" className="text-xs text-neutral-500 hover:text-white transition-colors">Contact</a></li>
-                <li><Link href="/privacy" className="text-xs text-neutral-500 hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="text-xs text-neutral-500 hover:text-white transition-colors">Terms of Service</Link></li>
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-600 mb-6">Compliance</h4>
+              <ul className="space-y-4">
+                <li><Link href="/privacy" className="text-xs text-neutral-500 hover:text-white transition-colors">Privacy Paradigm</Link></li>
+                <li><Link href="/terms" className="text-xs text-neutral-500 hover:text-white transition-colors">Terms of Operations</Link></li>
+                <li><span className="text-xs text-neutral-700">POPIA Adherent</span></li>
               </ul>
             </div>
 
             {/* Connect */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-400 mb-4">Connect</h4>
-              <ul className="space-y-3">
-                <li><a href="mailto:support@umbra.co.za" className="text-xs text-neutral-500 hover:text-white transition-colors">support@umbra.co.za</a></li>
-                <li><span className="text-xs text-neutral-600">Cape Town, South Africa</span></li>
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-600 mb-6">Communications</h4>
+              <ul className="space-y-4">
+                <li><a href="mailto:sysadmin@sovereign-matrix.com" className="text-xs text-neutral-500 hover:text-white transition-colors font-mono">sysadmin@sovereign.local</a></li>
+                <li><span className="text-xs text-neutral-600 uppercase tracking-widest">Base: Western Cape</span></li>
               </ul>
             </div>
           </div>
 
           {/* Bottom bar */}
-          <div className="section-divider mb-8" />
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-[10px] text-neutral-600 uppercase tracking-[0.15em]">© 2026 Sovereign Matrix. All rights reserved.</p>
-            <p className="text-[10px] text-neutral-600 uppercase tracking-[0.15em]">Secure payments via Paystack • Built in South Africa 🇿🇦</p>
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 px-4">
+            <p className="text-[10px] text-neutral-700 uppercase tracking-[0.2em]">© 2026 Sovereign Matrix Protocol. All channels encrypted.</p>
+            <p className="text-[10px] text-neutral-700 uppercase tracking-[0.2em]">Transacting globally via Paystack.</p>
           </div>
         </div>
       </footer>

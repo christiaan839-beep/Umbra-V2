@@ -7,9 +7,9 @@ import { AnimatedGridPattern } from "@/components/AnimatedGridPattern";
 
 // Mock data for Reseller Sub-Agencies
 const TARGET_AGENCIES = [
-  { id: "ag-01", name: "Apex Digital Solutions", mrr: 5000, status: "active", uptime: "99.9%", tokens: "4.2M", license: "Enterprise White-Label" },
-  { id: "ag-02", name: "Nexus Media Group", mrr: 5000, status: "active", uptime: "100%", tokens: "2.8M", license: "Enterprise White-Label" },
-  { id: "ag-03", name: "Quantum Growth Partners", mrr: 5000, status: "provisioning", uptime: "-", tokens: "-", license: "Enterprise White-Label" },
+  { id: "ag-01", name: "Apex Digital Solutions", mrr: 90000, status: "active", uptime: "99.9%", tokens: "4.2M", license: "Enterprise White-Label" },
+  { id: "ag-02", name: "Nexus Media Group", mrr: 90000, status: "active", uptime: "100%", tokens: "2.8M", license: "Enterprise White-Label" },
+  { id: "ag-03", name: "Quantum Growth Partners", mrr: 90000, status: "provisioning", uptime: "-", tokens: "-", license: "Enterprise White-Label" },
 ];
 
 export default function AgencyHubPage() {
@@ -37,16 +37,16 @@ export default function AgencyHubPage() {
              <div className="flex items-center gap-2 text-emerald-400 font-mono text-[10px] uppercase font-bold tracking-widest mb-1">
                <DollarSign className="w-3 h-3" /> Monthly Recurring
              </div>
-             <div className="text-2xl font-bold text-white">$15,000<span className="text-sm text-neutral-500 font-normal">/mo</span></div>
+             <div className="text-2xl font-bold text-white">R270,000<span className="text-sm text-neutral-500 font-normal">/mo</span></div>
            </div>
            
            <a 
-             href="https://buy.stripe.com/test_8wM4jE4O8eWQ0OQ4gg" 
+             href="https://paystack.com/pay/sovereign-matrix" 
              target="_blank" 
              rel="noreferrer"
-             className="px-6 py-4 bg-gradient-to-r from-purple-500 to-[#00B7FF] rounded-xl text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap"
+             className="px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap shadow-[0_0_20px_rgba(16,185,129,0.2)] border border-emerald-500/50"
            >
-             <Plus className="w-4 h-4" /> Provision New License
+             <Plus className="w-4 h-4" /> Provision License (ZAR)
            </a>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function AgencyHubPage() {
 
                     <div className="flex items-center gap-6">
                        <div className="text-right">
-                         <div className="text-sm font-bold text-white">${agency.mrr.toLocaleString()}</div>
+                         <div className="text-sm font-bold text-white">R{agency.mrr.toLocaleString()}</div>
                          <div className="text-[9px] text-neutral-500 uppercase tracking-widest mt-1">Monthly Yield</div>
                        </div>
                        <button className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#00B7FF] hover:text-white transition-all text-neutral-400 opacity-0 group-hover:opacity-100">
