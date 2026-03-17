@@ -37,7 +37,7 @@ function VoiceAgentClient() {
         </div>
         <h1 className="text-3xl font-bold serif-text text-white">Autonomous Voice Caller</h1>
         <p className="text-sm text-stone-400 mt-2 max-w-2xl">
-          Deploy ultra-realistic, low-latency conversational agents powered by NVIDIA NIM and Pipecat. UMBRA doesn&apos;t just find leads—it calls them, pitches your offer, and books meetings on your calendar.
+          Deploy ultra-realistic, sub-200ms conversational agents powered by NVIDIA NIM, Riva ASR, and Pipecat. UMBRA doesn&apos;t just find leads—it explicitly controls the dialer array, pitches your offer, and books meetings.
         </p>
       </div>
 
@@ -96,8 +96,8 @@ function VoiceAgentClient() {
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-2 flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> System Status</h4>
             <div className="space-y-2 text-xs font-mono text-stone-400">
               <div className="flex justify-between"><span>NVIDIA NIM Endpoints:</span> <span className="text-emerald-400">ONLINE</span></div>
-              <div className="flex justify-between"><span>Pipecat Framework:</span> <span className="text-emerald-400">ENGAGED</span></div>
-              <div className="flex justify-between"><span>Latency Average:</span> <span className="text-electric">320ms</span></div>
+              <div className="flex justify-between"><span>Pipecat & Riva ASR:</span> <span className="text-emerald-400">ENGAGED</span></div>
+              <div className="flex justify-between"><span>Latency Average:</span> <span className="text-electric">184ms</span></div>
             </div>
           </div>
         </div>

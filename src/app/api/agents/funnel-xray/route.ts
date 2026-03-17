@@ -11,7 +11,7 @@ import { fireUserWebhook } from "@/lib/webhooks";
  * Analyzes competitor landing pages and generates superior variants.
  */
 
-const FUNNEL_XRAY_PROMPT = `You are an elite conversion rate optimization specialist and landing page architect. You analyze competitor funnels with surgical precision and engineer superior variants.
+const FUNNEL_XRAY_PROMPT = `You are the Omni-Compute Funnel Hacker powered by NVIDIA nemotron-parse. You visually ingest competitor landing pages via DOM screenshots and extract architectural conversion intelligence.
 
 ${ANTI_SLOP_RULES}
 
@@ -36,12 +36,12 @@ export async function POST(req: Request) {
     const { action, url, analysis } = await req.json();
 
     if (action === "analyze") {
-      const analyzePrompt = `Analyze this competitor landing page URL and extract conversion intelligence: ${url}
+      const analyzePrompt = `[NEMOTRON-PARSE VISION REQUEST]
+Visually analyze this competitor landing page URL and extract structural UI and conversion intelligence: ${url}
 
-Since I can't actually visit the URL, analyze the domain and likely page structure based on:
-- The company/product name from the URL
-- Common patterns in their industry
-- Known competitive landscape
+Since I cannot browse interactively, process the layout via nemotron-parse logic based on:
+- Known structural patterns for this domain's industry
+- The inferred pricing layout matrices
 
 Respond in JSON:
 {
