@@ -10,12 +10,12 @@ import {
   Code2,
   MapPin,
   Loader2,
-  Copy,
   CheckCircle2,
   Crosshair,
   Zap,
   AlertTriangle,
 } from "lucide-react";
+import { useUsage } from "@/hooks/useUsage";
 
 type SEOAction = "xray" | "gap" | "schema" | "gbp";
 
@@ -91,10 +91,11 @@ export default function SEODominatorPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const { canGenerate, refresh: refreshUsage } = useUsage();
 
   const handleExecute = async () => {
     if (!activeAction) return;
+    if (!canGenerate) return;
     setLoading(true);
     setResult(null);
     setError(null);
@@ -140,6 +141,7 @@ export default function SEODominatorPage() {
             output,
           }),
         }).catch(() => {}); // Silent — don't block UI
+        refreshUsage(); // Update usage counter
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
@@ -149,13 +151,6 @@ export default function SEODominatorPage() {
     }
   };
 
-  const handleCopy = () => {
-    if (result) {
-      navigator.clipboard.writeText(result);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8 relative z-10 p-4 lg:p-8">

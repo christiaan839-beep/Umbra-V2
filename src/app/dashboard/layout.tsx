@@ -6,10 +6,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Users, Settings, Shield, DollarSign,
-  Workflow,
-  Send, Layers,
-  CalendarDays, Target, Globe2,
+  Users, Settings, Shield, DollarSign, Target,
+  Layers, Globe2,
   Search, ChevronDown, Rocket, Palette, Factory, X, Menu,
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
@@ -35,33 +33,29 @@ function CrosshairIcon(props: React.SVGProps<SVGSVGElement>) {
 
 const NAV_GROUPS = [
   {
-    group: "Dashboard",
+    group: "Core",
     icon: LayoutDashboard,
     items: [
       { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-      { href: "/dashboard/analytics", label: "Analytics", icon: Workflow },
     ]
   },
   {
-    group: "Marketing Tools",
+    group: "AI Tools",
     icon: Rocket,
     items: [
-      { href: "/dashboard/content-factory", label: "Content Hub", icon: Factory },
-      { href: "/dashboard/seo-dominator", label: "SEO Tools", icon: Search },
+      { href: "/dashboard/seo-dominator", label: "SEO X-Ray", icon: Search },
+      { href: "/dashboard/content-factory", label: "Content Factory", icon: Factory },
       { href: "/dashboard/designer", label: "Design Studio", icon: Palette },
-      { href: "/dashboard/social", label: "Social Media", icon: Send },
-      { href: "/dashboard/calendar", label: "Content Calendar", icon: CalendarDays },
       { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
+      { href: "/dashboard/competitor", label: "Competitor Intel", icon: Shield },
     ]
   },
   {
-    group: "Lead Generation",
+    group: "Growth",
     icon: CrosshairIcon,
     items: [
       { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
-      { href: "/dashboard/outbound", label: "Outbound Engine", icon: Send },
-      { href: "/dashboard/competitor", label: "Competitor Analysis", icon: Shield },
-      { href: "/dashboard/programmatic", label: "Programmatic SEO", icon: Layers },
+      { href: "/dashboard/programmatic", label: "Bulk Pages", icon: Layers },
     ]
   },
   {
