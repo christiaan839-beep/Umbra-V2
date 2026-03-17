@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Globe2, Sparkles, Code, Eye, Copy, CheckCircle2 } from "lucide-react";
+import { useUsage } from "@/hooks/useUsage";
 
 export default function PageBuilderPage() {
   const [businessName, setBusinessName] = useState("");
@@ -13,9 +14,10 @@ export default function PageBuilderPage() {
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"preview" | "code">("preview");
   const [copied, setCopied] = useState(false);
+  const { canGenerate, refresh: refreshUsage } = useUsage();
 
   const handleGenerate = async () => {
-    if (!businessName || !offer) return;
+    if (!businessName || !offer || !canGenerate) return;
     setGenerating(true);
     setGeneratedHtml(null);
 
@@ -28,6 +30,19 @@ export default function PageBuilderPage() {
       const data = await res.json();
       if (data.success) {
         setGeneratedHtml(data.page);
+        // Auto-save to library
+        fetch("/api/generations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "save",
+            tool: "page-builder",
+            toolAction: "generate",
+            inputSummary: `Landing page: ${businessName}`.slice(0, 200),
+            output: data.page,
+          }),
+        }).catch(() => {});
+        refreshUsage();
       }
     } catch (err) {
       console.error("Page generation failed:", err);

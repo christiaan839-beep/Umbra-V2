@@ -12,6 +12,7 @@ import {
   Zap,
   Sparkles,
 } from "lucide-react";
+import { useUsage } from "@/hooks/useUsage";
 
 type DesignAction = "landing-page" | "brand-identity" | "ui-spec";
 
@@ -76,9 +77,10 @@ export default function DesignerPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const { canGenerate, refresh: refreshUsage } = useUsage();
 
   const handleExecute = async () => {
-    if (!activeAction) return;
+    if (!activeAction || !canGenerate) return;
     setLoading(true);
     setResult(null);
 
@@ -101,7 +103,21 @@ export default function DesignerPage() {
         body: JSON.stringify({ action: activeAction, params }),
       });
       const data = await res.json();
-      setResult(data.output || data.error || JSON.stringify(data, null, 2));
+      const output = data.output || data.error || JSON.stringify(data, null, 2);
+      setResult(output);
+      // Auto-save to library
+      fetch("/api/generations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "save",
+          tool: "designer",
+          toolAction: activeAction,
+          inputSummary: `${activeAction}: ${formData[action.fields[0]?.name] || ""}`.slice(0, 200),
+          output,
+        }),
+      }).catch(() => {});
+      refreshUsage();
     } catch (e: any) {
       setResult(`Error: ${e.message}`);
     } finally {

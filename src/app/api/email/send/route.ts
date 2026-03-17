@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { rateLimit } from "@/lib/rate-limit";
 import { requireAuth } from "@/lib/auth-guard";
 
 export const maxDuration = 30;
@@ -51,31 +51,21 @@ async function sendViaResend(payload: EmailPayload): Promise<{ success: boolean;
 }
 
 async function sendViaGmail(payload: EmailPayload): Promise<{ success: boolean; id?: string; error?: string }> {
-  // Gmail fallback check
   const user = process.env.GMAIL_USER;
   const pass = process.env.GMAIL_APP_PASSWORD;
   if (!user || !pass) throw new Error("Gmail credentials not configured");
-
-  // Use the Gmail API directly via base64 encoded MIME message
-  const _rawMessage = [
-    `From: ${payload.from || user}`,
-    `To: ${payload.to}`,
-    `Subject: ${payload.subject}`,
-    `Content-Type: text/html; charset=utf-8`,
-    "",
-    payload.html || payload.text || "",
-  ].join("\r\n");
 
   console.log("[Email/Gmail] Would send via Gmail:", { to: payload.to, subject: payload.subject });
   return { success: true, id: `gmail_${Date.now()}` };
 }
 
+const emailLimiter = rateLimit({ interval: 60, limit: 10 }); // 10 emails per minute
+
 export async function POST(req: Request) {
   const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
-    const ip = req.headers.get("x-forwarded-for") || "anonymous";
-    const { allowed } = rateLimit(`email:${ip}`);
-    if (!allowed) return rateLimitResponse();
+    const limited = emailLimiter.check(req);
+    if (limited) return limited;
 
     const body = await req.json();
     const { to, subject, html, text, from, replyTo, template, data } = body;

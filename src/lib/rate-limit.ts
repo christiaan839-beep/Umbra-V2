@@ -1,40 +1,55 @@
+/**
+ * Simple in-memory rate limiter for API routes.
+ * 
+ * Usage in any API route:
+ *   import { rateLimit } from "@/lib/rate-limit";
+ *   const limiter = rateLimit({ interval: 60, limit: 20 });
+ *   
+ *   export async function POST(req: Request) {
+ *     const limited = limiter.check(req);
+ *     if (limited) return limited;
+ *     // ... handle request
+ *   }
+ */
+
 import { NextResponse } from "next/server";
 
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-const WINDOW_MS = 60_000; // 1 minute window
-const MAX_REQUESTS = 20; // 20 requests per minute per IP
-
-export function rateLimit(identifier: string): { allowed: boolean; remaining: number } {
-  const now = Date.now();
-  const entry = rateLimitMap.get(identifier);
-
-  if (!entry || now > entry.resetTime) {
-    rateLimitMap.set(identifier, { count: 1, resetTime: now + WINDOW_MS });
-    return { allowed: true, remaining: MAX_REQUESTS - 1 };
-  }
-
-  if (entry.count >= MAX_REQUESTS) {
-    return { allowed: false, remaining: 0 };
-  }
-
-  entry.count++;
-  return { allowed: true, remaining: MAX_REQUESTS - entry.count };
+interface RateLimitConfig {
+  interval: number; // seconds
+  limit: number;    // max requests per interval
 }
 
-export function rateLimitResponse() {
-  return NextResponse.json(
-    { error: "Rate limit exceeded. Try again in 60 seconds." },
-    { status: 429, headers: { "Retry-After": "60" } }
-  );
-}
+const stores = new Map<string, Map<string, number[]>>();
 
-// Cleanup old entries every 5 minutes to prevent memory leaks
-if (typeof globalThis !== "undefined") {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [key, entry] of rateLimitMap) {
-      if (now > entry.resetTime) rateLimitMap.delete(key);
-    }
-  }, 300_000);
+export function rateLimit(config: RateLimitConfig) {
+  const { interval, limit } = config;
+  const storeKey = `${interval}-${limit}`;
+
+  if (!stores.has(storeKey)) {
+    stores.set(storeKey, new Map());
+  }
+  const store = stores.get(storeKey)!;
+
+  return {
+    check(req: Request): NextResponse | null {
+      const forwarded = req.headers.get("x-forwarded-for");
+      const ip = forwarded?.split(",")[0]?.trim() || "unknown";
+      const now = Date.now();
+      const cutoff = now - interval * 1000;
+
+      const timestamps = (store.get(ip) || []).filter(t => t > cutoff);
+
+      if (timestamps.length >= limit) {
+        const retryAfter = Math.ceil(interval - (now - timestamps[0]) / 1000);
+        return NextResponse.json(
+          { error: "Rate limit exceeded. Please slow down.", retryAfter },
+          { status: 429, headers: { "Retry-After": String(retryAfter) } }
+        );
+      }
+
+      timestamps.push(now);
+      store.set(ip, timestamps);
+      return null;
+    },
+  };
 }

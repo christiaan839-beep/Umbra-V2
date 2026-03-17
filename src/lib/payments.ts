@@ -10,26 +10,19 @@ import crypto from "crypto";
 // ─── Pricing Plans ──────────────────────────────────────────────
 
 export const PLANS = {
-  starter: {
-    name: "Starter",
-    priceZAR: 27500, // R275.00 (in cents for Paystack)
+  pro: {
+    name: "Pro",
+    priceZAR: 99700, // R997.00 (in cents for Paystack)
+    priceDisplay: "R997",
+    monthlyAmount: 997,
+    features: ["Unlimited AI Generations", "All AI Tools", "Priority Processing", "Export to PDF", "Email Support"],
+  },
+  agency: {
+    name: "Agency",
+    priceZAR: 275000, // R2,750.00
     priceDisplay: "R2,750",
     monthlyAmount: 2750,
-    features: ["AI Booking Agent", "Chat Widget", "Content Studio", "Email Sequences"],
-  },
-  growth: {
-    name: "Growth",
-    priceZAR: 55000,
-    priceDisplay: "R5,500",
-    monthlyAmount: 5500,
-    features: ["Everything in Starter", "Ad Creative Gen", "Reputation AI", "Outbound Engine", "Client Reports"],
-  },
-  enterprise: {
-    name: "Enterprise",
-    priceZAR: 95000,
-    priceDisplay: "R9,500",
-    monthlyAmount: 9500,
-    features: ["Everything in Growth", "Funnel X-Ray", "Competitor Intel", "Programmatic SEO", "Page Builder", "Custom Skills"],
+    features: ["Everything in Pro", "White-Label Dashboard", "Client Portal", "Bulk Pages (1000+/mo)", "API Access", "Dedicated Support"],
   },
 } as const;
 

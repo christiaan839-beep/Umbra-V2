@@ -7,32 +7,45 @@ interface UsageData {
   total: number;
   limit: number;
   remaining: number;
+  plan: string;
+  isPaid: boolean;
 }
 
 /**
  * Hook to check generation usage and enforce daily limits.
- * Returns usage data + canGenerate boolean + a refresh function.
+ * Paid users (pro/agency) get unlimited generations.
+ * Free users get 20/day.
  */
 export function useUsage() {
-  const [usage, setUsage] = useState<UsageData>({ today: 0, total: 0, limit: 20, remaining: 20 });
+  const [usage, setUsage] = useState<UsageData>({
+    today: 0, total: 0, limit: 20, remaining: 20, plan: "starter", isPaid: false,
+  });
   const [loaded, setLoaded] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch("/api/generations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "usage" }),
+      // Fetch plan tier and usage in parallel
+      const [planRes, usageRes] = await Promise.all([
+        fetch("/api/user/plan").then(r => r.json()).catch(() => ({ plan: "starter", isPaid: false, limit: 20 })),
+        fetch("/api/generations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "usage" }),
+        }).then(r => r.json()).catch(() => ({ today: 0, total: 0, limit: 20, remaining: 20 })),
+      ]);
+
+      const isPaid = planRes.isPaid || false;
+      const limit = isPaid ? 999999 : 20;
+      const today = usageRes.today || 0;
+
+      setUsage({
+        today,
+        total: usageRes.total || 0,
+        limit,
+        remaining: isPaid ? 999999 : Math.max(0, limit - today),
+        plan: planRes.plan || "starter",
+        isPaid,
       });
-      const data = await res.json();
-      if (data.success) {
-        setUsage({
-          today: data.today || 0,
-          total: data.total || 0,
-          limit: data.limit || 20,
-          remaining: data.remaining ?? 20,
-        });
-      }
     } catch {
       // Silently fail — don't block users if metering is down
     }
@@ -47,7 +60,7 @@ export function useUsage() {
   return {
     ...usage,
     loaded,
-    canGenerate: usage.remaining > 0,
+    canGenerate: usage.isPaid || usage.remaining > 0,
     refresh,
   };
 }
