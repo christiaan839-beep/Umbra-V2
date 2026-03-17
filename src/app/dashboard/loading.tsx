@@ -1,46 +1,30 @@
+import { Loader2 } from "lucide-react";
+
 export default function DashboardLoading() {
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 lg:p-8 space-y-8 animate-pulse">
-      {/* Header Skeleton */}
-      <div className="bg-white/[0.03] border border-white/[0.05] rounded-2xl p-6 backdrop-blur-xl">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-xl bg-white/[0.05]" />
-          <div className="space-y-2 flex-1">
-            <div className="h-5 w-48 bg-white/[0.05] rounded-lg" />
-            <div className="h-3 w-72 bg-white/[0.03] rounded-lg" />
-          </div>
-        </div>
+    <div className="flex-1 flex flex-col items-center justify-center min-h-[80vh] w-full text-center relative z-10 animate-fade-in">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,183,255,0.03),transparent_40%)] pointer-events-none" />
+      
+      <div className="relative">
+        {/* Core Reactor Ring */}
+        <div className="w-16 h-16 rounded-full border-4 border-[#00B7FF]/10 border-t-[#00B7FF] animate-spin shadow-[0_0_30px_rgba(0,183,255,0.3)]" />
+        {/* Inner Reactor */}
+        <div className="absolute inset-0 m-auto w-8 h-8 rounded-full border-4 border-purple-500/10 border-b-purple-500 animate-spin-reverse shadow-[0_0_20px_rgba(168,85,247,0.3)]" />
+        <Loader2 className="absolute inset-0 m-auto w-4 h-4 text-white animate-pulse" />
       </div>
 
-      {/* Cards Grid Skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={i}
-            className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-6 backdrop-blur-xl"
-            style={{ animationDelay: `${i * 100}ms` }}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-white/[0.05]" />
-              <div className="h-4 w-28 bg-white/[0.05] rounded-lg" />
-            </div>
-            <div className="space-y-2">
-              <div className="h-3 w-full bg-white/[0.03] rounded" />
-              <div className="h-3 w-4/5 bg-white/[0.03] rounded" />
-              <div className="h-3 w-3/5 bg-white/[0.02] rounded" />
-            </div>
-          </div>
-        ))}
+      <div className="mt-8 space-y-2">
+        <h3 className="text-sm font-bold tracking-[0.2em] uppercase text-white font-mono flex items-center justify-center gap-2">
+          Syncing Neuro-Link <span className="flex gap-0.5"><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-75" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-150" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-300" /></span>
+        </h3>
+        <p className="text-[10px] uppercase tracking-widest text-[#5C667A] font-medium">
+          Retrieving Data from UMBRA Vector Matrix
+        </p>
       </div>
 
-      {/* Bottom Panel Skeleton */}
-      <div className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-6 backdrop-blur-xl">
-        <div className="h-4 w-40 bg-white/[0.05] rounded-lg mb-4" />
-        <div className="space-y-3">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-3 bg-white/[0.03] rounded w-full" style={{ width: `${100 - i * 15}%` }} />
-          ))}
-        </div>
+      {/* Decorative Progress Bar Skeleton */}
+      <div className="mt-6 w-48 h-1 bg-white/5 rounded-full overflow-hidden">
+        <div className="h-full bg-gradient-to-r from-transparent via-[#00B7FF] to-transparent w-full animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
       </div>
     </div>
   );

@@ -67,6 +67,7 @@ const NAV_GROUPS = [
     icon: Network,
     items: [
       { href: "/dashboard/voice", label: "Voice Execution", icon: Rocket },
+      { href: "/dashboard/war-room", label: "War Room CRM", icon: Target },
       { href: "/dashboard/knowledge", label: "Vertex Knowledge", icon: Shield },
     ]
   },
