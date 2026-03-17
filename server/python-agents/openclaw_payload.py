@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import requests
 import os
+import subprocess
+import shlex
 
 app = FastAPI(title="UMBRA V4 - Nano 30B OpenClaw Edge Bridge")
 
@@ -18,23 +20,55 @@ async def receive_openclaw_payload(payload: EdgePayload):
     print(f"[EDGE BRIDGE] Incoming Command from {payload.caller}")
     print(f"[NANO 30B PRE-PROCESS] Analysis: {payload.nano_30b_analysis}")
     
-    # Forward to the God-Brain for heavy routing (Super 120B)
+    # -------------------------------------------------------------
+    # PHASE 41 UPGRADE: PHYSICAL OS EXECUTION
+    # -------------------------------------------------------------
+    # Security: In production, check an ACCESS_TOKEN here.
+    # We parse the command and genuinely execute it on the Mac shell.
+    # Note: Complex commands or AppleScript must be safely handled.
+    
+    execution_result = ""
+    try:
+        # We assume the command is a safe shell command.
+        print(f"[EXECUTING] {payload.command}")
+        
+        # Execute natively on Mac
+        result = subprocess.run(
+            payload.command, 
+            shell=True, 
+            capture_output=True, 
+            text=True, 
+            timeout=10 # Prevent hanging
+        )
+        
+        stdout = result.stdout.strip()
+        stderr = result.stderr.strip()
+        
+        execution_result = stdout if stdout else (stderr if stderr else "Command executed silently.")
+        print(f"[RESULT] {execution_result}")
+    except subprocess.TimeoutExpired:
+        execution_result = "[Timeout] Command took too long to execute locally."
+    except Exception as e:
+        execution_result = f"[Error executing locally] {e}"
+
+    
+    # Optional: Still forward to the God-Brain for logging/telemetry
     god_brain_url = os.getenv("GOD_BRAIN_URL", "http://127.0.0.1:8000/api/v1/commander/execute")
     
     try:
-        response = requests.post(
+        requests.post(
             god_brain_url, 
-            json={"command": payload.command, "target_vector": "GLOBAL"}
+            json={"command": payload.command, "target_vector": "LOCAL", "result": execution_result[:500]},
+            timeout=2
         )
-        data = response.json()
+    except:
+        pass # Non-blocking if main server is offline
         
-        return {
-            "status": "success",
-            "message": f"Edge execution via Nano 30B successful. Relayed to God-Brain. Status: {data.get('status')}"
-        }
-    except Exception as e:
-        print(f"[ERROR] Connection to God-Brain Failed: {e}")
-        raise HTTPException(status_code=500, detail="God-Brain uplink offline.")
+    return {
+        "status": "success",
+        "message": f"Edge execution via Nano 30B successful.",
+        "local_execution_result": execution_result
+    }
 
 if __name__ == "__main__":
     import uvicorn
