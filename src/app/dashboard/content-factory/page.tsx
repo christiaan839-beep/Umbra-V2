@@ -10,12 +10,12 @@ import {
   Share2,
   Video,
   Loader2,
-  Copy,
   CheckCircle2,
   Zap,
   Factory,
   AlertTriangle,
 } from "lucide-react";
+import { useUsage } from "@/hooks/useUsage";
 
 type ContentAction = "blog" | "email" | "social" | "video";
 
@@ -86,13 +86,18 @@ export default function ContentFactoryPage() {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { canGenerate, refresh: refreshUsage } = useUsage();
 
   const handleExecute = async () => {
     setLoading(true);
     setResult(null);
     setError(null);
+    if (!canGenerate) {
+      setError("Daily limit reached (20/day). Upgrade to Pro for unlimited.");
+      setLoading(false);
+      return;
+    }
 
     const tab = TABS.find((t) => t.id === activeTab)!;
     const params: Record<string, string | string[] | number> = {};
@@ -137,6 +142,7 @@ export default function ContentFactoryPage() {
             output,
           }),
         }).catch(() => {}); // Silent
+        refreshUsage();
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
@@ -146,13 +152,6 @@ export default function ContentFactoryPage() {
     }
   };
 
-  const handleCopy = () => {
-    if (result) {
-      navigator.clipboard.writeText(result);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8 relative z-10 p-4 lg:p-8">
