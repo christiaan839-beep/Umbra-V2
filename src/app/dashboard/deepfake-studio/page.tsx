@@ -2,13 +2,32 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FileVideo, ShieldAlert, Sparkles, Play, Database, Upload, Wand2, MonitorPlay } from "lucide-react";
+import { FileVideo, ShieldAlert, Play, Database, Wand2, MonitorPlay } from "lucide-react";
 import { AnimatedGridPattern } from "@/components/AnimatedGridPattern";
 
 export default function DeepfakeStudioPage() {
+  const [targetDomain, setTargetDomain] = useState("");
   const [targetScript, setTargetScript] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState("avatar-1");
-  const [status, setStatus] = useState<"idle" | "generating" | "complete">("idle");
+  const [status, setStatus] = useState<"idle" | "scraping" | "generating" | "complete">("idle");
+  const [scrapedData, setScrapedData] = useState<{name: string, company: string, tech: string} | null>(null);
+
+  const handleScrape = () => {
+    if (!targetDomain) return;
+    setStatus("scraping");
+    
+    // Simulate Apollo.io / Clearbit scraping
+    setTimeout(() => {
+      const data = {
+        name: "David",
+        company: targetDomain.replace('.com', '').replace('www.', '').toUpperCase(),
+        tech: "HubSpot & Salesforce"
+      };
+      setScrapedData(data);
+      setTargetScript(`Hi ${data.name}. I'm the AI infrastructure lead at Sovereign. We actively audited ${data.company}'s technology stack today. You are currently paying human employees to manage ${data.tech}, which is burning approximately $15,000 a month in wage and API inefficiencies. I have mapped a 100% autonomous Sovereign architecture that replaces this entirely. I am sending the technical teardown to your inbox now.`);
+      setStatus("idle");
+    }, 2500);
+  };
 
   const handleGenerate = () => {
     if (!targetScript) return;
@@ -80,14 +99,42 @@ export default function DeepfakeStudioPage() {
                  </div>
                </div>
                
-               <div>
+               {/* Apollo Scraper Input */}
+               <div className="pt-4 border-t border-white/10">
+                 <label className="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-2 flex items-center gap-2">
+                   <Database className="w-4 h-4" /> Apollo.io Target Scraper
+                 </label>
+                 <div className="flex gap-2">
+                   <input 
+                     type="text"
+                     value={targetDomain}
+                     onChange={(e) => setTargetDomain(e.target.value)}
+                     placeholder="target-agency.com"
+                     className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 transition-colors"
+                   />
+                   <button 
+                     onClick={handleScrape}
+                     disabled={status === "scraping" || !targetDomain}
+                     className="px-4 py-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-emerald-500/30 transition-colors whitespace-nowrap"
+                   >
+                     {status === "scraping" ? "Scraping..." : "Scan Domain"}
+                   </button>
+                 </div>
+                 {scrapedData && (
+                   <div className="mt-3 text-[10px] text-emerald-500/70 font-mono bg-emerald-500/5 p-2 rounded border border-emerald-500/10">
+                     TARGET ACQUIRED: {scrapedData.name} @ {scrapedData.company}
+                   </div>
+                 )}
+               </div>
+
+               <div className="pt-4">
                  <label className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-2 flex items-center gap-2">
-                   2. Inject Audit & Destroy Script
+                   2. Verify Injected Script
                  </label>
                  <textarea 
                    value={targetScript}
                    onChange={(e) => setTargetScript(e.target.value)}
-                   placeholder="Enter the payload script. (e.g., 'We audited your tech stack. You are burning $20k/mo on APIs...')"
+                     placeholder="Enter the payload script. (e.g., 'We audited your tech stack...')"
                    className="w-full h-32 bg-black/40 border border-white/10 rounded-xl p-4 text-xs font-mono text-emerald-100/90 focus:outline-none focus:border-[#00B7FF]/50 transition-colors resize-none"
                  />
                </div>
@@ -129,6 +176,18 @@ export default function DeepfakeStudioPage() {
                   <div className="font-mono text-xs text-neutral-500 uppercase tracking-widest">
                     Awaiting Target Script
                   </div>
+                </div>
+             )}
+
+             {status === "scraping" && (
+                <div className="text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 mx-auto flex items-center justify-center animate-pulse">
+                    <Database className="w-6 h-6 text-emerald-400" />
+                  </div>
+                  <div className="font-mono text-xs text-emerald-400 uppercase tracking-widest">
+                    Pinging Apollo.io Graph...
+                  </div>
+                  <div className="text-[10px] text-neutral-500 font-mono">Extracting Executive Identity & Tech Stack</div>
                 </div>
              )}
 

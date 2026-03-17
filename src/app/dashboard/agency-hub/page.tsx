@@ -40,9 +40,14 @@ export default function AgencyHubPage() {
              <div className="text-2xl font-bold text-white">$15,000<span className="text-sm text-neutral-500 font-normal">/mo</span></div>
            </div>
            
-           <button className="px-6 py-4 bg-gradient-to-r from-purple-500 to-[#00B7FF] rounded-xl text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap">
+           <a 
+             href="https://buy.stripe.com/test_8wM4jE4O8eWQ0OQ4gg" 
+             target="_blank" 
+             rel="noreferrer"
+             className="px-6 py-4 bg-gradient-to-r from-purple-500 to-[#00B7FF] rounded-xl text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:opacity-90 transition-opacity whitespace-nowrap"
+           >
              <Plus className="w-4 h-4" /> Provision New License
-           </button>
+           </a>
         </div>
       </div>
 
