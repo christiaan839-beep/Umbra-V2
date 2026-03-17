@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Globe2, Sparkles, Code, Eye, Copy, CheckCircle2, Terminal, MonitorPlay, Activity } from "lucide-react";
 import { useUsage } from "@/hooks/useUsage";
 
@@ -53,7 +53,16 @@ export default function PageBuilderPage() {
         body: JSON.stringify({ businessName, industry, offer, targetAudience }),
       });
 
-      if (!res.body) throw new Error("No response stream");
+      if (!res.ok) {
+        let errMsg = `HTTP ${res.status}`;
+        try {
+          const errData = await res.json();
+          errMsg = errData.error || errMsg;
+        } catch {}
+        throw new Error(`Pipeline Authorization/Network Error: ${errMsg}`);
+      }
+
+      if (!res.body) throw new Error("No response stream from API.");
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -85,7 +94,7 @@ export default function PageBuilderPage() {
             } else if (parsed.type === "error") {
               setLogs(prev => [...prev, `[ERROR] ${parsed.data.message}`]);
             }
-          } catch (e) {
+          } catch {
             console.error("Error parsing stream chunk:", part);
           }
         }
@@ -177,6 +186,17 @@ export default function PageBuilderPage() {
                   rows={2}
                   disabled={generating}
                   className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-sm text-white font-mono focus:border-violet-500/50 outline-none transition-all resize-none disabled:opacity-50"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Target Audience</label>
+                <input
+                  type="text"
+                  value={targetAudience}
+                  onChange={(e) => setTargetAudience(e.target.value)}
+                  placeholder="e.g. CMOs of hyper-growth SaaS"
+                  disabled={generating}
+                  className="w-full bg-black/60 border border-glass-border rounded-lg px-3 py-2.5 text-sm text-white font-mono focus:border-violet-500/50 outline-none transition-all disabled:opacity-50"
                 />
               </div>
             </div>

@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   const stream = new ReadableStream({
     async start(controller) {
-      const emit = (type: string, data: any) => {
+      const emit = (type: string, data: Record<string, unknown>) => {
         const payload = JSON.stringify({ type, data }) + "\n\n";
         controller.enqueue(encoder.encode(payload));
       };
@@ -99,13 +99,17 @@ export async function POST(req: Request) {
 
         RULES:
         ${ANTI_SLOP_RULES}
-        1. Output ONLY valid HTML code. Start with <!DOCTYPE html>.
-        2. Include Tailwind via CDN: <script src="https://cdn.tailwindcss.com"></script> in the <head>.
-        3. Do NOT wrap in markdown \`\`\`html tags. Output raw HTML.
-        4. Use a premium, dark-mode aesthetic (bg-gray-950, text-white, with neon/glassmorphic accents).
-        5. Include Lucide icons via CDN script if needed, or use inline SVG.
-        6. Page must be fully responsive (mobile-first).
-        7. Only use standard Tailwind generic utility classes. Do not use custom CSS unless absolutely necessary.
+        
+        UI DESIGN & ANTI-SLOP LAWS (CRITICAL):
+        1. NO GENERIC TEMPLATES: Do not output a generic "Hero -> Features -> Footer" centered blocky mess. Use modern patterns like Bento Grids, asymmetric layouts, or Aceternity UI style components.
+        2. NO "LOREM IPSUM" OR FILLER: Use the exact copy provided. Every word must count.
+        3. PREMIUM AESTHETIC: Use a sophisticated dark-mode palette. Instead of flat grays, use ultra-dark rich tones (bg-zinc-950, bg-neutral-950). Use subtle borders (border-white/5), aggressive glassmorphism (backdrop-blur-xl bg-white/5), and subtle glowing gradients (bg-gradient-to-br from-violet-500/20 to-transparent).
+        4. TYPOGRAPHY: Use tight tracking for headings (tracking-tighter) and modern sans-serif. Make headlines dramatic and large.
+        5. Output ONLY valid HTML code. Start with <!DOCTYPE html>.
+        6. Include Tailwind via CDN: <script src="https://cdn.tailwindcss.com"></script> in the <head>. Include standard Tailwind config to enable custom colors if needed.
+        7. Do NOT wrap in markdown \`\`\`html tags. Output raw HTML only.
+        8. Include Lucide icons via CDN script if needed, or use inline SVG.
+        9. Page must be fully responsive (mobile-first). Avoid fixed pixel heights, use padding/margins instead.
         `;
 
         const rawCode = await ai(codePrompt, {
@@ -115,9 +119,8 @@ export async function POST(req: Request) {
         });
 
         let cleanCode = rawCode.trim();
-        if (cleanCode.startsWith('```html')) cleanCode = cleanCode.replace(/^```html\n/, '');
-        if (cleanCode.startsWith('```')) cleanCode = cleanCode.replace(/^```\n/, '');
-        if (cleanCode.endsWith('```')) cleanCode = cleanCode.replace(/\n```$/, '');
+        cleanCode = cleanCode.replace(/^```(?:html|xml)?\s*\n/i, '');
+        cleanCode = cleanCode.replace(/\n```\s*$/i, '');
 
         emit("progress", { step: 6, message: "Code compilation complete." });
 
@@ -150,9 +153,10 @@ export async function POST(req: Request) {
         emit("progress", { step: 8, message: "Page Generation Complete." });
         emit("complete", { code: cleanCode });
         
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Streaming error:", err);
-        emit("error", { message: err.message || "An error occurred during generation." });
+        const errorMessage = err instanceof Error ? err.message : "An error occurred during generation.";
+        emit("error", { message: errorMessage });
       } finally {
         controller.close();
       }
