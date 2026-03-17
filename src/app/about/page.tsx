@@ -33,7 +33,7 @@ export default function AboutPage() {
           <span className="text-sm font-medium tracking-[0.15em] uppercase">UMBRA</span>
         </Link>
         <div className="flex items-center gap-6 text-xs text-text-secondary">
-          <Link href="/sovereign" className="hover:text-white transition-colors">Features</Link>
+          <Link href="/pricing" className="hover:text-white transition-colors">Features</Link>
           <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
           <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
         </div>

@@ -70,11 +70,11 @@ export default function Home() {
           </div>
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6">
-             <Link href="/showcase" className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Proof of Work</Link>
+             <Link href="/pricing" className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Proof of Work</Link>
              <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
                <button className="text-sm font-semibold text-text-secondary hover:text-white transition-colors">Client Login</button>
              </SignInButton>
-             <Link href="/sovereign" className="px-5 py-2 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white hover:bg-white/5 transition-colors">Start Free Trial</Link>
+             <Link href="/pricing" className="px-5 py-2 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white hover:bg-white/5 transition-colors">Start Free Trial</Link>
           </div>
           {/* Mobile hamburger */}
           <button className="md:hidden flex flex-col gap-1.5 p-2" onClick={() => setMobileNavOpen(!mobileNavOpen)} aria-label="Toggle menu">
@@ -86,11 +86,11 @@ export default function Home() {
         {/* Mobile dropdown */}
         {mobileNavOpen && (
           <div className="md:hidden bg-[#050505]/95 backdrop-blur-lg border-t border-white/5 px-6 py-6 flex flex-col gap-4 animate-fade-in">
-            <Link href="/showcase" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Proof of Work</Link>
+            <Link href="/pricing" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Proof of Work</Link>
             <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
               <button className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors text-left" onClick={() => setMobileNavOpen(false)}>Client Login</button>
             </SignInButton>
-            <Link href="/sovereign" className="px-5 py-3 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white text-center hover:bg-white/5 transition-colors" onClick={() => setMobileNavOpen(false)}>Start Free Trial</Link>
+            <Link href="/pricing" className="px-5 py-3 rounded-full border border-glass-border bg-glass-bg text-sm font-bold text-white text-center hover:bg-white/5 transition-colors" onClick={() => setMobileNavOpen(false)}>Start Free Trial</Link>
           </div>
         )}
       </nav>
@@ -467,7 +467,7 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 serif-text">Your Competitors Are<br/>Already Using AI.</h2>
             <p className="text-lg text-neutral-400 max-w-xl mx-auto mb-12">The question isn&apos;t whether to automate. It&apos;s whether you&apos;ll do it before they do.</p>
-            <Link href="/sovereign" className="inline-flex px-12 py-5 bg-white text-black font-bold rounded-full text-lg shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] transition-all items-center gap-3 hover:-translate-y-1 group">
+            <Link href="/pricing" className="inline-flex px-12 py-5 bg-white text-black font-bold rounded-full text-lg shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] transition-all items-center gap-3 hover:-translate-y-1 group">
               Start Your Free Trial <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
             </Link>
             <p className="mt-6 text-xs text-neutral-500 uppercase tracking-[0.2em]">No credit card required • Cancel anytime</p>
@@ -492,7 +492,7 @@ export default function Home() {
             <div>
               <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-400 mb-4">Product</h4>
               <ul className="space-y-3">
-                <li><Link href="/showcase" className="text-xs text-neutral-500 hover:text-white transition-colors">Proof of Work</Link></li>
+                <li><Link href="/pricing" className="text-xs text-neutral-500 hover:text-white transition-colors">Proof of Work</Link></li>
                 <li><Link href="/#pricing" className="text-xs text-neutral-500 hover:text-white transition-colors">Pricing</Link></li>
                 <li><Link href="/dashboard" className="text-xs text-neutral-500 hover:text-white transition-colors">Dashboard</Link></li>
               </ul>

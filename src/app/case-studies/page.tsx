@@ -76,7 +76,7 @@ export default function CaseStudiesPage() {
           <span className="text-sm font-medium tracking-[0.15em] uppercase">UMBRA</span>
         </Link>
         <div className="flex items-center gap-6 text-xs text-text-secondary">
-          <Link href="/sovereign" className="hover:text-white transition-colors">Features</Link>
+          <Link href="/pricing" className="hover:text-white transition-colors">Features</Link>
           <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
           <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
         </div>
@@ -149,7 +149,7 @@ export default function CaseStudiesPage() {
         <motion.div {...fadeIn(0)} className="text-center mt-16">
           <h3 className="text-2xl serif-text font-light mb-4">Ready to Be the Next Case Study?</h3>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/sovereign" className="px-8 py-3 bg-white text-midnight font-bold rounded-xl flex items-center justify-center gap-2 group hover:bg-gray-200 transition-all">
+            <Link href="/pricing" className="px-8 py-3 bg-white text-midnight font-bold rounded-xl flex items-center justify-center gap-2 group hover:bg-gray-200 transition-all">
               Deploy UMBRA <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link href="/demo" className="px-8 py-3 border border-glass-border text-white font-medium rounded-xl text-center hover:bg-glass-bg transition-all">Try Free Demo</Link>
