@@ -64,7 +64,7 @@ Return ONLY a JSON array. No explanation. Format:
     if (lead.stage === "hot") {
       await remember(
         `Hot lead found: ${lead.name} at ${lead.company} — ${(lead as any).reason || industry}`,
-        { type: "lead", stage: "hot", industry }
+        JSON.stringify({ type: "lead", stage: "hot", industry })
       );
     }
   }

@@ -61,6 +61,8 @@ export const whitelabelConfig = pgTable("whitelabel_config", {
   logoUrl: text("logo_url"),
   primaryColor: text("primary_color").default("#00B7FF"),
   supportEmail: text("support_email"),
+  domain: text("domain").notNull().unique().default(""),
+  tenantId: text("tenant_id").notNull().default(""),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 

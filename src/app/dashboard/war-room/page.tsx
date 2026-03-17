@@ -50,7 +50,7 @@ export default function WarRoomPage() {
   const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
   const [draggedLead, setDraggedLead] = useState<Lead | null>(null);
 
-  const COLUMNS: { id: PipeStatus; title: string; color: string; icon: React.ElementType }[] = [
+  const COLUMNS: { id: PipeStatus; title: string; color: string; icon: any }[] = [
     { id: "pipeline", title: "God-Brain Call Pipeline", color: "text-blue-400 border-blue-400/20", icon: Network },
     { id: "negotiating", title: "In Negotiation", color: "text-amber-400 border-amber-400/20", icon: Flame },
     { id: "contract", title: "Contract Sent", color: "text-purple-400 border-purple-400/20", icon: FileText },

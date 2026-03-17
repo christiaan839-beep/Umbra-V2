@@ -2,12 +2,12 @@
  * Swarm stub — multi-agent orchestration not active.
  * These are pass-through stubs so agents don't crash.
  */
-export async function runSwarm(prompt: string, _options?: Record<string, unknown>): Promise<string> {
-  // No-op: just return the prompt (agents will use their own AI call)
-  return prompt;
+export async function runSwarm(_options: Record<string, unknown>): Promise<{ finalOutput: string, rounds: number }> {
+  // Return mock object to prevent destructuring crashes
+  return { finalOutput: "Swarm logic bypassed via configuration.", rounds: 1 };
 }
 
-export async function adSwarm(_config: Record<string, unknown>): Promise<string> {
-  // No-op
-  return "Ad swarm not configured";
+export async function adSwarm(_prompt: string, _tone: string): Promise<{ finalOutput: string, rounds: number }> {
+  // Return mock object
+  return { finalOutput: "Ad swarm not configured. Bypassed.", rounds: 1 };
 }
