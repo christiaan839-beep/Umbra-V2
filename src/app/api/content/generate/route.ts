@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { google } from "@ai-sdk/google";
+import { vertex as google } from "@ai-sdk/google-vertex";
 import { generateText } from "ai";
 import { db } from "@/db";
 import { scheduledContent } from "@/db/schema";
@@ -15,7 +15,7 @@ import { requireAuth } from "@/lib/auth-guard";
 export async function POST(req: Request) {
   const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
-    const { tenantId, industry, topics, platforms } = await req.json();
+    const { industry, topics, platforms } = await req.json();
 
     const targetPlatforms = platforms || ["instagram", "linkedin", "twitter"];
     const targetTopics = topics || ["AI marketing trends", "automation case studies", "growth hacking", "client results", "industry insights"];

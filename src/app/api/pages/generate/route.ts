@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { google } from "@ai-sdk/google";
+import { vertex as google } from "@ai-sdk/google-vertex";
 import { generateText } from "ai";
 import { requireAuth } from "@/lib/auth-guard";
 
