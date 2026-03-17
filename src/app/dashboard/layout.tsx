@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
   Layers, Globe2, Network,
-  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,18 +23,6 @@ import { JarvisSocket } from '@/components/JarvisSocket';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { CinematicOnboarding } from '@/components/dashboard/CinematicOnboarding';
-
-function CrosshairIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="22" x2="18" y1="12" y2="12" />
-      <line x1="6" x2="2" y1="12" y2="12" />
-      <line x1="12" x2="12" y1="6" y2="2" />
-      <line x1="12" x2="12" y1="22" y2="18" />
-    </svg>
-  );
-}
 
 const NAV_GROUPS = [
   {
@@ -60,8 +48,13 @@ const NAV_GROUPS = [
     icon: Network,
     items: [
       { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
+      { href: "/dashboard/war-room", label: "War Room Colosseum", icon: Swords },
       { href: "/dashboard/nemo-claw", label: "NemoClaw Builder", icon: Cpu },
       { href: "/dashboard/podcast", label: "PDF-to-Podcast", icon: Mic },
+      { href: "/dashboard/avatar", label: "Digital Human", icon: ScanFace },
+      { href: "/dashboard/vsl-hacker", label: "Cosmos VSL Hacker", icon: Video },
+      { href: "/dashboard/omni-search", label: "Global RAG Search", icon: Database },
+      { href: "/dashboard/cyber-audit", label: "Cyber Security Auditor", icon: ShieldAlert },
     ]
   },
   {
