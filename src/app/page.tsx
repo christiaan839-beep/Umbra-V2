@@ -112,7 +112,7 @@ export default function Home() {
           
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium uppercase tracking-[0.15em] mb-8">
-            ⚡ NVIDIA NIM + NemoClaw Autonomous OS
+            AI-Powered Marketing Platform
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight">
@@ -141,27 +141,18 @@ export default function Home() {
           </div>
 
           {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-20 max-w-5xl mx-auto">
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#00B7FF] trust-badge bg-[#00B7FF]/5 border border-[#00B7FF]/20 px-3 py-1.5 rounded-full">
-                <ShieldAlert className="w-3.5 h-3.5" /> Vertex AI
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-20 max-w-4xl mx-auto">
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#00B7FF] trust-badge bg-[#00B7FF]/5 border border-[#00B7FF]/20 px-4 py-2 rounded-full">
+                <ShieldAlert className="w-4 h-4" /> Secured by Google Vertex AI
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-3 py-1.5 rounded-full" style={{ animationDelay: '0.5s' }}>
-                <Cpu className="w-3.5 h-3.5" /> NVIDIA NIM
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '1s' }}>
+                <Cpu className="w-4 h-4" /> Powered by NVIDIA NIM APIs
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-3 py-1.5 rounded-full" style={{ animationDelay: '1s' }}>
-                <CheckCircle2 className="w-3.5 h-3.5" /> Riva Speech AI
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 trust-badge bg-emerald-500/5 border border-emerald-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '2s' }}>
+                <CheckCircle2 className="w-4 h-4" /> NVIDIA Riva Speech AI
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-purple-400 trust-badge bg-purple-500/5 border border-purple-500/20 px-3 py-1.5 rounded-full" style={{ animationDelay: '1.5s' }}>
-                <Zap className="w-3.5 h-3.5" /> TensorRT-LLM
-              </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-amber-400 trust-badge bg-amber-500/5 border border-amber-500/20 px-3 py-1.5 rounded-full" style={{ animationDelay: '2s' }}>
-                <BrainCircuit className="w-3.5 h-3.5" /> NemoClaw OS
-              </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-rose-400 trust-badge bg-rose-500/5 border border-rose-500/20 px-3 py-1.5 rounded-full" style={{ animationDelay: '2.5s' }}>
-                <TrendingUp className="w-3.5 h-3.5" /> Data Flywheel
-              </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-cyan-400 trust-badge bg-cyan-500/5 border border-cyan-500/20 px-3 py-1.5 rounded-full" style={{ animationDelay: '3s' }}>
-                <ShieldAlert className="w-3.5 h-3.5" /> NeMo Guardrails
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-purple-400 trust-badge bg-purple-500/5 border border-purple-500/20 px-4 py-2 rounded-full" style={{ animationDelay: '3s' }}>
+                <Zap className="w-4 h-4" /> TensorRT-LLM Microsecond Latency
               </div>
            </div>
 
@@ -254,15 +245,12 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: CalendarCheck, title: "Voice & Speech Engine", desc: "Powered by NVIDIA Pipecat & Riva STT/TTS. Physically dials prospects, handles live objections, and books calls 24/7.", tag: "VOICE SWARM", color: "from-emerald-500 to-teal-500" },
-              { icon: ShieldAlert, title: "Zero Hallucinations", desc: "Secured by NVIDIA NeMo Guardrails + Content Safety Reasoning 4B for absolute script adherence.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
-              { icon: BrainCircuit, title: "Visual Logic Builder", desc: "Drag-and-drop React Flow logic grids giving you ultimate granular control over every agent pathway.", tag: "PROGRAMMATIC AI", color: "from-blue-500 to-sky-500" },
-              { icon: Target, title: "Waterfall Enrichment", desc: "Military-grade scraping transparency. Watch the live AI mapping: Domain Ping → Firmographic Match → Contact Hash.", tag: "PROSPECTOR OS", color: "from-violet-500 to-fuchsia-500" },
-              { icon: CheckCircle2, title: "Live God-Brain Telemetry", desc: "A streaming terminal visualizing exactly what the LLM is thinking, scraping, and deciding in real-time.", tag: "AUDIT TRAIL", color: "from-amber-500 to-orange-500" },
-              { icon: Users, title: "Lead Generation", desc: "Find ultra-qualified business leads, analyze their marketing gaps, and generate personalized cold outreach.", tag: "OUTREACH", color: "from-cyan-500 to-blue-500" },
-              { icon: Cpu, title: "NemoClaw AI Builder", desc: "Autonomous coding agent powered by Nemotron. Describe features in plain English — NemoClaw builds, tests, and deploys them.", tag: "NEMOCLAW", color: "from-amber-500 to-yellow-500" },
-              { icon: TrendingUp, title: "Data Flywheel", desc: "Self-optimizing agent loop. Your AI agents continuously improve their accuracy, speed, and conversion rates every week.", tag: "SELF-EVOLVING", color: "from-pink-500 to-rose-500" },
-              { icon: Globe, title: "Nemotron-OCR Intel", desc: "Photograph competitor marketing materials — Nemotron-OCR extracts text, layout, and strategy from any document instantly.", tag: "VISUAL AI", color: "from-teal-500 to-emerald-500" },
+              { icon: CalendarCheck, title: "Voice & Speech Engine", desc: "Powered by NVIDIA Pipecat & Riva. Physically dials prospects, handles live objections, and books calls 24/7.", tag: "VOICE SWARM", color: "from-emerald-500 to-teal-500" },
+              { icon: ShieldAlert, title: "Zero Hallucinations", desc: "Secured by NVIDIA NeMo Guardrails for absolute, un-hackable script adherence by all micro-agents.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
+              { icon: BrainCircuit, title: "Visual Logic Builder", desc: "Drag-and-drop conversational React Flow logic grids giving you ultimate granular control over the God-Brain.", tag: "PROGRAMMATIC AI", color: "from-blue-500 to-sky-500" },
+              { icon: Target, title: "Waterfall Enrichment", desc: "Military-grade scraping transparency. Watch the live AI mapping: Domain Ping -> Firmographic Match -> Contact Hash.", tag: "PROSPECTOR OS", color: "from-violet-500 to-fuchsia-500" },
+              { icon: CheckCircle2, title: "Live God-Brain Telemetry", desc: "A live streaming dashboard terminal mapping exactly what the LLM is thinking, scraping, and deciding.", tag: "AUDIT TRAIL", color: "from-amber-500 to-orange-500" },
+              { icon: Users, title: "Lead Generation", desc: "Find ultra-qualified local business leads, analyze their specific marketing gaps, and generate personalized cold outreach.", tag: "OUTREACH", color: "from-cyan-500 to-blue-500" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="group relative glass-card p-8 border border-glass-border hover:border-white/20 transition-all duration-500 overflow-hidden">
@@ -333,9 +321,9 @@ export default function Home() {
                 <ul className="space-y-4">
                   {[
                     "Content generated in under 30 seconds",
-                    "Programmatic SEO pages for local search",
-                    "Competitor landing page analysis on demand",
-                    "AI booking agent qualifies leads for you",
+                    "NeMo Guardrails — zero AI hallucinations",
+                    "Nemotron Voice Agent dials & books leads",
+                    "Self-optimizing via NVIDIA Data Flywheel",
                     "Runs 24/7 — no holidays, no sick days"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-white">
@@ -366,7 +354,7 @@ export default function Home() {
           <div className="marquee-track gap-12">
             {[...Array(2)].map((_, repeat) => (
               <div key={repeat} className="flex gap-12 items-center px-6">
-                {["Google Gemini 2.0", "NVIDIA NIM", "Nemotron Voicechat", "NVIDIA Riva", "TensorRT-LLM", "NeMo Guardrails", "NemoClaw", "Data Flywheel", "Google Vertex AI", "Nemotron-OCR", "Pipecat WebRTC", "Vercel Edge", "Pinecone", "Tavily"].map(tech => (
+                {["Google Gemini 2.5", "NVIDIA Nemotron", "NVIDIA Riva STT/TTS", "TensorRT-LLM", "NeMo Guardrails", "NemoClaw", "Google Vertex AI", "Neon Postgres", "Pipecat WebRTC", "Vercel Edge", "Data Flywheel"].map(tech => (
                   <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold font-mono whitespace-nowrap">{tech}</span>
                 ))}
               </div>
@@ -394,7 +382,7 @@ export default function Home() {
                 UMBRA was built to solve a problem I saw firsthand — businesses paying R15,000–R50,000/month for agency retainers and getting slow, mediocre results. So I built 29 AI agents that do the same work in seconds, at a fraction of the cost.
               </p>
               <p className="text-neutral-400 leading-relaxed mb-8">
-                Every tool runs on real AI — Google Gemini, Anthropic Claude, and live web research via Tavily. No faked demos. No placeholder responses. Real marketing intelligence, real results.
+                Every tool runs on real AI — Google Gemini 2.5, NVIDIA Nemotron for voice, TensorRT-LLM for speed, and NeMo Guardrails for absolute security. No faked demos. No placeholder responses. Real marketing intelligence, real results.
               </p>
               <a href="#pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#00B7FF] to-purple-500 text-white font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-all">
                 Start Your Free Trial
@@ -405,14 +393,12 @@ export default function Home() {
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-4">Powered By</h3>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { name: "NVIDIA Nemotron", desc: "Agentic LLM backbone", color: "from-emerald-500/10 to-green-500/10", border: "border-emerald-500/20" },
-                  { name: "NVIDIA Riva", desc: "STT + TTS Speech AI", color: "from-orange-500/10 to-amber-500/10", border: "border-orange-500/20" },
-                  { name: "TensorRT-LLM", desc: "Microsecond inference", color: "from-purple-500/10 to-pink-500/10", border: "border-purple-500/20" },
-                  { name: "NeMo Guardrails", desc: "Zero hallucination logic", color: "from-rose-500/10 to-red-500/10", border: "border-rose-500/20" },
-                  { name: "NemoClaw OS", desc: "Autonomous self-builder", color: "from-amber-500/10 to-yellow-500/10", border: "border-amber-500/20" },
-                  { name: "Data Flywheel", desc: "Self-optimizing agents", color: "from-cyan-500/10 to-blue-500/10", border: "border-cyan-500/20" },
-                  { name: "Google Vertex AI", desc: "Enterprise vector search", color: "from-blue-500/10 to-cyan-500/10", border: "border-blue-500/20" },
-                  { name: "Nemotron-OCR", desc: "Visual document intel", color: "from-teal-500/10 to-emerald-500/10", border: "border-teal-500/20" },
+                  { name: "Google Gemini 2.5", desc: "Core AI engine", color: "from-blue-500/10 to-cyan-500/10", border: "border-blue-500/20" },
+                  { name: "NVIDIA Nemotron", desc: "Voice & agentic LLM", color: "from-emerald-500/10 to-green-500/10", border: "border-emerald-500/20" },
+                  { name: "TensorRT-LLM", desc: "Microsecond inference", color: "from-orange-500/10 to-amber-500/10", border: "border-orange-500/20" },
+                  { name: "NeMo Guardrails", desc: "Zero hallucinations", color: "from-rose-500/10 to-pink-500/10", border: "border-rose-500/20" },
+                  { name: "NVIDIA Riva", desc: "Speech AI (STT/TTS)", color: "from-purple-500/10 to-violet-500/10", border: "border-purple-500/20" },
+                  { name: "Data Flywheel", desc: "Self-optimizing agents", color: "from-cyan-500/10 to-teal-500/10", border: "border-cyan-500/20" },
                 ].map((tech) => (
                   <div key={tech.name} className={`p-4 rounded-xl bg-gradient-to-br ${tech.color} border ${tech.border}`}>
                     <p className="text-sm font-bold text-white mb-1">{tech.name}</p>
