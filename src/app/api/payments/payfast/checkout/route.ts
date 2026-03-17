@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_URL || "https://umbra-v2.vercel.app";
+    const baseUrl = process.env.NEXT_PUBLIC_URL || "https://umbra-v3.vercel.app";
     const formHtml = generatePayFastForm(plan as PlanId, email, baseUrl);
 
     if (!formHtml) {

@@ -1,5 +1,4 @@
-/**
- * UMBRA V2 Test Suite
+ * UMBRA V3 Test Suite
  * 
  * Tests for critical paths: Health, Payments, Email, Self-Heal.
  * Run with: npm test

@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_URL || "https://umbra-v2.vercel.app";
+    const baseUrl = process.env.NEXT_PUBLIC_URL || "https://umbra-v3.vercel.app";
     const result = await initializePaystack(plan as PlanId, email, baseUrl);
 
     if (!result) {
