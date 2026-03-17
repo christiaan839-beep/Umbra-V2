@@ -22,6 +22,27 @@ const AVAILABLE_MODELS = {
     description: "Built for agentic workflows — excels in coding, instruction following, and function calling.",
     endpoint: "/chat/completions",
   },
+  "deepseek-r1": {
+    id: "deepseek-ai/deepseek-r1",
+    name: "DeepSeek-V3 Reasoning",
+    category: "Core LLM",
+    description: "State-of-the-art reasoning LLM optimized for extreme long-context mathematical deduction and tool-calling.",
+    endpoint: "/chat/completions",
+  },
+  "llama-3-3": {
+    id: "meta/llama-3.3-70b-instruct",
+    name: "Llama 3.3 (70B) Instruct",
+    category: "Core LLM",
+    description: "High-speed agentic execution model capable of flawless API function routing.",
+    endpoint: "/chat/completions",
+  },
+  "cosmos-vlm": {
+    id: "nvidia/cosmos-nemotron-34b",
+    name: "Cosmos VLM",
+    category: "Vision",
+    description: "Multi-modal vision-language model giving your agents eyes to read screen captures and videos.",
+    endpoint: "/chat/completions",
+  },
   // Voice — Speech-to-Text
   "nemotron-asr": {
     id: "nvidia/nemotron-asr-streaming",

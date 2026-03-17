@@ -23,6 +23,7 @@ export default function NemoClawPage() {
   const [isInferencing, setIsInferencing] = useState(false);
   const [latency, setLatency] = useState("- ms");
   const [privacyMode, setPrivacyMode] = useState<"secure" | "open">("secure");
+  const [selectedModel, setSelectedModel] = useState("mistral-nemotron");
   const [isDeployed247, setIsDeployed247] = useState(false);
   const [showGuardrails, setShowGuardrails] = useState(true);
   
@@ -63,15 +64,14 @@ export default function NemoClawPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "mistral-nemotron",
+          model: selectedModel,
           messages: payloadMessages,
           temperature: 0.3,
           max_tokens: 1024,
         }),
       });
 
-      const endTime = performance.now();
-      setLatency(\`\${(endTime - startTime).toFixed(0)} ms\`);
+      setLatency(`${(endTime - startTime).toFixed(0)} ms`);
 
       const data = await res.json();
 
@@ -125,7 +125,20 @@ export default function NemoClawPage() {
             <div className="space-y-3 font-mono text-[10px] uppercase tracking-wider">
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
                 <span className="text-neutral-500">Active Node</span>
-                <span className="text-emerald-400 flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"/> mistral-nemotron</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"/>
+                  <select 
+                    value={selectedModel}
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                    className="bg-transparent border-none text-emerald-400 font-bold uppercase tracking-wider focus:outline-none focus:ring-0 cursor-pointer text-right appearance-none custom-select"
+                  >
+                    <option value="mistral-nemotron" className="bg-[#050505]">Mistral-Nemotron</option>
+                    <option value="deepseek-r1" className="bg-[#050505]">DeepSeek-V3 Reasoning</option>
+                    <option value="llama-3-3" className="bg-[#050505]">Llama 3.3 (70B) Instruct</option>
+                    <option value="cosmos-vlm" className="bg-[#050505]">Cosmos VLM</option>
+                    <option value="nemotron-ocr" className="bg-[#050505]">Nemotron OCR</option>
+                  </select>
+                </div>
               </div>
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
                 <span className="text-neutral-500">Acceleration</span>
@@ -231,22 +244,21 @@ export default function NemoClawPage() {
                 <motion.div 
                   key={i} 
                   initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={\`flex items-start gap-4 \${m.role === "user" ? "flex-row-reverse" : ""}\`}
+                  className={`flex items-start gap-4 ${m.role === "user" ? "flex-row-reverse" : ""}`}
                 >
-                  <div className={\`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center \${
+                  <div className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center ${
                     m.role === "assistant" 
                       ? "bg-[#00B7FF]/10 text-[#00B7FF] border border-[#00B7FF]/20" 
                       : "bg-white/10 text-white border border-white/20"
-                  }\`}>
+                  }`}>
                     {m.role === "assistant" ? <Cpu className="w-4 h-4" /> : <Terminal className="w-4 h-4" />}
                   </div>
                   
-                  <div className={\`max-w-[80%] rounded-2xl p-4 \${
+                  <div className={`max-w-[80%] rounded-2xl p-4 ${
                     m.role === "user" 
                       ? "bg-white/10 border border-white/10 text-white rounded-tr-sm" 
                       : "bg-[#00B7FF]/5 border border-[#00B7FF]/10 text-emerald-50 rounded-tl-sm relative group"
-                  }\`}>
+                  }`}>
                     {m.role === "assistant" && i > 0 && (
                       <div className="absolute -top-2.5 -left-2 px-2 py-0.5 bg-black border border-[#00B7FF]/30 rounded text-[9px] text-[#00B7FF] uppercase tracking-wider font-bold shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
                         TensorRT Inference

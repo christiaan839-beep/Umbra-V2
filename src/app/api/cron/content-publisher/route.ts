@@ -34,11 +34,14 @@ export async function GET() {
 
     for (const item of dueItems) {
       try {
-        // Trigger the Social Media Swarm via the internal API
-        await fetch("http://localhost:3000/api/swarm/social", {
+        // Trigger the external n8n workflow directly
+        const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL || "https://n8n.your-agency.com/webhook/omnidirector";
+        
+        await fetch(n8nWebhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            event: "cron_publish",
             topic: item.topic,
             platform: item.platform,
           }),

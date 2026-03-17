@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, Zap, Target, BrainCircuit, Globe, CheckCircle2, XCircle, ShieldAlert, Cpu, TrendingUp, Clock, DollarSign, Users, CalendarCheck, ChevronDown } from "lucide-react";
+import { Cpu, Globe, Rocket, ShieldAlert, Target, Zap, ChevronRight, Lock, CheckCircle2, TrendingUp, DollarSign, Clock, BrainCircuit, Activity, LineChart, Code2, Users, FileText, ArrowRight, Star, MessageSquare, Webhook } from "lucide-react";
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
@@ -250,8 +250,8 @@ export default function Home() {
               { icon: ShieldAlert, title: "OpenShell Guardrails", desc: "Enforce policy-based privacy and security guardrails directly within the runtime. Absolute control over how agents handle data.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
               { icon: Globe, title: "Privacy Router", desc: "Tap open models like Mistral-Nemotron locally, or dynamically route to cloud-based frontier models within defined security guardrails.", tag: "DYNAMIC ROUTING", color: "from-blue-500 to-sky-500" },
               { icon: Zap, title: "Deep Competitor Intel", desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.", tag: "COMPETITOR X-RAY", color: "from-violet-500 to-fuchsia-500" },
-              { icon: TrendingUp, title: "Dynamic Content Factory", desc: "Automate blog posts, social media schedules, ad creatives, and email sequences perfectly tuned to your brand voice.", tag: "CONTENT ENGINE", color: "from-amber-500 to-orange-500" },
-              { icon: Target, title: "Lead Prospector Matrix", desc: "Find ultra-qualified local business leads, analyze their specific marketing gaps, and generate personalized cold outreach.", tag: "OUTREACH", color: "from-cyan-500 to-blue-500" },
+              { icon: MessageSquare, title: "Mobile Command Center", desc: "Control your entire 24/7 autonomous marketing agency directly from Telegram. Fire webhooks, check stats, and deploy logic seamlessly.", tag: "TELEGRAM NATIVE", color: "from-amber-500 to-orange-500" },
+              { icon: Webhook, title: "Omni-Automation Network", desc: "100% autonomous background execution. Direct n8n secure routing handles content generation and lead scraping without human intervention.", tag: "WEBHOOK ROUTING", color: "from-cyan-500 to-blue-500" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="group relative glass-card p-8 border border-glass-border hover:border-white/20 transition-all duration-500 overflow-hidden">

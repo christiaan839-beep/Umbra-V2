@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
   Layers, Globe2, Network,
-  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
@@ -61,6 +61,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
       { href: "/dashboard/nemo-claw", label: "NemoClaw Builder", icon: Cpu },
+      { href: "/dashboard/podcast", label: "PDF-to-Podcast", icon: Mic },
     ]
   },
   {
