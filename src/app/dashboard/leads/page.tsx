@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Search, MapPin, Target, Loader2, Database, AlertTriangle, Building2, Zap, ArrowRight, Activity, CheckCircle2 } from "lucide-react";
 import { useUsage } from "@/hooks/useUsage";
 
@@ -58,10 +58,10 @@ export default function LeadsDashboard() {
       }, 1500); // 1.5s per simulated step
 
       try {
-          const res = await fetch("/api/agents/seo", {
+          const res = await fetch("/api/agents/leads", {
              method: "POST",
              headers: { "Content-Type": "application/json" },
-             body: JSON.stringify({ action: "xray", params: { urls: [niche], business: location || "business" } })
+             body: JSON.stringify({ action: "prospect", params: { niche, location } })
           });
           
           const data = await res.json();
@@ -74,7 +74,7 @@ export default function LeadsDashboard() {
                setLogs(prev => [...prev, `[ERROR] Intelligence sweep failed: ${data.error}`]);
           }
           refreshUsage();
-      } catch (err) {
+      } catch {
           clearInterval(logInterval);
           setLogs(prev => [...prev, "[FATAL] Connection to Prospector Node severed."]);
       } finally {
@@ -230,7 +230,7 @@ export default function LeadsDashboard() {
                                  <div className="space-y-4">
                                       <div>
                                           <span className="text-[10px] text-stone-500 uppercase font-mono tracking-widest mb-1 block">Diagnosis Matrix:</span>
-                                          <p className="text-sm text-stone-300 leading-relaxed font-serif italic border-l-2 border-red-500/50 pl-3">"{report.detected_gap}"</p>
+                                          <p className="text-sm text-stone-300 leading-relaxed font-serif italic border-l-2 border-red-500/50 pl-3">&quot;{report.detected_gap}&quot;</p>
                                       </div>
                                       
                                       <div className="bg-black/50 border border-glass-border rounded-lg p-4 font-mono">

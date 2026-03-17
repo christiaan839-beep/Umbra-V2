@@ -63,8 +63,8 @@ const TIERS = [
 
 const FAQS = [
   { q: "What AI tools are included?", a: "UMBRA includes AI-powered tools for SEO analysis, content creation, design briefs, landing page generation, lead prospecting, competitor intelligence, and more. All powered by Google Gemini 2.5 Pro." },
-  { q: "Do I need technical skills?", a: "No. The dashboard is designed for non-technical users. Select what you need, fill in a brief, and the AI generates results in seconds." },
-  { q: "How is UMBRA different from GoHighLevel?", a: "GoHighLevel gives you templates and workflows. UMBRA generates the actual content, strategies, and creatives for you using AI. It's the difference between a toolkit and a team." },
+  { q: "Do I need technical skills?", a: "No. The dashboard is designed for founders and operators, not coders. Select a tool, fill in your business name, and the AI generates production-ready marketing assets." },
+  { q: "How is UMBRA different from GoHighLevel?", a: "GoHighLevel gives you empty templates and makes you do the work. UMBRA is an autonomous engine that generates the actual content, strategies, and creatives for you. It's the difference between buying a toolkit and hiring a 24/7 marketing team." },
   { q: "What are AI generations?", a: "Each time you use an AI tool (e.g., generate a blog post, analyze a competitor, create a landing page), that counts as one generation. Free users get 20/day, Pro and Agency get unlimited." },
   { q: "What is BYOK (Bring Your Own Key)?", a: "You can plug in your own API keys for Gemini, Anthropic, or Tavily. This means your generations use your own API quota, giving you full control over costs and usage." },
   { q: "Can I cancel anytime?", a: "Yes. No contracts, no cancellation fees. Monthly billing, cancel whenever you want." },
@@ -121,8 +121,8 @@ export default function PricingPage() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium uppercase tracking-wider mb-8">
             <Zap className="w-3 h-3" /> Simple, Transparent Pricing
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Start Free. Scale When Ready.</h1>
-          <p className="text-neutral-400 max-w-lg mx-auto">No credit card required. 20 free generations per day. Upgrade when you need unlimited power.</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Replace Your R15,000/mo Agency.</h1>
+          <p className="text-neutral-400 max-w-xl mx-auto">Hire a 24/7 team of 29 elite AI marketing agents for less than your daily coffee. 20 free generations per day to prove the ROI.</p>
         </motion.div>
       </section>
 
