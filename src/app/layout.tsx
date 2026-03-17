@@ -6,12 +6,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "UMBRA — AI Marketing Platform",
-  description: "29 AI tools that handle your content, ads, SEO, outreach, and lead qualification — running 24/7 at a fraction of what you pay a traditional agency. From R2,750/month.",
+  description: "AI marketing tools for content, SEO, lead gen, and competitor analysis — running 24/7. Free to start. Pro from R997/mo.",
   keywords: ["AI marketing", "marketing automation", "AI marketing platform", "content generation", "SEO automation", "lead generation", "South Africa", "ZAR"],
   authors: [{ name: "UMBRA" }],
   openGraph: {
     title: "UMBRA — Replace Your Agency. Keep The Results.",
-    description: "29 AI marketing tools that handle content, ads, SEO, and lead generation — running 24/7. From R2,750/month.",
+    description: "AI marketing tools for content, SEO, lead gen — running 24/7. Free to start. Pro from R997/mo.",
     type: "website",
     siteName: "UMBRA",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "UMBRA — AI Marketing Platform" }],
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "UMBRA — AI Marketing Platform",
-    description: "29 AI tools. 24/7 execution. Replace your agency. From R2,750/month.",
+    description: "AI marketing tools. 24/7 execution. Free to start. Pro from R997/mo.",
   },
   other: {
     "theme-color": "#050505",

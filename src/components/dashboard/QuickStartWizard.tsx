@@ -30,7 +30,7 @@ const STEPS = [
     title: "Launch Outbound",
     description: "Generate a cold email sequence for your ideal client profile and start booking meetings on autopilot.",
     icon: Send,
-    href: "/dashboard/outbound",
+    href: "/dashboard/content-factory",
     cta: "Build Outbound Sequence",
     color: "text-purple-400",
     bg: "bg-purple-500/10",

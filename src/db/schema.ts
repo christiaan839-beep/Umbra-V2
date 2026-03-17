@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, integer, index } from "drizzle-orm/pg-core";
 
 export const tenants = pgTable("tenants", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -156,4 +156,8 @@ export const generations = pgTable("generations", {
   output: text("output").notNull(),        // Full AI output
   tokens: integer("tokens").default(0),    // Estimated token count
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => [
+  index("gen_user_email_idx").on(table.userEmail),
+  index("gen_created_at_idx").on(table.createdAt),
+]);
+
