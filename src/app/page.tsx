@@ -313,7 +313,7 @@ export default function Home() {
                 <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
                   <CheckCircle2 className="w-6 h-6 text-emerald-400" /> UMBRA Platform
                 </h3>
-                <p className="text-emerald-400 font-mono font-bold text-xl mb-8">From R2,750 / month</p>
+                <p className="text-emerald-400 font-mono font-bold text-xl mb-8">Free to Start — Pro from R997/mo</p>
                 
                 <ul className="space-y-4">
                   {[
