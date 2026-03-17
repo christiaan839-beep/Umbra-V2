@@ -22,7 +22,6 @@ import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/Te
 import { JarvisSocket } from '@/components/JarvisSocket';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
-import { LiveTelemetry } from '@/components/dashboard/LiveTelemetry';
 import { CinematicOnboarding } from '@/components/dashboard/CinematicOnboarding';
 
 function CrosshairIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -57,22 +56,11 @@ const NAV_GROUPS = [
     ]
   },
   {
-    group: "Growth",
-    icon: CrosshairIcon,
-    items: [
-      { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
-      { href: "/dashboard/funnel-hacker", label: "Funnel Hacker", icon: Layers },
-      { href: "/dashboard/omnipresence", label: "Omnipresence", icon: Globe2 },
-    ]
-  },
-  {
     group: "God-Brain V3",
     icon: Network,
     items: [
+      { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
       { href: "/dashboard/nemo-claw", label: "NemoClaw Builder", icon: Cpu },
-      { href: "/dashboard/voice", label: "Voice Execution", icon: Rocket },
-      { href: "/dashboard/war-room", label: "War Room CRM", icon: Target },
-      { href: "/dashboard/knowledge", label: "Vertex Knowledge", icon: Shield },
     ]
   },
   {
@@ -298,7 +286,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </ErrorBoundary>
           </div>
           <JarvisSocket />
-          <LiveTelemetry />
         </main>
 
         {/* === MOBILE BOTTOM NAV === */}
@@ -307,13 +294,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <LayoutDashboard className="w-5 h-5" />
               <span className="text-[8px] font-bold uppercase tracking-widest">Command</span>
            </Link>
-           <Link href="/dashboard/war-room" className={`flex flex-col items-center gap-1 ${pathname?.startsWith('/dashboard/war-room') ? 'text-[#00B7FF]' : 'text-neutral-500'}`}>
-              <Target className="w-5 h-5" />
-              <span className="text-[8px] font-bold uppercase tracking-widest">CRM</span>
-           </Link>
            <div className="relative -mt-6">
-              <Link href="/dashboard/omnipresence" className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-rose-500 to-rose-700 border border-white/20 shadow-[0_0_20px_rgba(244,63,94,0.4)] text-white">
-                 <Globe2 className="w-5 h-5" />
+              <Link href="/dashboard/nemo-claw" className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-[#00B7FF] to-blue-700 border border-white/20 shadow-[0_0_20px_rgba(0,183,255,0.4)] text-white">
+                 <Network className="w-5 h-5" />
               </Link>
            </div>
            <Link href="/dashboard/leads" className={`flex flex-col items-center gap-1 ${pathname === '/dashboard/leads' ? 'text-[#00B7FF]' : 'text-neutral-500'}`}>

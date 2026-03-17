@@ -245,12 +245,12 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: CalendarCheck, title: "Voice & Speech Engine", desc: "Powered by NVIDIA Pipecat & Riva. Physically dials prospects, handles live objections, and books calls 24/7.", tag: "VOICE SWARM", color: "from-emerald-500 to-teal-500" },
+              { icon: Cpu, title: "NemoClaw Direct Access", desc: "Execute advanced reasoning loops natively on NVIDIA hardware via Mistral-Nemotron inside our cinematic Space Black terminal.", tag: "NVIDIA NIM", color: "from-emerald-500 to-teal-500" },
               { icon: ShieldAlert, title: "Zero Hallucinations", desc: "Secured by NVIDIA NeMo Guardrails for absolute, un-hackable script adherence by all micro-agents.", tag: "ENTERPRISE SECURE", color: "from-rose-500 to-pink-500" },
-              { icon: BrainCircuit, title: "Visual Logic Builder", desc: "Drag-and-drop conversational React Flow logic grids giving you ultimate granular control over the God-Brain.", tag: "PROGRAMMATIC AI", color: "from-blue-500 to-sky-500" },
-              { icon: Target, title: "Waterfall Enrichment", desc: "Military-grade scraping transparency. Watch the live AI mapping: Domain Ping -> Firmographic Match -> Contact Hash.", tag: "PROSPECTOR OS", color: "from-violet-500 to-fuchsia-500" },
-              { icon: CheckCircle2, title: "Live God-Brain Telemetry", desc: "A live streaming dashboard terminal mapping exactly what the LLM is thinking, scraping, and deciding.", tag: "AUDIT TRAIL", color: "from-amber-500 to-orange-500" },
-              { icon: Users, title: "Lead Generation", desc: "Find ultra-qualified local business leads, analyze their specific marketing gaps, and generate personalized cold outreach.", tag: "OUTREACH", color: "from-cyan-500 to-blue-500" },
+              { icon: TrendingUp, title: "Advanced SEO Dominator", desc: "Reverse-engineer search intent, hijack local map packs, and inject advanced schema architectures directly into your sites.", tag: "SEO DOMINANCE", color: "from-blue-500 to-sky-500" },
+              { icon: Zap, title: "Deep Competitor Intel", desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.", tag: "COMPETITOR X-RAY", color: "from-violet-500 to-fuchsia-500" },
+              { icon: Globe, title: "Dynamic Content Factory", desc: "Automate blog posts, social media schedules, ad creatives, and email sequences perfectly tuned to your brand voice.", tag: "CONTENT ENGINE", color: "from-amber-500 to-orange-500" },
+              { icon: Target, title: "Lead Prospector Matrix", desc: "Find ultra-qualified local business leads, analyze their specific marketing gaps, and generate personalized cold outreach.", tag: "OUTREACH", color: "from-cyan-500 to-blue-500" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="group relative glass-card p-8 border border-glass-border hover:border-white/20 transition-all duration-500 overflow-hidden">
