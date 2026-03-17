@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { Cpu, Globe, Rocket, ShieldAlert, Target, Zap, ChevronRight, Lock, CheckCircle2, TrendingUp, DollarSign, Clock, BrainCircuit, Activity, LineChart, Code2, Users, FileText, ArrowRight, Star, MessageSquare, Webhook } from "lucide-react";
+import { ArrowRight, BrainCircuit, CheckCircle2, Cpu, Globe, Target, Zap, ShieldAlert, ChevronDown, XCircle } from "lucide-react";
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
@@ -116,19 +116,19 @@ export default function Home() {
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 serif-text leading-[1.1] tracking-tight">
-            Replace Your Agency.<br/>
-            <span className="animated-gradient-text">Keep The Results.</span>
+            The Agency Extinction Protocol.<br/>
+            <span className="animated-gradient-text">Powered by NVIDIA Nemotron.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
-            Build and deploy secure, always-on AI assistants with a single command. 
-            NVIDIA NemoClaw adds policy-based privacy and security guardrails via OpenShell, giving you absolute control over how agents behave.
+            Build and deploy secure, Sovereign AI Infrastructure with a single command. 
+            Command the Nano 30B Edge Daemon locally via OpenClaw, and scale to the Super 120B Omni-RAG cluster for absolute market dominance.
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-16">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
               <a href="#pricing" className="inline-flex px-10 py-5 rounded-full bg-gradient-to-r from-[#00B7FF] to-[#a855f7] text-lg font-bold text-white shadow-[0_0_40px_rgba(0,183,255,0.3)] cta-glow items-center gap-3 hover:-translate-y-1 transition-all">
-                Deploy God-Brain V3 <ArrowRight className="w-6 h-6" />
+                Initialize Sovereign Swarm V4 <ArrowRight className="w-6 h-6" />
               </a>
               <button 
                  onClick={() => {
@@ -181,27 +181,27 @@ export default function Home() {
               {[
                 {
                   icon: BrainCircuit,
-                  title: "Strategy Engine",
-                  desc: "AI-powered marketing strategy that analyzes your market, competitors, and audience to create data-driven campaigns.",
+                  title: "Super 120B Omni-RAG",
+                  desc: "Ground your sales and marketing in absolute truth using NVIDIA NeMo Retriever and the 120B Super open-weight reasoning model.",
                   color: "text-rose-glow", bg: "bg-rose-glow/10", border: "border-rose-glow/20"
                 },
                 {
                   icon: Target,
-                  title: "Lead Generation",
-                  desc: "Automated prospecting and outreach. Find potential clients, score them, and generate personalized cold outreach sequences.",
+                  title: "Nano 30B Edge Execution",
+                  desc: "Command the swarm locally from your macOS terminal or WhatsApp via the highly-secure OpenClaw Daemon.",
                   color: "text-electric", bg: "bg-electric/10", border: "border-electric/20"
                 },
                 {
                   icon: Globe,
-                  title: "Content Automation",
-                  desc: "Blog posts, social media content, ad creatives, email sequences, and landing pages — all generated in your brand voice.",
+                  title: "Nemotron Speech Pipeline",
+                  desc: "Deploy ultra-low latency voice closers powered by Nemotron Speech to secure $2,500 consulting retainers autonomously.",
                   color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20"
                 },
                 {
-                  icon: Zap,
-                  title: "Competitive Intel",
-                  desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.",
-                  color: "text-amber-400", bg: "bg-amber-400/10", border: "border-amber-400/20"
+                  icon: ShieldAlert,
+                  title: "Morpheus Safety Shield",
+                  desc: "Real-time PII redaction, brand alignment, and deepfake verification powered natively by NeMo Guardrails.",
+                  color: "text-violet-400", bg: "bg-violet-400/10", border: "border-violet-400/20"
                 }
               ].map((feature, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
