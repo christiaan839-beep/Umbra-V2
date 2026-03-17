@@ -72,7 +72,7 @@ const NAV_GROUPS = [
     group: "The Syndicate",
     icon: Globe2,
     items: [
-      { href: "/dashboard/agency-hub", label: "Reseller Hub", icon: Briefcase },
+      { href: "/dashboard/agency-hub", label: "Agency Cartel Hub", icon: Briefcase },
     ]
   },
   {

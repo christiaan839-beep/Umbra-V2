@@ -14,6 +14,7 @@ class EdgePayload(BaseModel):
     caller: str # e.g. "Terminal", "WhatsApp", "Telegram"
     command: str
     nano_30b_analysis: str
+    requires_vision: bool = False
 
 @app.post("/api/edge/receive")
 async def receive_openclaw_payload(payload: EdgePayload):
@@ -52,13 +53,34 @@ async def receive_openclaw_payload(payload: EdgePayload):
         execution_result = f"[Error executing locally] {e}"
 
     
+    # -------------------------------------------------------------
+    # PHASE 43 UPGRADE: COSMOS VLM (VISUAL TELEMETRY)
+    # -------------------------------------------------------------
+    vision_data = None
+    if getattr(payload, 'requires_vision', False):
+        print("[VISION] Capturing local macOS screen telemetry for Cosmos VLM...")
+        try:
+            # Requires `screencapture` on macOS
+            vision_path = "/tmp/openclaw_vision_telemetry.png"
+            subprocess.run(f"screencapture -x {vision_path}", shell=True)
+            vision_data = f"[SCREENSHOT CAPTURED] Saved to {vision_path}. Ready for VLM routing."
+            print(vision_data)
+        except Exception as e:
+            vision_data = f"[VISION ERROR] {e}"
+            print(vision_data)
+
     # Optional: Still forward to the God-Brain for logging/telemetry
     god_brain_url = os.getenv("GOD_BRAIN_URL", "http://127.0.0.1:8000/api/v1/commander/execute")
     
     try:
         requests.post(
             god_brain_url, 
-            json={"command": payload.command, "target_vector": "LOCAL", "result": execution_result[:500]},
+            json={
+                "command": payload.command, 
+                "target_vector": "LOCAL", 
+                "result": execution_result[:500],
+                "vision": vision_data
+            },
             timeout=2
         )
     except:
@@ -67,7 +89,8 @@ async def receive_openclaw_payload(payload: EdgePayload):
     return {
         "status": "success",
         "message": f"Edge execution via Nano 30B successful.",
-        "local_execution_result": execution_result
+        "local_execution_result": execution_result,
+        "vision_telemetry": vision_data
     }
 
 if __name__ == "__main__":
