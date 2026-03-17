@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
   Layers, Globe2, Network,
-  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database, Headphones, FileVideo, Cuboid, Briefcase
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database, Headphones, FileVideo, Cuboid, Briefcase, Radar, RefreshCcw, Hexagon, ScanEye
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
@@ -56,6 +56,8 @@ const NAV_GROUPS = [
       { href: "/dashboard/omni-search", label: "Global RAG Search", icon: Database },
       { href: "/dashboard/cyber-audit", label: "Cyber Security Auditor", icon: ShieldAlert },
       { href: "/dashboard/support-router", label: "Omni-Closer Support", icon: Headphones },
+      { href: "/dashboard/competitor-intel", label: "Competitor Analysis", icon: Radar },
+      { href: "/dashboard/flywheel", label: "Anti-Slop Flywheel", icon: RefreshCcw },
     ]
   },
   {
@@ -71,6 +73,14 @@ const NAV_GROUPS = [
     icon: Globe2,
     items: [
       { href: "/dashboard/agency-hub", label: "Reseller Hub", icon: Briefcase },
+    ]
+  },
+  {
+    group: "Industrial Nodes",
+    icon: Factory,
+    items: [
+      { href: "/dashboard/god-eye", label: "God-Eye Spatial Array", icon: ScanEye },
+      { href: "/dashboard/morpheus-shield", label: "Morpheus Shield", icon: Hexagon },
     ]
   },
   {
