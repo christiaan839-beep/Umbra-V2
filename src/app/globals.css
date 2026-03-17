@@ -8,9 +8,9 @@ html {
 
 @theme {
   /* Backgrounds */
-  --color-midnight: #0f080c;
-  --color-onyx: #1a1014;
-  --color-surface: #231820;
+  --color-midnight: #000000;
+  --color-onyx: #0A0A0A;
+  --color-surface: #111111;
 
   /* Accents — Primary */
   --color-electric: #a855f7;
@@ -64,14 +64,14 @@ body {
 
 .glass-card {
   background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 1rem;
   backdrop-filter: blur(16px);
   transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .glass-card:hover {
-  border-color: rgba(168, 85, 247, 0.15);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .glass-panel {
@@ -104,6 +104,7 @@ body {
 
 input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   height: 6px;
   border-radius: 3px;
   background: var(--color-onyx);
@@ -111,6 +112,7 @@ input[type="range"] {
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   width: 18px;
   height: 18px;
   border-radius: 50%;

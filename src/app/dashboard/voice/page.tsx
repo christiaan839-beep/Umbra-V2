@@ -2,8 +2,9 @@
 
 import { useState, Suspense } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mic, ShieldAlert, Cpu, Activity, Play, Square, Volume2 } from "lucide-react";
+import { Phone, Mic, ShieldAlert, Cpu, Activity, Play, Square, Volume2, Network } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { VoicePathwayBuilder } from "@/components/dashboard/VoicePathwayBuilder";
 
 function VoiceAgentClient() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ function VoiceAgentClient() {
   const [context, setContext] = useState(searchParams.get("context") || "Offer: Free SEO Audit + Review Sweeper");
   
   const [callStatus, setCallStatus] = useState<"idle" | "connecting" | "active" | "completed">("idle");
+  const [activeTab, setActiveTab] = useState<"execution" | "pathway">("execution");
 
   const initiateCall = async () => {
     if (!targetPhone) return;
@@ -100,9 +102,27 @@ function VoiceAgentClient() {
           </div>
         </div>
 
-        {/* Right Column: Live Terminal / Visualizer */}
-        <div className="lg:col-span-2 relative overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl">
-           {/* Terminal Header */}
+        {/* Right Column: Live Terminal / Visualizer / Pathway */}
+        <div className="lg:col-span-2 flex flex-col space-y-4">
+           {/* Tab Switcher */}
+           <div className="flex items-center gap-2">
+              <button 
+                 onClick={() => setActiveTab("execution")}
+                 className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2 ${activeTab === "execution" ? "bg-electric/20 text-electric border border-electric/50 shadow-[0_0_15px_rgba(0,255,255,0.2)]" : "bg-white/5 text-stone-500 border border-white/5 hover:text-white hover:bg-white/10"}`}
+              >
+                 <Activity className="w-3 h-3" /> Live Execution
+              </button>
+              <button 
+                 onClick={() => setActiveTab("pathway")}
+                 className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2 ${activeTab === "pathway" ? "bg-electric/20 text-emerald-400 border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.2)]" : "bg-white/5 text-stone-500 border border-white/5 hover:text-white hover:bg-white/10"}`}
+              >
+                 <Network className="w-3 h-3" /> Pathway Builder
+              </button>
+           </div>
+
+           {activeTab === "execution" ? (
+             <div className="relative flex-1 overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl min-h-[500px]">
+               {/* Terminal Header */}
            <div className="absolute top-0 left-0 right-0 h-10 bg-white/5 border-b border-white/10 flex items-center px-4 justify-between z-10">
               <div className="flex items-center gap-2">
                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
@@ -179,7 +199,13 @@ function VoiceAgentClient() {
                 </p>
              </div>
            )}
-        </div>
+         </div>
+       ) : (
+         <div className="relative flex-1 rounded-xl shadow-2xl min-h-[500px]">
+            <VoicePathwayBuilder />
+         </div>
+       )}
+     </div>
       </div>
     </div>
   );

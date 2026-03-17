@@ -22,6 +22,8 @@ import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/Te
 import { JarvisSocket } from '@/components/JarvisSocket';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { LiveTelemetry } from '@/components/dashboard/LiveTelemetry';
+import { CinematicOnboarding } from '@/components/dashboard/CinematicOnboarding';
 
 function CrosshairIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -288,11 +290,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="relative z-10 w-full min-h-full">
             <ErrorBoundary>
               <ToastProvider>
-                {children}
+                <CinematicOnboarding>
+                  {children}
+                </CinematicOnboarding>
               </ToastProvider>
             </ErrorBoundary>
           </div>
           <JarvisSocket />
+          <LiveTelemetry />
         </main>
 
         {/* === MOBILE BOTTOM NAV === */}

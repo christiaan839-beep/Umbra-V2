@@ -229,6 +229,30 @@ export default function LeadsDashboard() {
                                       </div>
                                  </div>
 
+                                 {/* Enrichment Depth Waterfall */}
+                                 <div className="flex items-center gap-2 mb-4 text-[10px] font-mono uppercase tracking-widest bg-black/40 border border-white/5 p-3 rounded-lg overflow-x-auto hide-scrollbar shadow-inner">
+                                    <span className="text-stone-500 shrink-0 pr-2 border-r border-white/10 hidden sm:block">Enrichment Depth</span>
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                      <span className="text-emerald-400">Google Places API</span>
+                                    </div>
+                                    <ArrowRight className="w-2 h-2 text-stone-700 shrink-0" />
+                                    <div className="flex items-center gap-1.5 shrink-0">
+                                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                      <span className="text-emerald-400">Domain Pinged</span>
+                                    </div>
+                                    <ArrowRight className="w-2 h-2 text-stone-700 shrink-0" />
+                                    <div className="flex items-center gap-1.5 shrink-0 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
+                                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                                      <span className="text-blue-400 glow-text">Gemini 2.5 Researched</span>
+                                    </div>
+                                    <ArrowRight className="w-2 h-2 text-stone-700 shrink-0" />
+                                    <div className={`flex items-center gap-1.5 shrink-0 ${report.phone ? 'bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20' : ''}`}>
+                                      <div className={`w-1.5 h-1.5 rounded-full ${report.phone ? 'bg-amber-500' : 'bg-stone-700'}`} />
+                                      <span className={report.phone ? 'text-amber-400' : 'text-stone-600'}>Contact Discovery</span>
+                                    </div>
+                                 </div>
+
                                  {/* Body */}
                                  <div className="space-y-4">
                                       <div>
