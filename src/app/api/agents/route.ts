@@ -5,9 +5,11 @@ import { generateNurtureSequence } from "@/agents/nurture";
 import { prospectLeads } from "@/agents/prospector";
 import { executeGhostCycle } from "@/agents/ghost-mode";
 import { analyzeCompetitor } from "@/agents/war-room";
+import { requireAuth } from "@/lib/auth-guard";
 
 /** Dynamic agent router — single endpoint for all agents */
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const body = await req.json();
   const { agent } = body;
 

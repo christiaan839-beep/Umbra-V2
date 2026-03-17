@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { tenantId, type, data } = await req.json();
 

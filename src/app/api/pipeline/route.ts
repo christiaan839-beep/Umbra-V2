@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { runPipeline, PIPELINE_TEMPLATES } from "@/lib/pipeline";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function GET() {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const templates = Object.entries(PIPELINE_TEMPLATES).map(([id, t]) => ({
     id,
     name: t.name,
@@ -12,6 +14,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const { templateId, topic } = await req.json();
   if (!templateId || !topic?.trim()) {
     return NextResponse.json({ error: "templateId and topic required" }, { status: 400 });

@@ -361,6 +361,66 @@ export default function Home() {
       </section>
       <div className="section-divider" />
 
+      {/* Founder & Trust Section */}
+      <section className="py-24 bg-[#050505] px-6 border-t border-glass-border">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Founder Message */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Built in South Africa 🇿🇦
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white serif-text mb-6 leading-tight">
+                One person. 29 AI agents.<br/>
+                <span className="animated-gradient-text">Zero agency overhead.</span>
+              </h2>
+              <p className="text-neutral-400 leading-relaxed mb-6">
+                UMBRA was built to solve a problem I saw firsthand — businesses paying R15,000–R50,000/month for agency retainers and getting slow, mediocre results. So I built 29 AI agents that do the same work in seconds, at a fraction of the cost.
+              </p>
+              <p className="text-neutral-400 leading-relaxed mb-8">
+                Every tool runs on real AI — Google Gemini, Anthropic Claude, and live web research via Tavily. No faked demos. No placeholder responses. Real marketing intelligence, real results.
+              </p>
+              <a href="#pricing" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#00B7FF] to-purple-500 text-white font-bold text-xs uppercase tracking-wider hover:opacity-90 transition-all">
+                Start Your Free Trial
+              </a>
+            </div>
+            {/* Right: Tech Stack */}
+            <div className="space-y-6">
+              <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-4">Powered By</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { name: "Google Gemini 2.0", desc: "Core AI engine", color: "from-blue-500/10 to-cyan-500/10", border: "border-blue-500/20" },
+                  { name: "Anthropic Claude", desc: "Advanced reasoning", color: "from-orange-500/10 to-amber-500/10", border: "border-orange-500/20" },
+                  { name: "Pinecone", desc: "AI memory & context", color: "from-emerald-500/10 to-green-500/10", border: "border-emerald-500/20" },
+                  { name: "Tavily", desc: "Live web research", color: "from-purple-500/10 to-pink-500/10", border: "border-purple-500/20" },
+                ].map((tech) => (
+                  <div key={tech.name} className={`p-4 rounded-xl bg-gradient-to-br ${tech.color} border ${tech.border}`}>
+                    <p className="text-sm font-bold text-white mb-1">{tech.name}</p>
+                    <p className="text-[10px] text-neutral-500 uppercase tracking-widest">{tech.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-4 mt-6">
+                <div className="flex items-center gap-2 text-xs text-neutral-500">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  256-bit encryption
+                </div>
+                <div className="flex items-center gap-2 text-xs text-neutral-500">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  POPIA compliant
+                </div>
+                <div className="flex items-center gap-2 text-xs text-neutral-500">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  ZAR payments
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className="section-divider" />
+
       {/* FAQ Section */}
       <section className="py-24 bg-[#050505] px-6 border-t border-glass-border">
         <div className="max-w-3xl mx-auto">

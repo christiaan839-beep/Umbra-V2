@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { requireAuth } from "@/lib/auth-guard";
 
 /**
  * Referral System API
@@ -8,6 +9,7 @@ import crypto from "crypto";
  * POST: Track a referral conversion
  */
 export async function GET(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const url = new URL(req.url);
     const tenantId = url.searchParams.get("tenantId");
@@ -40,6 +42,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { referralCode, newClientEmail } = await req.json();
 

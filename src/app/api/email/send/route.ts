@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { requireAuth } from "@/lib/auth-guard";
 
 export const maxDuration = 30;
 
@@ -70,6 +71,7 @@ async function sendViaGmail(payload: EmailPayload): Promise<{ success: boolean; 
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const ip = req.headers.get("x-forwarded-for") || "anonymous";
     const { allowed } = rateLimit(`email:${ip}`);

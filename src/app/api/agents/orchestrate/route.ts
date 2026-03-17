@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAvailablePipelines, runPipeline } from "@/agents/orchestrator";
 import { fireUserWebhook } from "@/lib/webhooks";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function GET() {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const pipelines = getAvailablePipelines();
   return NextResponse.json({ pipelines });
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const body = await req.json();
     const { pipelineId, params } = body;

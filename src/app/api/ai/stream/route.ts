@@ -1,6 +1,8 @@
 import { ai } from "@/lib/ai";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const { prompt, systemInstruction, model } = await req.json();
   if (!prompt?.trim()) return new Response("Prompt required", { status: 400 });
 

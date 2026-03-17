@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { ai } from "@/lib/ai";
 import { postToSocial } from "@/lib/social";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { action, content, platform, platforms, topic, count } = await req.json();
 

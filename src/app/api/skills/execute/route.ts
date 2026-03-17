@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { research_ai } from "@/lib/ai";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const body = await req.json();
     const { skill } = body;

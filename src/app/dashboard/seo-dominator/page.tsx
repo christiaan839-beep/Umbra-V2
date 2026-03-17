@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ExportButtons } from "@/components/ui/ExportButtons";
 import {
   Search,
   Target,
@@ -251,17 +252,7 @@ export default function SEODominatorPage() {
                   Intelligence Report
                 </span>
               </div>
-              <button
-                onClick={handleCopy}
-                className="flex items-center gap-1 text-[9px] uppercase tracking-widest text-neutral-500 hover:text-white transition-colors"
-              >
-                {copied ? (
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                ) : (
-                  <Copy className="w-3 h-3" />
-                )}
-                {copied ? "Copied" : "Copy"}
-              </button>
+              <ExportButtons content={result || ""} filename="umbra-seo-report" />
             </div>
             <div className="p-6 max-h-[600px] overflow-y-auto">
               <pre className="text-xs text-neutral-300 font-mono whitespace-pre-wrap leading-relaxed">

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Pinecone } from "@pinecone-database/pinecone";
+import { requireAuth } from "@/lib/auth-guard";
 
 const pinecone = new Pinecone({ apiKey: process.env.PINECONE_API_KEY! });
 const INDEX_NAME = process.env.PINECONE_INDEX || "umbra-memory";
@@ -15,6 +16,7 @@ const INDEX_NAME = process.env.PINECONE_INDEX || "umbra-memory";
  * GET: Retrieve relevant learnings for a given context
  */
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { type, outcome, context, clientId, metadata } = await req.json();
 
@@ -71,6 +73,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const url = new URL(req.url);
     const query = url.searchParams.get("query");

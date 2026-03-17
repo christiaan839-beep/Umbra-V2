@@ -3,6 +3,7 @@ import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { db } from "@/db";
 import { scheduledContent } from "@/db/schema";
+import { requireAuth } from "@/lib/auth-guard";
 
 /**
  * Content Auto-Generator API
@@ -12,6 +13,7 @@ import { scheduledContent } from "@/db/schema";
  * This is the key automation gap — content creation is now zero-touch.
  */
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { tenantId, industry, topics, platforms } = await req.json();
 

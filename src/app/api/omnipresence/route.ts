@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { getScheduledTasks, createScheduledTask, toggleTask, deleteTask, executeDueTasks } from "@/lib/omnipresence";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function GET() {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   return NextResponse.json({ tasks: getScheduledTasks() });
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { action, prompt, id } = await req.json();
 

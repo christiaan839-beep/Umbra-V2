@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireAuth } from "@/lib/auth-guard";
 
 // Conceptual proxy rotation architectures
 const PROXY_POOLS = [
@@ -10,6 +11,7 @@ const PROXY_POOLS = [
 let currentIndex = 0;
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { targetUrl, module } = await req.json();
 

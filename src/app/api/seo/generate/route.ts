@@ -3,6 +3,7 @@ import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { db } from "@/db";
 import { globalTelemetry } from "@/db/schema";
+import { requireAuth } from "@/lib/auth-guard";
 
 /**
  * Infinite SEO Network Generator
@@ -12,6 +13,7 @@ import { globalTelemetry } from "@/db/schema";
  * HTML structuring (H2, H3, tags) for instant web publishing.
  */
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { tenantId, targetKeyword, industry, location } = await req.json();
 

@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { globalTelemetry } from "@/db/schema";
 import crypto from "crypto";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { topic, platform = "all" } = await req.json();
 

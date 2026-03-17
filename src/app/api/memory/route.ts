@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { remember, recall, getAllMemories } from "@/lib/memory";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const { action, text, query, metadata, fileData, fileType } = await req.json();
 
   if (action === "remember") {

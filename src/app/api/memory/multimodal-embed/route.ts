@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireAuth } from "@/lib/auth-guard";
 
 /**
  * Multimodal Ingestion Pipeline
@@ -7,6 +8,7 @@ import { NextResponse } from 'next/server';
  * into a unified 768-dimensional mathematical vector.
  */
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const formData = await req.formData();
     const mediaFile = formData.get('media') as File;

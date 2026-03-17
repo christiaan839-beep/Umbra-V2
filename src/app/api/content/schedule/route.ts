@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { scheduledContent } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function GET(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const url = new URL(req.url);
     const tenantId = url.searchParams.get("tenantId");
@@ -23,6 +25,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const body = await req.json();
     const { topic, caption, platform = "instagram", scheduledAt, imagePrompt, tenantId } = body;

@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { getSkills, getPromptForSkill, logSkillSuccess, autoGenerateVariant } from "@/lib/skills";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function GET() {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   return NextResponse.json({ skills: getSkills() });
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const { action, skillId, variantId, prompt } = await req.json();
   try {
     switch (action) {

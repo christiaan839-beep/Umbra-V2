@@ -3,8 +3,10 @@ import { db } from "@/db";
 import { settings } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { getUserFromCookie } from "@/lib/db"; // we still use this utility function
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { action, settings: newSettings } = await req.json();
     const userEmail = getUserFromCookie(req) || "admin@umbra.ai";

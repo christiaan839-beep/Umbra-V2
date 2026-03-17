@@ -5,8 +5,10 @@ import {
   generateUISpec,
 } from "@/agents/designer";
 import { fireUserWebhook } from "@/lib/webhooks";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const body = await req.json();
     const { action, params } = body;

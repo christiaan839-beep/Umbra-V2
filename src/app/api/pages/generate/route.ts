@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
+import { requireAuth } from "@/lib/auth-guard";
 
 /**
  * Landing Page Generator API
@@ -9,6 +10,7 @@ import { generateText } from "ai";
  * with copy, structure, and styling based on a business description.
  */
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { businessName, industry, offer, targetAudience, style } = await req.json();
 

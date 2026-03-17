@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { runSwarm, adSwarm } from "@/lib/swarm";
+import { requireAuth } from "@/lib/auth-guard";
 
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   const { goal, preset, angle } = await req.json();
 
   if (preset === "ad") {

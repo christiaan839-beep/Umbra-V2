@@ -3,6 +3,7 @@ import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { db } from "@/db";
 import { globalTelemetry } from "@/db/schema";
+import { requireAuth } from "@/lib/auth-guard";
 
 /**
  * Lead Nurture Sequence API
@@ -12,6 +13,7 @@ import { globalTelemetry } from "@/db/schema";
  * position in the funnel.
  */
 export async function POST(req: Request) {
+  const auth = await requireAuth(); if (auth.error) return auth.error;
   try {
     const { leadName, email, industry, painPoints, source } = await req.json();
 
