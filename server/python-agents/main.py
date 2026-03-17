@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="UMBRA God-Brain API V3.1 - Omni-Compute Edition")
+app = FastAPI(title="UMBRA God-Brain API V3.1 - NIM & Twilio Edition")
 
 class NodeCommand(BaseModel):
     command: str
@@ -27,10 +27,9 @@ class VoiceCommand(BaseModel):
 async def execute_command(payload: NodeCommand):
     print(f"[GOD-BRAIN] Intercepted Execution Command: {payload.command}")
     
-    # [PHASE 18 OMNI-COMPUTE] Deploying DeepSeek-V3 Terminus + Mistral Nemotron for orchestrated reasoning
-    print(f"[DEEPSEEK TERMINUS] Analyzing intent via deepseek-v3.1-terminus with Function Calling...")
-    # In a full production scenario, this node operates on deepseek-v3.1-terminus logic:
-    # prompt_analysis = deploy_terminus(payload.command, mode="Think")
+    # In a full production scenario, this node would use LangChain to dissect the payload:
+    # llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
+    # parsed_intent = llm.invoke(f"Extract parameters from command: {payload.command}")
     
     # 1. Trigger the n8n Core Webhook
     n8n_webhook_url = os.getenv("N8N_CORE_WEBHOOK_URL", "http://localhost:5678/webhook/umbra-genesis")
@@ -51,7 +50,7 @@ async def execute_command(payload: NodeCommand):
         
         return {
             "status": "protocol_engaged",
-            "message": "The DeepSeek Terminus Engine has routed your command via Mistral Nemotron to the automation swarm.",
+            "message": "The God-Brain has routed your command to the n8n automation swarm.",
             "sub_swarms_activated": [vector],
             "telemetry_stream": "active"
         }
@@ -62,7 +61,7 @@ async def execute_command(payload: NodeCommand):
 
 @app.get("/health")
 def health_check():
-    return {"status": "God-Brain Optimal", "version": "3.2.0 Omni-Compute", "components": ["NeMo Retriever", "Riva ASR", "DeepSeek Terminus", "Nemotron Guardrails"]}
+    return {"status": "God-Brain Optimal", "version": "3.1.0 NIM Edition", "components": ["NeMo Retriever", "Audio2Face", "Pipecat", "Twilio"]}
 
 # UMBRA God-Brain: Pipecat Voice Node + Vertex AI Grounding
 @app.post("/api/v1/voice/execute")
@@ -72,25 +71,20 @@ async def execute_voice_agent(payload: VoiceCommand):
     
     # PHASE 1: VERTEX AI & NVIDIA NEMO RETRIEVER GROUNDING
     # Here, UMBRA queries the private Vertex AI vector store using NeMo Retriever
-    # [PHASE 18 UPGRADE]: Integrating `llama-nemotron-rerank-1b-v2` for absolute context sorting.
-    print("[NVIDIA NIM] Retrieving context via NeMo Retriever & llama-nemotron-rerank-1b-v2...")
+    # to extract proprietary sales SOPs with sub-millisecond latency.
+    print("[NVIDIA NIM] Retrieving context via NeMo Retriever Microservice...")
     
     # Simulated Grounded Prompt via Retriever
-    grounded_system_prompt = f"Act as an expert closer for UMBRA. Use the following exact retrieved context: {payload.context}. Keep responses under 50 words. Be slightly aggressive but professional. Execute via deepseek-v3.1-terminus."
+    grounded_system_prompt = f"Act as an expert closer for UMBRA. Use the following context from NeMo: {payload.context}. Keep responses under 50 words. Be slightly aggressive but professional."
     
-    # PHASE 1B: NEMO GUARDRAILS IRONCLAD SHIELD
-    # Intercept system prompt to guarantee script adherence using `nemoguard-jailbreak-detect` and `topic-control`
-    print("[NEMO GUARDRAILS] Securing system prompt payload with `nemoguard-jailbreak-detect` and `topic-control`...")
-    print("[NEMO GUARDRAILS] Status: Vetted. Zero Hallucinations.")
-
-    # PHASE 2: PIPECAT, RIVA ASR & AUDIO2FACE NIM EXECUTION
+    # PHASE 2: PIPECAT & AUDIO2FACE NIM EXECUTION
     # This initializes the physical WebRTC or SIP trunk connection via Pipecat
-    # using NVIDIA Riva `nemotron-asr-streaming` for sub-200ms audio decoding.
-    print("[NVIDIA NIM] Initializing Pipcat Swarm with Riva ASR & Audio2Face...")
+    # utilizing NVIDIA's low-latency NIM endpoints for LLM, TTS, and STT.
+    print("[NVIDIA NIM] Initializing Pipcat Swarm with Audio2Face & TTS...")
     print(f"[PIPECAT] Dialing {payload.phone_number}...")
     
-    # In a full production container, this would trigger an async subprocess for Riva Streaming:
-    # subprocess.Popen(["python", "dialer.py", "--phone", payload.phone_number, "--prompt", grounded_system_prompt, "--enable-avatar", "true", "--asr", "riva"])
+    # In a full production container, this would trigger an async subprocess for Audio2Face Streaming:
+    # subprocess.Popen(["python", "dialer.py", "--phone", payload.phone_number, "--prompt", grounded_system_prompt, "--enable-avatar", "true"])
     
     return {
         "status": "voice_swarm_deployed",

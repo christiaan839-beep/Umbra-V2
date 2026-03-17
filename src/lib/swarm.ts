@@ -1,13 +1,13 @@
 /**
- * Omni-Compute Agent Swarm — multi-agent orchestration via deepseek-v3.1-terminus
- * These serve as the proxy endpoints for the main Python Terminus routing logic.
+ * Swarm stub — multi-agent orchestration not active.
+ * These are pass-through stubs so agents don't crash.
  */
 export async function runSwarm(_options: Record<string, unknown>): Promise<{ finalOutput: string, rounds: number }> {
-  // Simulates an async handoff to DeepSeek Terminus for sub-task routing
-  return { finalOutput: "DeepSeek Terminus engaged. Swarm logic executed.", rounds: 3 };
+  // Return mock object to prevent destructuring crashes
+  return { finalOutput: "Swarm logic bypassed via configuration.", rounds: 1 };
 }
 
 export async function adSwarm(_prompt: string, _tone: string): Promise<{ finalOutput: string, rounds: number }> {
-  // Simulates handoff to mistral-nemotron for creative ad generation
-  return { finalOutput: "Mistral Nemotron ad swarm deployed. Output generated.", rounds: 2 };
+  // Return mock object
+  return { finalOutput: "Ad swarm not configured. Bypassed.", rounds: 1 };
 }
