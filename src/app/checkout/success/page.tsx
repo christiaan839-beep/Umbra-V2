@@ -6,13 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Server, Database, BrainCircuit, Scan, ShieldCheck } from 'lucide-react';
 
 const BOOT_SEQUENCE = [
-  { text: "Validating Stripe Transaction Payload...", delay: 800, icon: ShieldCheck, color: "text-emerald-400" },
-  { text: "Payment verified. Allocating $5,000/mo retainer limits.", delay: 1500, icon: CheckCircle2, color: "text-emerald-400" },
-  { text: "Initializing Dedicated Sovereign Node: [Apex Alpha]", delay: 2800, icon: Server, color: "text-indigo-400" },
-  { text: "Mounting Multimodal Vector Lake...", delay: 4200, icon: Database, color: "text-violet-400" },
-  { text: "Connecting to UMBRA God-Brain Core API...", delay: 5800, icon: BrainCircuit, color: "text-rose-400" },
-  { text: "Injecting Base Prompts & Competitor Signatures...", delay: 7200, icon: Scan, color: "text-amber-400" },
-  { text: "AGI Worker Online. Routing to Command Center.", delay: 8500, icon: CheckCircle2, color: "text-emerald-500" }
+  { text: "Validating payment transaction...", delay: 800, icon: ShieldCheck, color: "text-emerald-400" },
+  { text: "Payment verified. Activating your subscription.", delay: 1500, icon: CheckCircle2, color: "text-emerald-400" },
+  { text: "Provisioning your dedicated UMBRA workspace...", delay: 2800, icon: Server, color: "text-indigo-400" },
+  { text: "Connecting AI memory and vector database...", delay: 4200, icon: Database, color: "text-violet-400" },
+  { text: "Loading AI models and agent configurations...", delay: 5800, icon: BrainCircuit, color: "text-rose-400" },
+  { text: "Configuring your marketing toolkit...", delay: 7200, icon: Scan, color: "text-amber-400" },
+  { text: "Setup complete. Redirecting to your dashboard.", delay: 8500, icon: CheckCircle2, color: "text-emerald-500" }
 ];
 
 export default function CheckoutSuccessBoot() {
@@ -63,7 +63,7 @@ export default function CheckoutSuccessBoot() {
                </motion.div>
             </div>
 
-            <h1 className="text-2xl font-light text-center text-white mb-2 tracking-tight">Provisioning Artificial Employee</h1>
+            <h1 className="text-2xl font-light text-center text-white mb-2 tracking-tight">Setting Up Your Account</h1>
             <p className="text-center text-neutral-500 text-sm mb-12 font-mono tracking-wider">DO NOT CLOSE THIS WINDOW</p>
 
             <div className="space-y-4 font-mono text-xs">

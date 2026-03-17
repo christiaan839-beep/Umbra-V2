@@ -191,7 +191,7 @@ export default function ArchitectDashboard() {
                         <div className="absolute inset-0 flex items-center justify-center mt-10">
                             <div className="text-center opacity-30">
                                 <Code className="w-16 h-16 mx-auto mb-4 text-white" />
-                                <p className="text-xs font-mono text-neutral-400 tracking-widest uppercase">Waiting for God-Brain Directives</p>
+                                <p className="text-xs font-mono text-neutral-400 tracking-widest uppercase">Waiting for AI Memory Directives</p>
                             </div>
                         </div>
                     )}

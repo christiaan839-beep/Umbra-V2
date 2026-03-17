@@ -36,7 +36,7 @@ export default function NurtureMatrix() {
 
   const sequenceSteps = [
     { day: 1, type: "Email", icon: Mail, title: "The Sovereign Value Bomb", desc: "Inject absolute conviction via High-Ticket Closer skill.", status: activeNode >= 1 ? "Sent" : "Queued" },
-    { day: 2, type: "WhatsApp", icon: MessageSquare, title: "Direct Intervention", desc: "God-Brain custom check-in via Twilio API.", status: activeNode >= 2 ? "Sent" : "Queued" },
+    { day: 2, type: "WhatsApp", icon: MessageSquare, title: "Direct Intervention", desc: "AI Memory custom check-in via Twilio API.", status: activeNode >= 2 ? "Sent" : "Queued" },
     { day: 4, type: "Email", icon: Mail, title: "The Agency Decimation Case Study", desc: "ROI mathematical proof + Video Testimonials.", status: activeNode >= 3 ? "Sent" : "Queued" },
     { day: 7, type: "WhatsApp", icon: MessageSquare, title: "The Ultimatum", desc: "Final scarcity trigger and checkout injection.", status: activeNode >= 4 ? "Sent" : "Queued" },
   ];
@@ -57,7 +57,7 @@ export default function NurtureMatrix() {
           <h1 className="text-3xl font-light tracking-tight text-white">Nurture Matrix</h1>
         </div>
         <p className="text-neutral-500 max-w-2xl tracking-wide">
-          Omnichannel Sequencing Swarm. Autonomously routes unconverted God-Brain leads through a 7-day high-ticket email and WhatsApp extraction cycle.
+          Omnichannel Sequencing Swarm. Autonomously routes unconverted AI Memory leads through a 7-day high-ticket email and WhatsApp extraction cycle.
         </p>
       </div>
 

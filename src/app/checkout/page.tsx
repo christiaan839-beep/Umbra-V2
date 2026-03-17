@@ -88,30 +88,30 @@ export default function CheckoutPage() {
         </Link>
         
         <div className="mb-12">
-           <h1 className="text-3xl md:text-5xl font-light tracking-tight mb-4 text-white">Sovereign Asset Acquisition</h1>
+           <h1 className="text-3xl md:text-5xl font-light tracking-tight mb-4 text-white">Complete Your Subscription</h1>
            <p className="text-neutral-400 font-light leading-relaxed">
-             You are initiating the deployment of a dedicated UMBRA AGI Node. This secures your exclusive, containerized automation swarm.
+             You are activating your UMBRA AI marketing platform. This gives you full access to all tools and features.
            </p>
         </div>
 
         <div className="space-y-6 mb-12">
           {/* Line Items */}
           <div className="flex justify-between items-center pb-6 border-b border-white/5">
-            <span className="text-neutral-300">UMBRA Dedicated Node (Monthly)</span>
-            <span className="font-mono text-white">$5,000</span>
+            <span className="text-neutral-300">UMBRA Pro Plan (Monthly)</span>
+            <span className="font-mono text-white">R2,750</span>
           </div>
           <div className="flex justify-between items-center pb-6 border-b border-white/5">
-            <span className="text-neutral-500">Sub-Swarm Orchestration</span>
+            <span className="text-neutral-500">AI Content & SEO Tools</span>
             <span className="text-emerald-500 text-xs font-bold tracking-wide uppercase">Included</span>
           </div>
           <div className="flex justify-between items-center pb-6 border-b border-white/5">
-            <span className="text-neutral-500">API Telemetry Routing</span>
+            <span className="text-neutral-500">Lead Generation & Analytics</span>
             <span className="text-emerald-500 text-xs font-bold tracking-wide uppercase">Included</span>
           </div>
           
           <div className="flex justify-between items-center pt-6">
             <span className="text-lg text-white font-medium">Total Billed Today</span>
-            <span className="text-3xl font-light text-white">$5,000<span className="text-sm text-neutral-500 ml-1">USD</span></span>
+            <span className="text-3xl font-light text-white">R2,750<span className="text-sm text-neutral-500 ml-1">ZAR</span></span>
           </div>
         </div>
 
@@ -297,9 +297,9 @@ export default function CheckoutPage() {
                  <CheckCircle className="w-12 h-12 text-emerald-500" />
                </div>
                
-               <h2 className="text-3xl md:text-5xl font-light text-white mb-6">Asset Secured.</h2>
+               <h2 className="text-3xl md:text-5xl font-light text-white mb-6">You&apos;re In.</h2>
                <p className="text-neutral-400 font-light leading-relaxed mb-12">
-                 Your $5,000 transaction was successful. We have provisioned your dedicated UMBRA namespace. The Swarm is now awaiting your command.
+                 Your subscription is now active. We have set up your UMBRA workspace and all AI tools are ready to use.
                </p>
 
                <div className="bg-[#0A0A0A] border border-white/10 rounded-2xl p-6 mb-10 text-left">

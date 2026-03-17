@@ -97,7 +97,7 @@ export default function CinematicStudioPage() {
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 className="w-full bg-black/60 border border-glass-border rounded-lg px-4 py-3 text-sm text-white font-mono focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 outline-none transition-all shadow-inner resize-none"
-                placeholder="Paste context from God-Brain..."
+                placeholder="Paste context from AI Memory..."
                 disabled={status !== "idle"}
               />
             </div>

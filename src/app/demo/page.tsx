@@ -33,7 +33,7 @@ const TERMINAL_LINES = [
   { text: "   5. \"Why Google Reviews Matter More Than Your Website\"", type: "data" as const, delay: 11000 },
   { text: "", type: "sys" as const, delay: 11200 },
   { text: "📊 Estimated traffic capture: +4,200 visits/month", type: "success" as const, delay: 11500 },
-  { text: "💰 Projected lead value: $12,600/month", type: "success" as const, delay: 12000 },
+  { text: "💰 Projected lead value: R126,000/month", type: "success" as const, delay: 12000 },
   { text: "🚀 Deploying SEO pages to /locations/dentist/[city]...", type: "sys" as const, delay: 12500 },
   { text: "   ✅ Generated: /locations/dental-marketing/dallas", type: "success" as const, delay: 13000 },
   { text: "   ✅ Generated: /locations/dental-marketing/houston", type: "success" as const, delay: 13300 },

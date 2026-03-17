@@ -169,7 +169,7 @@ export default function TreasuryHub() {
         <div className="lg:col-span-2">
            <motion.div {...fade(6)} className="glass-card">
               <div className="px-6 py-4 border-b border-glass-border flex items-center justify-between">
-                <h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary">God-Brain Ledger (Last 24h)</h2>
+                <h2 className="text-sm font-bold uppercase tracking-widest text-text-secondary">AI Memory Ledger (Last 24h)</h2>
                 <Target className="w-4 h-4 text-text-secondary" />
               </div>
               

@@ -97,7 +97,7 @@ export default function MetaCognitionHub() {
                     </button>
                     
                     <p className="text-[10px] text-text-secondary mt-4 text-center leading-relaxed">
-                        Initializing this routine scans the God-Brain for recent failure states associated with the target agent, synthesizes the core flaw, and rewrites the internal agent system prompt dynamically.
+                        Initializing this routine scans the AI Memory for recent failure states associated with the target agent, synthesizes the core flaw, and rewrites the internal agent system prompt dynamically.
                     </p>
                 </div>
             </div>
@@ -158,7 +158,7 @@ export default function MetaCognitionHub() {
                 {isOptimizing && (
                      <div className="p-8 border border-glass-border border-dashed rounded-xl bg-midnight/30 flex items-center justify-center flex-col animate-pulse">
                          <DatabaseZap className="w-8 h-8 text-electric mb-4 animate-bounce" />
-                         <p className="text-xs uppercase tracking-widest text-electric">Connecting to God-Brain Telemetry...</p>
+                         <p className="text-xs uppercase tracking-widest text-electric">Connecting to AI Memory Telemetry...</p>
                      </div>
                 )}
             </div>

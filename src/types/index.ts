@@ -1,4 +1,4 @@
-/** Shared types for the entire Sovereign Node V2 platform */
+/** Shared types for the UMBRA platform */
 
 // ─── AI ──────────────────────────────────────────────
 export type AIModel = "gemini" | "claude";

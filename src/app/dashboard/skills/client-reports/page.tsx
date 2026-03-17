@@ -69,7 +69,7 @@ export default function ClientReportsPage() {
         </div>
         <h1 className="text-3xl font-bold serif-text text-white">Client Report Generator</h1>
         <p className="text-sm text-text-secondary mt-2 max-w-2xl">
-          Generate branded, executive-level performance reports that justify your retainer. Agencies charge $500-$1,000 just for monthly reporting — this does it in seconds.
+          Generate branded, executive-level performance reports that justify your retainer. Agencies charge R5,000-R10,000 just for monthly reporting — this does it in seconds.
         </p>
       </div>
 

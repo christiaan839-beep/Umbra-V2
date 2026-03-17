@@ -77,7 +77,7 @@ export default function BillingPage() {
             <p className="text-sm text-[#8A95A5]">15 AI engines • Unlimited actions • Priority support</p>
           </div>
           <div className="text-right">
-            <p className="text-3xl font-bold text-white font-mono">$2,497<span className="text-sm text-[#5C667A]">/mo</span></p>
+            <p className="text-3xl font-bold text-white font-mono">R2,750<span className="text-sm text-[#5C667A]">/mo</span></p>
             <button
               onClick={openBillingPortal}
               disabled={portalLoading}

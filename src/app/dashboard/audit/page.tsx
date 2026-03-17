@@ -20,7 +20,7 @@ export default function AuditTimeline() {
       { type: "audit:campaign_launched", timestamp: new Date(Date.now() - 120000).toISOString(), payload: JSON.stringify({ actorType: "ai_agent", actorId: "outbound-swarm", details: { niche: "MedSpa", count: 5 } }) },
       { type: "audit:content_published", timestamp: new Date(Date.now() - 300000).toISOString(), payload: JSON.stringify({ actorType: "ai_agent", actorId: "content-engine", details: { platform: "Instagram", title: "5 Botox Myths Debunked" } }) },
       { type: "audit:competitor_scanned", timestamp: new Date(Date.now() - 600000).toISOString(), payload: JSON.stringify({ actorType: "system", actorId: "warfare-scanner", details: { competitor: "RivalSpa.com", threatLevel: "MEDIUM" } }) },
-      { type: "audit:lead_closed", timestamp: new Date(Date.now() - 900000).toISOString(), payload: JSON.stringify({ actorType: "ai_agent", actorId: "closer-bot", details: { prospect: "Dr. Sarah Mitchell", value: "$8,500" } }) },
+      { type: "audit:lead_closed", timestamp: new Date(Date.now() - 900000).toISOString(), payload: JSON.stringify({ actorType: "ai_agent", actorId: "closer-bot", details: { prospect: "Dr. Sarah Mitchell", value: "R85,000" } }) },
       { type: "audit:page_deployed", timestamp: new Date(Date.now() - 1200000).toISOString(), payload: JSON.stringify({ actorType: "ai_agent", actorId: "page-factory", details: { keyword: "botox miami", slug: "/botox-miami" } }) },
       { type: "audit:user_login", timestamp: new Date(Date.now() - 1800000).toISOString(), payload: JSON.stringify({ actorType: "user", actorId: "admin@umbra.ai", details: { ip: "192.168.1.1" } }) },
     ]);

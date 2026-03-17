@@ -17,9 +17,9 @@ export default function SovereignTerminal() {
             <span className="font-bold tracking-[0.2em] text-sm group-hover:text-rose-glow transition-colors">UMBRA V2</span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-text-secondary">
-             <span>Sovereign Architecture</span>
-             <span>Decimation Protocols</span>
-             <Link href="/login" className="text-white">Access God-Brain</Link>
+             <span>Platform Architecture</span>
+             <span>AI Capabilities</span>
+             <Link href="/login" className="text-white">Access Dashboard</Link>
           </div>
         </div>
       </header>
@@ -29,7 +29,7 @@ export default function SovereignTerminal() {
         <div className="max-w-4xl mx-auto text-center mb-24">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-glow text-xs font-bold uppercase tracking-widest mb-8">
-               Phase 28 Active
+               Now Available
              </span>
              <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 serif-text leading-tight">
                The Sovereign Entity.
@@ -50,7 +50,7 @@ export default function SovereignTerminal() {
           {[
             { tag: "01", title: "Zero Latency", desc: "Humans take 4 weeks to launch campaigns. UMBRA deploys programmatic SEO and hooks in 3.4 seconds.", icon: Cpu },
             { tag: "02", title: "Ruthless Logic", desc: "Agencies get emotional about losing ads. The Apex Ad Buyer coldly calculates CPA and kills bleeding campaigns instantly.", icon: InfinityIcon },
-            { tag: "03", title: "God-Brain Persistence", desc: "Employees forget client context. UMBRA logs every lead, every ad variant, and every competitor change to Pinecone forever.", icon: Shield },
+            { tag: "03", title: "Total Recall Memory", desc: "Employees forget client context. UMBRA logs every lead, every ad variant, and every competitor change to its AI memory — forever.", icon: Shield },
           ].map((feat, i) => (
              <div key={i} className="glass-card p-8 border border-glass-border hover:border-rose-500/30 transition-colors">
                 <feat.icon className="w-8 h-8 text-rose-500 mb-6" />

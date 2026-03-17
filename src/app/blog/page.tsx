@@ -18,7 +18,7 @@ const ARTICLES = [
   },
   {
     slug: "autonomous-marketing-playbook",
-    title: "The Autonomous Marketing Playbook: How to Run $50k/mo in Ads Without Touching a Button",
+    title: "The Autonomous Marketing Playbook: How to Run R500k/mo in Ads Without Touching a Button",
     excerpt: "Ghost Mode changes everything. Set your ROAS threshold, deploy your campaigns, and let AI handle the rest — killing losers, scaling winners, and writing new copy 24/7.",
     category: "Guide",
     readTime: "12 min",
@@ -35,15 +35,15 @@ const ARTICLES = [
   },
   {
     slug: "ai-replacing-10k-retainers",
-    title: "How AI Is Replacing $10k/mo Agency Retainers",
+    title: "How AI Is Replacing R100k/mo Agency Retainers",
     excerpt: "Three agency owners share how they replaced their entire marketing team with a single autonomous system — and saw revenue increase by 200-400%.",
     category: "Case Study",
     readTime: "10 min",
     date: "Mar 5, 2026",
   },
   {
-    slug: "god-brain-vector-memory",
-    title: "God-Brain: The Vector Memory System That Never Forgets a Winning Pattern",
+    slug: "ai-vector-memory",
+    title: "AI Memory: The Vector System That Never Forgets a Winning Pattern",
     excerpt: "Every successful campaign pattern is stored in vector memory. Every future campaign starts smarter. This is how compound intelligence works — and why it can't be replicated by humans.",
     category: "Technology",
     readTime: "7 min",
@@ -51,8 +51,8 @@ const ARTICLES = [
   },
   {
     slug: "white-label-ai-agency",
-    title: "Build a $60k/mo White-Label AI Agency With Zero Technical Skills",
-    excerpt: "Buy the Franchise license. Rebrand UMBRA. Sell it to 12 clients at $5k/mo each. Zero code, zero hiring, zero overhead. Here's the exact playbook.",
+    title: "Build a R600k/mo White-Label AI Agency With Zero Technical Skills",
+    excerpt: "Use UMBRA as your agency backend. Service 12 clients at R50k/mo each. Zero code, zero hiring, zero overhead. Here's the exact playbook.",
     category: "Business",
     readTime: "9 min",
     date: "Feb 28, 2026",

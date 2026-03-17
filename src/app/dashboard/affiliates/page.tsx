@@ -15,9 +15,9 @@ export default function AffiliateEngine() {
   };
 
   const affiliates = [
-    { name: "Apex Alpha", revenue: "$14,250", referrals: 24, status: "Active", utm: "utm_campaign=apex_alpha" },
-    { name: "Growth OS Build", revenue: "$8,500", referrals: 12, status: "Active", utm: "utm_campaign=growth_build" },
-    { name: "Sovereign Syndicate", revenue: "$4,100", referrals: 7, status: "Active", utm: "utm_campaign=syndicate" },
+    { name: "Apex Alpha", revenue: "R142,500", referrals: 24, status: "Active", utm: "utm_campaign=apex_alpha" },
+    { name: "Growth OS Build", revenue: "R85,000", referrals: 12, status: "Active", utm: "utm_campaign=growth_build" },
+    { name: "UMBRA Partners", revenue: "R41,000", referrals: 7, status: "Active", utm: "utm_campaign=partners" },
   ];
 
   return (
@@ -46,7 +46,7 @@ export default function AffiliateEngine() {
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-neutral-900/40 border border-neutral-800/60 rounded-xl p-6 backdrop-blur-md">
             <h3 className="text-xs uppercase tracking-widest text-neutral-500 mb-1">Total Rev-Share Paid</h3>
-            <p className="text-3xl font-light text-emerald-400">$38,450.00</p>
+            <p className="text-3xl font-light text-emerald-400">R384,500.00</p>
             <div className="mt-4 pt-4 border-t border-neutral-800">
                <p className="text-xs text-neutral-400">Next Payout: <span className="text-white">Mar 15, 2026</span></p>
             </div>
@@ -132,7 +132,7 @@ export default function AffiliateEngine() {
                         <td className="py-4 text-indigo-300 animate-pulse">Initializing...</td>
                         <td className="py-4 text-neutral-500 font-mono text-xs">utm_campaign=pending</td>
                         <td className="py-4 text-neutral-500">0</td>
-                        <td className="py-4 text-neutral-500">$0.00</td>
+                        <td className="py-4 text-neutral-500">R0.00</td>
                         <td className="py-4">
                           <span className="px-2 py-1 text-xs rounded-full bg-neutral-800 text-neutral-400">Deploying</span>
                         </td>

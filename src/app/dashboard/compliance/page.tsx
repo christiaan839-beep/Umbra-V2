@@ -38,7 +38,7 @@ export default function ComplianceTerminal() {
             <h1 className="text-3xl font-light tracking-tight text-white">Compliance & Risk</h1>
           </div>
           <p className="text-neutral-500 max-w-2xl tracking-wide">
-            Enterprise-grade Sovereign Guardian. Monitors API velocity limits, rotates routing proxies, and enforces strict TOS compliance parameters across the God-Brain.
+            Enterprise-grade Sovereign Guardian. Monitors API velocity limits, rotates routing proxies, and enforces strict TOS compliance parameters across the AI Memory.
           </p>
         </div>
         

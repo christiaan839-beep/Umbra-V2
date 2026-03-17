@@ -20,7 +20,7 @@ const LOG_MESSAGES = [
     "Transmitting payload to Gemini 1.5 Pro for analysis...",
     "Detecting marketing failure points (SEO, Schema, Offer)...",
     "Synthesizing hyper-personalized cold outreach angles...",
-    "Committing gap analysis reports to The God-Brain...",
+    "Committing gap analysis reports to The AI Memory...",
 ];
 
 export default function LeadsDashboard() {

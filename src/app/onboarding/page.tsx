@@ -179,11 +179,11 @@ export default function OnboardingWizard() {
                   <div>
                     <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Monthly Budget</label>
                     <select value={formData.monthlyBudget} onChange={(e) => update("monthlyBudget", e.target.value)} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-500/50 font-mono">
-                      <option value="500">$500/mo</option>
-                      <option value="1000">$1,000/mo</option>
-                      <option value="2500">$2,500/mo</option>
-                      <option value="5000">$5,000/mo</option>
-                      <option value="10000">$10,000+/mo</option>
+                      <option value="500">R5,000/mo</option>
+                      <option value="1000">R10,000/mo</option>
+                      <option value="2500">R25,000/mo</option>
+                      <option value="5000">R50,000/mo</option>
+                      <option value="10000">R100,000+/mo</option>
                     </select>
                   </div>
                 </div>

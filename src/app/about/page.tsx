@@ -16,7 +16,7 @@ const VALUES = [
 const STATS = [
   { value: "15", label: "AI Engines" },
   { value: "53+", label: "Routes" },
-  { value: "$2.3M", label: "Revenue Generated" },
+  { value: "R2.3M", label: "Revenue Generated" },
   { value: "0", label: "Human Employees Needed" },
 ];
 
@@ -61,7 +61,7 @@ export default function AboutPage() {
         <motion.div {...fadeIn(0.15)} className="mb-20">
           <h2 className="text-xs font-bold uppercase tracking-widest text-electric mb-6">The Problem</h2>
           <div className="space-y-4 text-sm text-text-secondary leading-relaxed">
-            <p>Marketing agencies charge $10-25k per month for a team that works 9-5, takes holidays, and forgets what worked last quarter. AI tools like Jasper or Copy.ai solve one problem each — but your marketing needs a system, not a typewriter.</p>
+            <p>Marketing agencies charge R100-250k per month for a team that works 9-5, takes holidays, and forgets what worked last quarter. AI tools like Jasper or Copy.ai solve one problem each — but your marketing needs a system, not a typewriter.</p>
             <p>We asked: what if one platform could replace the entire team? Not just write copy — but analyze competitors, debate ad variations with itself, test prompts against each other, kill underperforming ads while you sleep, and remember every winning pattern forever?</p>
             <p className="text-white font-medium">That&apos;s UMBRA. 15 engines. Zero employees. Fully autonomous.</p>
           </div>
@@ -90,7 +90,7 @@ export default function AboutPage() {
             <p><span className="text-electric">Engines:</span> 15 autonomous agents operating in parallel</p>
             <p><span className="text-electric">Deployment:</span> Vercel Edge Network (global CDN)</p>
             <p><span className="text-electric">Auth:</span> Cookie-based with middleware route guards</p>
-            <p><span className="text-electric">Payments:</span> Stripe with HMAC-SHA256 webhook verification</p>
+            <p><span className="text-electric">Payments:</span> Paystack with HMAC-SHA512 webhook verification</p>
           </div>
         </motion.div>
 

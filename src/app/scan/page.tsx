@@ -201,7 +201,7 @@ export default function AGIAuditorPage() {
                     <DollarSign className="w-5 h-5 text-[#00B7FF]" />
                     <span className="text-xs tracking-widest text-[#00B7FF] uppercase font-bold">Lost Capital</span>
                   </div>
-                  <div className="text-3xl font-mono text-white mb-2">$34,200<span className="text-xl text-neutral-500">/mo</span></div>
+                  <div className="text-3xl font-mono text-white mb-2">R342,000<span className="text-xl text-neutral-500">/mo</span></div>
                   <div className="text-sm text-[#00B7FF]/80">Estimated value bleeding to competitors via inefficient routing.</div>
                 </div>
 

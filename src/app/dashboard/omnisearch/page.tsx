@@ -42,7 +42,7 @@ export default function OmnisearchDashboard() {
           title: 'Closing Call - High Ticket Prospect (Dr. Evans)',
           relevance: 92.1,
           timestamp: '14:22',
-          excerpt: "...exactly. And when you bypass the standard digestive limits using our protocol, the cognitive ROI is immediate. That's why the $5k retainer is..."
+          excerpt: "...exactly. And when you bypass the standard digestive limits using our protocol, the cognitive ROI is immediate. That's why the R2,750 retainer is..."
         },
         {
           id: 'doc_55x',
@@ -98,7 +98,7 @@ export default function OmnisearchDashboard() {
                     <input 
                       type="text"
                       className="w-full bg-black/50 border border-white/10 focus:border-[#00B7FF]/50 rounded-xl py-4 pl-12 pr-4 text-white placeholder-neutral-600 transition-all outline-none font-mono text-sm"
-                      placeholder="e.g., 'Find the exact moment I explained the $5k offer on a sales call last week'"
+                      placeholder="e.g., 'Find the exact moment I explained the R2,750 offer on a sales call last week'"
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                     />
@@ -112,7 +112,7 @@ export default function OmnisearchDashboard() {
                       disabled={isSearching}
                       className="px-6 py-2 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-[#00B7FF] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {isSearching ? 'Querying God-Brain...' : 'Extract Context'}
+                      {isSearching ? 'Querying AI Memory...' : 'Extract Context'}
                     </button>
                  </div>
                </form>

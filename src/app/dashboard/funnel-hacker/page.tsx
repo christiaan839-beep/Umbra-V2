@@ -138,7 +138,7 @@ export default function FunnelHijacker() {
                    
                    <div className="bg-black/50 border border-glass-border rounded-lg p-4">
                      <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-1">Pricing Model</p>
-                     <p className="text-sm font-mono text-white">$99/mo standard tier.</p>
+                     <p className="text-sm font-mono text-white">R999/mo standard tier.</p>
                      <p className="text-[10px] text-amber-400 mt-2 font-mono">Commoditized tiering. Missing high-ticket anchor.</p>
                    </div>
 
@@ -187,7 +187,7 @@ export default function FunnelHijacker() {
                         <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-2">Superseding Hook</p>
                         <div className="bg-black/50 border border-emerald-500/20 rounded-xl p-5">
                           <h2 className="text-3xl font-light text-white font-mono leading-tight">
-                            "Stop Renting Employees.<br/>Own A Sovereign God-Brain."
+                            "Stop Renting Employees.<br/>Own A Sovereign AI Memory."
                           </h2>
                           <div className="mt-4 flex gap-2">
                             <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded border border-emerald-500/20 uppercase tracking-widest font-bold">+412% Semantic Power</span>
@@ -198,8 +198,8 @@ export default function FunnelHijacker() {
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-black/50 border border-glass-border rounded-xl p-5">
                            <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-3">Pricing Architecture</p>
-                           <p className="text-xl text-white font-mono">$5,000 / mo</p>
-                           <p className="text-xs text-[#8A95A5] mt-1 font-mono">High-ticket anchor bypasses $99/mo commodity friction.</p>
+                           <p className="text-xl text-white font-mono">R2,750 / mo</p>
+                           <p className="text-xs text-[#8A95A5] mt-1 font-mono">Premium anchor positions against R999/mo standard tier.</p>
                         </div>
                         <div className="bg-black/50 border border-glass-border rounded-xl p-5">
                            <p className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-3">UI/UX Paradigm</p>

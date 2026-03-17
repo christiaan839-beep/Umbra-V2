@@ -66,7 +66,7 @@ export default function AdCreatorPage() {
         </div>
         <h1 className="text-3xl font-bold serif-text text-white">Dynamic Ad Creator</h1>
         <p className="text-sm text-text-secondary mt-2 max-w-2xl">
-          Generate 5 high-converting ad creatives in seconds using 5 different psychological hooks. Each variation is designed to stop the scroll and drive action. Agencies charge $5,000+ for this.
+          Generate 5 high-converting ad creatives in seconds using 5 different psychological hooks. Each variation is designed to stop the scroll and drive action. Agencies charge R50,000+ for this.
         </p>
       </div>
 

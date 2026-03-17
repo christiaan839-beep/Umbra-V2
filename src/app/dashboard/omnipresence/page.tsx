@@ -75,7 +75,7 @@ export default function GlobalOmnipresenceGlobe() {
                 <div className="flex justify-between items-end border-b border-[#00B7FF]/10 pb-4">
                   <div>
                     <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold">Global Capital Deployed</span>
-                    <p className="text-2xl text-emerald-400 font-mono font-light mt-1">$1.4M</p>
+                    <p className="text-2xl text-emerald-400 font-mono font-light mt-1">R14M</p>
                   </div>
                   <Target className="w-5 h-5 text-[#00B7FF]" />
                 </div>

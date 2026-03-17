@@ -10,9 +10,9 @@ export default function AdBuyerTerminal() {
 
   // Mock telemetry data
   const metrics = [
-    { platform: "Meta Array", spend: "$2,105", roas: "3.4x", cpl: "$14.20", trend: "up", status: "scaling" },
-    { platform: "TikTok Grid", spend: "$1,840", roas: "4.1x", cpl: "$9.80", trend: "up", status: "scaling" },
-    { platform: "Google Search", spend: "$1,055", roas: "1.8x", cpl: "$45.00", trend: "down", status: "culling" }
+    { platform: "Meta Array", spend: "R21,050", roas: "3.4x", cpl: "R142", trend: "up", status: "scaling" },
+    { platform: "TikTok Grid", spend: "R18,400", roas: "4.1x", cpl: "R98", trend: "up", status: "scaling" },
+    { platform: "Google Search", spend: "R10,550", roas: "1.8x", cpl: "R450", trend: "down", status: "culling" }
   ];
 
   return (
@@ -62,7 +62,7 @@ export default function AdBuyerTerminal() {
                <div>
                  <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5C667A] mb-2">Targeting Directive</label>
                  <select disabled={active} className="w-full bg-black/60 border border-glass-border rounded-lg px-4 py-3 text-sm text-white outline-none cursor-pointer appearance-none font-mono">
-                   <option>God-Brain Lookalike (Max LTV)</option>
+                   <option>AI Memory Lookalike (Max LTV)</option>
                    <option>Pixel Converters (High Intent)</option>
                    <option>Cold Outreach Retargeting (Omnipresence)</option>
                  </select>
@@ -95,8 +95,8 @@ export default function AdBuyerTerminal() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                {[
                  { label: "Active Nodes", val: "14" },
-                 { label: "Avg CPL", val: "$12.40", color: "text-emerald-400" },
-                 { label: "God-Brain Match", val: "94%" },
+                 { label: "Avg CPL", val: "R124", color: "text-emerald-400" },
+                 { label: "AI Memory Match", val: "94%" },
                  { label: "Next Reallocation", val: "00:45:12" }
                ].map((stat, i) => (
                  <div key={i} className="glass-card bg-[#0B0C10]/80 border border-glass-border p-4 rounded-lg flex flex-col justify-center">

@@ -7,8 +7,8 @@ import { BrainCircuit, Search, Database, Activity, Target, Zap, Play, Workflow, 
 // Simulated Real-Time System Telemetry
 const TELEMETRY_STREAM = [
     { node: "Ghost Mode", action: "Drafting SEO cluster for short-form AI video generation.", color: "text-purple-400", bg: "bg-purple-500/10", icon: Workflow },
-    { node: "Ad-Buyer", action: "Allocating $250 to Meta learning phase. CPL projected at $22.40.", color: "text-blue-400", bg: "bg-blue-500/10", icon: Target },
-    { node: "Cinematic Swarm", action: "Rendering final frame composite for VSL variant B. God-Brain logged.", color: "text-amber-400", bg: "bg-amber-500/10", icon: Play },
+    { node: "Ad-Buyer", action: "Allocating R2,500 to Meta learning phase. CPL projected at R224.", color: "text-blue-400", bg: "bg-blue-500/10", icon: Target },
+    { node: "Cinematic Swarm", action: "Rendering final frame composite for VSL variant B. AI Memory logged.", color: "text-amber-400", bg: "bg-amber-500/10", icon: Play },
     { node: "Apex Engine", action: "Synthesized cross-swarm matrix. Injecting scaling weight to TikTok.", color: "text-emerald-400", bg: "bg-emerald-500/10", icon: BrainCircuit },
     { node: "The Nexus", action: "Routing webhook trigger from Stripe to Onboarding sequence.", color: "text-electric", bg: "bg-electric/10", icon: Activity },
     { node: "Genesis Node", action: "Deep crawl completed for client domain. Sub-swarm provisioned.", color: "text-rose-glow", bg: "bg-rose-glow/10", icon: Zap }
@@ -85,7 +85,7 @@ export default function NeuralVisualizer() {
                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-electric/10 border border-electric/20 text-electric text-xs font-bold uppercase tracking-wider mb-3">
                     <Database className="w-3 h-3" /> Core Memory
                </div>
-               <h1 className="text-3xl font-bold font-mono tracking-tight text-white mb-1">God-Brain V2</h1>
+               <h1 className="text-3xl font-bold font-mono tracking-tight text-white mb-1">AI Memory V2</h1>
                <p className="text-sm text-[#8A95A5] uppercase tracking-widest font-bold">Multimodal Vector Subsystem</p>
            </div>
 
@@ -237,7 +237,7 @@ export default function NeuralVisualizer() {
                                     <Upload className="w-8 h-8 text-emerald-400" />
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-2 font-mono">Multimodal Memory Ingestion</h3>
-                                <p className="text-sm text-[#8A95A5] mb-8 max-w-sm">Drop .mp3 (sales calls), .mp4 (video ads), or text documents to embed into the God-Brain.</p>
+                                <p className="text-sm text-[#8A95A5] mb-8 max-w-sm">Drop .mp3 (sales calls), .mp4 (video ads), or text documents to embed into the AI Memory.</p>
                                 
                                 <div className="flex gap-4">
                                   <button onClick={() => simulateIngest("discovery_call_feb24.mp3")} className="px-4 py-2 bg-black border border-glass-border hover:border-emerald-500/50 rounded-lg text-xs font-bold text-[#C1C8D4] transition-colors flex items-center gap-2">

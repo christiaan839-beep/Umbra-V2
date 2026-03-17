@@ -15,7 +15,7 @@ const PRESET_MESSAGES = [
   "Hey, I saw your post about dental marketing. How does it work?",
   "What's the pricing for the AI marketing system?",
   "Can you show me a competitor analysis for my area?",
-  "I'm spending $3k/month with an agency and getting nothing. Help?",
+  "I'm spending R30k/month with an agency and getting nothing. Help?",
 ];
 
 export default function WhatsAppTestPage() {

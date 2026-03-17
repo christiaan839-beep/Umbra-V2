@@ -96,7 +96,7 @@ export default function ApexStrategyTerminal() {
     {
       id: '1',
       agent: 'GOVERNOR',
-      text: 'God-Brain sequence initiated. Swarm nodes standing by for command injection.',
+      text: 'AI Memory sequence initiated. Swarm nodes standing by for command injection.',
       timestamp: new Date()
     }
   ]);
@@ -218,7 +218,7 @@ export default function ApexStrategyTerminal() {
                type="text"
                value={input}
                onChange={(e) => setInput(e.target.value)}
-               placeholder="Inject command into God-Brain... (e.g., 'Analyze competitor.com and launch counter-campaign')"
+               placeholder="Inject command into AI Memory... (e.g., 'Analyze competitor.com and launch counter-campaign')"
                disabled={isProcessing}
                className="w-full bg-black/50 border border-[#00B7FF]/30 rounded-xl py-4 pl-10 pr-16 text-white font-mono text-sm focus:outline-none focus:border-[#00B7FF] focus:shadow-[0_0_20px_rgba(0,183,255,0.2)] transition-all placeholder:text-neutral-600 disabled:opacity-50"
              />
