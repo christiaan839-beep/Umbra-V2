@@ -7,6 +7,7 @@ import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
 
 import { UmbraLogo } from "@/components/ui/UmbraLogo";
+import { LiveDemoScanner } from "@/components/ui/LiveDemoScanner";
 import { ROICalculator } from "@/components/ui/ROICalculator";
 import { Pricing } from "@/components/ui/Pricing";
 import { SplashIntro } from "@/components/ui/SplashIntro";
@@ -151,7 +152,14 @@ export default function Home() {
                 <Target className="w-4 h-4" /> Secure ZAR Payments
               </div>
            </div>
-          
+
+          {/* Live Demo Scanner */}
+          <div className="w-full max-w-3xl mx-auto mb-20">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
+              <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-6">Try It Yourself — Free Competitor Scan</h2>
+              <LiveDemoScanner />
+            </motion.div>
+          </div>
 
           {/* Animated Product Walkthrough */}
           <AnimatedVSL />

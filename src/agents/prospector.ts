@@ -1,31 +1,60 @@
-import { ai } from "@/lib/ai";
+import { ai, research_ai } from "@/lib/ai";
 import { remember } from "@/lib/memory";
 import type { AgentResult, Lead } from "@/types";
 
-/** Apollo-style lead prospector that finds and qualifies leads */
+/**
+ * Lead Prospector — finds REAL businesses using Tavily web search.
+ *
+ * Unlike the old version (which generated fictional leads), this uses
+ * live web research to find actual companies matching the ideal client profile.
+ */
 export async function prospectLeads(
   industry: string,
-  idealClient: string
+  idealClient: string,
+  location?: string
 ): Promise<AgentResult & { leads: Lead[] }> {
-  const output = await ai(
-    `Generate 5 realistic B2B leads for an AI marketing platform.
-INDUSTRY: ${industry}
-IDEAL CLIENT: ${idealClient}
+  // 1. Search for real businesses via Tavily
+  const searchQuery = `${industry} ${idealClient} businesses ${location || "South Africa"} company contact`;
 
-For each lead return JSON: {"name": string, "company": string, "email": string, "stage": "cold"|"warm"|"hot", "score": 1-100}
+  const enrichedOutput = await research_ai(
+    searchQuery,
+    `You are an elite B2B lead prospector. Using the live search results provided, identify 5 REAL businesses that match the target profile.
 
-Return ONLY a JSON array. No explanation.`,
+TARGET PROFILE:
+- Industry: ${industry}
+- Ideal Client: ${idealClient}
+- Location: ${location || "South Africa"}
+
+CRITICAL RULES:
+- Only return companies you found in the search results — DO NOT invent or fabricate any data
+- Use real company names and real website URLs from the search results
+- For email, use the format info@[domain] or contact@[domain] if not found directly
+- Score each lead 1-100 based on how well they match the ideal client profile
+- Stage: "cold" (just found), "warm" (strong match + active online), "hot" (perfect match + clear pain point)
+
+Return ONLY a JSON array. No explanation. Format:
+[
+  {
+    "name": "Contact/Company Name",
+    "company": "Real Company Name",
+    "email": "real-email@domain.com",
+    "website": "https://real-company-url.com",
+    "stage": "cold"|"warm"|"hot",
+    "score": 1-100,
+    "reason": "Why this is a good lead"
+  }
+]`,
     {
       model: "gemini",
-      system: "You are a B2B lead generation expert. Generate realistic but fictional lead data for prospecting.",
-      maxTokens: 1000,
+      system: "You are a B2B lead generation expert. Only return real companies found in the search results. Never fabricate data.",
+      maxTokens: 2000,
     }
   );
 
   let leads: Lead[] = [];
   try {
-    const match = output.match(/\[[\s\S]*\]/);
-    leads = JSON.parse(match ? match[0] : output);
+    const match = enrichedOutput.match(/\[[\s\S]*\]/);
+    leads = JSON.parse(match ? match[0] : enrichedOutput);
   } catch {
     leads = [];
   }
@@ -33,9 +62,18 @@ Return ONLY a JSON array. No explanation.`,
   // Store hot leads in memory for other agents
   for (const lead of leads) {
     if (lead.stage === "hot") {
-      await remember(`Hot lead: ${lead.name} at ${lead.company} (${industry})`, { type: "lead", stage: "hot" });
+      await remember(
+        `Hot lead found: ${lead.name} at ${lead.company} — ${(lead as any).reason || industry}`,
+        { type: "lead", stage: "hot", industry }
+      );
     }
   }
 
-  return { success: true, agent: "prospector", output, leads, timestamp: new Date().toISOString() };
+  return {
+    success: true,
+    agent: "prospector",
+    output: enrichedOutput,
+    leads,
+    timestamp: new Date().toISOString(),
+  };
 }
