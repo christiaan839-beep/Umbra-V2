@@ -49,13 +49,13 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
       { href: "/dashboard/war-room", label: "War Room Colosseum", icon: Swords },
-      { href: "/dashboard/nemo-claw", label: "NemoClaw Builder", icon: Cpu },
-      { href: "/dashboard/podcast", label: "PDF-to-Podcast", icon: Mic },
+      { href: "/dashboard/voice-swarm", label: "Pipecat Voice Swarm", icon: Mic },
+      { href: "/dashboard/nemo-claw", label: "Nano 30B Edge Terminal", icon: Cpu },
+      { href: "/dashboard/podcast", label: "PDF-to-Podcast", icon: Headphones },
       { href: "/dashboard/avatar", label: "Digital Human", icon: ScanFace },
       { href: "/dashboard/vsl-hacker", label: "Cosmos VSL Hacker", icon: Video },
       { href: "/dashboard/omni-search", label: "Global RAG Search", icon: Database },
       { href: "/dashboard/cyber-audit", label: "Cyber Security Auditor", icon: ShieldAlert },
-      { href: "/dashboard/support-router", label: "Omni-Closer Support", icon: Headphones },
       { href: "/dashboard/competitor-intel", label: "Competitor Analysis", icon: Radar },
       { href: "/dashboard/flywheel", label: "Anti-Slop Flywheel", icon: RefreshCcw },
     ]

@@ -11,13 +11,13 @@ interface Message {
 
 export default function NemoClawPage() {
   const [systemPrompt, setSystemPrompt] = useState(
-    "You are NemoClaw, an elite, autonomous AI builder within the UMBRA V3 ecosystem. " +
-    "You communicate with extreme precision and brevity. No fluff. No apologies. " +
-    "Your objective is to construct flawless marketing architectures and answer queries with mathematical certainty."
+    "You are OpenClaw Nano 30B, the local Edge Daemon operating on the Commander's macOS. " +
+    "You have root-level terminal access. " +
+    "Your objective is to execute OS-level commands, intercept local data, and route heavy reasoning to the Super 120B God-Brain."
   );
   
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "NemoClaw Initialized. NVIDIA Mistral-Nemotron Core online. Awaiting directive." }
+    { role: "assistant", content: "OpenClaw Daemon Initialized. Mac OS connection established. Awaiting root directive." }
   ]);
   const [input, setInput] = useState("");
   const [isInferencing, setIsInferencing] = useState(false);
@@ -100,15 +100,15 @@ export default function NemoClawPage() {
     <div className="p-8 max-w-7xl mx-auto min-h-screen bg-[#050505] text-white">
       {/* Header */}
       <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00B7FF]/10 border border-[#00B7FF]/20 text-[#00B7FF] text-xs font-bold uppercase tracking-wider mb-3">
-          <Cpu className="w-3 h-3" /> God-Brain Integrations
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-3">
+          <Activity className="w-3 h-3 animate-pulse" /> Edge Telemetry Active
         </div>
         <h1 className="text-3xl font-bold font-sans tracking-tight mb-2 flex items-center gap-3">
-          NemoClaw Builder
+          Nano 30B Edge Terminal
         </h1>
         <p className="text-sm text-neutral-400 max-w-2xl">
-          Construct autonomous agent workflows directly on top of NVIDIA&apos;s Mistral-Nemotron architecture. 
-          Configure the core directive, test responses, and deploy microsecond-latency reasoning loops.
+          Live connection to your local macOS OpenClaw Daemon. Execute OS-level commands natively, 
+          manage background routines, and view payload telemetry bypassing the cloud.
         </p>
       </div>
 
@@ -132,17 +132,15 @@ export default function NemoClawPage() {
                     onChange={(e) => setSelectedModel(e.target.value)}
                     className="bg-transparent border-none text-emerald-400 font-bold uppercase tracking-wider focus:outline-none focus:ring-0 cursor-pointer text-right appearance-none custom-select"
                   >
+                    <option value="nano-30b" className="bg-[#050505]">Nemotron Nano (30B)</option>
+                    <option value="super-120b" className="bg-[#050505]">Nemotron Super (120B)</option>
                     <option value="mistral-nemotron" className="bg-[#050505]">Mistral-Nemotron</option>
-                    <option value="deepseek-r1" className="bg-[#050505]">DeepSeek-V3 Reasoning</option>
-                    <option value="llama-3-3" className="bg-[#050505]">Llama 3.3 (70B) Instruct</option>
-                    <option value="cosmos-vlm" className="bg-[#050505]">Cosmos VLM</option>
-                    <option value="nemotron-ocr" className="bg-[#050505]">Nemotron OCR</option>
                   </select>
                 </div>
               </div>
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
-                <span className="text-neutral-500">Acceleration</span>
-                <span className="text-white">TensorRT-LLM</span>
+                <span className="text-neutral-500">Local Uplink</span>
+                <span className="text-white">Port 8001 (openclaw_payload.py)</span>
               </div>
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
                 <span className="text-neutral-500">OpenShell Guardrails</span>
@@ -228,7 +226,7 @@ export default function NemoClawPage() {
           <div className="h-12 border-b border-white/10 bg-white/[0.02] flex items-center justify-between px-4">
             <div className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-neutral-500" />
-              <span className="text-[10px] font-mono text-neutral-400 tracking-widest uppercase">NVIDIA NIM Sandbox Environment</span>
+              <span className="text-[10px] font-mono text-neutral-400 tracking-widest uppercase">macOS openclaw_daemon@local</span>
             </div>
             <div className="flex gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-neutral-800" />

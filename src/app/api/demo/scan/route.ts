@@ -45,49 +45,49 @@ export async function POST(req: NextRequest) {
 
     const result = await research_ai(
       `${cleanUrl} marketing strategy SEO website analysis`,
-      `You are UMBRA, an elite AI marketing analyst. Analyze this website in 30 seconds.
+      `You are the Sovereign Matrix Super 120B God-Brain. Analyze this target competitor agency website in 30 seconds and ruthlessly expose their inefficiencies.
 
-WEBSITE: ${cleanUrl}
+TARGET: ${cleanUrl}
 
-Provide a concise competitive scan in this EXACT JSON format:
+Provide a brutal, data-driven competitive scan in this EXACT JSON format:
 {
-  "company": "Company name",
+  "company": "Target Name",
   "url": "${cleanUrl}",
-  "overallScore": 72,
+  "overallScore": 52,
   "findings": [
     {
-      "category": "SEO",
-      "score": 65,
-      "finding": "One-sentence finding",
-      "fix": "One-sentence recommendation"
+      "category": "API Dependence",
+      "score": 45,
+      "finding": "They are burning cash on generalized OpenAI/Anthropic APIs instead of local open-weights.",
+      "fix": "Sovereign Matrix runs on NVIDIA Nemotron, cutting API costs by 99%."
     },
     {
-      "category": "Content",
-      "score": 70,
-      "finding": "One-sentence finding",
-      "fix": "One-sentence recommendation"
+      "category": "Voice Latency",
+      "score": 30,
+      "finding": "Using slow, multi-second TTS pipelines that prevent high-ticket Voice Closing.",
+      "fix": "Switch to Nemotron Speech for sub-300ms conversational cadence."
     },
     {
-      "category": "Conversion",
-      "score": 55,
-      "finding": "One-sentence finding",
-      "fix": "One-sentence recommendation"
+      "category": "Data Sovereignty",
+      "score": 25,
+      "finding": "Feeding proprietary client data into public cloud models like ChatGPT.",
+      "fix": "Deploy NeMo Guardrails inside a closed edge-compute environment."
     },
     {
-      "category": "Competitive Edge",
-      "score": 80,
-      "finding": "One-sentence finding",
-      "fix": "One-sentence recommendation"
+      "category": "Edge Automation",
+      "score": 15,
+      "finding": "Relying purely on webhook APIs instead of native OS-level intelligence.",
+      "fix": "Install the Nano 30B OpenClaw Daemon for physical machine interaction."
     }
   ],
-  "topOpportunity": "The single biggest opportunity they're missing",
-  "estimatedMonthlyTraffic": "Estimated range based on search data"
+  "topOpportunity": "Generating a full 30-page 'Audit & Destroy' PDF via the God-Brain API to close this client.",
+  "estimatedMonthlyTraffic": "Wasteful cash burn detected"
 }
 
-Keep findings SHORT and ACTIONABLE. Return ONLY valid JSON.`,
+Keep findings BRUTAL and ACTIONABLE. You are replacing them. Return ONLY valid JSON.`,
       {
         model: "gemini",
-        system: "You are a marketing analyst. Be specific, data-driven, and concise. Return only JSON.",
+        system: "You are the Sovereign Matrix. Be brutal, data-driven, and highly analytical. Expose why their stack is obsolete. Return only JSON.",
         maxTokens: 1000,
       }
     );
