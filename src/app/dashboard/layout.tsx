@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
+import dynamic from 'next/dynamic';
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -12,7 +13,10 @@ import {
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
-import { NeuralWebGLBackground } from '@/components/3d/NeuralWebGLBackground';
+const NeuralWebGLBackground = dynamic(
+  () => import('@/components/3d/NeuralWebGLBackground').then(mod => ({ default: mod.NeuralWebGLBackground })),
+  { ssr: false }
+);
 import { UserButton, useUser } from "@clerk/nextjs";
 import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/TelemetryProvider';
 import { JarvisSocket } from '@/components/JarvisSocket';
