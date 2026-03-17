@@ -151,6 +151,9 @@ export default function Home() {
               <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '2s' }}>
                 <CheckCircle2 className="w-4 h-4" /> 29 Autonomous Micro-Agents
               </div>
+              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '3s' }}>
+                <ShieldAlert className="w-4 h-4 text-emerald-500" /> NeMo Guardrails (Zero Hallucinations)
+              </div>
            </div>
 
           {/* Live Demo Scanner */}
@@ -246,7 +249,7 @@ export default function Home() {
               { icon: Megaphone, title: "God-Brain Knowledge", desc: "Securely grounds your agents using your proprietary SOPs via Google Cloud Vertex AI Vector Search.", tag: "AI MEMORY", color: "from-rose-500 to-pink-500" },
               { icon: Target, title: "SEO & Search", desc: "Competitor analysis, schema audits, keyword research, and programmatic page generation to dominate local search.", tag: "SEARCH RANKING", color: "from-blue-500 to-sky-500" },
               { icon: Globe, title: "Content Engine", desc: "Blog posts, social captions, email sequences, and landing pages — all generated in your brand voice.", tag: "CONTENT CREATION", color: "from-violet-500 to-fuchsia-500" },
-              { icon: Sparkles, title: "Custom AI Agents", desc: "Create your own specialized agents with a simple text prompt. No coding required.", tag: "EXTENSIBLE", color: "from-amber-500 to-orange-500" },
+              { icon: ShieldAlert, title: "Zero Hallucinations", desc: "Your AI never goes rogue. Secured by Open-Source NVIDIA NeMo Guardrails for absolute, un-hackable script adherence.", tag: "ENTERPRISE SECURE", color: "from-amber-500 to-orange-500" },
               { icon: Users, title: "Lead Prospecting", desc: "Find local businesses, analyze their marketing gaps, and generate personalized outreach sequences.", tag: "PROSPECTING", color: "from-cyan-500 to-blue-500" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
@@ -351,7 +354,7 @@ export default function Home() {
           <div className="marquee-track gap-12">
             {[...Array(2)].map((_, repeat) => (
               <div key={repeat} className="flex gap-12 items-center px-6">
-                {["Google Gemini 2.0", "NVIDIA NIM", "Google Vertex AI", "Neon Postgres", "Clerk Auth", "Pipecat WebRTC", "Vercel Edge", "Pinecone", "Tavily", "Resend"].map(tech => (
+                {["Google Gemini 2.0", "NVIDIA NIM", "NeMo Guardrails", "Google Vertex AI", "Neon Postgres", "Clerk Auth", "Pipecat WebRTC", "Vercel Edge", "Pinecone", "Tavily", "Resend"].map(tech => (
                   <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold font-mono whitespace-nowrap">{tech}</span>
                 ))}
               </div>
@@ -391,7 +394,7 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { name: "Google Gemini 2.0", desc: "Core AI engine", color: "from-blue-500/10 to-cyan-500/10", border: "border-blue-500/20" },
-                  { name: "Anthropic Claude", desc: "Advanced reasoning", color: "from-orange-500/10 to-amber-500/10", border: "border-orange-500/20" },
+                  { name: "NVIDIA NeMo", desc: "Zero hallucination guardrails", color: "from-orange-500/10 to-amber-500/10", border: "border-orange-500/20" },
                   { name: "Pinecone", desc: "AI memory & context", color: "from-emerald-500/10 to-green-500/10", border: "border-emerald-500/20" },
                   { name: "Tavily", desc: "Live web research", color: "from-purple-500/10 to-pink-500/10", border: "border-purple-500/20" },
                 ].map((tech) => (
