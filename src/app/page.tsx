@@ -127,7 +127,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-4 mb-16">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
               <a href="#pricing" className="inline-flex px-10 py-5 rounded-full bg-gradient-to-r from-[#00B7FF] to-[#a855f7] text-lg font-bold text-white shadow-[0_0_40px_rgba(0,183,255,0.3)] cta-glow items-center gap-3 hover:-translate-y-1 transition-all">
-                Get Started Free <ArrowRight className="w-6 h-6" />
+                Deploy God-Brain V3 <ArrowRight className="w-6 h-6" />
               </a>
               <button 
                  onClick={() => {
@@ -143,13 +143,13 @@ export default function Home() {
           {/* Trust Badges */}
           <div className="flex flex-wrap items-center justify-center gap-8 mb-20">
               <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge">
-                <ShieldAlert className="w-4 h-4" /> 256-bit Encryption
+                <ShieldAlert className="w-4 h-4" /> Secured by Google Vertex AI
               </div>
               <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '1s' }}>
-                <CheckCircle2 className="w-4 h-4" /> Powered by Google Gemini
+                <Cpu className="w-4 h-4" /> Powered by NVIDIA NIM APIs
               </div>
               <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-neutral-500 trust-badge" style={{ animationDelay: '2s' }}>
-                <Target className="w-4 h-4" /> Secure ZAR Payments
+                <CheckCircle2 className="w-4 h-4" /> 29 Autonomous Micro-Agents
               </div>
            </div>
 
@@ -242,8 +242,8 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: CalendarCheck, title: "AI Booking Agent", desc: "Qualifies leads with AI scoring, handles objections, and books calls automatically. Responds in minutes, runs 24/7.", tag: "LEAD QUALIFICATION", color: "from-emerald-500 to-teal-500" },
-              { icon: Megaphone, title: "Ad Creative Generator", desc: "Generates 5 ad variations using proven copywriting frameworks. Each one tailored to your audience and ready to deploy.", tag: "AD CREATIVES", color: "from-rose-500 to-pink-500" },
+              { icon: CalendarCheck, title: "Autonomous Call Agent", desc: "Powered by NVIDIA Pipecat. Physically dials prospects, handles live objections, and books calls 24/7.", tag: "VOICE SWARM", color: "from-emerald-500 to-teal-500" },
+              { icon: Megaphone, title: "God-Brain Knowledge", desc: "Securely grounds your agents using your proprietary SOPs via Google Cloud Vertex AI Vector Search.", tag: "AI MEMORY", color: "from-rose-500 to-pink-500" },
               { icon: Target, title: "SEO & Search", desc: "Competitor analysis, schema audits, keyword research, and programmatic page generation to dominate local search.", tag: "SEARCH RANKING", color: "from-blue-500 to-sky-500" },
               { icon: Globe, title: "Content Engine", desc: "Blog posts, social captions, email sequences, and landing pages — all generated in your brand voice.", tag: "CONTENT CREATION", color: "from-violet-500 to-fuchsia-500" },
               { icon: Sparkles, title: "Custom AI Agents", desc: "Create your own specialized agents with a simple text prompt. No coding required.", tag: "EXTENSIBLE", color: "from-amber-500 to-orange-500" },
@@ -351,7 +351,7 @@ export default function Home() {
           <div className="marquee-track gap-12">
             {[...Array(2)].map((_, repeat) => (
               <div key={repeat} className="flex gap-12 items-center px-6">
-                {["Google Gemini 2.5", "Neon Postgres", "Clerk Auth", "PayFast", "Paystack", "Vercel Edge", "Pinecone", "Tavily", "Resend"].map(tech => (
+                {["Google Gemini 2.0", "NVIDIA NIM", "Google Vertex AI", "Neon Postgres", "Clerk Auth", "Pipecat WebRTC", "Vercel Edge", "Pinecone", "Tavily", "Resend"].map(tech => (
                   <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold font-mono whitespace-nowrap">{tech}</span>
                 ))}
               </div>
