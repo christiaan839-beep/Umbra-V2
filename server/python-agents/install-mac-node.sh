@@ -24,17 +24,19 @@ else
 fi
 
 echo ""
-echo "[3/4] Pulling NVIDIA Nemotron-Mini-4B Open Model..."
+echo "[3/5] Pulling NVIDIA Nemotron & Qwen2.5-Coder Open Models..."
 if command -v ollama &> /dev/null; then
   echo "Executing physical pull from God-Brain Hub..."
   ollama pull nemotron-mini || ollama pull llama3
+  echo "Pulling Qwen2.5-Coder (Open-Source Claude equivalent)..."
+  ollama pull qwen2.5-coder:7b
 else
   echo "⚠️ Skipping pull until Ollama is started manually."
 fi
 
 echo ""
-echo "[4/4] Activating Local OS Dependencies (PyAutoGUI, Playwright, ChromaDB)..."
-pip install fastapi uvicorn pyautogui playwright chromadb ollama
+echo "[4/5] Activating Local OS Dependencies (PyAutoGUI, Aider-Chat, Playwright, ChromaDB)..."
+pip install fastapi uvicorn pyautogui playwright chromadb ollama aider-chat
 playwright install chromium
 
 echo ""

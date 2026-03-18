@@ -244,7 +244,7 @@ export default function Home() {
               { icon: BrainCircuit, title: "Uncensored Edge RAG", desc: "Upload gigabytes of classified corporate PDFs. Run vector analysis locally on NVMe storage with ChromaDB—bypassing OpenAI API fees entirely.", tag: "ZERO DATA LEAKS" },
               { icon: Target, title: "SaaS Sales Domination", desc: "Fire your SDRs. The Matrix executes physical outbound sequences, scraping target lists dynamically and writing Nemotron-powered emails.", tag: "GHOST FLEET PROTOCOL" },
               { icon: ShieldAlert, title: "God-Eye Surveillance", desc: "Sell your software to physical retail. Plug the Matrix into RTSP security feeds for sub-millisecond NVIDIA Metropolis theft-detection.", tag: "SPATIAL ARRAYS" },
-              { icon: Globe, title: "Cinematic Director Node", desc: "Bypass video editors entirely. Route parameters safely to NVIDIA Cosmos to generate photorealistic VSLs mapped to your exact brand aesthetics.", tag: "COSMOS VLM" },
+              { icon: Globe, title: "Autonomous Engineering Node", desc: "The Matrix doesn't just market software; it builds it. Summon the local Qwen-Coder model via Aider CLI to physically author and commit production code.", tag: "QWEN2.5-CODER" },
               { icon: MessageSquare, title: "Telegram Sub-Command", desc: "Dictate the swarm's targets from your iOS device. Dispatch the Deepfake closer or order a competitor audit via immediate webhook execution.", tag: "MOBILE UPLINK" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}

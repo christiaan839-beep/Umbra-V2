@@ -1,6 +1,7 @@
 import os
 import time
 import json
+import subprocess
 from fastapi import FastAPI, Request
 import uvicorn
 
@@ -98,6 +99,32 @@ async def physical_mouse_control(req: Request):
         return {"error": f"OS Control Aborted: {str(e)}"}
     
     return {"error": "Unknown action"}
+
+@app.post("/execute/code")
+async def autonomous_software_engineer(req: Request):
+    """Summons the open-source 'Aider' CLI (Claude Code equivalent) to literally code on the local machine using Qwen2.5-Coder."""
+    data = await req.json()
+    directive = data.get("directive", "Fix the CSS on the main page to be dark mode.")
+    target_dir = data.get("directory", os.getcwd())
+    
+    # We physically trigger Aider in the background using the open-source local Qwen model.
+    # --yes answers prompts automatically, --message passes the instruction.
+    try:
+        command = [
+            "aider", 
+            "--model", "ollama/qwen2.5-coder:7b", 
+            "--yes", 
+            "--message", directive
+        ]
+        # Run subprocess and capture output
+        result = subprocess.run(command, cwd=target_dir, capture_output=True, text=True, timeout=120)
+        return {
+            "success": result.returncode == 0,
+            "logs": str(result.stdout)[-1000:] if result.stdout else "",
+            "error": str(result.stderr)[-500:] if result.stderr else ""
+        }
+    except Exception as e:
+        return {"error": f"Autonomous Coding Failed: {str(e)}"}
 
 if __name__ == "__main__":
     print("===========================================================")
