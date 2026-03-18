@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     }
 
     // Reply back via Telegram API (assuming we have a bot token)
-    const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+    const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN || "8722758433:AAHxBcPL5DcCLxiN5k6JMOlkl2THEwxxbXg";
     if (telegramBotToken) {
       await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
         method: 'POST',
