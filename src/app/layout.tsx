@@ -6,21 +6,21 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sovereign-matrix.com"),
-  title: "Sovereign Matrix — Replace Your Agency. Keep The Results.",
-  description: "Autonomous AI marketing swarms executing B2B outbound, cinematic content production, and enterprise telemetry 24/7.",
+  title: "SOVEREIGN MATRIX | The Ultimate Autonomous Agency OS",
+  description: "Stop paying $5k retainers. Deploy 29 autonomous AI agents via the Sovereign Vector Matrix. Fire your agency. Become the Chief Agent Officer.",
   keywords: ["AI matrix", "God-Brain", "AI outbound engine", "faceless automation", "sovereign matrix"],
   authors: [{ name: "Sovereign Matrix - Edge" }],
   openGraph: {
-    title: "Sovereign Matrix — Replace Your Agency. Keep The Results.",
-    description: "AI marketing tools for content, SEO, lead gen — running 24/7. Free to start. Pro from R997/mo.",
+    title: "SOVEREIGN MATRIX | The Ultimate Autonomous Agency OS",
+    description: "Stop paying $5k retainers. Deploy 29 autonomous AI agents via the Sovereign Vector Matrix. Fire your agency. Become the Chief Agent Officer.",
     type: "website",
     siteName: "Sovereign Matrix",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Sovereign Matrix — AI Marketing Platform" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sovereign Matrix — AI Marketing Platform",
-    description: "AI marketing tools. 24/7 execution. Free to start. Pro from R997/mo.",
+    title: "SOVEREIGN MATRIX | The Ultimate Autonomous Agency OS",
+    description: "Deploy 29 autonomous AI agents via the Sovereign Vector Matrix. Fire your agency.",
   },
   other: {
     "theme-color": "#050505",
