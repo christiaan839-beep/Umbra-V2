@@ -1,86 +1,120 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
-// A single glowing particle/node in the AGI Swarm Network
-function NodeParticle({ position, color }: { position: [number, number, number], color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  // Subtle hovering animation
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const time = state.clock.getElapsedTime();
-    meshRef.current.position.y = position[1] + Math.sin(time * 2 + position[0]) * 0.1;
-  });
+export function ImmersiveNodeLayer() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  return (
-    <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[0.08, 16, 16]} />
-      <meshBasicMaterial color={color} transparent opacity={0.6} />
-      {/* Outer glow */}
-      <mesh>
-        <sphereGeometry args={[0.15, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={0.2} blending={THREE.AdditiveBlending} />
-      </mesh>
-    </mesh>
-  );
-}
-
-// Global rotating neural constellation
-function SwarmConstellation() {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  // Generate random node positions within a spherical radius
-  const [nodes, setNodes] = useState<{position: [number, number, number], color: string}[]>([]);
-  
   useEffect(() => {
-    const temp = [];
-    for (let i = 0; i < 150; i++) {
-       const theta = Math.random() * Math.PI * 2;
-       const phi = Math.acos(Math.random() * 2 - 1);
-       const r = 3 + Math.random() * 2; // Radius between 3 and 5
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-       const x = r * Math.sin(phi) * Math.cos(theta);
-       const y = r * Math.sin(phi) * Math.sin(theta);
-       const z = r * Math.cos(phi);
-       
-       // Assign colors based on node "type"
-       const type = Math.random();
-       let color = "#00B7FF"; // Electric Blue (Processing)
-       if (type > 0.8) color = "#10B981"; // Emerald (Revenue)
-       else if (type > 0.6) color = "#F43F5E"; // Rose (Action)
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
 
-       temp.push({ position: [x, y, z] as [number, number, number], color });
+    // ⚡ SOVEREIGN SWARM: Node Architecture
+    const nodes: { x: number, y: number, vx: number, vy: number, label: string, color: string }[] = [];
+    const nodeLabels = ['NemoClaw', 'Twilio X1', 'Gemini 1.5', 'Postgres DB', 'N8N Webhook', 'Aider OS', 'ChromaDB', 'NVIDIA Riva'];
+    const colors = ['#10B981', '#3B82F6', '#8B5CF6', '#EC4899', '#F43F5E'];
+
+    for (let i = 0; i < 40; i++) {
+      nodes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        label: i < nodeLabels.length ? nodeLabels[i] : '',
+        color: colors[i % colors.length]
+      });
     }
-    setNodes(temp);
+
+    let animationFrameId: number;
+
+    const render = () => {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.15)"; // Trailing effect for absolute cinematic motion
+      ctx.fillRect(0, 0, width, height);
+
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        node.x += node.vx;
+        node.y += node.vy;
+
+        if (node.x < 0 || node.x > width) node.vx *= -1;
+        if (node.y < 0 || node.y > height) node.vy *= -1;
+
+        // Draw connections (The Neural Sync)
+        for (let j = i + 1; j < nodes.length; j++) {
+          const target = nodes[j];
+          const dx = node.x - target.x;
+          const dy = node.y - target.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 - dist / 1500})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(target.x, target.y);
+            ctx.stroke();
+
+            // Draw Data Packets flowing securely across the Swarm
+            if (Math.random() > 0.98) {
+                ctx.beginPath();
+                ctx.fillStyle = node.color;
+                const packetX = node.x + dx * 0.5;
+                const packetY = node.y + dy * 0.5;
+                ctx.arc(packetX, packetY, 2, 0, Math.PI * 2);
+                ctx.fill();
+                // Glow effect on packet
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = node.color;
+            }
+            ctx.shadowBlur = 0;
+          }
+        }
+
+        // Draw Nodes
+        ctx.beginPath();
+        ctx.fillStyle = i < nodeLabels.length ? node.color : "rgba(255,255,255,0.3)";
+        ctx.arc(node.x, node.y, i < nodeLabels.length ? 4 : 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw Labels for Core Sovereign Modules
+        if (node.label) {
+          ctx.fillStyle = "rgba(255,255,255,0.7)";
+          ctx.font = "10px monospace";
+          ctx.fillText(node.label, node.x + 8, node.y + 4);
+        }
+      }
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    const resizeHandler = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resizeHandler);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', resizeHandler);
+    };
   }, []);
 
-  useFrame((state) => {
-    if (!groupRef.current) return;
-    // Slow cinematic rotation
-    groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.05;
-    groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.02) * 0.1;
-  });
-
   return (
-    <group ref={groupRef}>
-      {nodes.map((n, i) => (
-        <NodeParticle key={i} position={n.position} color={n.color} />
-      ))}
-    </group>
-  );
-}
-
-export default function ImmersiveNodeLayer() {
-  return (
-    <div className="absolute inset-0 pointer-events-none z-0">
-      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-        <fog attach="fog" args={['#050505', 5, 15]} />
-        <ambientLight intensity={0.5} />
-        <SwarmConstellation />
-      </Canvas>
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2 }}
+      className="absolute inset-0 z-0 pointer-events-none"
+    >
+       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black z-10" />
+       <canvas ref={canvasRef} className="w-full h-full block" />
+    </motion.div>
   );
 }

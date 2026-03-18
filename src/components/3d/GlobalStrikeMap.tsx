@@ -1,121 +1,82 @@
 "use client";
 
-import { useRef, useEffect } from 'react';
-import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
+import createGlobe from "cobe";
+import { useEffect, useRef } from "react";
 
-// @ts-ignore
-import Globe from 'three-globe';
+// ⚡ SOVEREIGN CARTEL //
+// This renders a mathematically perfect 3D Earth, spinning at 60fps 
+// using WebGL. It visualizes global data strikes running asynchronously.
 
-interface TelemetryLog {
-    id: string | number;
-    location: string;
-    action: string;
-    isCapital?: boolean;
-    lat?: number;
-    lng?: number;
-}
+export function GlobalStrikeMap() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-export function GlobalStrikeMap({ logs }: { logs: TelemetryLog[] }) {
-    const groupRef = useRef<THREE.Group>(null);
-    const globeInstanceRef = useRef<any>(null);
+  useEffect(() => {
+    let phi = 0;
+    let width = 0;
+    
+    const onResize = () => {
+      if (canvasRef.current) {
+        // Account for high-DPI retina screens (MacBooks)
+        width = canvasRef.current.offsetWidth;
+      }
+    };
+    window.addEventListener("resize", onResize);
+    onResize();
 
-    // Initial Globe Setup
-    useEffect(() => {
-        if (!groupRef.current) return;
+    if (!canvasRef.current) return;
 
-        const globe = new Globe()
-            // We use standard base64/hex colors instead of loading external images to prevent CORS/rendering latency
-            .globeMaterial(new THREE.MeshPhongMaterial({ color: '#001824', transparent: true, opacity: 0.9 }))
-            .showAtmosphere(true)
-            .atmosphereColor('#00B7FF')
-            .atmosphereAltitude(0.15);
-
-        // Map the geographic data from logs (assuming fake or derived lat/lng for visual effect)
-        // If the logs lack explicit coords, we generate deterministic fake ones based on location name.
-        
-        globeInstanceRef.current = globe;
-        groupRef.current.add(globe);
-
-        // Scale the globe to match the previous sphere size (~2 units radius)
-        // three-globe default radius is 100, so scale it down
-        globe.scale.set(0.02, 0.02, 0.02);
-
-        return () => {
-            if (groupRef.current) {
-                groupRef.current.remove(globe);
-            }
-        };
-    }, []);
-
-    // Update Globe data dynamically when logs change
-    useEffect(() => {
-        if (!globeInstanceRef.current) return;
-        const globe = globeInstanceRef.current;
-
-        // Generate synthetic lat/lng from the log locations to scatter them (for visual simulation)
-        const gData = logs.map(log => {
-            // Simple deterministic hash for lat/lng based on location string
-            let hash = 0;
-            for (let i = 0; i < log.location.length; i++) {
-                hash = log.location.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const lat = (Math.abs(hash) % 180) - 90;
-            const lng = (Math.abs(hash >> 8) % 360) - 180;
-            
-            return {
-                lat,
-                lng,
-                size: log.isCapital ? 0.8 : 0.3,
-                color: log.isCapital ? '#34d399' : '#00B7FF' // Emerald for capital, Electric blue for attention
-            };
-        });
-
-        // Push new points to the globe
-        globe
-            .pointsData(gData)
-            .pointAltitude('size')
-            .pointColor('color')
-            .pointResolution(32);
-
-        // Also add sweeping laser lines (Arcs) from the Swarm Core (e.g. London) to the Strike point
-        const originLat = 51.5074;
-        const originLng = -0.1278; // London Command
-
-        const arcData = gData.map(point => ({
-            startLat: originLat,
-            startLng: originLng,
-            endLat: point.lat,
-            endLng: point.lng,
-            color: point.color
-        }));
-
-        globe
-            .arcsData(arcData)
-            .arcColor('color')
-            .arcAltitude(0.3)
-            .arcStroke(0.5)
-            .arcDashLength(0.4)
-            .arcDashGap(4)
-            .arcDashInitialGap(() => Math.random() * 5)
-            .arcDashAnimateTime(2000);
-
-    }, [logs]);
-
-    // Earth Rotation Animation
-    useFrame(() => {
-        if (groupRef.current) {
-            groupRef.current.rotation.y += 0.003;
-            // Slight tilt
-            groupRef.current.rotation.x = 0.2;
-        }
+    const globe = createGlobe(canvasRef.current, {
+      devicePixelRatio: 2,
+      width: width * 2,
+      height: width * 2,
+      phi: 0,
+      theta: 0.2,
+      dark: 1, // Absolute dark mode
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
+      baseColor: [0.1, 0.1, 0.1], // Jet black/dark grey base
+      markerColor: [0.063, 0.725, 0.506], // Emerald 500 for Sovereign Matrix
+      glowColor: [0.05, 0.05, 0.05],
+      markers: [
+        // Active Swarm Target Nodes (Longitude, Latitude)
+        { location: [37.7595, -122.4367], size: 0.08 }, // San Francisco (HQ)
+        { location: [40.7128, -74.0060], size: 0.05 },  // New York (Scraping node)
+        { location: [51.5074, -0.1278], size: 0.04 },   // London (Ghost Fleet active)
+        { location: [35.6762, 139.6503], size: 0.06 },  // Tokyo (N8N relay)
+        { location: [-26.2041, 28.0473], size: 0.07 },  // Johannesburg (Origin)
+      ],
+      onRender: (state) => {
+        // Spin globe mathematically
+        state.phi = phi;
+        phi += 0.003;
+        state.width = width * 2;
+        state.height = width * 2;
+      },
     });
 
-    return (
-        <group ref={groupRef}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[100, 100, 100]} intensity={1.5} color="#00B7FF" />
-            <pointLight position={[-100, -100, -100]} intensity={0.5} color="#34d399" />
-        </group>
-    );
+    return () => {
+      globe.destroy();
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  return (
+    <div className="relative w-full aspect-square max-w-[600px] mx-auto flex items-center justify-center">
+       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.15),transparent_70%)] z-0 rounded-full blur-3xl" />
+       <canvas
+         ref={canvasRef}
+         className="w-full h-full object-contain opacity-90 z-10 transition-opacity duration-1000"
+       />
+       
+       {/* Tactical HUD Overlay */}
+       <div className="absolute bottom-8 left-8 z-20 flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-mono text-emerald-500 tracking-[0.2em] font-bold">GLOBAL SWARM UPLINK</span>
+          </div>
+          <span className="text-[10px] font-mono text-neutral-500 uppercase">5 Data Pipelines Active</span>
+       </div>
+    </div>
+  );
 }

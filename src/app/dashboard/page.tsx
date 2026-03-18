@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useUser } from "@clerk/nextjs";
 import { QuickStartWizard } from "@/components/dashboard/QuickStartWizard";
 import { useUsage } from "@/hooks/useUsage";
+import { GlobalStrikeMap } from "@/components/3d/GlobalStrikeMap";
 
 const TOOLS = [
   {
@@ -98,6 +99,15 @@ export default function DashboardOverview() {
         <p className="text-neutral-400 text-sm leading-relaxed max-w-2xl">
           Your AI marketing engine is ready. Choose a tool below to generate content, analyze competitors, find leads, or build your next campaign.
         </p>
+      </motion.div>
+
+      {/* Global Strike Visualization (Palantir Architecture) */}
+      <motion.div {...fade(0.5)} className="bg-black border border-emerald-500/20 rounded-3xl p-8 relative overflow-hidden">
+         <div className="absolute top-6 left-6 z-20">
+            <h2 className="text-xl font-serif font-bold text-white">Global Reconnaissance</h2>
+            <p className="text-xs text-neutral-500 font-mono tracking-widest uppercase mt-1">Live Strike Nodes</p>
+         </div>
+         <GlobalStrikeMap />
       </motion.div>
 
       {/* Quick Start Guide */}

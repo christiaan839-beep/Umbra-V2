@@ -9,7 +9,7 @@ import { useRef, useEffect, useState } from "react";
 import { SovereignLogo } from "@/components/ui/SovereignLogo";
 import { Pricing } from "@/components/ui/Pricing";
 import { SplashIntro } from "@/components/ui/SplashIntro";
-import { NeuralWebGLBackground } from "@/components/3d/NeuralWebGLBackground";
+import { ImmersiveNodeLayer } from "@/components/3d/ImmersiveNodeLayer";
 import { ToolShowcase } from "@/components/ui/SocialProof";
 import { AnimatedVSL } from "@/components/ui/AnimatedVSL";
 import SovereignCalculator from "@/components/SovereignCalculator";
@@ -102,8 +102,8 @@ export default function Home() {
         {/* Obsidian subtle background texture */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'url("/grid.svg")' }} />
 
-        {/* 3D Hardware Accelerated Neural Matrix */}
-        <NeuralWebGLBackground />
+        {/* Elite Physical Data Flow Simulator */}
+        <ImmersiveNodeLayer />
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
           
