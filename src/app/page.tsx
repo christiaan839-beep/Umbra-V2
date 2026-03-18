@@ -363,7 +363,13 @@ export default function Home() {
 
       {/* Founder & Trust Section - Obsidian */}
       <section className="py-24 bg-black px-6">
-        <div className="max-w-5xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8 }}
+          className="max-w-5xl mx-auto"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left: Founder Message */}
             <div>
@@ -420,12 +426,18 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* FAQ Section */}
       <section className="py-32 bg-black px-6 border-t border-white/5">
-        <div className="max-w-3xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="max-w-3xl mx-auto"
+        >
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-4">Operational Parameters</h2>
             <p className="text-neutral-500">Declassification of core system mechanics and billing infrastructure.</p>
@@ -453,7 +465,7 @@ export default function Home() {
               <FAQItem key={i} question={faq.q} answer={faq.a} />
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Footer CTA */}
