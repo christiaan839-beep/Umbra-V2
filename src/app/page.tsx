@@ -11,7 +11,7 @@ import { LiveDemoScanner } from "@/components/ui/LiveDemoScanner";
 import { ROICalculator } from "@/components/ui/ROICalculator";
 import { Pricing } from "@/components/ui/Pricing";
 import { SplashIntro } from "@/components/ui/SplashIntro";
-import { ParticleGrid } from "@/components/ui/ParticleGrid";
+import { NeuralWebGLBackground } from "@/components/3d/NeuralWebGLBackground";
 import { ToolShowcase } from "@/components/ui/SocialProof";
 import { AnimatedVSL } from "@/components/ui/AnimatedVSL";
 
@@ -97,33 +97,31 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <main className="pt-40 pb-20 px-6 relative overflow-hidden flex flex-col items-center">
+      <main className="pt-40 pb-20 px-6 relative overflow-hidden flex flex-col items-center min-h-[90vh] justify-center">
         {/* Obsidian subtle background texture */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'url("/grid.svg")' }} />
 
-        {/* Interactive Particle Grid */}
-        <div className="absolute inset-0 pointer-events-auto mix-blend-screen opacity-50">
-          <ParticleGrid />
-        </div>
+        {/* 3D Hardware Accelerated Neural Matrix */}
+        <NeuralWebGLBackground />
 
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
           
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-xs font-medium uppercase tracking-[0.2em] mb-8">
-            AI-Powered Defense-Grade Matrix
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-xs font-medium uppercase tracking-[0.2em] mb-8 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+            The Ultimate Autonomous AI OS
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 mb-8 serif-text leading-[1.1] tracking-tight">
             The Agency Extinction Protocol.<br/>
-            <span className="text-neutral-400">Powered by NVIDIA Nemotron.</span>
+            <span className="text-neutral-400">Secured by NVIDIA.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-neutral-500 max-w-2xl mx-auto leading-relaxed mb-12">
-            Build and deploy secure, Sovereign AI Infrastructure with a single command. 
-            Command the Nano 30B Edge Daemon locally via OpenClaw, and scale to the Super 120B Omni-RAG cluster for absolute market dominance.
+            Build, deploy, and monetize secure Sovereign AI Infrastructure in 60 seconds. 
+            Replace human headcount with a 24/7 autonomous swarm powered by the 120B Omni-RAG cluster.
           </p>
 
-          <div className="flex flex-col items-center gap-4 mb-16">
+          <div className="flex flex-col items-center gap-4 mb-20">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
               <a href="#pricing" className="inline-flex px-10 py-5 rounded-full bg-white text-black text-lg font-bold shadow-[0_0_40px_rgba(255,255,255,0.15)] items-center gap-3 hover:-translate-y-1 hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] transition-all">
                 Initialize Sovereign Swarm V4 <ArrowRight className="w-6 h-6" />
@@ -132,9 +130,9 @@ export default function Home() {
                  onClick={() => {
                    document.getElementById("vsl")?.scrollIntoView({ behavior: "smooth" });
                  }}
-                 className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 bg-transparent text-white font-bold text-lg hover:bg-white/5 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                 className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 bg-black/50 backdrop-blur-md text-white font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-2 group cursor-pointer"
               >
-                <Globe className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" /> See How It Works
+                <Globe className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" /> View Architectural Demo
               </button>
             </div>
           </div>
