@@ -7,8 +7,6 @@ import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
 
 import { UmbraLogo } from "@/components/ui/UmbraLogo";
-import { LiveDemoScanner } from "@/components/ui/LiveDemoScanner";
-import { ROICalculator } from "@/components/ui/ROICalculator";
 import { Pricing } from "@/components/ui/Pricing";
 import { SplashIntro } from "@/components/ui/SplashIntro";
 import { NeuralWebGLBackground } from "@/components/3d/NeuralWebGLBackground";

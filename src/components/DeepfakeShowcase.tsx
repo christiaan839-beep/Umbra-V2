@@ -24,7 +24,7 @@ export default function DeepfakeShowcase() {
                         className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-gray-300 text-sm font-medium mb-6"
                     >
                         <Film className="w-4 h-4 text-primary" />
-                        Cinematic "Proof of Work"
+                        Cinematic &quot;Proof of Work&quot;
                     </motion.div>
                     <h2 className="text-4xl md:text-5xl font-bold mb-6 font-outfit text-white">
                         Rendered purely by the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">God-Brain</span>.
