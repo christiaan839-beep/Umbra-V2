@@ -26,7 +26,6 @@ fi
 echo ""
 echo "[3/4] Pulling NVIDIA Nemotron-Mini-4B Open Model..."
 if command -v ollama &> /dev/null; then
-  # We use the standard llama3 or nemotron-mini if available in Ollama hub
   echo "Executing physical pull from God-Brain Hub..."
   ollama pull nemotron-mini || ollama pull llama3
 else
@@ -34,7 +33,12 @@ else
 fi
 
 echo ""
-echo "[4/4] Activating the Local Node Bridge..."
+echo "[4/4] Activating Local OS Dependencies (PyAutoGUI, Playwright, ChromaDB)..."
+pip install fastapi uvicorn pyautogui playwright chromadb ollama
+playwright install chromium
+
+echo ""
+echo "[5/5] Activating the Local Node Bridge..."
 echo "Dependencies satisfied. To link Sovereign Matrix Vercel dashboard to this physical Mac:"
 echo "1. cd server/python-agents"
 2. source venv/bin/activate

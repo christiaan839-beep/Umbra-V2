@@ -240,12 +240,12 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Target, title: "SaaS Sales Domination", desc: "Fire your SDRs. OpenClaw Ghost Fleets open headless browsers, scrape Apollo.io natively, and dispatch personalized Nemotron emails at scale.", tag: "GHOST FLEET PROTOCOL" },
-              { icon: Cpu, title: "Design Agency Extinction", desc: "End $5k branding retainers. The Sovereign Visual Studio streams NVIDIA Edify 4K textures and 3D CAD meshes instantly via API.", tag: "NVIDIA EDIFY" },
-              { icon: ShieldAlert, title: "Enterprise Safe-AI", desc: "Sell to Fortune 500s confidently. NeMo Guardrails physically block hallucinations and intercept PII data leaks at the OS level.", tag: "NEMO GUARDRAILS" },
+              { icon: Cpu, title: "NemoClaw OS Autonomy", desc: "Sovereign Matrix physically controls your Mac's mouse and keyboard. It opens hidden headless Chrome browsers to steal competitor DBs while you sleep.", tag: "NEMOCLAW DAEMON" },
+              { icon: BrainCircuit, title: "Uncensored Edge RAG", desc: "Upload gigabytes of classified corporate PDFs. Run vector analysis locally on NVMe storage with ChromaDB—bypassing OpenAI API fees entirely.", tag: "ZERO DATA LEAKS" },
+              { icon: Target, title: "SaaS Sales Domination", desc: "Fire your SDRs. The Matrix executes physical outbound sequences, scraping target lists dynamically and writing Nemotron-powered emails.", tag: "GHOST FLEET PROTOCOL" },
+              { icon: ShieldAlert, title: "God-Eye Surveillance", desc: "Sell your software to physical retail. Plug the Matrix into RTSP security feeds for sub-millisecond NVIDIA Metropolis theft-detection.", tag: "SPATIAL ARRAYS" },
               { icon: Globe, title: "Cinematic Director Node", desc: "Bypass video editors entirely. Route parameters safely to NVIDIA Cosmos to generate photorealistic VSLs mapped to your exact brand aesthetics.", tag: "COSMOS VLM" },
-              { icon: MessageSquare, title: "Telegram Command Center", desc: "Dictate the swarm's targets from your iOS device. Dispatch the Deepfake closer or order a competitor audit via immediate webhook execution.", tag: "MOBILE UPLINK" },
-              { icon: BrainCircuit, title: "Autonomous Intelligence", desc: "It doesn't just draft copy. It reasons, debates, and executes. Wire Llama-3 against DeepSeek-R1 in the War Room for ruthless red-teaming.", tag: "WAR ROOM CRM" },
+              { icon: MessageSquare, title: "Telegram Sub-Command", desc: "Dictate the swarm's targets from your iOS device. Dispatch the Deepfake closer or order a competitor audit via immediate webhook execution.", tag: "MOBILE UPLINK" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
                 className="group relative bg-white/[0.01] p-8 border border-white/5 hover:border-white/10 rounded-2xl transition-all duration-500">
@@ -391,12 +391,12 @@ export default function Home() {
               <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-600 mb-6">Architecture Verification</h3>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { name: "Google Gemini 2.5", desc: "Core AI engine" },
-                  { name: "NVIDIA Nemotron", desc: "Voice & agentic LLM" },
-                  { name: "TensorRT-LLM", desc: "Microsecond inference" },
-                  { name: "NeMo Guardrails", desc: "Zero hallucinations" },
-                  { name: "NVIDIA Riva", desc: "Speech AI (STT/TTS)" },
-                  { name: "Data Flywheel", desc: "Self-optimizing agents" },
+                  { name: "Google Gemini 2.5", desc: "Primary Cognitive Engine" },
+                  { name: "NVIDIA Nemotron-Mini", desc: "Local Edge Execution" },
+                  { name: "NemoClaw OS Daemon", desc: "Physical Hardware Control" },
+                  { name: "ChromaDB Memory", desc: "Uncensored RAG Intel" },
+                  { name: "TensorRT Hardware", desc: "Microsecond Latency" },
+                  { name: "NeMo Guardrails", desc: "Zero Hallucinations" },
                 ].map((tech) => (
                   <div key={tech.name} className="p-5 rounded-xl bg-white/[0.02] border border-white/5">
                     <p className="text-sm font-bold text-white mb-1">{tech.name}</p>
