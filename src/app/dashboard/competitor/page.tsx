@@ -7,7 +7,7 @@ import { Swords, Target, Crosshair, Radar, AlertTriangle, Terminal, Zap } from "
 export default function CompetitorAssassination() {
   const [target, setTarget] = useState("");
   const [scanning, setScanning] = useState(false);
-  const [intel, setIntel] = useState<any>(null);
+  const [intel, setIntel] = useState<{domain: string, threatLevel: string, vulnerabilities: string[], counterStrikes: string[]} | null>(null);
 
   const initiateTacticalScan = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,6 +15,7 @@ export default function CompetitorAssassination() {
     setScanning(true);
     
     // Simulate the extreme API Call to NemoClaw/Gemini 1.5 Pro
+
     setTimeout(() => {
       setIntel({
          domain: target,
@@ -85,7 +86,7 @@ export default function CompetitorAssassination() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20 border border-rose-500/20 bg-black/40 rounded-3xl">
            <Radar className="w-12 h-12 text-rose-500 animate-spin mx-auto mb-6 opacity-80" />
            <h3 className="text-xl font-bold font-serif text-white mb-2">Extracting Enemy Telemetry</h3>
-           <p className="text-neutral-500 text-sm font-mono">Bypassing physical firewalls... Downloading Ad Libraries... Analyzing Customer Churn...</p>
+           <p className="text-neutral-500 text-sm font-mono">Initiating NIM Playwright Crawl... Extracting Visual Payload via nemotron-90b-vision... Ripping Architectures via nemotron-ocr-v1...</p>
         </motion.div>
       )}
 
