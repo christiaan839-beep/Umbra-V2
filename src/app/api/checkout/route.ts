@@ -1,53 +1,60 @@
 import { NextResponse } from 'next/server';
 
-const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 
 export async function POST(req: Request) {
     try {
         const { email, lead_id } = await req.json();
 
-        if (!STRIPE_SECRET_KEY) {
-            console.error("[STRIPE API] Missing STRIPE_SECRET_KEY.");
-            return NextResponse.json({ error: "Stripe API Offline" }, { status: 500 });
+        if (!PAYSTACK_SECRET_KEY) {
+            console.error("[PAYSTACK API] Missing PAYSTACK_SECRET_KEY.");
+            return NextResponse.json({ error: "Paystack API Offline" }, { status: 500 });
         }
 
-        console.log(`[STRIPE PIPELINE] Generating $5k Autonomous Invoice for ${email}...`);
+        // $5k USD retainer is functionally ~R90,000 ZAR. Amount is set in cents (9000000).
+        const zarAmountCents = 9000000; 
 
-        // Direct REST API fetch to Stripe (Bypasses NPM/Node dependency caches for extreme speed on Vercel Edge)
-        const params = new URLSearchParams();
-        params.append('success_url', 'https://sovereign-matrix.com/dashboard/onboarding?session_id={CHECKOUT_SESSION_ID}');
-        params.append('cancel_url', 'https://sovereign-matrix.com');
-        params.append('mode', 'payment');
-        params.append('customer_email', email || 'commander-lead@example.com');
-        params.append('line_items[0][price_data][currency]', 'usd');
-        params.append('line_items[0][price_data][product_data][name]', 'Sovereign Matrix Elite Node License (Phase 1 Retainer)');
-        params.append('line_items[0][price_data][unit_amount]', '500000'); // $5,000.00
-        params.append('line_items[0][quantity]', '1');
+        console.log(`[PAYSTACK PIPELINE] Generating R90,000 Autonomous Invoice for ${email}...`);
 
-        const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+        const paystackResponse = await fetch('https://api.paystack.co/transaction/initialize', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${STRIPE_SECRET_KEY}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Bearer ${PAYSTACK_SECRET_KEY}`,
+                'Content-Type': 'application/json',
             },
-            body: params
+            body: JSON.stringify({
+                email: email || 'commander-lead@example.com',
+                amount: zarAmountCents,
+                currency: 'ZAR',
+                callback_url: 'https://sovereign-matrix.com/dashboard/onboarding',
+                metadata: {
+                    custom_fields: [
+                        {
+                            display_name: "Product",
+                            variable_name: "product_name",
+                            value: "Sovereign Matrix Elite Node License (Phase 1 Retainer)"
+                        }
+                    ]
+                }
+            })
         });
 
-        const stripeData = await stripeResponse.json();
+        const paystackData = await paystackResponse.json();
 
-        if (!stripeResponse.ok) {
-            console.error("[STRIPE API ERROR]", stripeData);
-            return NextResponse.json({ error: stripeData.error.message }, { status: stripeResponse.status });
+        if (!paystackResponse.ok || !paystackData.status) {
+            console.error("[PAYSTACK API ERROR]", paystackData);
+            return NextResponse.json({ error: paystackData.message }, { status: paystackResponse.status || 500 });
         }
 
-        // Return the secure checkout URL directly to the Closer Agent or N8N Webhook
+        // Return the secure Paystack checkout URL directly to the Closer Agent or N8N Webhook
         return NextResponse.json({ 
             status: 'checkout_generated', 
-            checkout_url: stripeData.url 
+            checkout_url: paystackData.data.authorization_url,
+            reference: paystackData.data.reference
         });
 
     } catch (error) {
-        console.error("[STRIPE FATAL ERROR]", error);
+        console.error("[PAYSTACK FATAL ERROR]", error);
         return NextResponse.json({ error: 'Internal Exec Error' }, { status: 500 });
     }
 }
