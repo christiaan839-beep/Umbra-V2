@@ -49,10 +49,26 @@ export async function POST(req: Request) {
             // Create tenant record if doesn't exist
             await db.insert(tenants).values({
               clerkUserId: email,
-              nodeId: `UMB-${Date.now().toString(36).toUpperCase()}`,
+              nodeId: `SOV-${Date.now().toString(36).toUpperCase()}`,
               plan,
             });
             console.log(`[Paystack] ✅ Created tenant with plan ${plan} for ${email}`);
+          }
+
+          // Trigger Autonomous Vercel Clone Phase 81 if Cartel
+          if (plan === "cartel") {
+             console.log(`[Paystack] 🚀 Ignition sequence started for Cartel Node: ${email}`);
+             try {
+               const agencyName = metadata?.agencyName || email.split("@")[0] + "-cartel";
+               await fetch(`${process.env.NEXT_PUBLIC_URL || "https://sovereign-matrix.com"}/api/provisioning`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ userEmail: email, agencyName })
+               });
+               console.log(`[Paystack] 🌐 Cartel Provisioning Ping dispatched successfully`);
+             } catch (e) {
+               console.error("[Paystack] Cartel Engine Ping failed:", e);
+             }
           }
         }
         break;
@@ -60,7 +76,7 @@ export async function POST(req: Request) {
 
       case "subscription.create": {
         const email = event.data.customer?.email;
-        const plan = event.data.plan?.plan_code?.includes("agency") ? "agency" : "pro";
+        const plan = event.data.plan?.plan_code?.includes("cartel") ? "cartel" : "array";
         console.log(`[Paystack] 🔄 Subscription created: ${email} → ${plan}`);
 
         if (email) {
@@ -79,7 +95,7 @@ export async function POST(req: Request) {
         if (email) {
           await db
             .update(tenants)
-            .set({ plan: "starter" }) // Downgrade to free
+            .set({ plan: "node" }) // Downgrade to baseline node
             .where(eq(tenants.clerkUserId, email));
         }
         break;

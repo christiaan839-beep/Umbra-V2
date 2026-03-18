@@ -5,21 +5,21 @@ import os
 import subprocess
 import shlex
 
-app = FastAPI(title="UMBRA V4 - Nano 30B OpenClaw Edge Bridge")
+app = FastAPI(title="SOVEREIGN MATRIX - Nemotron-Mini-4B Edge Bridge")
 
 # This script lives locally and acts as the bridge between the OpenClaw OS daemon
-# and the primary God-Brain server. It processes lightweight logic locally via Nano 30B.
+# and the primary God-Brain server. It processes lightweight logic locally via Nemotron-Mini-4B.
 
 class EdgePayload(BaseModel):
     caller: str # e.g. "Terminal", "WhatsApp", "Telegram"
     command: str
-    nano_30b_analysis: str
+    nemotron_mini_analysis: str
     requires_vision: bool = False
 
 @app.post("/api/edge/receive")
 async def receive_openclaw_payload(payload: EdgePayload):
     print(f"[EDGE BRIDGE] Incoming Command from {payload.caller}")
-    print(f"[NANO 30B PRE-PROCESS] Analysis: {payload.nano_30b_analysis}")
+    print(f"[NEMOTRON-MINI PRE-PROCESS] Analysis: {payload.nemotron_mini_analysis}")
     
     # -------------------------------------------------------------
     # PHASE 41 UPGRADE: PHYSICAL OS EXECUTION
@@ -98,7 +98,7 @@ async def receive_openclaw_payload(payload: EdgePayload):
         
     return {
         "status": "success",
-        "message": f"Edge execution via Nano 30B successful.",
+        "message": f"Edge execution via Nemotron-Mini successful.",
         "local_execution_result": execution_result,
         "vision_telemetry": vision_data
     }
