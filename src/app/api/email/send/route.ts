@@ -36,7 +36,7 @@ async function sendViaResend(payload: EmailPayload): Promise<{ success: boolean;
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: payload.from || process.env.RESEND_FROM_EMAIL || "UMBRA <noreply@umbra.ai>",
+      from: payload.from || process.env.RESEND_FROM_EMAIL || "SOVEREIGN <noreply@umbra.ai>",
       to: [payload.to],
       subject: payload.subject,
       html: payload.html || undefined,
@@ -116,24 +116,24 @@ export async function POST(req: Request) {
 }
 
 /**
- * Built-in branded UMBRA email templates
+ * Built-in branded SOVEREIGN email templates
  */
 function renderTemplate(template: string, data: Record<string, string>): string {
   const baseStyle = `
     <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #0A0A0B; color: #E5E5E5; padding: 40px; max-width: 600px; margin: 0 auto;">
       <div style="border-bottom: 1px solid #1a1a1f; padding-bottom: 20px; margin-bottom: 30px;">
-        <h1 style="font-size: 18px; letter-spacing: 0.3em; color: white; font-weight: 300; margin: 0;">UMBRA</h1>
+        <h1 style="font-size: 18px; letter-spacing: 0.3em; color: white; font-weight: 300; margin: 0;">SOVEREIGN</h1>
         <p style="font-size: 10px; letter-spacing: 0.2em; color: #666; text-transform: uppercase; margin: 4px 0 0;">Autonomous AI Marketing Intelligence</p>
       </div>
       <div>{{CONTENT}}</div>
       <div style="border-top: 1px solid #1a1a1f; padding-top: 20px; margin-top: 30px;">
-        <p style="font-size: 11px; color: #444; margin: 0;">This is an automated notification from your UMBRA node.</p>
+        <p style="font-size: 11px; color: #444; margin: 0;">This is an automated notification from your SOVEREIGN node.</p>
       </div>
     </div>`;
 
   const templates: Record<string, string> = {
     welcome: `
-      <h2 style="color: #00B7FF; font-weight: 300; font-size: 22px;">Welcome to UMBRA</h2>
+      <h2 style="color: #00B7FF; font-weight: 300; font-size: 22px;">Welcome to SOVEREIGN</h2>
       <p>Your autonomous marketing node has been activated.</p>
       <p>Node ID: <strong style="color: white;">${data.nodeId || "UMB-NX-00000"}</strong></p>
       <p>Your AI marketing engine is now initializing. You'll receive notifications as it learns and executes.</p>
@@ -143,7 +143,7 @@ function renderTemplate(template: string, data: Record<string, string>): string 
       <h2 style="color: #10B981; font-weight: 300; font-size: 22px;">Payment Confirmed</h2>
       <p>Amount: <strong style="color: white;">${data.amount || "R0"}</strong></p>
       <p>Plan: <strong style="color: white;">${data.plan || "Sovereign"}</strong></p>
-      <p>Your UMBRA node is now fully operational. All AI engines are active.</p>`,
+      <p>Your SOVEREIGN node is now fully operational. All AI engines are active.</p>`,
 
     lead_alert: `
       <h2 style="color: #F97316; font-weight: 300; font-size: 22px;">New Lead Captured</h2>

@@ -1,5 +1,5 @@
 /**
- * UMBRA Anti-Slop Content Framework
+ * SOVEREIGN Anti-Slop Content Framework
  * 
  * The #1 reason AI content fails is it reads like AI.
  * This module injects anti-slop guardrails into every content generation

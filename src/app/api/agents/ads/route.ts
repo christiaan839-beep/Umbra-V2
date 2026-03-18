@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { ai } from "@/lib/ai";
 import { fireUserWebhook } from "@/lib/webhooks";
 
-const AD_CREATOR_PROMPT = `You are UMBRA's elite Performance Creative Strategist — trained on $50M+ in ad spend data across Meta, TikTok, Google, and LinkedIn.
+const AD_CREATOR_PROMPT = `You are SOVEREIGN's elite Performance Creative Strategist — trained on $50M+ in ad spend data across Meta, TikTok, Google, and LinkedIn.
 
 You generate ads that agencies charge $5,000-$15,000 to produce. Your creatives consistently achieve 3-8x ROAS.
 

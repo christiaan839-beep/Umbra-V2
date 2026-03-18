@@ -7,9 +7,9 @@ export function ROICalculator() {
   const [adSpend, setAdSpend] = useState(100000);
   const [agencyFee, setAgencyFee] = useState(40000);
   
-  const UMBRA_COST = 2750;
+  const SOVEREIGN_COST = 2750;
   const currentTotal = adSpend + agencyFee;
-  const umbraTotal = adSpend + UMBRA_COST;
+  const umbraTotal = adSpend + SOVEREIGN_COST;
   const monthlySavings = currentTotal - umbraTotal;
   const yearlySavings = monthlySavings * 12;
 
@@ -20,7 +20,7 @@ export function ROICalculator() {
     <div className="w-full max-w-4xl mx-auto my-24">
       <div className="text-center mb-10">
         <h3 className="text-3xl font-bold text-white serif-text mb-4">Calculate Your Unfair Advantage</h3>
-        <p className="text-neutral-400">See exactly how much capital UMBRA frees up for actual growth.</p>
+        <p className="text-neutral-400">See exactly how much capital SOVEREIGN frees up for actual growth.</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 bg-black/40 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
@@ -76,8 +76,8 @@ export function ROICalculator() {
             <div className="absolute top-0 right-0 p-4 opacity-10">
               <DollarSign className="w-24 h-24 text-emerald-500" />
             </div>
-            <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-2">UMBRA Monthly Cost</h4>
-            <div className="text-4xl font-black text-white font-mono tracking-tighter mb-1">{formatCurrency(UMBRA_COST)}</div>
+            <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-widest mb-2">SOVEREIGN Monthly Cost</h4>
+            <div className="text-4xl font-black text-white font-mono tracking-tighter mb-1">{formatCurrency(SOVEREIGN_COST)}</div>
             <p className="text-xs text-emerald-100/70">Flat rate. Infinite compute. Zero complaints.</p>
           </div>
 
@@ -95,7 +95,7 @@ export function ROICalculator() {
           </div>
 
           <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="w-full py-4 rounded-xl bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-neutral-200 transition-colors flex items-center justify-center gap-2 group">
-            Deploy UMBRA Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            Deploy SOVEREIGN Now <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>

@@ -9,7 +9,7 @@ const TESTIMONIALS = [
     name: "Marcus van der Berg",
     role: "CEO, Velocity Digital",
     avatar: "MV",
-    text: "We replaced a 6-person content team with UMBRA. The AI content engine produces more output in one day than our team did in a month — and the quality is indistinguishable from senior copywriters.",
+    text: "We replaced a 6-person content team with SOVEREIGN. The AI content engine produces more output in one day than our team did in a month — and the quality is indistinguishable from senior copywriters.",
     metric: "R847K revenue generated",
     color: "from-[#00B7FF]/20 to-transparent",
   },

@@ -88,7 +88,7 @@ export function QuickStartWizard() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white">Quick Start Guide</h3>
-                <p className="text-xs text-neutral-500">Complete these 3 steps to get the most out of UMBRA</p>
+                <p className="text-xs text-neutral-500">Complete these 3 steps to get the most out of SOVEREIGN</p>
               </div>
             </div>
             <button

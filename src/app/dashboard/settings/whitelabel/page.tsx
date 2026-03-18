@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function WhitelabelPage() {
   const [settings, setSettings] = useState({
-    agencyName: "UMBRA",
+    agencyName: "SOVEREIGN",
     logoUrl: "",
     primaryColor: "#00B7FF",
     supportEmail: "",
@@ -22,7 +22,7 @@ export default function WhitelabelPage() {
         const data = await res.json();
         if (data.config) {
           setSettings({
-            agencyName: data.config.agencyName || "UMBRA",
+            agencyName: data.config.agencyName || "SOVEREIGN",
             logoUrl: data.config.logoUrl || "",
             primaryColor: data.config.primaryColor || "#00B7FF",
             supportEmail: data.config.supportEmail || "",
@@ -65,7 +65,7 @@ export default function WhitelabelPage() {
           <Palette className="w-6 h-6 text-violet-400" /> White-Label Exports
         </h1>
         <p className="text-neutral-400">
-          Customize the UMBRA portal and AI-generated PDF reports with your own agency's branding, colors, and logos.
+          Customize the SOVEREIGN portal and AI-generated PDF reports with your own agency's branding, colors, and logos.
         </p>
       </div>
 

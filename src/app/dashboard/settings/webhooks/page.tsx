@@ -60,7 +60,7 @@ export default function WebhooksPage() {
           <Webhook className="w-6 h-6 text-[#00B7FF]" /> Webhook Automations
         </h1>
         <p className="text-neutral-400">
-          Connect UMBRA to your existing CRM, Slack, or databases. Provide a Zapier or Make.com URL, and the Swarm will automatically push the final AI briefs there once complete.
+          Connect SOVEREIGN to your existing CRM, Slack, or databases. Provide a Zapier or Make.com URL, and the Swarm will automatically push the final AI briefs there once complete.
         </p>
       </div>
 

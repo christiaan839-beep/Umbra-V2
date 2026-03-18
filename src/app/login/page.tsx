@@ -53,7 +53,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3 mb-6">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white">U</div>
-            <span className="text-sm font-semibold tracking-[0.15em] uppercase text-white">UMBRA</span>
+            <span className="text-sm font-semibold tracking-[0.15em] uppercase text-white">SOVEREIGN</span>
           </Link>
           <h1 className="text-3xl font-light serif-text text-white tracking-wide">
             {isLogin ? "Access Intelligence" : "Deploy Intelligence"}

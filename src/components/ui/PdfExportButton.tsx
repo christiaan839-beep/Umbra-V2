@@ -10,7 +10,7 @@ interface PdfExportButtonProps {
   className?: string;
 }
 
-export default function PdfExportButton({ fileName = "UMBRA_Report", className = "" }: PdfExportButtonProps) {
+export default function PdfExportButton({ fileName = "SOVEREIGN_Report", className = "" }: PdfExportButtonProps) {
   const [isExporting, setIsExporting] = React.useState(false);
 
   const handleExport = () => {

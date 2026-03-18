@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL || "https://n8n.your-agency.com/webhook/omnidirector";
 
-    // Forward the trusted request from UMBRA frontend to backend n8n worker
+    // Forward the trusted request from SOVEREIGN frontend to backend n8n worker
     const response = await fetch(n8nWebhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

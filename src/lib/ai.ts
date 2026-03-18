@@ -145,7 +145,7 @@ export async function research_ai(query: string, prompt: string, options: AIOpti
  * 2. Injects them into the system prompt as learned context
  * 3. Executes the user's prompt with the benefit of accumulated intelligence
  * 
- * Over time, UMBRA gets measurably better at closing leads, writing copy,
+ * Over time, SOVEREIGN gets measurably better at closing leads, writing copy,
  * and analyzing competitors — without any human retraining.
  */
 export async function adaptive_ai(prompt: string, options: AIOptions = {}): Promise<string> {
@@ -165,7 +165,7 @@ export async function adaptive_ai(prompt: string, options: AIOptions = {}): Prom
   }
 
   const enhancedSystem = [
-    options.system || "You are UMBRA, an elite autonomous AI marketing system.",
+    options.system || "You are SOVEREIGN, an elite autonomous AI marketing system.",
     learnedDirectives ? `\n\n--- LEARNED OPTIMIZATION DIRECTIVES (Auto-Injected) ---\n${learnedDirectives}\n--- END DIRECTIVES ---` : "",
   ].join("");
 

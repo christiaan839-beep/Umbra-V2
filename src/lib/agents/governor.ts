@@ -2,7 +2,7 @@
  * The AGI Governor Ruleset
  * 
  * Interception layer for the DSPy optimizer. This module parses autonomous
- * payload generation and prevents UMBRA from triggering algorithmic bans.
+ * payload generation and prevents SOVEREIGN from triggering algorithmic bans.
  */
 
 export interface GovernorCheck {

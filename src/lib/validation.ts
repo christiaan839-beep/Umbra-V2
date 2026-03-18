@@ -1,5 +1,5 @@
 /**
- * Input validation utilities for UMBRA tool forms.
+ * Input validation utilities for SOVEREIGN tool forms.
  * Prevents garbage requests from reaching the API.
  */
 

@@ -8,7 +8,7 @@ import Link from "next/link";
 // Terminal simulation lines
 const TERMINAL_LINES = [
   { text: "$ umbra scan --target competitor1.com competitor2.com competitor3.com", type: "cmd" as const, delay: 0 },
-  { text: "⚡ Initializing UMBRA Gap Killer v2.6...", type: "sys" as const, delay: 800 },
+  { text: "⚡ Initializing SOVEREIGN Gap Killer v2.6...", type: "sys" as const, delay: 800 },
   { text: "🔍 Scanning competitor1.com via Tavily Live Search...", type: "sys" as const, delay: 1500 },
   { text: "   ├── Schema: ❌ Missing LocalBusiness JSON-LD", type: "data" as const, delay: 2200 },
   { text: "   ├── Blog frequency: 2 posts/month (LOW)", type: "data" as const, delay: 2700 },
@@ -40,7 +40,7 @@ const TERMINAL_LINES = [
   { text: "   ✅ Generated: /locations/dental-marketing/austin", type: "success" as const, delay: 13600 },
   { text: "", type: "sys" as const, delay: 14000 },
   { text: "🧠 Storing optimizations in God-Brain memory...", type: "sys" as const, delay: 14300 },
-  { text: "✅ UMBRA cycle complete. 14 gaps exploited. 3 pages deployed. 0 humans needed.", type: "success" as const, delay: 15000 },
+  { text: "✅ SOVEREIGN cycle complete. 14 gaps exploited. 3 pages deployed. 0 humans needed.", type: "success" as const, delay: 15000 },
 ];
 
 const WhatsAppSim = [
@@ -112,7 +112,7 @@ export default function DemoPage() {
       <header className="border-b border-glass-border px-6 py-4 flex items-center justify-between shrink-0">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-7 h-7 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-[10px] font-bold text-white">U</div>
-          <span className="text-xs font-semibold tracking-[0.15em] uppercase text-white">UMBRA Live Demo</span>
+          <span className="text-xs font-semibold tracking-[0.15em] uppercase text-white">SOVEREIGN Live Demo</span>
         </Link>
         <div className="flex items-center gap-3">
           <span className="text-[10px] text-text-secondary uppercase tracking-widest">Autonomous AI</span>
@@ -172,7 +172,7 @@ export default function DemoPage() {
             <div className="bg-[#075E54] px-4 py-3 flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-emerald-300/20 flex items-center justify-center text-emerald-200 text-xs font-bold">U</div>
               <div>
-                <p className="text-white text-sm font-medium">UMBRA AI Closer</p>
+                <p className="text-white text-sm font-medium">SOVEREIGN AI Closer</p>
                 <p className="text-emerald-200/60 text-[10px]">online • autonomous mode</p>
               </div>
               <span className="ml-auto w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -189,7 +189,7 @@ export default function DemoPage() {
                         : "bg-[#1f2c33] text-gray-200 rounded-bl-sm"
                     }`}>
                       {msg.from === "umbra" && (
-                        <p className="text-[9px] text-emerald-400 font-bold uppercase tracking-wider mb-1">🤖 UMBRA AI</p>
+                        <p className="text-[9px] text-emerald-400 font-bold uppercase tracking-wider mb-1">🤖 SOVEREIGN AI</p>
                       )}
                       {msg.text}
                       <p className="text-[9px] text-gray-500 text-right mt-1">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
@@ -200,7 +200,7 @@ export default function DemoPage() {
             </div>
             {/* Input bar */}
             <div className="bg-[#1f2c33] px-4 py-3 flex items-center gap-2 border-t border-gray-700/30">
-              <div className="flex-1 bg-[#2a3942] rounded-full px-4 py-2 text-sm text-gray-500">UMBRA is responding autonomously...</div>
+              <div className="flex-1 bg-[#2a3942] rounded-full px-4 py-2 text-sm text-gray-500">SOVEREIGN is responding autonomously...</div>
               <div className="w-9 h-9 rounded-full bg-emerald-500 flex items-center justify-center">
                 <Send className="w-4 h-4 text-white" />
               </div>
@@ -213,7 +213,7 @@ export default function DemoPage() {
           className="mt-8 text-center">
           <p className="text-text-secondary text-sm mb-4">This is running live. Every scan is real. Every reply is AI-generated.</p>
           <Link href="/" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-electric to-rose-glow text-white font-bold shadow-[0_0_30px_rgba(45,110,255,0.4)] hover:shadow-[0_0_50px_rgba(45,110,255,0.6)] transition-all group">
-            Deploy UMBRA For Your Business
+            Deploy SOVEREIGN For Your Business
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>

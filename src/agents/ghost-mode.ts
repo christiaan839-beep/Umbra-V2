@@ -90,7 +90,7 @@ export async function executeGhostCycle(): Promise<GhostAction[]> {
   if (META_TOKEN && AD_ACCOUNT_ID) {
     try {
       const campRes = await metaApi(`act_${AD_ACCOUNT_ID}/campaigns`, "POST", {
-        name: `UMBRA Ghost Cycle - ${new Date().toISOString().split("T")[0]}`,
+        name: `SOVEREIGN Ghost Cycle - ${new Date().toISOString().split("T")[0]}`,
         objective: "OUTCOME_SALES",
         status: "PAUSED", // Create paused initially for safety
         special_ad_categories: [],

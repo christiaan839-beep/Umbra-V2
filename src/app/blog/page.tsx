@@ -52,7 +52,7 @@ const ARTICLES = [
   {
     slug: "white-label-ai-agency",
     title: "Build a R600k/mo White-Label AI Agency With Zero Technical Skills",
-    excerpt: "Use UMBRA as your agency backend. Service 12 clients at R50k/mo each. Zero code, zero hiring, zero overhead. Here's the exact playbook.",
+    excerpt: "Use SOVEREIGN as your agency backend. Service 12 clients at R50k/mo each. Zero code, zero hiring, zero overhead. Here's the exact playbook.",
     category: "Business",
     readTime: "9 min",
     date: "Feb 28, 2026",
@@ -74,7 +74,7 @@ export default function BlogPage() {
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-6xl mx-auto">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold">U</div>
-          <span className="text-sm font-medium tracking-[0.15em] uppercase">UMBRA</span>
+          <span className="text-sm font-medium tracking-[0.15em] uppercase">SOVEREIGN</span>
         </Link>
         <div className="flex items-center gap-6 text-xs text-text-secondary">
           <Link href="/pricing" className="hover:text-white transition-colors">Features</Link>
@@ -88,7 +88,7 @@ export default function BlogPage() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-electric/10 border border-electric/20 text-electric text-xs font-bold uppercase tracking-wider mb-6">
             <Zap className="w-3 h-3" /> Intelligence Hub
           </div>
-          <h1 className="text-4xl md:text-5xl serif-text font-light mb-4">The UMBRA Blog</h1>
+          <h1 className="text-4xl md:text-5xl serif-text font-light mb-4">The SOVEREIGN Blog</h1>
           <p className="text-text-secondary max-w-lg mx-auto">Insights on autonomous marketing, AI strategy, and building systems that scale without humans.</p>
         </motion.div>
 
@@ -130,7 +130,7 @@ export default function BlogPage() {
       </section>
 
       <footer className="relative z-10 border-t border-glass-border/30 px-8 py-10 text-center">
-        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">UMBRA — Shadow Intelligence Platform</p>
+        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">SOVEREIGN — Shadow Intelligence Platform</p>
       </footer>
     </div>
   );

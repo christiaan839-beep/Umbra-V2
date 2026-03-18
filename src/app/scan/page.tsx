@@ -84,7 +84,7 @@ export default function AGIAuditorPage() {
             <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/50">Your Funnel Leaking?</span>
           </h1>
           <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto font-light leading-relaxed">
-            UMBRA AGI will rip apart your frontend architecture, map your friction points, and calculate the exact monthly MRR you are losing to outdated human systems.
+            SOVEREIGN AGI will rip apart your frontend architecture, map your friction points, and calculate the exact monthly MRR you are losing to outdated human systems.
           </p>
         </motion.div>
 
@@ -224,7 +224,7 @@ export default function AGIAuditorPage() {
                   </div>
                   <h3 className="text-3xl md:text-5xl font-light mb-6 leading-tight">Your infrastructure is <span className="text-red-500 font-medium">bleeding capital.</span></h3>
                   <p className="text-neutral-400 mb-8 text-lg">
-                    UMBRA is an autonomous Swarm engineered to permanently seal funnel leakage. Enter your email to get a free live demo dashboard — see exactly what UMBRA would do for <span className="text-white font-medium">{targetUrl}</span>.
+                    SOVEREIGN is an autonomous Swarm engineered to permanently seal funnel leakage. Enter your email to get a free live demo dashboard — see exactly what SOVEREIGN would do for <span className="text-white font-medium">{targetUrl}</span>.
                   </p>
                   
                   {/* Email capture + auto demo provision */}
@@ -266,7 +266,7 @@ export default function AGIAuditorPage() {
                       See My Demo <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
-                  <p className="text-xs text-neutral-500">No credit card required. Instant access to your personalized UMBRA dashboard.</p>
+                  <p className="text-xs text-neutral-500">No credit card required. Instant access to your personalized SOVEREIGN dashboard.</p>
                 </div>
               </div>
             </motion.div>

@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — UMBRA",
-  description: "UMBRA privacy policy. How we collect, use, and protect your data.",
+  title: "Privacy Policy — SOVEREIGN",
+  description: "SOVEREIGN privacy policy. How we collect, use, and protect your data.",
 };
 
 export default function PrivacyPage() {
@@ -23,7 +23,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">2. How We Use Your Information</h2>
-            <p>We use your information to: provide and maintain the UMBRA platform, process payments via Paystack, send transactional emails, improve our services, and provide customer support. We do not sell your data to third parties.</p>
+            <p>We use your information to: provide and maintain the SOVEREIGN platform, process payments via Paystack, send transactional emails, improve our services, and provide customer support. We do not sell your data to third parties.</p>
           </section>
 
           <section>

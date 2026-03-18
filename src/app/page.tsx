@@ -6,7 +6,7 @@ import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
 
-import { UmbraLogo } from "@/components/ui/UmbraLogo";
+import { SovereignLogo } from "@/components/ui/SovereignLogo";
 import { Pricing } from "@/components/ui/Pricing";
 import { SplashIntro } from "@/components/ui/SplashIntro";
 import { NeuralWebGLBackground } from "@/components/3d/NeuralWebGLBackground";
@@ -67,7 +67,7 @@ export default function Home() {
       <nav className="fixed top-0 inset-x-0 z-50 bg-black/50 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <UmbraLogo size="md" />
+            <SovereignLogo size="md" />
             <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">Sovereign Matrix</span>
           </div>
           {/* Desktop nav */}
@@ -477,7 +477,7 @@ export default function Home() {
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <UmbraLogo size="sm" />
+                <SovereignLogo size="sm" />
                 <span className="text-xs font-bold tracking-[0.2em] uppercase text-white">Sovereign Matrix</span>
               </div>
               <p className="text-xs text-neutral-500 leading-relaxed max-w-xs">An elite, AI-driven defense-grade orchestration platform built to replace traditional marketing agency workflows.</p>

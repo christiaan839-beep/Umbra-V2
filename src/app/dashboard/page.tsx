@@ -181,7 +181,7 @@ export default function DashboardOverview() {
           </div>
           <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
             <p className="text-lg font-mono font-bold text-emerald-400">Free to Start</p>
-            <p className="text-[10px] text-neutral-500 uppercase tracking-widest mt-1">UMBRA Platform</p>
+            <p className="text-[10px] text-neutral-500 uppercase tracking-widest mt-1">SOVEREIGN Platform</p>
           </div>
         </div>
       </motion.div>

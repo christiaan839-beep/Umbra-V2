@@ -67,7 +67,7 @@ export function generatePayFastForm(plan: PlanId, email: string, returnUrl: stri
     notify_url: `${returnUrl}/api/payments/payfast/webhook`,
     email_address: email,
     amount: planData.monthlyAmount.toFixed(2),
-    item_name: `UMBRA ${planData.name} Plan - Monthly`,
+    item_name: `SOVEREIGN ${planData.name} Plan - Monthly`,
     subscription_type: "1", // Subscription
     recurring_amount: planData.monthlyAmount.toFixed(2),
     frequency: "3", // Monthly

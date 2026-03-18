@@ -18,7 +18,7 @@ export default function DashboardLoading() {
           Syncing Neuro-Link <span className="flex gap-0.5"><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-75" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-150" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-300" /></span>
         </h3>
         <p className="text-[10px] uppercase tracking-widest text-[#5C667A] font-medium">
-          Retrieving Data from UMBRA Vector Matrix
+          Retrieving Data from SOVEREIGN Vector Matrix
         </p>
       </div>
 

@@ -1,5 +1,5 @@
 /**
- * UMBRA — Centralized Environment Variable Validator
+ * SOVEREIGN — Centralized Environment Variable Validator
  * 
  * Validates all required environment variables at startup.
  * Import this module in any API route that needs env validation.
@@ -45,7 +45,7 @@ export function validateEnv(): { valid: boolean; missing: string[]; warnings: st
   }
 
   if (missing.length > 0) {
-    console.error("\n🔴 UMBRA ENVIRONMENT VALIDATION FAILED");
+    console.error("\n🔴 SOVEREIGN ENVIRONMENT VALIDATION FAILED");
     console.error("═══════════════════════════════════════");
     missing.forEach((m) => console.error(m));
     if (warnings.length > 0) {
@@ -64,7 +64,7 @@ export function validateEnv(): { valid: boolean; missing: string[]; warnings: st
 export function getRequiredEnv(key: string): string {
   const value = process.env[key];
   if (!value) {
-    throw new Error(`[UMBRA ENV] Missing required environment variable: ${key}. Check .env.local`);
+    throw new Error(`[SOVEREIGN ENV] Missing required environment variable: ${key}. Check .env.local`);
   }
   return value;
 }

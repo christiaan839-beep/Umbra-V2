@@ -12,7 +12,7 @@ const GUIDES = [
     color: "#00B7FF",
     steps: [
       "Sign in with your credentials at /dashboard",
-      "Your UMBRA node automatically initializes on first login",
+      "Your SOVEREIGN node automatically initializes on first login",
       "Navigate the sidebar to access all 100 AI phases",
       "Use the Command Center (main dashboard) for an overview of all systems",
     ],
@@ -96,12 +96,12 @@ export default function DocsPage() {
       {/* Header */}
       <div className="border-b border-white/5 bg-black/40 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-6 py-8">
-          <Link href="/" className="text-xs font-mono uppercase tracking-widest text-neutral-600 hover:text-neutral-400 transition-colors">← Back to UMBRA</Link>
+          <Link href="/" className="text-xs font-mono uppercase tracking-widest text-neutral-600 hover:text-neutral-400 transition-colors">← Back to SOVEREIGN</Link>
           <h1 className="text-3xl font-light tracking-wider mt-4 flex items-center gap-3">
             <BookOpen className="w-8 h-8 text-cyan-400" />
             Documentation
           </h1>
-          <p className="text-neutral-400 mt-2">Quick guides for UMBRA&apos;s core features. Each guide takes under 2 minutes to follow.</p>
+          <p className="text-neutral-400 mt-2">Quick guides for SOVEREIGN&apos;s core features. Each guide takes under 2 minutes to follow.</p>
         </div>
       </div>
 
@@ -152,7 +152,7 @@ export default function DocsPage() {
             <span className="text-2xl">🇿🇦</span> South African Payments (PayFast)
           </h2>
           <div className="space-y-2.5 text-sm text-neutral-400">
-            <p>UMBRA supports PayFast for ZAR payments. To activate:</p>
+            <p>SOVEREIGN supports PayFast for ZAR payments. To activate:</p>
             <ol className="space-y-2 pl-6 list-decimal">
               <li>Register at <a href="https://www.payfast.co.za" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">payfast.co.za</a></li>
               <li>Set these environment variables in your Vercel dashboard:
@@ -175,13 +175,13 @@ export default function DocsPage() {
             <Send className="w-5 h-5 text-purple-400" /> Email Sending Setup
           </h2>
           <div className="space-y-2.5 text-sm text-neutral-400">
-            <p>UMBRA uses Resend for email delivery (100 free emails/day). To activate:</p>
+            <p>SOVEREIGN uses Resend for email delivery (100 free emails/day). To activate:</p>
             <ol className="space-y-2 pl-6 list-decimal">
               <li>Sign up at <a href="https://resend.com" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:underline">resend.com</a></li>
               <li>Add your API key to Vercel:
                 <code className="block mt-2 bg-black/60 border border-white/10 rounded-lg p-3 text-xs font-mono text-purple-400">
                   RESEND_API_KEY=re_xxxxxxxxxxxxx<br />
-                  RESEND_FROM_EMAIL=UMBRA &lt;noreply@yourdomain.com&gt;
+                  RESEND_FROM_EMAIL=SOVEREIGN &lt;noreply@yourdomain.com&gt;
                 </code>
               </li>
               <li>Verify your domain in Resend for custom sender addresses</li>

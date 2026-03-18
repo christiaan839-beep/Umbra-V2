@@ -50,7 +50,7 @@ export async function sendEmail(options: EmailOptions): Promise<EmailResult> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: from || "UMBRA <noreply@umbra.ai>",
+        from: from || "SOVEREIGN <noreply@umbra.ai>",
         to: [to],
         subject,
         html,

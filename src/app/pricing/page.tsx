@@ -9,62 +9,59 @@ const fadeIn = (d: number) => ({ initial: { opacity: 0, y: 20 }, whileInView: { 
 
 const TIERS = [
   {
-    name: "Starter", price: "Free", period: "forever", plan: "starter", featured: false,
-    tagline: "Explore UMBRA with 20 AI generations per day",
-    cta: "Start Free",
+    name: "Sovereign Node", price: "R9,997", period: "/mo", plan: "node", featured: false,
+    tagline: "Replace your SDR and Junior Designer entirely. Includes Ghost Fleet.",
+    cta: "Deploy Node",
     features: [
-      { name: "20 AI generations / day", included: true },
-      { name: "SEO X-Ray Analysis", included: true },
-      { name: "Content Factory", included: true },
-      { name: "Design Studio", included: true },
-      { name: "Lead Prospector", included: true },
-      { name: "My Library (result history)", included: true },
+      { name: "OpenClaw Local Execution", included: true },
+      { name: "Apollo Ghost Fleet Targeting", included: true },
+      { name: "Sovereign Visual Studio", included: true },
+      { name: "NVIDIA Edify 3D Generation", included: true },
+      { name: "Morpheus Shield Integration", included: true },
+      { name: "Single macOS Node License", included: true },
       { name: "Bring Your Own API Key", included: true },
       { name: "Unlimited generations", included: false },
-      { name: "White-label dashboard", included: false },
-      { name: "Client portal", included: false },
+      { name: "White-label Reseller Hub", included: false },
     ],
   },
   {
-    name: "Pro", price: "R997", period: "/mo", plan: "pro", featured: true,
-    tagline: "Unlimited AI power for growing businesses",
-    cta: "Upgrade to Pro",
+    name: "Sovereign Array", price: "R24,997", period: "/mo", plan: "array", featured: true,
+    tagline: "Replace a full Growth Team. Priority Nemotron 70B inference.",
+    cta: "Deploy Array",
     features: [
-      { name: "Everything in Starter", included: true },
+      { name: "Everything in Node", included: true },
       { name: "Unlimited AI generations", included: true },
-      { name: "All AI tools unlocked", included: true },
-      { name: "Priority API processing", included: true },
-      { name: "Export to PDF & WordPress", included: true },
+      { name: "Cosmos VLM Video Generation", included: true },
+      { name: "Priority AI processing", included: true },
+      { name: "War Room Red-Teaming", included: true },
       { name: "Competitor monitoring", included: true },
-      { name: "Email support (24h)", included: true },
-      { name: "White-label dashboard", included: false },
-      { name: "Client portal", included: false },
-      { name: "API access", included: false },
+      { name: "Direct Comm-Link (24h)", included: true },
+      { name: "White-label Reseller Hub", included: false },
+      { name: "Cartel Sub-Licenses", included: false },
     ],
   },
   {
-    name: "Agency", price: "R2,750", period: "/mo", plan: "agency", featured: false,
-    tagline: "White-label platform for agencies & teams",
-    cta: "Go Agency",
+    name: "Cartel License", price: "R49,997", period: "/mo", plan: "cartel", featured: false,
+    tagline: "White-label the Sovereign Matrix to resell autonomous hubs.",
+    cta: "Initialize Cartel",
     features: [
-      { name: "Everything in Pro", included: true },
+      { name: "Everything in Array", included: true },
       { name: "White-label dashboard", included: true },
       { name: "Client portal access", included: true },
-      { name: "Bulk page generation (1000+/mo)", included: true },
-      { name: "API access for integrations", included: true },
-      { name: "Dedicated support & onboarding", included: true },
-      { name: "Custom branding", included: true },
-      { name: "Priority feature requests", included: true },
-      { name: "Team seats (5 included)", included: true },
+      { name: "Root Admin Command Center", included: true },
+      { name: "API access for Integrations", included: true },
+      { name: "Dedicated Setup & Onboarding", included: true },
+      { name: "Custom domain branding", included: true },
+      { name: "Cartel Sub-Licenses (5 included)", included: true },
       { name: "SLA guarantee", included: true },
     ],
   },
 ];
 
 const FAQS = [
-  { q: "What AI tools are included?", a: "UMBRA includes AI-powered tools for SEO analysis, content creation, design briefs, landing page generation, lead prospecting, competitor intelligence, and more. All powered by Google Gemini 2.5 Pro." },
+  { q: "What AI tools are included?", a: "SOVEREIGN includes AI-powered tools for SEO analysis, content creation, design briefs, landing page generation, lead prospecting, competitor intelligence, and more. All powered by Google Gemini 2.5 Pro." },
   { q: "Do I need technical skills?", a: "No. The dashboard is designed for founders and operators, not coders. Select a tool, fill in your business name, and the AI generates production-ready marketing assets." },
-  { q: "How is UMBRA different from GoHighLevel?", a: "GoHighLevel gives you empty templates and makes you do the work. UMBRA is an autonomous engine that generates the actual content, strategies, and creatives for you. It's the difference between buying a toolkit and hiring a 24/7 marketing team." },
+  { q: "How is SOVEREIGN different from GoHighLevel?", a: "GoHighLevel gives you empty templates and makes you do the work. SOVEREIGN is an autonomous engine that generates the actual content, strategies, and creatives for you. It's the difference between buying a toolkit and hiring a 24/7 marketing team." },
   { q: "What are AI generations?", a: "Each time you use an AI tool (e.g., generate a blog post, analyze a competitor, create a landing page), that counts as one generation. Free users get 20/day, Pro and Agency get unlimited." },
   { q: "What is BYOK (Bring Your Own Key)?", a: "You can plug in your own API keys for Gemini, Anthropic, or Tavily. This means your generations use your own API quota, giving you full control over costs and usage." },
   { q: "Can I cancel anytime?", a: "Yes. No contracts, no cancellation fees. Monthly billing, cancel whenever you want." },
@@ -75,7 +72,7 @@ export default function PricingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const checkout = async (plan: string) => {
-    if (plan === "starter") {
+    if (plan === "node") {
       window.location.assign("/dashboard");
       return;
     }
@@ -108,7 +105,7 @@ export default function PricingPage() {
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00B7FF] to-blue-600 flex items-center justify-center text-xs font-bold">U</div>
-          <span className="text-sm font-medium tracking-[0.15em] uppercase">UMBRA</span>
+          <span className="text-sm font-medium tracking-[0.15em] uppercase">SOVEREIGN</span>
         </Link>
         <div className="flex items-center gap-6 text-xs text-neutral-400">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -121,8 +118,8 @@ export default function PricingPage() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium uppercase tracking-wider mb-8">
             <Zap className="w-3 h-3" /> Simple, Transparent Pricing
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Replace Your R15,000/mo Agency.</h1>
-          <p className="text-neutral-400 max-w-xl mx-auto">Hire a 24/7 team of 29 elite AI marketing agents for less than your daily coffee. 20 free generations per day to prove the ROI.</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Scale Your Autonomous Swarm.</h1>
+          <p className="text-neutral-400 max-w-xl mx-auto">Deploy enterprise-grade NVIDIA execution pipelines. Replaces entire agency overheads dynamically via high-ticket infrastructure.</p>
         </motion.div>
       </section>
 
@@ -152,7 +149,7 @@ export default function PricingPage() {
                 className={`w-full py-3 font-bold rounded-xl transition-all flex items-center justify-center gap-2 ${
                   t.featured
                     ? "bg-gradient-to-r from-[#00B7FF] to-purple-500 text-white hover:opacity-90"
-                    : t.plan === "starter"
+                    : t.plan === "node"
                     ? "bg-white/5 border border-white/10 text-white hover:bg-white/10"
                     : "border border-white/10 text-white hover:bg-white/5"
                 }`}>
@@ -168,7 +165,7 @@ export default function PricingPage() {
         <motion.div {...fadeIn(0)} className="rounded-2xl bg-white/[0.02] border border-white/10 p-8">
           <h3 className="text-lg font-bold mb-2">30-Day Money-Back Guarantee</h3>
           <p className="text-sm text-neutral-400 leading-relaxed">
-            Try UMBRA for 30 days. If it doesn&apos;t work for you, we&apos;ll refund you — no questions asked.
+            Try SOVEREIGN for 30 days. If it doesn&apos;t work for you, we&apos;ll refund you — no questions asked.
           </p>
           <div className="flex items-center justify-center gap-4 mt-4">
             <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold uppercase tracking-wider"><Shield className="w-3 h-3" /> SSL Secured</span>
@@ -206,16 +203,16 @@ export default function PricingPage() {
       {/* Final CTA */}
       <section className="relative z-10 px-8 pb-20 text-center max-w-lg mx-auto">
         <motion.div {...fadeIn(0)}>
-          <h2 className="text-2xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-sm text-neutral-400 mb-6">AI-powered marketing tools. Free to start. No credit card required.</p>
+          <h2 className="text-2xl font-bold mb-4">Initialize the Swarm?</h2>
+          <p className="text-sm text-neutral-400 mb-6">Enterprise autonomous agents ready for direct OS execution.</p>
           <Link href="/dashboard" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black font-bold text-sm uppercase tracking-[0.15em] rounded-full hover:bg-neutral-200 transition-all">
-            <Zap className="w-4 h-4" /> Start Free — 20 Generations/Day
+            <Zap className="w-4 h-4" /> Initialize Dashboard
           </Link>
         </motion.div>
       </section>
 
       <footer className="relative z-10 border-t border-white/5 px-8 py-10 text-center">
-        <p className="text-[10px] text-neutral-600 uppercase tracking-[0.4em]">UMBRA — AI Marketing Platform</p>
+        <p className="text-[10px] text-neutral-600 uppercase tracking-[0.4em]">SOVEREIGN — AI Marketing Platform</p>
       </footer>
     </div>
   );

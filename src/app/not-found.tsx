@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Home } from "lucide-react";
-import { UmbraLogo } from "@/components/ui/UmbraLogo";
+import { SovereignLogo } from "@/components/ui/SovereignLogo";
 
 export default function NotFound() {
   return (
@@ -20,8 +20,8 @@ export default function NotFound() {
         className="relative z-10 text-center"
       >
         <div className="flex items-center justify-center gap-3 mb-12">
-          <UmbraLogo size="md" />
-          <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">UMBRA</span>
+          <SovereignLogo size="md" />
+          <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">SOVEREIGN</span>
         </div>
 
         <div className="text-[120px] md:text-[180px] font-bold text-white/5 font-mono leading-none select-none mb-4">
@@ -54,7 +54,7 @@ export default function NotFound() {
       </motion.div>
 
       <div className="absolute bottom-8 text-xs text-neutral-600">
-        © 2026 UMBRA. All rights reserved.
+        © 2026 SOVEREIGN. All rights reserved.
       </div>
     </div>
   );

@@ -9,13 +9,13 @@ export interface ToolResult {
 }
 
 /**
- * Tool Factory — When UMBRA encounters a problem it doesn't have a tool for,
+ * Tool Factory — When SOVEREIGN encounters a problem it doesn't have a tool for,
  * it writes the tool in JavaScript and executes it in real-time.
  */
 export async function createAndRunTool(objective: string): Promise<ToolResult> {
   const start = Date.now();
 
-  const systemPrompt = `You are the UMBRA Tool Factory — an elite AI engineer.
+  const systemPrompt = `You are the SOVEREIGN Tool Factory — an elite AI engineer.
 The user needs a tool to accomplish an objective. You must WRITE it now in JavaScript.
 
 Rules:

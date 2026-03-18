@@ -6,33 +6,33 @@ import { CheckCircle2, X as XIcon, Zap, Crown, Server, ArrowRight, Shield } from
 export function Pricing() {
   const tiers = [
     {
-      name: "Starter",
-      description: "Explore all AI tools with 20 free generations per day.",
-      price: "Free",
-      period: "forever",
+      name: "Sovereign Node",
+      description: "Replace your SDR and Junior Designer entirely. Includes the OpenClaw Ghost Fleet.",
+      price: "R9,997",
+      period: "/mo",
       icon: Zap,
       color: "text-[#00B7FF]",
       bg: "bg-[#00B7FF]/5",
       border: "border-[#00B7FF]/20",
       features: [
-        { name: "20 AI generations / day", included: true },
-        { name: "SEO X-Ray Analysis", included: true },
-        { name: "Content Factory", included: true },
-        { name: "Design Studio", included: true },
-        { name: "Lead Prospector", included: true },
-        { name: "My Library (history)", included: true },
+        { name: "OpenClaw Local Execution", included: true },
+        { name: "Apollo Ghost Fleet Targeting", included: true },
+        { name: "Sovereign Visual Studio", included: true },
+        { name: "NVIDIA Edify 3D Generation", included: true },
+        { name: "Morpheus Shield Integration", included: true },
+        { name: "Single macOS Node License", included: true },
         { name: "Bring Your Own API Key", included: true },
         { name: "Unlimited generations", included: false },
-        { name: "White-label", included: false },
+        { name: "White-label Reseller Hub", included: false },
       ],
-      planId: "starter",
-      buttonText: "Start Free",
+      planId: "node",
+      buttonText: "Deploy Node",
       buttonStyle: "bg-white/5 hover:bg-white/10 text-white border border-white/10",
     },
     {
-      name: "Pro",
-      description: "Unlimited AI power for growing businesses.",
-      price: "R997",
+      name: "Sovereign Array",
+      description: "Replace a full Growth Team. Unlimited generations and priority Nemotron 70B inference.",
+      price: "R24,997",
       period: "/mo",
       icon: Crown,
       color: "text-emerald-400",
@@ -40,48 +40,48 @@ export function Pricing() {
       border: "border-emerald-500/40",
       isPopular: true,
       features: [
-        { name: "Everything in Starter", included: true },
+        { name: "Everything in Node", included: true },
         { name: "Unlimited AI generations", included: true },
-        { name: "All AI tools unlocked", included: true },
-        { name: "Priority API processing", included: true },
-        { name: "Export to PDF & WordPress", included: true },
+        { name: "Cosmos VLM Video Generation", included: true },
+        { name: "Priority AI processing", included: true },
+        { name: "War Room Red-Teaming", included: true },
         { name: "Competitor monitoring", included: true },
-        { name: "Email support (24h)", included: true },
-        { name: "White-label", included: false },
-        { name: "API access", included: false },
+        { name: "Direct Comm-Link (24h)", included: true },
+        { name: "White-label Reseller Hub", included: false },
+        { name: "Cartel Sub-Licenses", included: false },
       ],
-      planId: "pro",
-      buttonText: "Upgrade to Pro",
+      planId: "array",
+      buttonText: "Deploy Array",
       buttonStyle: "bg-emerald-400 hover:bg-emerald-300 text-black shadow-[0_0_20px_rgba(52,211,153,0.3)]",
     },
     {
-      name: "Agency",
-      description: "White-label platform for teams & agencies.",
-      price: "R2,750",
+      name: "Cartel License",
+      description: "White-label the Sovereign Matrix to resell autonomous hubs to local businesses.",
+      price: "R49,997",
       period: "/mo",
       icon: Server,
       color: "text-violet-400",
       bg: "bg-violet-500/5",
       border: "border-violet-500/20",
       features: [
-        { name: "Everything in Pro", included: true },
+        { name: "Everything in Array", included: true },
         { name: "White-label dashboard", included: true },
         { name: "Client portal access", included: true },
-        { name: "Bulk pages (1000+/mo)", included: true },
-        { name: "API access", included: true },
-        { name: "Dedicated support", included: true },
-        { name: "Custom branding", included: true },
-        { name: "Team seats (5 included)", included: true },
+        { name: "Root Admin Command Center", included: true },
+        { name: "API access for Integrations", included: true },
+        { name: "Dedicated Setup & Onboarding", included: true },
+        { name: "Custom domain branding", included: true },
+        { name: "Cartel Sub-Licenses (5 included)", included: true },
         { name: "SLA guarantee", included: true },
       ],
-      planId: "agency",
-      buttonText: "Go Agency",
+      planId: "cartel",
+      buttonText: "Initialize Cartel",
       buttonStyle: "bg-white/5 hover:bg-white/10 text-white border border-white/10",
     },
   ];
 
   const handleCheckout = async (planId: string) => {
-    if (planId === "starter") {
+    if (planId === "node") {
       window.location.assign("/dashboard");
       return;
     }
@@ -108,9 +108,9 @@ export function Pricing() {
   return (
     <div className="w-full max-w-7xl mx-auto py-24 px-6 relative z-10">
       <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold text-white serif-text mb-6">Start Free. Scale When Ready.</h2>
+        <h2 className="text-4xl md:text-5xl font-bold text-white serif-text mb-6">Enterprise Architecture.</h2>
         <p className="text-neutral-400 max-w-2xl mx-auto">
-          No credit card required. 20 free AI generations per day. Upgrade when you need unlimited power.
+          Scale your autonomous agency instantly. Deploy a node, authorize an array, or initialize a cartel.
         </p>
       </div>
 

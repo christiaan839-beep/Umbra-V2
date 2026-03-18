@@ -165,7 +165,7 @@ export default function SettingsPage() {
           <p className="text-xs text-neutral-400 leading-relaxed">
             Keys are stored per-user in Neon Postgres, masked on display (first 4 + last 4 chars only),
             and never logged. Used server-side only — never exposed to the browser.
-            UMBRA uses platform defaults if you don&apos;t set your own.
+            SOVEREIGN uses platform defaults if you don&apos;t set your own.
           </p>
         </div>
       </motion.div>
@@ -259,7 +259,7 @@ export default function SettingsPage() {
         </h4>
         <ul className="space-y-1 text-xs text-neutral-500">
           <li>• Your keys override the platform defaults for your account only</li>
-          <li>• If you don&apos;t set a key, UMBRA uses its shared platform keys</li>
+          <li>• If you don&apos;t set a key, SOVEREIGN uses its shared platform keys</li>
           <li>• Keys are stored in Neon Postgres, encrypted at rest</li>
           <li>• You can remove a key by saving an empty value</li>
         </ul>

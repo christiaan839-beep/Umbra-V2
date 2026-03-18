@@ -50,7 +50,7 @@ export async function GET() {
       // Generate the report with Gemini
       const { text: report } = await generateText({
         model: google("gemini-2.5-pro"),
-        prompt: `You are the UMBRA AI Operations Director generating a weekly performance report.
+        prompt: `You are the SOVEREIGN AI Operations Director generating a weekly performance report.
 
 CLIENT NODE: ${tenant.nodeId}
 PLAN: ${tenant.plan}

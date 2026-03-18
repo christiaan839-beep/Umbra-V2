@@ -57,7 +57,7 @@ export const scheduledContent = pgTable("scheduled_content", {
 export const whitelabelConfig = pgTable("whitelabel_config", {
   id: uuid("id").primaryKey().defaultRandom(),
   userEmail: text("user_email").notNull().unique(),
-  agencyName: text("agency_name").notNull().default("UMBRA"),
+  agencyName: text("agency_name").notNull().default("SOVEREIGN"),
   logoUrl: text("logo_url"),
   primaryColor: text("primary_color").default("#00B7FF"),
   supportEmail: text("support_email"),
@@ -164,7 +164,7 @@ export const generations = pgTable("generations", {
 ]);
 
 // ═══════════════════════════════════════════
-// Phase 8: NVIDIA NIM Voice Agent (UMBRA Siren)
+// Phase 8: NVIDIA NIM Voice Agent (SOVEREIGN Siren)
 // ═══════════════════════════════════════════
 
 export const voiceCalls = pgTable("voice_calls", {

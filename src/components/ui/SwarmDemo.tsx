@@ -115,7 +115,7 @@ export function SwarmDemo() {
                   </ul>
                   <div className="pt-2 flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span className="text-xs text-emerald-400 font-medium">UMBRA can fix this autonomously in 4.2 seconds.</span>
+                    <span className="text-xs text-emerald-400 font-medium">SOVEREIGN can fix this autonomously in 4.2 seconds.</span>
                   </div>
                 </div>
               </div>

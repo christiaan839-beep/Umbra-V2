@@ -28,7 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("[UMBRA ErrorBoundary]:", error, errorInfo);
+    console.error("[SOVEREIGN ErrorBoundary]:", error, errorInfo);
   }
 
   render() {

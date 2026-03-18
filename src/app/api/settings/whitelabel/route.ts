@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     } else {
       await db.insert(whitelabelConfig).values({
         userEmail,
-        agencyName: agencyName || "UMBRA",
+        agencyName: agencyName || "SOVEREIGN",
         logoUrl,
         primaryColor: primaryColor || "#00B7FF",
         supportEmail,

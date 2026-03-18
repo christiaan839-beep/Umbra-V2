@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
       try {
         // --- STEP 1: Initialization ---
-        emit("progress", { step: 1, message: "Initializing UMBRA Autonomous Engine..." });
+        emit("progress", { step: 1, message: "Initializing SOVEREIGN Autonomous Engine..." });
         await new Promise(r => setTimeout(r, 1000)); // Brief pause for UX
 
         // --- STEP 2: Competitor X-Ray (Research) ---

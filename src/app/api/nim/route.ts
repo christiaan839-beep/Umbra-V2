@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 /**
- * NVIDIA NIM API Proxy — Routes UMBRA V3 requests to NVIDIA's NIM inference endpoints. 
+ * NVIDIA NIM API Proxy — Routes SOVEREIGN MATRIX requests to NVIDIA's NIM inference endpoints. 
  * Supports Nemotron, Riva STT/TTS, NeMo Guardrails, and OCR models.
  * All requests are authenticated via the NVIDIA_NIM_API_KEY environment variable.
  * 

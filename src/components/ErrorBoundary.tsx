@@ -24,7 +24,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("[UMBRA Error Boundary]:", error, errorInfo);
+    console.error("[SOVEREIGN Error Boundary]:", error, errorInfo);
     // In production, send to Sentry or your error tracking service
   }
 

@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { ai } from "@/lib/ai";
 import { fireUserWebhook } from "@/lib/webhooks";
 
-const BOOKING_AGENT_PROMPT = `You are UMBRA's elite AI Booking Agent — a world-class digital sales representative with 15+ years of consultative selling experience.
+const BOOKING_AGENT_PROMPT = `You are SOVEREIGN's elite AI Booking Agent — a world-class digital sales representative with 15+ years of consultative selling experience.
 
 Your role is to qualify inbound leads using the BANT framework (Budget, Authority, Need, Timeline) and convert them into booked appointments.
 

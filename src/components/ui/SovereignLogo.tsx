@@ -8,7 +8,7 @@ interface LogoProps {
   size?: "sm" | "md" | "lg";
 }
 
-export function UmbraLogo({ className = "", size = "md" }: LogoProps) {
+export function SovereignLogo({ className = "", size = "md" }: LogoProps) {
   const dimensions = {
     sm: { wrapper: "w-6 h-6", px: 24 },
     md: { wrapper: "w-8 h-8", px: 32 },
@@ -27,7 +27,7 @@ export function UmbraLogo({ className = "", size = "md" }: LogoProps) {
       >
         <Image
           src="/logo.png"
-          alt="UMBRA Sovereign Mark"
+          alt="SOVEREIGN Sovereign Mark"
           width={d.px}
           height={d.px}
           className="w-full h-full object-cover rounded-md shadow-[0_0_20px_rgba(0,183,255,0.4)]"

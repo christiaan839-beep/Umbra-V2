@@ -11,7 +11,7 @@ interface MarkdownRendererProps {
 /**
  * Premium markdown renderer for AI tool outputs.
  * Renders headers, lists, bold/italic, code blocks, and tables
- * with UMBRA's dark theme styling.
+ * with SOVEREIGN's dark theme styling.
  */
 export function MarkdownRenderer({ content, className = "" }: MarkdownRendererProps) {
   return (

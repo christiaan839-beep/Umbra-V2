@@ -9,7 +9,7 @@ const fadeIn = (d: number) => ({ initial: { opacity: 0, y: 20 }, whileInView: { 
 const VALUES = [
   { icon: Cpu, title: "Autonomy Over Manual", desc: "Every feature we build must work without human intervention. If it needs babysitting, it doesn't ship." },
   { icon: Brain, title: "Intelligence That Compounds", desc: "Every success is stored. Every failure is learned from. The system gets smarter with every campaign it runs." },
-  { icon: Shield, title: "Your Data, Your System", desc: "UMBRA runs on your infrastructure, with your API keys. We never see your data. Period." },
+  { icon: Shield, title: "Your Data, Your System", desc: "SOVEREIGN runs on your infrastructure, with your API keys. We never see your data. Period." },
   { icon: Code, title: "Build in Public", desc: "15 engines, 53 routes, open architecture. We don't hide behind a black box. You see everything." },
 ];
 
@@ -30,7 +30,7 @@ export default function AboutPage() {
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-5xl mx-auto">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold">U</div>
-          <span className="text-sm font-medium tracking-[0.15em] uppercase">UMBRA</span>
+          <span className="text-sm font-medium tracking-[0.15em] uppercase">SOVEREIGN</span>
         </Link>
         <div className="flex items-center gap-6 text-xs text-text-secondary">
           <Link href="/pricing" className="hover:text-white transition-colors">Features</Link>
@@ -43,7 +43,7 @@ export default function AboutPage() {
         <motion.div {...fadeIn(0)} className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl serif-text font-light mb-6">We Build Autonomous<br /><span className="bg-gradient-to-r from-electric to-rose-glow bg-clip-text text-transparent font-medium">Intelligence Systems</span></h1>
           <p className="text-text-secondary max-w-xl mx-auto leading-relaxed">
-            UMBRA was born from a simple question: what if your marketing team never slept, never forgot, and got better every single day? We built the answer — 15 AI engines that run your entire marketing operation autonomously.
+            SOVEREIGN was born from a simple question: what if your marketing team never slept, never forgot, and got better every single day? We built the answer — 15 AI engines that run your entire marketing operation autonomously.
           </p>
         </motion.div>
 
@@ -63,7 +63,7 @@ export default function AboutPage() {
           <div className="space-y-4 text-sm text-text-secondary leading-relaxed">
             <p>Marketing agencies charge R100-250k per month for a team that works 9-5, takes holidays, and forgets what worked last quarter. AI tools like Jasper or Copy.ai solve one problem each — but your marketing needs a system, not a typewriter.</p>
             <p>We asked: what if one platform could replace the entire team? Not just write copy — but analyze competitors, debate ad variations with itself, test prompts against each other, kill underperforming ads while you sleep, and remember every winning pattern forever?</p>
-            <p className="text-white font-medium">That&apos;s UMBRA. 15 engines. Zero employees. Fully autonomous.</p>
+            <p className="text-white font-medium">That&apos;s SOVEREIGN. 15 engines. Zero employees. Fully autonomous.</p>
           </div>
         </motion.div>
 
@@ -107,7 +107,7 @@ export default function AboutPage() {
       </section>
 
       <footer className="relative z-10 border-t border-glass-border/30 px-8 py-10 text-center">
-        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">UMBRA — Shadow Intelligence Platform</p>
+        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">SOVEREIGN — Shadow Intelligence Platform</p>
       </footer>
     </div>
   );

@@ -52,7 +52,7 @@ export default async function ProgrammaticLocationPage({ params }: Props) {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold text-white shadow-[0_0_15px_rgba(45,110,255,0.3)]">U</div>
-            <span className="text-xl font-bold tracking-[0.15em] uppercase text-white">UMBRA</span>
+            <span className="text-xl font-bold tracking-[0.15em] uppercase text-white">SOVEREIGN</span>
           </div>
           <button className="px-6 py-2.5 rounded-full bg-white text-midnight text-sm font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transition-all">
             Get Pricing
@@ -119,7 +119,7 @@ export default async function ProgrammaticLocationPage({ params }: Props) {
                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-electric to-rose-glow mx-auto mb-6 flex items-center justify-center shadow-[0_0_30px_rgba(45,110,255,0.3)]">
                    <Sparkles className="w-10 h-10 text-white" />
                  </div>
-                 <h4 className="text-xl font-bold text-white mb-2">UMBRA Autonomous Engine</h4>
+                 <h4 className="text-xl font-bold text-white mb-2">SOVEREIGN Autonomous Engine</h4>
                  <p className="text-sm text-text-secondary mb-8">Currently monitoring 244 competitors in {payload.city}.</p>
                  <button className="w-full py-4 rounded-xl bg-white text-midnight font-bold shadow-lg hover:bg-gray-100 transition-colors">
                    Deploy Now
@@ -133,7 +133,7 @@ export default async function ProgrammaticLocationPage({ params }: Props) {
 
       {/* Footer */}
       <footer className="border-t border-glass-border py-12 text-center text-text-secondary text-sm">
-        <p>© 2026 UMBRA Intelligence Systems. All rights reserved.</p>
+        <p>© 2026 SOVEREIGN Intelligence Systems. All rights reserved.</p>
         <p className="mt-2 text-xs">Serving enterprise clients in {payload.city}.</p>
       </footer>
     </div>
@@ -157,7 +157,7 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return {
-    title: `Local Services in ${params.city} | UMBRA`,
+    title: `Local Services in ${params.city} | SOVEREIGN`,
     description: `Leading autonomous marketing services in ${params.city}.`
   };
 }

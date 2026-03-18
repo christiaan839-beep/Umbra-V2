@@ -9,7 +9,7 @@ export function ROICalculator() {
   const [adSpend, setAdSpend] = useState<number>(3000);
 
   const agencyTotal = agencyRetainer + adSpend;
-  const umbraTotal = 497 + adSpend; // UMBRA SaaS fee + spend
+  const umbraTotal = 497 + adSpend; // SOVEREIGN SaaS fee + spend
   const monthlySavings = agencyRetainer - 497;
   const yearlySavings = monthlySavings * 12;
 
@@ -24,7 +24,7 @@ export function ROICalculator() {
             <Calculator className="w-8 h-8 text-rose-glow" />
             The Mathematical Reality
           </h3>
-          <p className="text-text-secondary mt-2">What happens when you fire your agency and deploy UMBRA.</p>
+          <p className="text-text-secondary mt-2">What happens when you fire your agency and deploy SOVEREIGN.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-12">
@@ -63,7 +63,7 @@ export function ROICalculator() {
             <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20">
               <p className="text-sm text-rose-200 flex items-start gap-2">
                 <TrendingDown className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                Agencies typically consume 20% of your Ad Spend in &quot;unseen management fees&quot; or markups. <strong>UMBRA puts 100% of your budget directly into the algorithm.</strong>
+                Agencies typically consume 20% of your Ad Spend in &quot;unseen management fees&quot; or markups. <strong>SOVEREIGN puts 100% of your budget directly into the algorithm.</strong>
               </p>
             </div>
           </div>
@@ -82,7 +82,7 @@ export function ROICalculator() {
               <div className="p-6 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
                 <div className="flex items-center gap-2 mb-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-bold text-emerald-400/80 uppercase">UMBRA Cost</span>
+                  <span className="text-xs font-bold text-emerald-400/80 uppercase">SOVEREIGN Cost</span>
                 </div>
                 <div className="text-2xl font-mono font-bold text-emerald-400">${umbraTotal.toLocaleString()}</div>
               </div>
@@ -103,7 +103,7 @@ export function ROICalculator() {
             </motion.div>
 
             <button className="w-full py-5 rounded-xl bg-white text-black font-bold text-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group">
-              Deploy UMBRA Ecosystem
+              Deploy SOVEREIGN Ecosystem
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>

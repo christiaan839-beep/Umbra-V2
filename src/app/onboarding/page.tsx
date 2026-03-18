@@ -97,7 +97,7 @@ export default function OnboardingWizard() {
           >
             <CheckCircle2 className="w-10 h-10 text-emerald-400" />
           </motion.div>
-          <h1 className="text-3xl font-light text-white tracking-wider mb-3">UMBRA Node Activated</h1>
+          <h1 className="text-3xl font-light text-white tracking-wider mb-3">SOVEREIGN Node Activated</h1>
           <p className="text-neutral-400 mb-8">Your AI marketing engine is now configured and initializing its first autonomous cycle for <strong className="text-white">{formData.businessName}</strong>.</p>
           <a
             href="/dashboard"
@@ -115,7 +115,7 @@ export default function OnboardingWizard() {
       <div className="max-w-2xl w-full">
         {/* Logo */}
         <div className="text-center mb-10">
-          <h1 className="text-xl font-light text-white tracking-[0.3em] font-mono">UMBRA</h1>
+          <h1 className="text-xl font-light text-white tracking-[0.3em] font-mono">SOVEREIGN</h1>
           <p className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">Deploy Your AI Marketing Engine</p>
         </div>
 
@@ -177,7 +177,7 @@ export default function OnboardingWizard() {
             {currentStep === 1 && (
               <motion.div key="channels" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                 <h2 className="text-lg font-light text-white tracking-wider mb-2">Connect your channels</h2>
-                <p className="text-xs text-neutral-500 mb-6">Optional — UMBRA can operate without these, but connected channels enable full automation.</p>
+                <p className="text-xs text-neutral-500 mb-6">Optional — SOVEREIGN can operate without these, but connected channels enable full automation.</p>
                 <div className="space-y-4">
                   {[
                     { key: "instagram", label: "Instagram Handle", placeholder: "@yourbusiness" },
@@ -237,7 +237,7 @@ export default function OnboardingWizard() {
             ) : (
               <button onClick={handleLaunch} disabled={!canProceed() || isLaunching} className="px-8 py-3 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 text-emerald-400 rounded-xl flex items-center gap-2 uppercase tracking-widest font-bold font-mono text-[10px] disabled:opacity-30 hover:from-emerald-500/20 transition-all">
                 {isLaunching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Rocket className="w-4 h-4" />}
-                {isLaunching ? "Deploying Node..." : "Launch UMBRA Node"}
+                {isLaunching ? "Deploying Node..." : "Launch SOVEREIGN Node"}
               </button>
             )}
           </div>

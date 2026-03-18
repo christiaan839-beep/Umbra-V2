@@ -1,7 +1,7 @@
 /**
  * Webhook Execution Engine
  * 
- * Fires real HTTP requests to external services when UMBRA events occur.
+ * Fires real HTTP requests to external services when SOVEREIGN events occur.
  */
 
 import { currentUser } from "@clerk/nextjs/server";
@@ -79,8 +79,8 @@ export async function triggerWebhook(event: "hot_lead" | "new_sale" | "campaign_
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "User-Agent": "UMBRA-Webhook-Engine/1.0",
-            "X-UMBRA-Event": event
+            "User-Agent": "SOVEREIGN-Webhook-Engine/1.0",
+            "X-SOVEREIGN-Event": event
           },
           body: JSON.stringify(payload)
         });

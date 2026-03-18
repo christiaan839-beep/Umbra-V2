@@ -63,7 +63,7 @@ export default function ApiKeysPage() {
           <Key className="w-6 h-6 text-rose-400" /> Bring Your Own Key (BYOK)
         </h1>
         <p className="text-neutral-400">
-          Enter your own API keys to bypass UMBRA's global rate limits. If you provide a key here, the Swarm will use it instead of our master keys. 
+          Enter your own API keys to bypass SOVEREIGN's global rate limits. If you provide a key here, the Swarm will use it instead of our master keys. 
           <strong className="text-white ml-1">Your keys are encrypted at rest.</strong>
         </p>
       </div>
@@ -102,7 +102,7 @@ export default function ApiKeysPage() {
             <label className="block text-sm font-bold text-white uppercase tracking-widest mb-2 flex items-center gap-2">
               Ollama Local Node <span className="text-[10px] bg-electric/20 text-electric px-2 py-0.5 rounded uppercase tracking-wider">Zero-Cost AI</span>
             </label>
-            <p className="text-xs text-neutral-500 mb-4">Run the UMBRA Swarm entirely offline using your own GPU. Enter your local endpoint (e.g. http://localhost:11434). If provided, this overrides Gemini.</p>
+            <p className="text-xs text-neutral-500 mb-4">Run the SOVEREIGN Swarm entirely offline using your own GPU. Enter your local endpoint (e.g. http://localhost:11434). If provided, this overrides Gemini.</p>
             <input 
               type="url"
               value={keys.ollama || ""}

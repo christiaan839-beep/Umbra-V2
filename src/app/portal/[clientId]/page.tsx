@@ -70,7 +70,7 @@ export default function ClientDashboard({ params }: Props) {
                <h2 className="text-xs font-bold uppercase tracking-widest text-text-secondary flex items-center gap-2">
                  <Activity className="w-4 h-4" /> Live AI Action Log
                </h2>
-               <span className="text-[10px] bg-electric/10 text-electric px-2 py-1 rounded uppercase tracking-wider font-bold">UMBRA System Log</span>
+               <span className="text-[10px] bg-electric/10 text-electric px-2 py-1 rounded uppercase tracking-wider font-bold">SOVEREIGN System Log</span>
             </div>
             
             <div className="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar relative">
@@ -212,7 +212,7 @@ function LiveLogFeed({ clientId }: { clientId: string }) {
 
         // If no real logs yet, show the system status message
         if (formattedLogs.length === 0) {
-          formattedLogs = [{ id: "1", action: "System Initialized", detail: "UMBRA God-Brain active. Awaiting first autonomous cycle.", type: "auth", time: "Just Now" }];
+          formattedLogs = [{ id: "1", action: "System Initialized", detail: "SOVEREIGN God-Brain active. Awaiting first autonomous cycle.", type: "auth", time: "Just Now" }];
         }
 
         setLogs(formattedLogs);

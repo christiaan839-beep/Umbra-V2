@@ -76,7 +76,7 @@ export default function ClientPortalLogin() {
         </form>
         
         <p className="text-center text-xs text-text-secondary mt-8 uppercase tracking-widest">
-           Powered by UMBRA Autonomous Systems
+           Powered by SOVEREIGN Autonomous Systems
         </p>
       </motion.div>
     </div>

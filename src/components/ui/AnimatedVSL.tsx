@@ -68,7 +68,7 @@ function MockDashboardCard({ step, isActive }: { step: typeof STEPS[0]; isActive
     return (
       <div className="rounded-xl bg-black/60 border border-white/10 p-5 font-mono text-sm space-y-3">
         <div className="flex items-center gap-2 text-neutral-500 text-xs">
-          <Sparkles className="w-3 h-3" /> UMBRA AI
+          <Sparkles className="w-3 h-3" /> SOVEREIGN AI
         </div>
         <div className="text-neutral-300">
           {isActive ? (

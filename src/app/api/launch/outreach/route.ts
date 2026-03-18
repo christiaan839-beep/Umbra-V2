@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
     const { text: emailContent } = await generateText({
       model: google("gemini-2.5-pro"),
-      prompt: `You are a world-class B2B sales copywriter working for UMBRA, an autonomous AI marketing platform. Write a personalized cold outreach email.
+      prompt: `You are a world-class B2B sales copywriter working for SOVEREIGN, an autonomous AI marketing platform. Write a personalized cold outreach email.
 
 PROSPECT: ${prospectName}
 BUSINESS: ${businessName}
@@ -34,7 +34,7 @@ PAIN POINTS: ${painPoints || "Marketing ROI, scaling, automation, content creati
 Write a cold email that:
 1. Opens with a specific observation about their business (not generic flattery)
 2. Identifies ONE specific problem they likely face
-3. Shows how UMBRA solves it (with a specific metric or example)
+3. Shows how SOVEREIGN solves it (with a specific metric or example)
 4. Ends with a low-commitment CTA (free AI scan, not a call)
 5. Is under 120 words — brevity is premium
 
@@ -53,7 +53,7 @@ Output ONLY the JSON.`,
       const cleaned = emailContent.replace(/```json?\n?/g, "").replace(/```/g, "").trim();
       parsed = JSON.parse(cleaned);
     } catch {
-      parsed = { subject: "UMBRA for your business", body: emailContent, followUp: "Following up on my previous email." };
+      parsed = { subject: "SOVEREIGN for your business", body: emailContent, followUp: "Following up on my previous email." };
     }
 
     await db.insert(globalTelemetry).values({

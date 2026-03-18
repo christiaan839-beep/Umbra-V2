@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BOOT_LINES = [
-  { text: "UMBRA PLATFORM v2.0", delay: 0 },
+  { text: "SOVEREIGN PLATFORM v2.0", delay: 0 },
   { text: "Connecting to AI infrastructure...", delay: 200 },
   { text: "█████████████████████ 100%", delay: 500 },
   { text: "Google Gemini 2.5: CONNECTED", delay: 900 },

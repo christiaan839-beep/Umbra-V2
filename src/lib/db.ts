@@ -1,7 +1,7 @@
 import type { User, Campaign, Lead, MemoryEntry } from "@/types";
 
 /**
- * UMBRA Database Abstraction Layer
+ * SOVEREIGN Database Abstraction Layer
  * 
  * In-memory store for development. Swap this single file
  * for Supabase/PlanetScale/Neon when ready for production.
@@ -22,7 +22,7 @@ const users = new Map<string, StoredUser>();
 users.set("admin@umbra.ai", {
   email: "admin@umbra.ai",
   passwordHash: hashPassword("umbra"),
-  name: "Umbra Admin",
+  name: "Sovereign Admin",
   tier: "franchise",
   createdAt: new Date().toISOString(),
 });

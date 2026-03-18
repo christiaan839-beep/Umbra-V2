@@ -1,4 +1,4 @@
- * UMBRA V3 Test Suite
+ * SOVEREIGN MATRIX Test Suite
  * 
  * Tests for critical paths: Health, Payments, Email, Self-Heal.
  * Run with: npm test

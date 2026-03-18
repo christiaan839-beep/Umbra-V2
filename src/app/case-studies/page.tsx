@@ -14,14 +14,14 @@ const CASES = [
     role: "Founder & CEO",
     industry: "SaaS",
     challenge: "TechVentures was spending R150k/mo on a 4-person marketing team — copywriter, media buyer, designer, and project manager. Results were inconsistent. Some months ROAS hit 3x, others dropped below 1x. They couldn't figure out what was working.",
-    solution: "Deployed UMBRA's autonomous ad management with a 2.5x ROAS kill threshold. The AI memory system started cataloging every winning pattern. Multi-agent review debated every piece of ad copy before deployment.",
+    solution: "Deployed SOVEREIGN's autonomous ad management with a 2.5x ROAS kill threshold. The AI memory system started cataloging every winning pattern. Multi-agent review debated every piece of ad copy before deployment.",
     results: [
       { label: "Monthly Revenue", before: "R380k", after: "R1.24M", metric: "+226%" },
       { label: "ROAS", before: "1.8x avg", after: "4.7x avg", metric: "+161%" },
       { label: "Marketing Cost", before: "R150k/mo", after: "R9,970/mo", metric: "-93%" },
       { label: "Time Spent on Ads", before: "40hrs/week", after: "0hrs/week", metric: "-100%" },
     ],
-    quote: "We replaced a 4-person marketing team with UMBRA. Revenue went up 340% in the first quarter. Not a joke.",
+    quote: "We replaced a 4-person marketing team with SOVEREIGN. Revenue went up 340% in the first quarter. Not a joke.",
     timeline: "90 days",
     color: "#6c63ff",
   },
@@ -32,14 +32,14 @@ const CASES = [
     role: "CEO",
     industry: "Fitness & Health",
     challenge: "Apex Fitness was running Facebook and Instagram ads manually. Sarah was spending 20+ hours per week managing campaigns, killing losers, and writing new variations. Growth had plateaued at R400k/mo.",
-    solution: "UMBRA took over all ad management. Ghost Mode runs campaigns autonomously. The Social Engine publishes organic content across Instagram, X, and LinkedIn. Pipeline Builder chains: Research → Content → Video Brief → Publish.",
+    solution: "SOVEREIGN took over all ad management. Ghost Mode runs campaigns autonomously. The Social Engine publishes organic content across Instagram, X, and LinkedIn. Pipeline Builder chains: Research → Content → Video Brief → Publish.",
     results: [
       { label: "Monthly Revenue", before: "R400k", after: "R670k", metric: "+68%" },
       { label: "Email List", before: "2,400", after: "8,900", metric: "+271%" },
       { label: "ROAS", before: "2.1x", after: "4.7x", metric: "+124%" },
       { label: "Hours on Marketing", before: "20/week", after: "0/week", metric: "-100%" },
     ],
-    quote: "UMBRA ran our ads for 3 months straight. We stopped checking. When we looked, ROAS was 4.7x.",
+    quote: "SOVEREIGN ran our ads for 3 months straight. We stopped checking. When we looked, ROAS was 4.7x.",
     timeline: "60 days",
     color: "#00ff88",
   },
@@ -50,14 +50,14 @@ const CASES = [
     role: "Agency Owner",
     industry: "Marketing Agency",
     challenge: "David was running a small agency with 6 clients. He was doing everything himself — ads, content, reporting. He couldn't take on more clients without hiring, and hiring would eat his margins. Revenue was stuck at R180k/mo.",
-    solution: "Started using UMBRA as his backend engine. White-labeled all outputs for his existing clients at R50k/mo each. Then prospected for new clients using the Lead Prospector and AI tools to demo the platform live.",
+    solution: "Started using SOVEREIGN as his backend engine. White-labeled all outputs for his existing clients at R50k/mo each. Then prospected for new clients using the Lead Prospector and AI tools to demo the platform live.",
     results: [
       { label: "Monthly Revenue", before: "R180k", after: "R600k", metric: "+233%" },
       { label: "Client Count", before: "6", after: "12", metric: "+100%" },
       { label: "Revenue per Client", before: "R30k", after: "R50k", metric: "+67%" },
       { label: "Employees Needed", before: "Considering hiring", after: "0", metric: "Zero hires" },
     ],
-    quote: "I use UMBRA as my agency backend. Now I charge each client R50k/mo. I have 12 clients. Do the math.",
+    quote: "I use SOVEREIGN as my agency backend. Now I charge each client R50k/mo. I have 12 clients. Do the math.",
     timeline: "45 days",
     color: "#ff3366",
   },
@@ -73,7 +73,7 @@ export default function CaseStudiesPage() {
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 max-w-6xl mx-auto">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electric to-rose-glow flex items-center justify-center text-xs font-bold">U</div>
-          <span className="text-sm font-medium tracking-[0.15em] uppercase">UMBRA</span>
+          <span className="text-sm font-medium tracking-[0.15em] uppercase">SOVEREIGN</span>
         </Link>
         <div className="flex items-center gap-6 text-xs text-text-secondary">
           <Link href="/pricing" className="hover:text-white transition-colors">Features</Link>
@@ -88,7 +88,7 @@ export default function CaseStudiesPage() {
             <TrendingUp className="w-3 h-3" /> Verified Results
           </div>
           <h1 className="text-4xl md:text-5xl serif-text font-light mb-4">Client Results</h1>
-          <p className="text-text-secondary max-w-lg mx-auto">Real businesses. Real numbers. Real revenue growth from deploying UMBRA.</p>
+          <p className="text-text-secondary max-w-lg mx-auto">Real businesses. Real numbers. Real revenue growth from deploying SOVEREIGN.</p>
         </motion.div>
 
         {/* Case Studies */}
@@ -150,7 +150,7 @@ export default function CaseStudiesPage() {
           <h3 className="text-2xl serif-text font-light mb-4">Ready to Be the Next Case Study?</h3>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/pricing" className="px-8 py-3 bg-white text-midnight font-bold rounded-xl flex items-center justify-center gap-2 group hover:bg-gray-200 transition-all">
-              Deploy UMBRA <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              Deploy SOVEREIGN <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link href="/demo" className="px-8 py-3 border border-glass-border text-white font-medium rounded-xl text-center hover:bg-glass-bg transition-all">Try Free Demo</Link>
           </div>
@@ -158,7 +158,7 @@ export default function CaseStudiesPage() {
       </section>
 
       <footer className="relative z-10 border-t border-glass-border/30 px-8 py-10 text-center">
-        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">UMBRA — Shadow Intelligence Platform</p>
+        <p className="text-[10px] text-text-secondary/40 uppercase tracking-[0.4em]">SOVEREIGN — Shadow Intelligence Platform</p>
       </footer>
     </div>
   );

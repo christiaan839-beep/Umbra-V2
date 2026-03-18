@@ -61,7 +61,7 @@ export default function RevenueAttributionPage({ params }: Props) {
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">Revenue Intelligence</h1>
           <p className="text-sm text-text-secondary">
-            Client: <span className="font-mono text-white/50">{params.clientId}</span> — AI-attributed revenue from UMBRA Swarm
+            Client: <span className="font-mono text-white/50">{params.clientId}</span> — AI-attributed revenue from SOVEREIGN Swarm
           </p>
         </div>
 
@@ -150,7 +150,7 @@ export default function RevenueAttributionPage({ params }: Props) {
                   <span className="text-lg font-bold font-mono text-emerald-400">{deal.value}</span>
                 </motion.div>
               )) : (
-                <div className="p-6 text-xs text-text-secondary">No closed deals tracked via UMBRA telemetry yet.</div>
+                <div className="p-6 text-xs text-text-secondary">No closed deals tracked via SOVEREIGN telemetry yet.</div>
               )}
             </div>
           </div>

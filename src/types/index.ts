@@ -1,4 +1,4 @@
-/** Shared types for the UMBRA platform */
+/** Shared types for the SOVEREIGN platform */
 
 // ─── AI ──────────────────────────────────────────────
 export type AIModel = "gemini" | "claude";
