@@ -1,8 +1,56 @@
-version: "3.7"
+version: '3.8'
 
 services:
+  # 1. The Core Sovereign Cartel Web Application (Next.js)
+  sovereign-matrix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sovereign-matrix
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@db:5432/sovereign-db}
+      - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
+      - NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=${NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY}
+    depends_on:
+      - db
+
+  # 2. Local Highly-Secured Postgres Database
+  db:
+    image: postgres:15-alpine
+    container_name: sovereign-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sovereign-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - sovereign-pgdata:/var/lib/postgresql/data
+
+  # 3. The NemoClaw Python Execution Daemon (Autonomous Scraping / RAG)
+  nemoclaw-daemon:
+    build:
+      context: ./server/python-agents
+      dockerfile: Dockerfile.nemoclaw
+    container_name: nemoclaw-daemon
+    restart: always
+    ports:
+      - "9090:9090"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY}
+    # NemoClaw needs extra privileges for specific X11/Headless Chromium scraping capabilities
+    privileged: true
+
+  # 4. N8N Webhook/Workflow Automation Engine (The Nervous System)
   n8n:
     image: docker.n8n.io/n8nio/n8n
+    container_name: sovereign-n8n
     restart: always
     ports:
       - "5678:5678"
@@ -12,10 +60,10 @@ services:
       - N8N_PROTOCOL=http
       - NODE_ENV=production
       - WEBHOOK_URL=http://localhost:5678/
-      - GENERIC_TIMEZONE=Europe/London
+      - GENERIC_TIMEZONE=Africa/Johannesburg
     volumes:
-      - n8n_data:/home/node/.n8n
-    command: /bin/sh -c "n8n start"
+      - sovereign-n8n-data:/home/node/.n8n
 
 volumes:
-  n8n_data:
+  sovereign-pgdata:
+  sovereign-n8n-data:

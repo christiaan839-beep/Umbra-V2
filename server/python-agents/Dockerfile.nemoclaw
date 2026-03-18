@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/playwright/python:v1.42.0-jammy
+
+WORKDIR /app
+
+# Install XVFB to run PyAutoGUI and hidden Chromium in a virtual headless display so it never interrupts the host Mac
+RUN apt-get update && apt-get install -y xvfb x11-utils
+
+COPY ./requirements.txt .
+# Fallback requirements if file missing
+RUN pip install fastapi uvicorn pyautogui playwright chromadb ollama aider-chat -r requirements.txt || pip install fastapi uvicorn pyautogui playwright chromadb ollama aider-chat
+
+COPY ./nemoclaw_os.py .
+
+EXPOSE 9090
+
+# Boot X Virtual Framebuffer (XVFB) and seamlessly attach NemoClaw to it.
+# This makes PyAutoGUI and Playwright run silently in the background without requiring a real monitor.
+CMD xvfb-run -a python3 nemoclaw_os.py
