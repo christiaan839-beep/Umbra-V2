@@ -16,29 +16,39 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing businessName or offer" }, { status: 400 });
     }
 
-    // ⚡ SOVEREIGN ZERO-COST PROTOCOL ⚡
-    // Hard-routing the Edge API back to the local Mac Ollama daemon
-    // Bypassing Gemini 2.5 Pro compute costs entirely.
+    // ⚡ SOVEREIGN EXASCALE TENSOR-RT PROTOCOL ⚡
+    // Hard-routing the Edge API to NVIDIA NIM clusters via nvapi key.
+    // Upgrading from Local 8B to Cloud 340B reasoning capability.
 
-    const ollamaPayload = {
-       model: "llama3",
-       prompt: `You are an elite landing page designer and copywriter. Generate a complete, production-ready HTML landing page for ${businessName}. Offer: ${offer}. Style: ${style}. Output ONLY HTML.`,
+    const nimPayload = {
+       model: "nvidia/nemotron-4-340b-instruct",
+       messages: [
+         { 
+            role: "user", 
+            content: `You are an elite landing page designer and copywriter. Generate a complete, production-ready HTML landing page for ${businessName}. Offer: ${offer}. Style: ${style}. Output ONLY HTML.` 
+         }
+       ],
+       max_tokens: 2000,
        stream: false
     };
 
-    const ollamaRes = await fetch("http://127.0.0.1:11434/api/generate", {
+    console.log("[*] Initiating TensorRT-LLM pipeline to NVIDIA NIM Framework...");
+    const nimRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
        method: "POST",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify(ollamaPayload)
+       headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.NVIDIA_API_KEY}`
+       },
+       body: JSON.stringify(nimPayload)
     });
 
-    if (!ollamaRes.ok) {
-       throw new Error("Local Llama3 Engine offline. Ensure Ollama is running on port 11434.");
+    if (!nimRes.ok) {
+       throw new Error("NVIDIA NIM Matrix Offline. Check API Key validity.");
     }
 
-    const ollamaData = await ollamaRes.json();
-    const pageHtml = ollamaData.response;
-    const imagePrompt = `Cinematic rendering for ${businessName}`;
+    const nimData = await nimRes.json();
+    const pageHtml = nimData.choices[0].message.content;
+    const imagePrompt = `Cinematic photorealistic rendering for ${businessName}`;
 
     return NextResponse.json({
       success: true,
