@@ -1,0 +1,103 @@
+{
+  "name": "Sovereign-Ghost-Fleet-Matrix",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 8
+            }
+          ]
+        }
+      },
+      "name": "Cron (Every 8 Hours)",
+      "type": "n8n-nodes-base.cron",
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://sovereign-matrix.com/api/cron/ghost-fleet",
+        "authentication": "headerAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Bearer YOUR_SECURE_VERCEL_CRON_SECRET"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Summon God-Brain Endpoint",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "thread_array",
+              "value": "={{$json.thread}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Extract JSON Thread",
+      "type": "n8n-nodes-base.set",
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "text": "={{$json.thread_array[0]}}",
+        "additionalFields": {}
+      },
+      "name": "Native Twitter X API Dispatch",
+      "type": "n8n-nodes-base.twitter",
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Cron (Every 8 Hours)": {
+      "main": [
+        [
+          {
+            "node": "Summon God-Brain Endpoint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summon God-Brain Endpoint": {
+      "main": [
+        [
+          {
+            "node": "Extract JSON Thread",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract JSON Thread": {
+      "main": [
+        [
+          {
+            "node": "Native Twitter X API Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
