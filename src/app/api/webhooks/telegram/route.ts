@@ -89,9 +89,9 @@ export async function POST(req: Request) {
         });
 
         responseMessage = `[GEMINI ULTRA DONE] Organic Post Scheduled for Tomorrow.\n\nCAPTION: ${caption}\n\nIMAGE PROMPT: ${imagePrompt}`;
-      } catch(e: any) {
+      } catch(e) {
         console.error("Gemini Ultra Error:", e);
-        responseMessage = `[ERROR] Gemini Ultra execution failed: ${e.message}`;
+        responseMessage = `[ERROR] Gemini Ultra execution failed: ${(e as Error).message}`;
       }
     }
     

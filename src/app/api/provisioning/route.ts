@@ -109,8 +109,8 @@ export async function POST(req: Request) {
       url: `https://${projectSlug}.vercel.app`
     });
 
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Cartel Provisioning Fault:', error);
-    return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', details: (error as Error).message }, { status: 500 });
   }
 }
