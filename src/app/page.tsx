@@ -14,6 +14,9 @@ import { SplashIntro } from "@/components/ui/SplashIntro";
 import { NeuralWebGLBackground } from "@/components/3d/NeuralWebGLBackground";
 import { ToolShowcase } from "@/components/ui/SocialProof";
 import { AnimatedVSL } from "@/components/ui/AnimatedVSL";
+import SovereignCalculator from "@/components/SovereignCalculator";
+import GodBrainTelemetry from "@/components/GodBrainTelemetry";
+import DeepfakeShowcase from "@/components/DeepfakeShowcase";
 
 function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { end: number; suffix?: string; prefix?: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -153,12 +156,10 @@ export default function Home() {
               </div>
            </div>
 
-          {/* Live Demo Scanner */}
-          <div className="w-full max-w-3xl mx-auto mb-20">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, ease: "easeOut" }}>
-              <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-6">Execution Telemetry — Live Target Scan</h2>
-              <LiveDemoScanner />
-            </motion.div>
+          {/* God-Brain Diagnostics */}
+          <div className="w-full max-w-4xl mx-auto mb-20 mt-10">
+             <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-6">Sovereign Node Telemetry Stream</h2>
+             <GodBrainTelemetry />
           </div>
 
           {/* Animated Product Walkthrough */}
@@ -329,13 +330,15 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ROI Calculator */}
+            {/* Agency Extinction Calculator */}
             <div className="mt-20">
-              <ROICalculator />
+              <SovereignCalculator />
             </div>
 
          </div>
       </section>
+
+      <DeepfakeShowcase />
 
       {/* Pricing Section */}
       <section id="pricing" className="py-24 bg-black relative border-t border-white/5">
