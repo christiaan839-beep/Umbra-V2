@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db } from '@/db';
 import { whitelabelConfig } from '@/db/schema';
 
 const VERCEL_API_URL = 'https://api.vercel.com';

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db } from '@/db';
 import { scheduledContent } from '@/db/schema';
 
 // Fallback to hardcoded ID if Vercel Preview Environment Variables are missing
