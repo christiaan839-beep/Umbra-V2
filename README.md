@@ -1,121 +1,40 @@
-# UMBRA V2 — Autonomous AI Marketing Intelligence
+# ⚡ SOVEREIGN MATRIX OVERRIDE ⚡
 
-> 100-phase SaaS platform that replaces your entire marketing team with autonomous AI.
+> **STATUS: ABSOLUTE MARKET DOMINATION ACTIVE**
+> **DEPLOYMENT:** Vercel Edge / Local Docker XFVB
 
-[![Vercel](https://img.shields.io/badge/deployed-Vercel-black?logo=vercel)](https://umbra-v2.vercel.app)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
-[![License](https://img.shields.io/badge/license-Proprietary-red)]()
+## 1. The Structure of Power
+The Sovereign Matrix isn't software; it is an autonomous workforce deployed on **Vercel Edge Runtimes** and orchestrated locally via **Dockerized Python Daemons** (NemoClaw).
 
-## Architecture
+It completely replaces the need for SDRs, strategists, and copywriters. 
 
-```
-src/
-├── app/                    # Next.js 16 App Router
-│   ├── api/                # 42 API route directories
-│   │   ├── stripe/         # Stripe payments + webhooks
-│   │   ├── payfast/        # PayFast ZAR payments (🇿🇦)
-│   │   ├── paypal/         # PayPal global payments
-│   │   ├── swarm/          # AI engine endpoints (Gemini)
-│   │   ├── email/          # Email sender (Resend/Gmail)
-│   │   ├── health/         # System health check
-│   │   ├── monitor/        # Self-healing monitor
-│   │   ├── webhooks/       # Payment & service webhooks
-│   │   └── cron/           # Automated jobs
-│   ├── dashboard/          # 43 dashboard pages
-│   │   ├── outbound/       # AI cold email generator
-│   │   ├── competitor/     # Competitive warfare scanner
-│   │   ├── studio/         # AI video synthesis
-│   │   ├── status/         # System health dashboard
-│   │   ├── audit/          # Full audit trail
-│   │   └── ...
-│   ├── docs/               # Feature documentation
-│   ├── onboarding/         # Client onboarding wizard
-│   └── pricing/            # Pricing tiers
-├── components/             # Shared UI components
-│   ├── ErrorBoundary.tsx   # Global crash recovery
-│   ├── SkeletonLoader.tsx  # Loading state system
-│   └── ui/                 # Design system
-├── db/                     # Drizzle ORM + Neon Postgres
-├── lib/                    # Utilities (rate-limit, memory, etc.)
-├── agents/                 # AI agent configurations
-└── types/                  # TypeScript type definitions
-```
+## 2. Does the System Get Smarter?
+**YES.** The Sovereign Matrix employs a permanent localized RAG memory loop (`ChromaDB`). Every time you feed it a competitor PDF, an old sales call transcript, or a winning cold email, it embeds this logic locally. Every subsequent strike it makes pulls from an ever-expanding contextual knowledge base. It physically gets smarter without relying on OpenAI's memory constraints. 
 
-## Tech Stack
+## 3. How Do Users Experience This Platform?
+Your $5,000/mo Cartel clients log into `sovereign-matrix.com/client-portal/[domain]`. 
+They see a flawless, military-style UI (The Palantir 3D Map, The Extinction Calculators). They submit a request (e.g., "Need 500 tech leads"), and then they close the browser.
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 16 (App Router, Turbopack) |
-| Language | TypeScript 5.9 |
-| Styling | Tailwind CSS 4 |
-| Auth | Clerk |
-| Database | Neon Postgres + Drizzle ORM |
-| AI Engine | Google Gemini 2.5 Pro |
-| Payments | Stripe, PayFast (ZAR), PayPal |
-| Real-time | Pusher |
-| Analytics | Vercel Analytics + Speed Insights |
-| 3D/Visuals | Three.js + React Three Fiber |
-| Animations | Framer Motion |
-| Deployment | Vercel (auto-deploy from `main`) |
+You receive a ping on your iOS Telegram App. You tap `/execute`. The Swarm extracts the leads via Stealth Headless Chromium, writes 500 emails via Gemini 1.5 Flash, and sends them via Resend API. On Sunday, the client receives an automated PDF proving you saved them 160 hours of human labor.
 
-## Quick Start
+They never see the backend. They only see the results.
 
+## 4. Is it Fast and Secure?
+- **Speed:** The Vercel Edge API runs on cold-start-immune instances, meaning UI responsiveness is measured in micro-seconds.
+- **Security:** NATIVE Zod Schema validation physically guarantees no malformed JSON can breach your Neon Postgres DB. The local Python scraper utilizes `try...except...finally` logic to ruthlessly kill zombie Chromium processes instantly, meaning your Mac/Server will *never* crash or run out of RAM.
+
+## Deployment Commands
+To run the UI:
 ```bash
-# Clone and install
-git clone https://github.com/your-org/sovereign-v2.git
-cd sovereign-v2
-npm install
-
-# Configure environment
-cp .env.example .env.local
-# Fill in your API keys (see .env.example for all required vars)
-
-# Run database migrations
-npx drizzle-kit push
-
-# Start development server
-npm run dev
+bun run dev
 ```
-
-## Environment Variables
-
-Copy `.env.example` to `.env.local` and fill in:
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | ✅ | Neon Postgres connection string |
-| `CLERK_SECRET_KEY` | ✅ | Clerk authentication |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | ✅ | Clerk public key |
-| `GOOGLE_GENERATIVE_AI_API_KEY` | ✅ | Gemini AI engine |
-| `STRIPE_SECRET_KEY` | 💰 | Stripe payments |
-| `PAYFAST_MERCHANT_ID` | 🇿🇦 | PayFast ZAR payments |
-| `RESEND_API_KEY` | 📧 | Email delivery |
-| `TELEGRAM_BOT_TOKEN` | 📱 | Commander notifications |
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/health` | GET | System health check with latency metrics |
-| `/api/monitor/self-heal` | GET | Self-healing diagnostics |
-| `/api/stripe/checkout` | POST | Create Stripe checkout session |
-| `/api/payfast/checkout` | POST | Create PayFast ZAR checkout |
-| `/api/email/send` | POST | Send branded emails |
-| `/api/swarm/outbound` | POST | Generate AI cold emails |
-| `/api/swarm/competitor/scan` | POST | Competitive analysis |
-
-## Deployment
-
-Automatically deploys to Vercel on push to `main`:
-
+To run the Daemon:
 ```bash
-git add .
-git commit -m "your changes"
-git push origin main
-# → Vercel auto-deploys in ~60 seconds
+cd server/python-agents && source venv/bin/activate && python nemoclaw_os.py
+```
+To execute physical containerization:
+```bash
+docker-compose up -d --build
 ```
 
-## License
-
-Proprietary. All rights reserved.
+Execute. Dominate. Extinguish.
