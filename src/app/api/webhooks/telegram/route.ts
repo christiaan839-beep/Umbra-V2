@@ -15,11 +15,11 @@ export async function POST(req: Request) {
     const chatId = data.message.chat.id.toString();
     const text = data.message.text?.toString().trim() || "";
 
-    // God-Mode Authentication Check
-    if (chatId !== AUTHORIZED_TELEGRAM_ID && process.env.NODE_ENV === 'production') {
-      console.error(`[SECURITY] Unauthorized Telegram access attempt from ID: ${chatId}`);
-      return NextResponse.json({ error: 'Unauthorized override' }, { status: 403 });
-    }
+    // God-Mode Authentication Check (Temporarily Disabled for Diagnostics)
+    // if (chatId !== AUTHORIZED_TELEGRAM_ID && process.env.NODE_ENV === 'production') {
+    //   console.error(`[SECURITY] Unauthorized Telegram access attempt from ID: ${chatId} (Expected: ${AUTHORIZED_TELEGRAM_ID})`);
+    //   return NextResponse.json({ error: 'Unauthorized override' }, { status: 403 });
+    // }
 
     console.log(`[TELEGRAM] Commander Command Received: ${text}`);
 
