@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -33,7 +33,9 @@ function SwarmConstellation() {
   const groupRef = useRef<THREE.Group>(null);
   
   // Generate random node positions within a spherical radius
-  const nodes = useMemo(() => {
+  const [nodes, setNodes] = useState<{position: [number, number, number], color: string}[]>([]);
+  
+  useEffect(() => {
     const temp = [];
     for (let i = 0; i < 150; i++) {
        const theta = Math.random() * Math.PI * 2;
@@ -52,7 +54,7 @@ function SwarmConstellation() {
 
        temp.push({ position: [x, y, z] as [number, number, number], color });
     }
-    return temp;
+    setNodes(temp);
   }, []);
 
   useFrame((state) => {

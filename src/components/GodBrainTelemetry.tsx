@@ -34,10 +34,10 @@ export default function GodBrainTelemetry() {
             } else {
                 index = 0; // Loop logs
             }
-        }, 3000);
+        }, 800);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [mounted]);
 
     return (
         <div className="w-full max-w-2xl mx-auto rounded-xl overflow-hidden border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-xl shadow-2xl font-mono text-sm relative z-50">

@@ -13,9 +13,7 @@ export function ROICalculator() {
   const monthlySavings = agencyRetainer - 497;
   const yearlySavings = monthlySavings * 12;
 
-  // Assuming an agency takes 20% of the ad spend in "management fees" vs UMBRA where 100% of spend goes to ads
-  const agencyEffectiveSpend = adSpend * 0.8; 
-  const umbraEffectiveSpend = adSpend;
+  // Removed unused agency/umbra effective spend variables natively here
 
   return (
     <div className="w-full max-w-5xl mx-auto glass-card p-1 border border-glass-border overflow-hidden">
@@ -65,7 +63,7 @@ export function ROICalculator() {
             <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20">
               <p className="text-sm text-rose-200 flex items-start gap-2">
                 <TrendingDown className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                Agencies typically consume 20% of your Ad Spend in "unseen management fees" or markups. <strong>UMBRA puts 100% of your budget directly into the algorithm.</strong>
+                Agencies typically consume 20% of your Ad Spend in &quot;unseen management fees&quot; or markups. <strong>UMBRA puts 100% of your budget directly into the algorithm.</strong>
               </p>
             </div>
           </div>
