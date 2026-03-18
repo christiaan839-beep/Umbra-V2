@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { CheckCircle2, X as XIcon, Zap, Crown, Server, ArrowRight, Shield } from "lucide-react";
+import React, { useState } from "react";
+import { CheckCircle2, X as XIcon, Zap, Crown, Server, ArrowRight, Shield, ShieldAlert, Loader2, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Pricing() {
   const tiers = [
@@ -80,17 +81,39 @@ export function Pricing() {
     },
   ];
 
-  const handleCheckout = async (planId: string) => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [leadName, setLeadName] = useState("");
+  const [leadPhone, setLeadPhone] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const initiateCheckout = (planId: string) => {
     if (planId === "node") {
       window.location.assign("/dashboard");
       return;
     }
+    setSelectedPlan(planId);
+    setShowModal(true);
+  };
+
+  const processSecureUplink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedPlan || !leadPhone) return;
+    setIsProcessing(true);
 
     try {
+      // Step 1: Capture Lead into God-Brain
+      await fetch("/api/leads/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: leadName, phone: leadPhone, planId: selectedPlan }),
+      });
+
+      // Step 2: Initialize Paystack Execution
       const res = await fetch("/api/payments/paystack/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId }),
+        body: JSON.stringify({ plan: selectedPlan }),
       });
       const data = await res.json();
 
@@ -98,12 +121,15 @@ export function Pricing() {
         window.location.assign(data.authorizationUrl);
         return;
       }
-
-      alert(data.error || "Payment is being set up. Please try again.");
+      alert(data.error || "Deployment authorization failed. Try again.");
     } catch {
-      alert("Checkout failed. Please try again.");
+      alert("Uplink severed. Try again.");
+    } finally {
+      setIsProcessing(false);
     }
   };
+
+
 
   return (
     <div className="w-full max-w-7xl mx-auto py-24 px-6 relative z-10">
@@ -147,7 +173,7 @@ export function Pricing() {
             </div>
 
             <button
-              onClick={() => handleCheckout(tier.planId)}
+              onClick={() => initiateCheckout(tier.planId)}
               className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-all mb-8 flex items-center justify-center gap-2 ${tier.buttonStyle}`}
             >
               <ArrowRight className="w-4 h-4" /> {tier.buttonText}
@@ -174,6 +200,75 @@ export function Pricing() {
         <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold uppercase tracking-wider"><Shield className="w-3 h-3" /> SSL Secured</span>
         <span className="text-xs text-neutral-500 uppercase tracking-widest">Secure payments via Paystack (Cards, Bank Transfer, EFT)</span>
       </div>
+
+      {/* Secure Uplink Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div 
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          >
+            <motion.div 
+              className="bg-[#0A0A0A] border border-white/10 p-8 rounded-3xl w-full max-w-md relative shadow-[0_0_100px_rgba(0,183,255,0.1)]"
+              initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+            >
+              <button onClick={() => setShowModal(false)} className="absolute top-6 right-6 text-neutral-500 hover:text-white transition-colors">
+                <XIcon className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <ShieldAlert className="w-6 h-6 text-[#00B7FF]" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white uppercase tracking-widest">Secure Uplink</h3>
+                  <p className="text-xs text-[#00B7FF] uppercase tracking-widest">Hardware Binding Protocol</p>
+                </div>
+              </div>
+
+              <p className="text-sm text-neutral-400 mb-6">
+                To authorize your deployment, the Sovereign Matrix requires a direct WhatsApp line. A verification packet will be sent to this number bounding your Cartel license to you physically.
+              </p>
+
+              <form onSubmit={processSecureUplink} className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-neutral-500 uppercase tracking-[0.2em] mb-2">Commander Name</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={leadName}
+                    onChange={(e) => setLeadName(e.target.value)}
+                    placeholder="John Doe"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-neutral-700 focus:outline-none focus:border-[#00B7FF]/50 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-neutral-500 uppercase tracking-[0.2em] mb-2">WhatsApp Number</label>
+                  <div className="relative">
+                    <Phone className="w-4 h-4 text-neutral-500 absolute left-4 top-1/2 -translate-y-1/2" />
+                    <input 
+                      type="tel" 
+                      required
+                      value={leadPhone}
+                      onChange={(e) => setLeadPhone(e.target.value)}
+                      placeholder="+27 82 000 0000"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder:text-neutral-700 focus:outline-none focus:border-[#00B7FF]/50 transition-colors font-mono"
+                    />
+                  </div>
+                </div>
+
+                <button 
+                  type="submit" 
+                  disabled={isProcessing || !leadPhone}
+                  className="w-full mt-4 py-4 rounded-xl bg-white text-black font-bold uppercase tracking-widest text-sm hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isProcessing ? <><Loader2 className="w-4 h-4 animate-spin" /> Authorizing...</> : "Initiate Handshake"}
+                </button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
