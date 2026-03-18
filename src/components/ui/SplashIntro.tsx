@@ -4,15 +4,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BOOT_LINES = [
-  { text: "SOVEREIGN PLATFORM v2.0", delay: 0 },
-  { text: "Connecting to AI infrastructure...", delay: 200 },
-  { text: "█████████████████████ 100%", delay: 500 },
-  { text: "Google Gemini 2.5: CONNECTED", delay: 900 },
-  { text: "29 AI Marketing Tools: READY", delay: 1100 },
-  { text: "Content Engine: ACTIVE", delay: 1300 },
-  { text: "Payment Systems: SECURE", delay: 1500 },
-  { text: "", delay: 1700 },
-  { text: "PLATFORM READY.", delay: 1800 },
+  { text: "SOVEREIGN MATRIX INITIALIZING...", delay: 0 },
+  { text: "Establishing secure uplink to Command Node.", delay: 200 },
+  { text: "Authenticating Nemotron-Mini-4B Edge Daemon...", delay: 400 },
+  { text: "Edge Daemon: BYPASS AUTHORIZED [LOCAL INFERENCE ONLINE]", delay: 700 },
+  { text: "███████████████████████████ 100%", delay: 1000 },
+  { text: "Google AI Ultra (Gemini 1.5 Pro) Synthesizer: ACTIVE", delay: 1300 },
+  { text: "Ghost Fleet Webcrawler: ARMED", delay: 1600 },
+  { text: "Vercel REST Clone Engine: STANDBY", delay: 1800 },
+  { text: "TOTAL AGENCY EXTINCTION PROTOCOL: READY.", delay: 2200 },
 ];
 
 export function SplashIntro({ onComplete }: { onComplete: () => void }) {
@@ -36,12 +36,12 @@ export function SplashIntro({ onComplete }: { onComplete: () => void }) {
     // Glitch effect
     setTimeout(() => setShowGlitch(true), 2000);
     
-    // Auto-dismiss after 3 seconds
+    // Auto-dismiss after sequence complete
     const timer = setTimeout(() => {
       sessionStorage.setItem("umbra-intro-seen", "true");
       setDismissed(true);
       onComplete();
-    }, 3000);
+    }, 3500);
 
     return () => clearTimeout(timer);
   }, [onComplete]);
@@ -84,13 +84,13 @@ export function SplashIntro({ onComplete }: { onComplete: () => void }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.15 }}
                 className={`${
-                  line.text === "SWARM OPERATIONAL."
-                    ? "text-emerald-400 text-lg font-bold mt-4"
+                  line.text.includes("PROTOCOL: READY.")
+                    ? "text-emerald-400 text-lg font-bold mt-4 animate-pulse"
                     : line.text.includes("100%")
                     ? "text-[#00B7FF]"
-                    : line.text.includes("ZERO COMPETITION")
+                    : line.text.includes("BYPASS AUTHORIZED")
                     ? "text-rose-400"
-                    : line.text.includes("ONLINE") || line.text.includes("ARMED") || line.text.includes("ACTIVE")
+                    : line.text.includes("ONLINE") || line.text.includes("ARMED") || line.text.includes("ACTIVE") || line.text.includes("STANDBY")
                     ? "text-emerald-400/80"
                     : "text-neutral-500"
                 }`}

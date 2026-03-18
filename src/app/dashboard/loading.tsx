@@ -9,16 +9,16 @@ export default function DashboardLoading() {
         {/* Core Reactor Ring */}
         <div className="w-16 h-16 rounded-full border-4 border-[#00B7FF]/10 border-t-[#00B7FF] animate-spin shadow-[0_0_30px_rgba(0,183,255,0.3)]" />
         {/* Inner Reactor */}
-        <div className="absolute inset-0 m-auto w-8 h-8 rounded-full border-4 border-purple-500/10 border-b-purple-500 animate-spin-reverse shadow-[0_0_20px_rgba(168,85,247,0.3)]" />
+        <div className="absolute inset-0 m-auto w-8 h-8 rounded-full border-4 border-emerald-500/10 border-b-emerald-500 animate-spin-reverse shadow-[0_0_20px_rgba(16,185,129,0.3)]" />
         <Loader2 className="absolute inset-0 m-auto w-4 h-4 text-white animate-pulse" />
       </div>
 
       <div className="mt-8 space-y-2">
         <h3 className="text-sm font-bold tracking-[0.2em] uppercase text-white font-mono flex items-center justify-center gap-2">
-          Syncing Neuro-Link <span className="flex gap-0.5"><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-75" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-150" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-300" /></span>
+          Executing Autonomous Node <span className="flex gap-0.5"><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-75" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-150" /><span className="w-1 h-1 bg-[#00B7FF] rounded-full animate-ping delay-300" /></span>
         </h3>
-        <p className="text-[10px] uppercase tracking-widest text-[#5C667A] font-medium">
-          Retrieving Data from SOVEREIGN Vector Matrix
+        <p className="text-[10px] uppercase tracking-widest text-emerald-500/80 font-medium">
+          Establishing Secure Link to God-Brain
         </p>
       </div>
 
