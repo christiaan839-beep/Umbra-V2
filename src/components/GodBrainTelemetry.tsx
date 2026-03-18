@@ -16,10 +16,16 @@ const STATIC_TELEMETRY_LOGS = [
 ];
 
 export default function GodBrainTelemetry() {
+    const [mounted, setMounted] = useState(false);
     const [logs, setLogs] = useState<typeof STATIC_TELEMETRY_LOGS>([]);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Simulate active telemetry stream
     useEffect(() => {
+        if (!mounted) return;
         let index = 0;
         const interval = setInterval(() => {
             if (index < STATIC_TELEMETRY_LOGS.length) {
@@ -52,7 +58,7 @@ export default function GodBrainTelemetry() {
             <div className="p-4 h-[200px] overflow-hidden flex flex-col justify-end relative">
                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-[#0a0a0a] z-10 pointer-events-none" />
                 <AnimatePresence initial={false}>
-                    {logs.map((log) => (
+                    {mounted && logs.map((log) => (
                         <motion.div
                             key={`${log.id}-${Math.random()}`}
                             initial={{ opacity: 0, x: -20, height: 0 }}
