@@ -5,10 +5,11 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sovereign Matrix — AI Marketing Platform",
-  description: "AI marketing tools for content, SEO, lead gen, and competitor analysis — running 24/7. Free to start. Pro from R997/mo.",
-  keywords: ["AI marketing", "marketing automation", "AI marketing platform", "content generation", "SEO automation", "lead generation", "South Africa", "ZAR"],
-  authors: [{ name: "Sovereign Matrix" }],
+  metadataBase: new URL("https://sovereign-matrix.com"),
+  title: "Sovereign Matrix — Replace Your Agency. Keep The Results.",
+  description: "Autonomous AI marketing swarms executing B2B outbound, cinematic content production, and enterprise telemetry 24/7.",
+  keywords: ["AI matrix", "God-Brain", "AI outbound engine", "faceless automation", "sovereign matrix"],
+  authors: [{ name: "Sovereign Matrix - Edge" }],
   openGraph: {
     title: "Sovereign Matrix — Replace Your Agency. Keep The Results.",
     description: "AI marketing tools for content, SEO, lead gen — running 24/7. Free to start. Pro from R997/mo.",
