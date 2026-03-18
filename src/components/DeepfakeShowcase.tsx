@@ -21,16 +21,16 @@ export default function DeepfakeShowcase() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-gray-300 text-sm font-medium mb-6"
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-400 text-sm font-bold uppercase tracking-widest mb-6"
                     >
-                        <Film className="w-4 h-4 text-primary" />
-                        Cinematic &quot;Proof of Work&quot;
+                        <Film className="w-4 h-4 text-neutral-400" />
+                        Autonomous Media Foundry
                     </motion.div>
                     <h2 className="text-4xl md:text-5xl font-bold mb-6 font-outfit text-white">
-                        Rendered purely by the <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">God-Brain</span>.
+                        Rendered purely by the <span className="text-neutral-500 font-serif italic">God-Brain</span>.
                     </h2>
-                    <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                        Do not hire human videographers. Our Filmmaker Agents utilize Veo 3.1 and elite TTS synthesis to manufacture hyper-realistic B2B cinematic content directly on the edge.
+                    <p className="text-neutral-500 max-w-2xl mx-auto text-lg">
+                        Do not hire human videographers. Our Filmmaker Agents utilize NVIDIA Cosmos and elite TTS synthesis to manufacture hyper-realistic B2B cinematic content directly on the edge.
                     </p>
                 </div>
 
@@ -48,13 +48,13 @@ export default function DeepfakeShowcase() {
                             <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black group-hover:from-gray-800 transition-colors duration-500" />
                             
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <PlayCircle className="w-16 h-16 text-white/50 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
-                                <p className="mt-4 text-gray-500 font-mono text-sm">[AWAITING_VIDEO_PAYLOAD]</p>
+                                <PlayCircle className="w-16 h-16 text-white/30 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
+                                <p className="mt-4 text-neutral-600 font-mono text-xs uppercase tracking-widest">[AWAITING_VIDEO_PAYLOAD]</p>
                             </div>
 
                             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
                                 <h3 className="text-xl font-bold text-white mb-2">{demo.title}</h3>
-                                <p className="text-sm font-mono text-primary">{demo.tech}</p>
+                                <p className="text-[10px] uppercase font-bold tracking-widest text-neutral-500">{demo.tech}</p>
                             </div>
                         </motion.div>
                     ))}

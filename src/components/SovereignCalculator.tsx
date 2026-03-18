@@ -24,7 +24,7 @@ export default function SovereignCalculator() {
     return (
         <section className="py-24 relative overflow-hidden bg-black border-y border-white/10">
             {/* Background God-Rays */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-primary/20 blur-[120px] rounded-full pointer-events-none opacity-30" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-white/5 blur-[120px] rounded-full pointer-events-none opacity-30" />
             
             <div className="max-w-6xl mx-auto px-6 relative z-10">
                 <div className="text-center mb-16">
@@ -32,15 +32,15 @@ export default function SovereignCalculator() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6"
+                        className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-400 text-sm font-bold uppercase tracking-widest mb-6"
                     >
                         <Calculator className="w-4 h-4" />
                         Agency Extinction Calculator
                     </motion.div>
                     <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight font-outfit text-white">
-                        Calculate Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">Human Capital Burn</span>.
+                        Calculate Your <span className="text-neutral-500 font-serif italic">Human Capital Burn</span>.
                     </h2>
-                    <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                    <p className="text-neutral-500 max-w-2xl mx-auto text-lg">
                         Traditional digital marketing agencies and human SDRs are mathematically inefficient. Dial in your current operational metrics to see exactly how much capital the God-Brain saves you.
                     </p>
                 </div>
@@ -64,7 +64,7 @@ export default function SovereignCalculator() {
                                 max="20" 
                                 value={employees} 
                                 onChange={(e) => setEmployees(Number(e.target.value))}
-                                className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
+                                className="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-white"
                             />
                         </div>
 
@@ -80,7 +80,7 @@ export default function SovereignCalculator() {
                                 step="1000"
                                 value={monthlyAdSpend} 
                                 onChange={(e) => setMonthlyAdSpend(Number(e.target.value))}
-                                className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
+                                className="w-full h-2 bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-white"
                             />
                         </div>
                     </motion.div>
@@ -92,30 +92,30 @@ export default function SovereignCalculator() {
                         viewport={{ once: true }}
                         className="relative"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent blur-3xl -z-10 rounded-full opacity-50" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent blur-3xl -z-10 rounded-full opacity-50" />
                         
-                        <div className="bg-black/80 border border-white/20 rounded-3xl p-10 overflow-hidden shadow-2xl relative shadow-primary/20">
+                        <div className="bg-black/80 border border-white/10 rounded-3xl p-10 overflow-hidden shadow-2xl relative shadow-white/5">
                             
-                            <div className="mb-8 pb-8 border-b border-white/10">
-                                <p className="text-gray-400 text-sm uppercase tracking-wider mb-2">Current Human Capital Burn</p>
-                                <div className="text-4xl font-mono text-red-500 font-bold">
-                                    ${absoluteHumanCost.toLocaleString()}<span className="text-xl text-red-500/50">/mo</span>
+                            <div className="mb-8 pb-8 border-b border-white/5">
+                                <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-widest mb-2">Current Human Capital Burn</p>
+                                <div className="text-4xl font-mono text-neutral-400 font-bold opacity-50 line-through">
+                                    ${absoluteHumanCost.toLocaleString()}<span className="text-xl">/mo</span>
                                 </div>
                             </div>
                             
                             <div className="mb-8">
-                                <p className="text-gray-400 text-sm uppercase tracking-wider mb-2">Sovereign God-Brain Node</p>
+                                <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-widest mb-2">Sovereign God-Brain Array</p>
                                 <div className="text-5xl font-mono text-white font-bold">
-                                    ${matrixLicenseCost.toLocaleString()}<span className="text-2xl text-gray-500">/mo</span>
+                                    ${matrixLicenseCost.toLocaleString()}<span className="text-2xl text-neutral-600">/mo</span>
                                 </div>
                             </div>
 
-                            <div className={`mt-8 p-6 rounded-xl ${isBurningMoney ? 'bg-green-500/10 border-green-500/30' : 'bg-gray-800/50 border-gray-700'} border`}>
-                                <p className={`text-sm tracking-wider uppercase mb-1 ${isBurningMoney ? 'text-green-500' : 'text-gray-400'}`}>
-                                    {isBurningMoney ? 'Total Net Capital Saved' : 'Matrix Investment'}
+                            <div className={`mt-8 p-6 rounded-xl ${isBurningMoney ? 'bg-white/5 border-white/10' : 'bg-white/[0.02] border-white/5'} border`}>
+                                <p className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-1 ${isBurningMoney ? 'text-neutral-300' : 'text-neutral-600'}`}>
+                                    {isBurningMoney ? 'Net Capital Retained' : 'Matrix Investment'}
                                 </p>
-                                <div className={`text-4xl font-bold font-mono ${isBurningMoney ? 'text-green-400' : 'text-gray-300'}`}>
-                                    {isBurningMoney ? `+$${capitalSaved.toLocaleString()}` : 'Optimal Autonomy'}
+                                <div className={`text-4xl font-bold font-mono ${isBurningMoney ? 'text-white' : 'text-neutral-500'}`}>
+                                    {isBurningMoney ? `+$${capitalSaved.toLocaleString()}` : 'Optimized'}
                                 </div>
                             </div>
                         </div>

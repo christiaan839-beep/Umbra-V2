@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, BrainCircuit, CheckCircle2, Cpu, Globe, Target, Zap, ShieldAlert, ChevronDown, XCircle, Clock, TrendingUp, DollarSign, MessageSquare, Webhook } from "lucide-react";
+import { ArrowRight, BrainCircuit, CheckCircle2, Cpu, Globe, Target, Zap, ShieldAlert, ChevronDown, XCircle, Clock, TrendingUp, DollarSign, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
@@ -231,21 +231,21 @@ export default function Home() {
           </div>
         </div>
 
-        {/* What You Get — Revenue Engine Showcase */}
+        {/* Advanced Industry Override — The Extinction Sectors */}
         <div className="w-full max-w-7xl mx-auto relative z-10 mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 serif-text mb-4">Total Omni-Channel Domination.</h2>
-            <p className="text-neutral-500 max-w-2xl mx-auto">Every tool your marketing team needs — automated and available around the clock.</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 serif-text mb-4">Human Workforce Extinction.</h2>
+            <p className="text-neutral-500 max-w-2xl mx-auto">The Sovereign Matrix physically replaces SDR teams, design studios, and strategy consultants with zero latency.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Cpu, title: "OpenClaw Direct Access", desc: "Deploy autonomous software agents safely, instantly. Native integration with NVIDIA Agent Toolkit ensures 24/7 localized compute.", tag: "NVIDIA NIM" },
-              { icon: ShieldAlert, title: "OpenShell Guardrails", desc: "Enforce policy-based privacy and security guardrails directly within the runtime. Absolute control over how agents handle data.", tag: "ENTERPRISE SECURE" },
-              { icon: Globe, title: "Privacy Router", desc: "Tap open models like Mistral-Nemotron locally, or dynamically route to cloud-based frontier models within defined security guardrails.", tag: "DYNAMIC ROUTING" },
-              { icon: Zap, title: "Deep Competitor Intel", desc: "Analyze competitor landing pages, ad copy, and SEO strategy. Get actionable insights to gain an edge in your market.", tag: "COMPETITOR X-RAY" },
-              { icon: MessageSquare, title: "Mobile Command Center", desc: "Control your entire 24/7 autonomous marketing agency directly from Telegram. Fire webhooks, check stats, and deploy logic seamlessly.", tag: "TELEGRAM NATIVE" },
-              { icon: Webhook, title: "Omni-Automation Network", desc: "100% autonomous background execution. Direct n8n secure routing handles content generation and lead scraping without human intervention.", tag: "WEBHOOK ROUTING" },
+              { icon: Target, title: "SaaS Sales Domination", desc: "Fire your SDRs. OpenClaw Ghost Fleets open headless browsers, scrape Apollo.io natively, and dispatch personalized Nemotron emails at scale.", tag: "GHOST FLEET PROTOCOL" },
+              { icon: Cpu, title: "Design Agency Extinction", desc: "End $5k branding retainers. The Sovereign Visual Studio streams NVIDIA Edify 4K textures and 3D CAD meshes instantly via API.", tag: "NVIDIA EDIFY" },
+              { icon: ShieldAlert, title: "Enterprise Safe-AI", desc: "Sell to Fortune 500s confidently. NeMo Guardrails physically block hallucinations and intercept PII data leaks at the OS level.", tag: "NEMO GUARDRAILS" },
+              { icon: Globe, title: "Cinematic Director Node", desc: "Bypass video editors entirely. Route parameters safely to NVIDIA Cosmos to generate photorealistic VSLs mapped to your exact brand aesthetics.", tag: "COSMOS VLM" },
+              { icon: MessageSquare, title: "Telegram Command Center", desc: "Dictate the swarm's targets from your iOS device. Dispatch the Deepfake closer or order a competitor audit via immediate webhook execution.", tag: "MOBILE UPLINK" },
+              { icon: BrainCircuit, title: "Autonomous Intelligence", desc: "It doesn't just draft copy. It reasons, debates, and executes. Wire Llama-3 against DeepSeek-R1 in the War Room for ruthless red-teaming.", tag: "WAR ROOM CRM" },
             ].map((feature, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
                 className="group relative bg-white/[0.01] p-8 border border-white/5 hover:border-white/10 rounded-2xl transition-all duration-500">
