@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, ShieldAlert, Zap, Server, Activity, ArrowRight, Save, PlayCircle } from "lucide-react";
 import { VoicePathwayBuilder } from "@/components/dashboard/VoicePathwayBuilder";
-import { AnimatedGridPattern } from "@/components/AnimatedGridPattern";
 
 export default function VoiceSwarmPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -24,8 +23,6 @@ export default function VoiceSwarmPage() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 relative min-h-screen">
-      <AnimatedGridPattern />
-      
       <div className="relative z-10 flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white serif-text tracking-tight flex items-center gap-3">

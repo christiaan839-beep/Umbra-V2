@@ -252,7 +252,7 @@ export default function PodcastBlueprintPage() {
                     <div className="flex-1 h-8 rounded relative overflow-hidden flex items-center justify-between px-1">
                       {/* Fake waveform */}
                       {[...Array(40)].map((_, i) => (
-                        <div key={i} className="w-1 bg-white/20 rounded-full" style={{ height: \`\${Math.random() * 80 + 20}%\` }} />
+                        <div key={i} className="w-1 bg-white/20 rounded-full" style={{ height: `${Math.random() * 80 + 20}%` }} />
                       ))}
                     </div>
                   </div>

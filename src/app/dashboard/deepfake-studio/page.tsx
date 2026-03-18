@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FileVideo, ShieldAlert, Play, Database, Wand2, MonitorPlay } from "lucide-react";
-import { AnimatedGridPattern } from "@/components/AnimatedGridPattern";
 
 export default function DeepfakeStudioPage() {
   const [targetDomain, setTargetDomain] = useState("");
@@ -41,8 +40,6 @@ export default function DeepfakeStudioPage() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 relative min-h-screen">
-      <AnimatedGridPattern />
-      
       {/* Header */}
       <div className="relative z-10 flex items-center justify-between mb-8">
         <div>

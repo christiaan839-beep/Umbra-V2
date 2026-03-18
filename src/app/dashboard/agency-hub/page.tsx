@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Briefcase, Building2, Server, DollarSign, Users, Activity, ExternalLink, Plus, Network, Key } from "lucide-react";
-import { AnimatedGridPattern } from "@/components/AnimatedGridPattern";
 
 // Mock data for Reseller Sub-Agencies
 const TARGET_AGENCIES = [
@@ -17,8 +16,6 @@ export default function AgencyHubPage() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 relative min-h-screen">
-      <AnimatedGridPattern />
-      
       {/* Header */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
