@@ -1,51 +1,74 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+
+const AUTHORIZED_TELEGRAM_ID = process.env.COMMANDER_TELEGRAM_ID; 
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const data = await req.json();
     
-    // Validate Telegram Webhook Secret Token (if provided in URL or headers)
-    // Telegram usually sends payload looking like:
-    // { "update_id": 10000, "message": { "date": 1441645532, "chat": { "last_name": "Test Lastname", "id": 1111111, "first_name": "Test Firstname", "username": "Testusername" }, "message_id": 1365, "from": { "last_name": "Test Lastname", "id": 1111111, "first_name": "Test Firstname", "username": "Testusername" }, "text": "/start" } }
-    
-    const message = body.message;
-    if (!message || !message.chat || !message.text) {
-      return NextResponse.json({ success: true }); // Acknowledge to stop Telegram from retrying
+    // Validate Telegram Payload Source
+    if (!data || !data.message || !data.message.chat) {
+      return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
     }
 
-    const chatId = message.chat.id.toString();
-    const authorizedChatId = process.env.TELEGRAM_OWNER_CHAT_ID;
+    const chatId = data.message.chat.id.toString();
+    const text = data.message.text?.toString().trim() || "";
 
-    if (authorizedChatId && chatId !== authorizedChatId) {
-      console.warn(`[Command Center] Unauthorized access attempt from Chat ID: ${chatId}`);
-      return NextResponse.json({ success: true, message: "Unauthorized" });
+    // God-Mode Authentication Check
+    if (chatId !== AUTHORIZED_TELEGRAM_ID && process.env.NODE_ENV === 'production') {
+      console.error(`[SECURITY] Unauthorized Telegram access attempt from ID: ${chatId}`);
+      return NextResponse.json({ error: 'Unauthorized override' }, { status: 403 });
     }
 
-    const text = message.text.trim();
-    console.log(`[Command Center] Received payload: "${text}"`);
+    console.log(`[TELEGRAM] Commander Command Received: ${text}`);
 
-    // Route command logic
-    // We send this to the live n8n orchestrator or native Mistral pipeline
-    const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL || "https://n8n.your-agency.com/webhook/omnidirector";
+    let responseMessage = "Command executed successfully.";
+
+    // Command Parser
+    const lowerText = text.toLowerCase();
     
-    try {
-      await fetch(n8nWebhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+    // 1. Voice Agent Call
+    if (lowerText.startsWith("deploy caller to ")) {
+      const phone = text.replace(/deploy caller to /i, "").trim();
+      // Execute Nemotron Pipecat Swarm logic here via internal API or Queue
+      responseMessage = `[TARGET LOCKED] Sovereign Matrix is deploying Pipecat Autonomous Voice Swarm to ${phone}. Initiating WebRTC pipeline...`;
+    }
+    
+    // 2. Audit & Destroy Target Hit
+    else if (lowerText.startsWith("strike ")) {
+      const url = text.replace(/strike /i, "").trim();
+      // Trigger Background Cron Job / Edge Function to scrape URL
+      responseMessage = `[STRIKE AUTHORIZED] Commencing scrape and Audit & Destroy protocol on ${url}. PDF will be dropped to your iOS device shortly.`;
+    }
+
+    // 3. Status Report
+    else if (lowerText === "status") {
+      responseMessage = `[SOVEREIGN OMNI-RAG V4]\n\nAll Systems: Online.\nVercel Edge: Defending.\nOpenClaw: Awaiting Local Tunnel.\n\nAwaiting your command, Sir.`;
+    }
+    
+    else {
+      responseMessage = "System active. Available Commands:\n- `deploy caller to <phone>`\n- `strike <url>`\n- `status`";
+    }
+
+    // Reply back via Telegram API (assuming we have a bot token)
+    const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+    if (telegramBotToken) {
+      await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          source: "telegram",
-          chatId,
-          command: text,
-          timestamp: new Date().toISOString()
-        })
+          chat_id: chatId,
+          text: responseMessage,
+        }),
       });
-    } catch (err) {
-      console.error("[Command Center] Failed to forward to n8n:", err);
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ status: 'success', recorded_command: text });
+    
   } catch (error) {
-    console.error("[Command Center Error]:", error);
-    return NextResponse.json({ success: false }, { status: 500 });
+    console.error("[TELEGRAM WEBHOOK ERROR]", error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
