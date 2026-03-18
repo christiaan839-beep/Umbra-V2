@@ -33,14 +33,24 @@ async def receive_openclaw_payload(payload: EdgePayload):
         # We assume the command is a safe shell command.
         print(f"[EXECUTING] {payload.command}")
         
-        # Execute natively on Mac
-        result = subprocess.run(
-            payload.command, 
-            shell=True, 
-            capture_output=True, 
-            text=True, 
-            timeout=10 # Prevent hanging
-        )
+        # PHASE 78: GHOST FLEET TRIGGER
+        if payload.command.startswith("GHOST_FLEET"):
+            parts = payload.command.split(" ")
+            niche = parts[1] if len(parts) > 1 else "B2B SaaS"
+            location = parts[2] if len(parts) > 2 else "Global"
+            result = subprocess.run(
+                f"python3 /Users/christiaanwillemdewet/Library/Mobile\\ Documents/com~apple~CloudDocs/Downloads/new\\ app/sovereign-v2/server/python-agents/apollo_ghost_fleet.py --niche '{niche}' --location '{location}'", 
+                shell=True, capture_output=True, text=True, timeout=45
+            )
+        else:
+            # Execute natively on Mac
+            result = subprocess.run(
+                payload.command, 
+                shell=True, 
+                capture_output=True, 
+                text=True, 
+                timeout=10 # Prevent hanging
+            )
         
         stdout = result.stdout.strip()
         stderr = result.stderr.strip()
