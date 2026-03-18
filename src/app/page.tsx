@@ -113,13 +113,13 @@ export default function Home() {
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 mb-8 serif-text leading-[1.1] tracking-tight">
-            The Agency Extinction Protocol.<br/>
-            <span className="text-neutral-400">Secured by NVIDIA.</span>
+            Chief Agent Officer.<br/>
+            <span className="text-neutral-400">Your Autonomous Agency.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-neutral-500 max-w-2xl mx-auto leading-relaxed mb-12">
-            Build, deploy, and monetize secure Sovereign AI Infrastructure in 60 seconds. 
-            Replace human headcount with a 24/7 autonomous swarm powered by the 120B Omni-RAG cluster.
+            Stop competing on labor. Productize your expertise into a $5,000/mo high-ticket retainer. 
+            The Sovereign Matrix runs 29 specialized agents 24/7—you just direct the swarm.
           </p>
 
           <div className="flex flex-col items-center gap-4 mb-20">
@@ -372,12 +372,12 @@ export default function Home() {
                 Engineered in South Africa
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-white serif-text mb-6 leading-tight tracking-tight">
-                One Architect. 29 Swarm Agents.<br/>
-                <span className="text-neutral-500">Zero Execution Bloat.</span>
+                Become The Chief Agent Officer.<br/>
+                <span className="text-neutral-500">Orchestrate the Swarm.</span>
               </h2>
               <div className="w-12 h-1 bg-white/10 mb-6" />
               <p className="text-neutral-500 leading-relaxed mb-6 text-sm">
-                Sovereign Matrix was engineered to execute one directive: eliminate the inefficiencies of human agency labor. Businesses bleed capital on R15,000–R50,000 retainers for slow, generic fulfillment. I have authored 29 autonomous agents that deploy identical output in milliseconds.
+                Every enterprise is currently hiring for one objective: offloading operations to autonomous systems. As a Chief Agent Officer (CAO), you do not write copy or run ads. You manage, tune, and orchestrate the Sovereign Matrix—a 29-node AI workforce that replaces traditional $15,000 retainers entirely.
               </p>
               <p className="text-neutral-500 leading-relaxed mb-8 text-sm">
                 There is no &quot;AI Slop&quot;. Every node runs on deterministic routing — Gemini 2.5 for reasoning, Nemotron for voice, TensorRT-LLM for latency, and NeMo Guardrails for absolute security. No hallucinations, only executable intelligence.
