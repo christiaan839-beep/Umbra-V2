@@ -7,29 +7,29 @@ import { ArrowRight, Sparkles, BarChart3, Send, Globe } from "lucide-react";
 const STEPS = [
   {
     label: "01",
-    title: "Describe your business",
-    detail: "Tell the AI about your industry, audience, and goals. One prompt is all it takes.",
+    title: "Initialize Target Parameters",
+    detail: "Inject your corporate ontology, target demographic, and objective vectors. One command is all it takes.",
     visual: "prompt",
     color: "#00B7FF",
   },
   {
     label: "02",
-    title: "AI generates everything",
-    detail: "Blog posts, ad creatives, landing pages, email sequences, competitor analysis — generated in seconds.",
+    title: "Execute Neural Synthesis",
+    detail: "The Swarm physically assembles the payloads—landing pages, high-ticket email sequences, and 3D competitor audits.",
     visual: "generate",
     color: "#10B981",
   },
   {
     label: "03",
-    title: "Review and publish",
-    detail: "Edit or approve. Push content live across all channels from one dashboard.",
+    title: "Authorize Deployment",
+    detail: "Verify the output via NeMo Guardrails. Execute the final push to all production endpoints synchronously.",
     visual: "publish",
     color: "#F59E0B",
   },
   {
     label: "04",
-    title: "Watch it compound",
-    detail: "SEO pages rank. Leads come in. Content builds authority. Your entire marketing runs on autopilot.",
+    title: "Observe Trajectory",
+    detail: "Organic nodes index. High-ticket leads are captured. The Sovereign Matrix operates with absolute autonomy.",
     visual: "compound",
     color: "#EC4899",
   },
@@ -73,18 +73,18 @@ function MockDashboardCard({ step, isActive }: { step: typeof STEPS[0]; isActive
         <div className="text-neutral-300">
           {isActive ? (
             <Typewriter
-              text='I run a digital marketing agency in Cape Town. Generate a full content strategy for a luxury real estate client targeting high-net-worth buyers in the Western Cape.'
+              text='> [TARGET LOCK]: Western Cape Enterprise Real Estate.\n> [OBJECTIVE]: Annihilate competitor search volume.\n> [PAYLOAD]: Deploy 50-node SEO cluster and 3-stage Cold Email Drip.'
               speed={25}
-              delay={300}
+              delay={200}
             />
           ) : (
             <span className="text-neutral-600">Type your business brief...</span>
           )}
         </div>
         <div className="flex gap-2 pt-2">
-          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-neutral-500">Real Estate</div>
-          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-neutral-500">Cape Town</div>
-          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-neutral-500">Luxury</div>
+          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-neutral-500">NODE_SEO_V2</div>
+          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-neutral-500">NEMOTRON_SDR</div>
+          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-neutral-500">DEFENSE_MODE</div>
         </div>
       </div>
     );
@@ -92,11 +92,11 @@ function MockDashboardCard({ step, isActive }: { step: typeof STEPS[0]; isActive
 
   if (step.visual === "generate") {
     const items = [
-      { name: "Blog: '5 Hidden Gems in Constantia Wine Country'", status: "done" },
-      { name: "Ad: Facebook Carousel — Luxury Estate Tour", status: "done" },
-      { name: "Landing Page: Atlantic Seaboard Collection", status: "done" },
-      { name: "Email: 5-Part Drip — Investment Opportunity", status: isActive ? "loading" : "pending" },
-      { name: "SEO: 12 Location Pages — Western Cape", status: isActive ? "loading" : "pending" },
+      { name: "NVIDIA Embeddings: Scraped 12 Competitor Sites", status: "done" },
+      { name: "Cosmos VLM: Rendered 4K Cinematic Payload", status: "done" },
+      { name: "Next.js: Compiled Cartel Landing Page", status: "done" },
+      { name: "Nemotron: Synthesizing High-Ticket Drip", status: isActive ? "loading" : "pending" },
+      { name: "Guardrails: Redacting Brand PII Data", status: isActive ? "loading" : "pending" },
     ];
     return (
       <div className="rounded-xl bg-black/60 border border-white/10 p-5 space-y-3">
@@ -129,10 +129,10 @@ function MockDashboardCard({ step, isActive }: { step: typeof STEPS[0]; isActive
     return (
       <div className="rounded-xl bg-black/60 border border-white/10 p-5 space-y-4">
         <div className="flex items-center gap-2 text-amber-400 text-xs font-bold">
-          <Send className="w-3 h-3" /> READY TO PUBLISH
+          <Send className="w-3 h-3" /> AUTHORIZATION REQUIRED
         </div>
         <div className="grid grid-cols-3 gap-3">
-          {["Blog", "Facebook", "Email"].map((ch, i) => (
+          {["Vercel Edge", "Apollo.io", "Twilio Voice"].map((ch, i) => (
             <motion.div
               key={ch}
               initial={{ scale: 0.8, opacity: 0 }}
@@ -141,7 +141,7 @@ function MockDashboardCard({ step, isActive }: { step: typeof STEPS[0]; isActive
               className="rounded-lg bg-white/5 border border-white/10 p-3 text-center"
             >
               <div className="text-[10px] text-neutral-500 uppercase tracking-widest mb-1">{ch}</div>
-              <div className="text-emerald-400 text-xs font-bold">Ready</div>
+              <div className="text-emerald-400 text-xs font-bold">Armed</div>
             </motion.div>
           ))}
         </div>
@@ -150,7 +150,7 @@ function MockDashboardCard({ step, isActive }: { step: typeof STEPS[0]; isActive
           transition={{ repeat: Infinity, duration: 2 }}
           className="w-full py-2.5 rounded-lg bg-amber-400/10 border border-amber-400/20 text-amber-400 text-xs font-bold uppercase tracking-widest"
         >
-          Publish All →
+          Execute Payloads →
         </motion.button>
       </div>
     );
@@ -160,13 +160,13 @@ function MockDashboardCard({ step, isActive }: { step: typeof STEPS[0]; isActive
   return (
     <div className="rounded-xl bg-black/60 border border-white/10 p-5 space-y-3">
       <div className="flex items-center gap-2 text-pink-400 text-xs font-bold">
-        <Globe className="w-3 h-3" /> RESULTS COMPOUNDING
+        <Globe className="w-3 h-3" /> TELEMETRY UPLINK ACTIVE
       </div>
       <div className="space-y-2">
         {[
-          { label: "Organic Traffic", value: "+312%", bar: 75 },
-          { label: "Leads Generated", value: "47", bar: 60 },
-          { label: "Content Published", value: "156", bar: 90 },
+          { label: "Terminal Nodes Synced", value: "29/29", bar: 100 },
+          { label: "$5k High-Ticket Leads", value: "14 Active", bar: 80 },
+          { label: "System Hallucinations", value: "0.00%", bar: 5 },
         ].map((metric, i) => (
           <motion.div
             key={i}

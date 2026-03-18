@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 import { PlayCircle, Film } from 'lucide-react';
 
 export default function DeepfakeShowcase() {
-    // In production, these represent raw URL payloads from the HeyGen or Veo API outputs
+    // Cinematic Defense-Grade Payloads
     const videoDemos = [
-        { id: 1, title: 'B2B Sales Outreach Deepfake', tech: 'HeyGen + Gemini 1.5' },
-        { id: 2, title: 'Cinematic B-Roll Rendering', tech: 'Veo 3.1 Accelerated' }
+        { id: 1, title: 'Synthetic Outbound Node', tech: 'Audio2Face + TensorRT', src: 'https://cdn.pixabay.com/video/2021/08/04/83902-584742469_tiny.mp4' },
+        { id: 2, title: 'Cosmos VLM Render Target', tech: 'NVIDIA Hardware Accelerated', src: 'https://cdn.pixabay.com/video/2020/09/22/50238-460498748_tiny.mp4' }
     ];
 
     return (
@@ -44,15 +44,23 @@ export default function DeepfakeShowcase() {
                             viewport={{ once: true }}
                             className="group relative rounded-2xl overflow-hidden border border-white/10 bg-black aspect-video cursor-pointer"
                         >
-                            {/* Mock Video Thumbnail / Placeholder */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black group-hover:from-gray-800 transition-colors duration-500" />
+                            <video 
+                                src={demo.src}
+                                autoPlay 
+                                loop 
+                                muted 
+                                playsInline
+                                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
                             
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <PlayCircle className="w-16 h-16 text-white/30 group-hover:text-white group-hover:scale-110 transition-all duration-300" />
-                                <p className="mt-4 text-neutral-600 font-mono text-xs uppercase tracking-widest">[AWAITING_VIDEO_PAYLOAD]</p>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+                                   <PlayCircle className="w-8 h-8 text-white ml-1" />
+                                </div>
                             </div>
 
-                            <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
+                            <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
                                 <h3 className="text-xl font-bold text-white mb-2">{demo.title}</h3>
                                 <p className="text-[10px] uppercase font-bold tracking-widest text-neutral-500">{demo.tech}</p>
                             </div>
