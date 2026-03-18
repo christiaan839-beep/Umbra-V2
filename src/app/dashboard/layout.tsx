@@ -64,6 +64,7 @@ const NAV_GROUPS = [
     group: "Extinction Protocol",
     icon: Rocket,
     items: [
+      { href: "/dashboard/audit-destroy", label: "Audit & Destroy Engine", icon: ShieldAlert },
       { href: "/dashboard/deepfake-studio", label: "Executive Deepfake", icon: FileVideo },
       { href: "/dashboard/visual-studio", label: "Sovereign Visual Studio", icon: Palette },
       { href: "/dashboard/edify-forge", label: "Edify 3D Forge", icon: Cuboid },
