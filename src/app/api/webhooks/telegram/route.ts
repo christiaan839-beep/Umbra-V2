@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-const AUTHORIZED_TELEGRAM_ID = process.env.COMMANDER_TELEGRAM_ID; 
+// Fallback to hardcoded ID if Vercel Preview Environment Variables are missing
+const AUTHORIZED_TELEGRAM_ID = process.env.COMMANDER_TELEGRAM_ID || "8701556788"; 
 
 export async function POST(req: Request) {
   try {
