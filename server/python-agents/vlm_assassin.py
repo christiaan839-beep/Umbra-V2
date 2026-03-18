@@ -46,7 +46,7 @@ def execute_vlm_strike(base64_image: str, target_name: str):
         "messages": [
             {
                 "role": "user",
-                "content": f'Evaluate this landing page for "{target_name}". As an elite $10k/mo agency director, give me a ruthless 3-point mathematical critique of its visual UX/UI and conversion flaws. Be aggressive but highly technical. Make it sound like a military debrief. Format with markdown bullet points.',
+                "content": f'Evaluate this landing page for "{target_name}". You are utilizing the Nemotron OCR/Table Extraction matrix. Scan the image for any pricing tables, pricing tiers, or service lists. Extract them explicitly into markdown tables. Then, give me a 3-point ruthless mathematical critique of their visual UX/UI and explain why a $5,000/mo Sovereign Matrix subscription instantly renders their pricing obsolete.',
             },
             {
                 "role": "user",
