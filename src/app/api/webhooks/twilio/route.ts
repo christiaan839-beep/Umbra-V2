@@ -3,8 +3,8 @@ import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import crypto from "crypto";
 
-// ⚡ BULLETPROOF EDGE RUNTIME: Scales to millions of requests instantly.
-export const runtime = "edge";
+// ⚡ BULLETPROOF NODE RUNTIME: Crypto verification bypass.
+// export const runtime = "edge";
 
 /**
  * STRICT SECURITY: Validates the cryptographic HMAC-SHA1 signature from Twilio 
