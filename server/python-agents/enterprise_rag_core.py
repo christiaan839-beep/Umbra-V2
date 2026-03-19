@@ -32,16 +32,22 @@ def index_enterprise_data():
         return
 
     pdf_files = glob.glob(f"{KNOLWEDGE_DIR}/*.pdf")
+    txt_files = glob.glob(f"{KNOLWEDGE_DIR}/*.txt")
+    target_files = pdf_files + txt_files
     
-    if not pdf_files:
+    if not target_files:
         print(f"[*] Intelligence Directory ({KNOLWEDGE_DIR}) is empty. Awaiting payloads.")
         return
 
-    print(f"[⚡] Initializing Agentic RAG Pipeline. Found {len(pdf_files)} core documents.")
+    print(f"[⚡] Initializing Agentic RAG Pipeline. Found {len(target_files)} core documents.")
     
-    for i, pdf_path in enumerate(pdf_files):
-        print(f"[*] Ripping Text Matrix: {os.path.basename(pdf_path)}")
-        text = extract_text_from_pdf(pdf_path)
+    for i, file_path in enumerate(target_files):
+        print(f"[*] Ripping Text Matrix: {os.path.basename(file_path)}")
+        if file_path.endswith('.pdf'):
+            text = extract_text_from_pdf(file_path)
+        else:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                text = f.read()
         
         # In Production, chunk the text overlappingly into 512 token blocks.
         chunks = [text[j:j+1000] for j in range(0, len(text), 1000)] if text else []
@@ -49,7 +55,7 @@ def index_enterprise_data():
         for chunk_idx, chunk in enumerate(chunks):
             collection.add(
                 documents=[chunk],
-                metadatas=[{"source": os.path.basename(pdf_path), "chunk_idx": chunk_idx}],
+                metadatas=[{"source": os.path.basename(file_path), "chunk_idx": chunk_idx}],
                 ids=[f"doc_{i}_chunk_{chunk_idx}"]
             )
             

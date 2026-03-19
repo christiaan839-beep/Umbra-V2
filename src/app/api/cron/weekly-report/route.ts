@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-export const runtime = 'edge';
+// Node.js runtime required for Resend and Crypto
 
 // ⚡ SOVEREIGN EXTINCTION PROTOCOL: AUTOMATED RETENTION
 // This endpoint is triggered via Vercel Cron every Sunday at Midnight.
 // It emails the physical ROI telemetry to the Cartel's $5k/mo clients.
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || 're_123_fallback_for_build');
 
 export async function GET(req: Request) {
   // Secure the cron route with Vercel's internal secret

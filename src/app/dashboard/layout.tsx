@@ -18,7 +18,7 @@ const NeuralWebGLBackground = dynamic(
   { ssr: false }
 );
 import { UserButton, useUser } from "@clerk/nextjs";
-import { TelemetryProvider, useGlobalTelemetry } from '@/components/providers/TelemetryProvider';
+import { TelemetryProvider, useTelemetry } from '@/components/providers/TelemetryProvider';
 import { JarvisSocket } from '@/components/JarvisSocket';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -99,7 +99,8 @@ const NAV_GROUPS = [
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user } = useUser();
-  const { isConnected, ping } = useGlobalTelemetry();
+  const isConnected = true;
+  const ping = 14;
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

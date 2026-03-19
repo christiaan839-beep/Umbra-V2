@@ -4,7 +4,7 @@ import { google } from "@ai-sdk/google";
 import crypto from "crypto";
 
 // ⚡ BULLETPROOF EDGE RUNTIME: Scales to millions of requests instantly.
-export const runtime = "edge";
+// export const runtime = "edge"; // Node.js runtime required for strict crypto validation
 
 /**
  * STRICT SECURITY: Validates the cryptographic HMAC-SHA1 signature from Twilio 
