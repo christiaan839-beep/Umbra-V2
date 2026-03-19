@@ -4,7 +4,7 @@ import { google } from "@ai-sdk/google";
 import crypto from "crypto";
 
 // ⚡ BULLETPROOF NODE RUNTIME: Crypto verification bypass.
-// export const runtime = "edge";
+// // export const runtime = "edge";
 
 /**
  * STRICT SECURITY: Validates the cryptographic HMAC-SHA1 signature from Twilio 
