@@ -74,7 +74,7 @@ export default function MorpheusShieldPage() {
                   disabled={isInjecting}
                   className="w-full text-left p-3 rounded-lg border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-colors disabled:opacity-50 text-[10px] font-mono text-neutral-400 truncate"
                 >
-                  {'>'} {ex.prompt}
+                  &gt; {ex.prompt}
                 </button>
               ))}
             </div>
@@ -164,7 +164,7 @@ export default function MorpheusShieldPage() {
                         </div>
                         <div>
                           <p className="text-xs font-mono leading-relaxed">
-                            <span className="text-emerald-400">{'>'}</span> {activeLog.reason}
+                            <span className="text-emerald-400">&gt;</span> {activeLog.reason}
                           </p>
                         </div>
                       </motion.div>
