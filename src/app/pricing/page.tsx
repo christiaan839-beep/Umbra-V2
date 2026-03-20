@@ -65,7 +65,7 @@ const FAQS = [
   { q: "What are AI generations?", a: "Each time you use an AI tool (e.g., generate a blog post, analyze a competitor, create a landing page), that counts as one generation. Free users get 20/day, Pro and Agency get unlimited." },
   { q: "What is BYOK (Bring Your Own Key)?", a: "You can plug in your own API keys for Gemini, Anthropic, or Tavily. This means your generations use your own API quota, giving you full control over costs and usage." },
   { q: "Can I cancel anytime?", a: "Yes. No contracts, no cancellation fees. Monthly billing, cancel whenever you want." },
-  { q: "What payment methods do you accept?", a: "We accept credit/debit cards, Instant EFT, SnapScan, and bank transfers via Paystack. All payments in South African Rand (ZAR)." },
+  { q: "What payment methods do you accept?", a: "We accept credit/debit cards, Instant EFT, Zapper, SnapScan, and bank transfers via PayFast. All payments in South African Rand (ZAR)." },
 ];
 
 export default function PricingPage() {
@@ -78,15 +78,20 @@ export default function PricingPage() {
     }
 
     try {
-      const res = await fetch("/api/payments/paystack/checkout", {
+      const res = await fetch("/api/payments/payfast/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan }),
       });
       const data = await res.json();
 
-      if (data.success && data.authorizationUrl) {
-        window.location.assign(data.authorizationUrl);
+      if (data.success && data.formHtml) {
+        const container = document.createElement("div");
+        container.innerHTML = data.formHtml;
+        container.style.display = "none";
+        document.body.appendChild(container);
+        const form = container.querySelector("form");
+        if (form) form.submit();
         return;
       }
 
@@ -169,7 +174,7 @@ export default function PricingPage() {
           </p>
           <div className="flex items-center justify-center gap-4 mt-4">
             <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold uppercase tracking-wider"><Shield className="w-3 h-3" /> SSL Secured</span>
-            <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold uppercase tracking-wider"><Shield className="w-3 h-3" /> Paystack Verified</span>
+            <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold uppercase tracking-wider"><Shield className="w-3 h-3" /> PayFast Verified</span>
           </div>
         </motion.div>
       </section>

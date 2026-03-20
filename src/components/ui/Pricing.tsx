@@ -109,19 +109,24 @@ export function Pricing() {
         body: JSON.stringify({ name: leadName, phone: leadPhone, planId: selectedPlan }),
       });
 
-      // Step 2: Initialize Paystack Execution
-      const res = await fetch("/api/payments/paystack/checkout", {
+      // Step 2: Initialize PayFast Execution
+      const res = await fetch("/api/payments/payfast/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan: selectedPlan }),
       });
       const data = await res.json();
 
-      if (data.success && data.authorizationUrl) {
-        window.location.assign(data.authorizationUrl);
+      if (data.success && data.formHtml) {
+        const container = document.createElement("div");
+        container.innerHTML = data.formHtml;
+        container.style.display = "none";
+        document.body.appendChild(container);
+        const form = container.querySelector("form");
+        if (form) form.submit();
         return;
       }
-      alert(data.error || "Deployment authorization failed. Try again.");
+      alert(data.error || "Deployment authorization failed. Ensure PayFast API keys are set.");
     } catch {
       alert("Uplink severed. Try again.");
     } finally {
@@ -198,7 +203,7 @@ export function Pricing() {
       {/* Payment Methods */}
       <div className="mt-12 text-center flex items-center justify-center gap-6">
         <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold uppercase tracking-wider"><Shield className="w-3 h-3" /> SSL Secured</span>
-        <span className="text-xs text-neutral-500 uppercase tracking-widest">Secure payments via Paystack (Cards, Bank Transfer, EFT)</span>
+        <span className="text-xs text-neutral-500 uppercase tracking-widest">Secure payments via PayFast (Cards, Instant EFT, Zapper)</span>
       </div>
 
       {/* Secure Uplink Modal */}
