@@ -159,25 +159,37 @@ export default function Home() {
                    Watch high-definition 30-second demonstrations of our NemoClaw and KiloClaw agents navigating complex logic seamlessly.
                  </p>
               </div>
-              {/* HD Video Console Array - Zero AI Slop */}
+              {/* Real-time System Analytics Array */}
               <div className="grid md:grid-cols-3 gap-6 mb-12">
-                 <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
-                    <video src="/videos/demo1.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
-                    <div className="p-4 border-t border-white/5">
-                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NIMO Audio-To-Face Generation</p>
+                 <div className="rounded-2xl border border-[#00ff66]/20 bg-[#00ff66]/5 backdrop-blur-md p-6 shadow-[0_0_40px_rgba(0,255,102,0.05)]">
+                    <div className="flex items-center justify-between mb-4">
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#00ff66]">NIMO Audio-To-Face</p>
+                       <span className="w-2 h-2 rounded-full bg-[#00ff66] animate-ping" />
                     </div>
+                    <div className="h-1 w-full bg-black/50 rounded-full overflow-hidden">
+                       <div className="h-full bg-[#00ff66] w-full animate-[pulse_2s_ease-in-out_infinite]" />
+                    </div>
+                    <p className="text-[10px] text-neutral-500 mt-3 font-mono">Status: ONLINE | Latency: 12ms</p>
                  </div>
-                 <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
-                    <video src="/videos/demo2.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
-                    <div className="p-4 border-t border-white/5">
-                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">Tensor Synthetic Outbound Node</p>
+                 <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 backdrop-blur-md p-6">
+                    <div className="flex items-center justify-between mb-4">
+                       <p className="text-xs font-bold uppercase tracking-widest text-white">Tensor Synthetic Outbound</p>
+                       <span className="w-2 h-2 rounded-full bg-neutral-500 animate-pulse" />
                     </div>
+                    <div className="h-1 w-full bg-black/50 rounded-full overflow-hidden">
+                       <div className="h-full bg-neutral-500 w-[85%]" />
+                    </div>
+                    <p className="text-[10px] text-neutral-500 mt-3 font-mono">Status: STANDBY | Dialing...</p>
                  </div>
-                 <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
-                    <video src="/videos/demo3.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
-                    <div className="p-4 border-t border-white/5">
-                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NVIDIA Cosmos VLM API</p>
+                 <div className="rounded-2xl border border-[#00ff66]/20 bg-[#00ff66]/5 backdrop-blur-md p-6 shadow-[0_0_40px_rgba(0,255,102,0.05)]">
+                    <div className="flex items-center justify-between mb-4">
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#00ff66]">NVIDIA Cosmos VLM</p>
+                       <span className="w-2 h-2 rounded-full bg-[#00ff66] animate-ping" />
                     </div>
+                    <div className="h-1 w-full bg-black/50 rounded-full overflow-hidden">
+                       <div className="h-full bg-[#00ff66] w-full animate-[pulse_1.5s_ease-in-out_infinite]" />
+                    </div>
+                    <p className="text-[10px] text-neutral-500 mt-3 font-mono">Status: SYNCED | Vision: Active</p>
                  </div>
               </div>
              <AIDemoShowcase />
