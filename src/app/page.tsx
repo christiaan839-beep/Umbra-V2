@@ -64,19 +64,21 @@ export default function Home() {
     <div className={`min-h-screen bg-black text-white selection:bg-white/20 font-sans transition-opacity duration-700 ${showSite ? 'opacity-100' : 'opacity-0'}`}>
       
       {/* Navigation */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-black/50 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-6 inset-x-0 z-50 flex justify-center px-6 pointer-events-none">
+         <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_0_80px_rgba(255,255,255,0.05)] rounded-full px-8 h-16 flex items-center justify-between gap-12 pointer-events-auto max-w-5xl w-full">
           <div className="flex items-center gap-3">
-            <SovereignLogo size="md" />
-            <span className="text-xl font-bold tracking-[0.2em] uppercase text-white font-serif">Sovereign Matrix</span>
+            <SovereignLogo size="sm" />
+            <span className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white font-serif">Sovereign Matrix</span>
           </div>
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-6">
-             <Link href="/pricing" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors">Proof of Work</Link>
+          <div className="hidden md:flex items-center gap-8">
+             <Link href="/pricing" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Proof of Work</Link>
              <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
-               <button className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors">Client Login</button>
+               <button className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Client Login</button>
              </SignInButton>
-             <Link href="/pricing" className="px-5 py-2 rounded-full border border-white/10 bg-white/5 text-sm font-bold text-white hover:bg-white/10 transition-colors">Start Free Trial</Link>
+             <Link href="/pricing" className="px-6 py-2.5 rounded-full border border-white/10 bg-white text-[10px] font-bold tracking-widest text-black uppercase hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+               Initialize Control
+             </Link>
           </div>
           {/* Mobile hamburger */}
           <button className="md:hidden flex flex-col gap-1.5 p-2" onClick={() => setMobileNavOpen(!mobileNavOpen)} aria-label="Toggle menu">
@@ -85,14 +87,15 @@ export default function Home() {
             <span className={`w-6 h-0.5 bg-white transition-all ${mobileNavOpen ? '-rotate-45 -translate-y-2' : ''}`} />
           </button>
         </div>
+
         {/* Mobile dropdown */}
         {mobileNavOpen && (
-          <div className="md:hidden bg-black/95 backdrop-blur-2xl border-t border-white/5 px-6 py-6 flex flex-col gap-4 animate-fade-in">
-            <Link href="/pricing" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Proof of Work</Link>
+          <div className="absolute top-24 left-6 right-6 p-6 rounded-2xl md:hidden bg-black/95 backdrop-blur-2xl border border-white/10 flex flex-col gap-4 animate-fade-in pointer-events-auto">
+            <Link href="/pricing" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Proof of Work</Link>
             <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
-              <button className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors text-left" onClick={() => setMobileNavOpen(false)}>Client Login</button>
+              <button className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors text-left" onClick={() => setMobileNavOpen(false)}>Client Login</button>
             </SignInButton>
-            <Link href="/pricing" className="px-5 py-3 rounded-full border border-white/10 bg-white/5 text-sm font-bold text-white text-center hover:bg-white/10 transition-colors" onClick={() => setMobileNavOpen(false)}>Start Free Trial</Link>
+            <Link href="/pricing" className="px-5 py-4 rounded-xl border border-white/10 bg-white text-xs font-bold uppercase tracking-widest text-black text-center hover:bg-neutral-200 transition-colors mt-4" onClick={() => setMobileNavOpen(false)}>Initialize Control</Link>
           </div>
         )}
       </nav>
