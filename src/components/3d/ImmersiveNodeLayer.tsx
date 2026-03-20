@@ -44,8 +44,8 @@ function ParticleSwarm() {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.015}
-          color="#10B981"
+          size={0.018}
+          color="#34D399"
           transparent
           opacity={0.6}
           depthWrite={false}

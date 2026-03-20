@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { CheckCircle2, X as XIcon, Zap, Crown, Server, ArrowRight, Shield, ShieldAlert, Loader2, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SovereignLogo } from "@/components/ui/SovereignLogo";
 
 export function Pricing() {
   const tiers = [
@@ -138,7 +139,10 @@ export function Pricing() {
 
   return (
     <div className="w-full max-w-7xl mx-auto py-24 px-6 relative z-10">
-      <div className="text-center mb-16">
+      <div className="text-center mb-16 flex flex-col items-center">
+        <div className="mb-6 animate-[pulse_4s_ease-in-out_infinite]">
+           <SovereignLogo size="lg" />
+        </div>
         <h2 className="text-4xl md:text-5xl font-bold text-white serif-text mb-6">Enterprise Architecture.</h2>
         <p className="text-neutral-400 max-w-2xl mx-auto">
           Scale your autonomous agency instantly. Deploy a node, authorize an array, or initialize a cartel.

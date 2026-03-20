@@ -70,7 +70,7 @@ export default function Home() {
          <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_0_80px_rgba(255,255,255,0.05)] rounded-full px-8 h-16 flex items-center justify-between gap-12 pointer-events-auto max-w-5xl w-full">
           <Link href="/" className="flex items-center gap-3 group cursor-pointer">
             <SovereignLogo size="sm" />
-            <span className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white font-serif group-hover:text-neutral-300 transition-colors">Sovereign Matrix</span>
+            <span className="hidden sm:block text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white font-serif group-hover:text-neutral-300 transition-colors">Sovereign Matrix</span>
           </Link>
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
@@ -164,19 +164,19 @@ export default function Home() {
                  <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
                     <video src="/videos/demo1.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
                     <div className="p-4 border-t border-white/5">
-                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NemoClaw Scraping Node</p>
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NIMO Audio-To-Face Generation</p>
                     </div>
                  </div>
                  <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
                     <video src="/videos/demo2.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
                     <div className="p-4 border-t border-white/5">
-                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NVIDIA KiloClaw Analytics</p>
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">Tensor Synthetic Outbound Node</p>
                     </div>
                  </div>
                  <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
                     <video src="/videos/demo3.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
                     <div className="p-4 border-t border-white/5">
-                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">OpenClaw Telemetry UI</p>
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NVIDIA Cosmos VLM API</p>
                     </div>
                  </div>
               </div>
