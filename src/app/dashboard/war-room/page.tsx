@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Swords, Brain, Zap, Terminal, ShieldAlert, CheckCircle2, Play } from "lucide-react";
+import { Swords, Brain, Zap, Terminal, ShieldAlert, CheckCircle2, Play, Network, Eye, Crosshair } from "lucide-react";
 
 export default function WarRoomColosseum() {
   const [topic, setTopic] = useState("Cold Outreach Campaign for B2B SaaS");
   const [status, setStatus] = useState<"idle" | "debating" | "consensus">("idle");
-  const [messages, setMessages] = useState<Array<{ agent: "DeepSeek" | "Llama"; text: string }>>([]);
+  const [messages, setMessages] = useState<Array<{
+    agent: "Nemotron" | "Llama" | "Kosmos" | "DeepSeek";
+    text: string;
+  }>>([]);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const startDebate = () => {
     setStatus("debating");
@@ -16,23 +27,23 @@ export default function WarRoomColosseum() {
     const debateScript = [
       {
         agent: "DeepSeek",
-        text: "STRATEGY: We must target Series A SaaS founders using a purely logic-based approach. The hook should leverage their burn rate, offering our AI integration as an operational cost-cutter. We should not use flashy sales copy. Direct math wins."
+        text: "STRATEGY: Target Series A SaaS founders using a logic-based math hook. The angle should leverage high burn rate, pitching the Sovereign Swarm as an operational cost-cutter without flashy sales copy."
       },
       {
         agent: "Llama",
-        text: "RED TEAM: Flawed premise. Series A founders are actively spending to acquire growth, not just cut costs. If we pitch pure cost-cutting, we sound like an accounting tool, not a growth engine. We must position the AI integration as a revenue multiplier that bypasses the need for bloated sales teams."
+        text: "RED TEAM: Flawed premise. Series A founders are actively spending to acquire growth, not cut costs. If we pitch pure cost-cutting, we sound like cheap accounting software. Position AI as a revenue scaling multiplier."
       },
       {
-         agent: "DeepSeek",
-         text: "REVISION: Conceded. Cost-cutting is a secondary benefit. The primary vector will be top-line revenue generation without head-count scaling. I propose the following subject line: 'Scaling outbound without the SDR headcount bloat by Q3'."
+        agent: "Kosmos",
+        text: "VISUAL AUDIT: I have scraped the target's recent YouTube ads. They rely heavily on 'Fast Integration' messaging. We should counter their creative by mocking their slow deployment speed. 'Ubernatural takes 24 hours. We take 4 minutes.'"
       },
       {
-         agent: "Llama",
-         text: "RED TEAM: That subject line is generic and lacks urgency. Q3 is too far away. Revised subject line: 'Replace your next 3 SDR hires with an AI swarm (Available to deploy Tuesday)'."
+         agent: "Nemotron",
+         text: "SYNTHESIS: DeepSeek provides the math vector. Llama provides the growth psychology. Kosmos provides the competitor visual weakness. I am fusing these data points into the ultimate strike vector."
       },
       {
-         agent: "DeepSeek",
-         text: "CONSENSUS: The revised subject line hits emotional urgency, specifies the mechanism (AI swarm), and provides a concrete timeline. We will route this finalized framework to the n8n outbound orchestrator."
+         agent: "Nemotron",
+         text: "CONSENSUS DEPLOYMENT:\nSubject Line: 'Scale SDR throughput by 400% in 4 minutes (Not 24 hours)'\nMechanism: AI Swarm integration generating top-line revenue.\nAction: Queuing payload to n8n outbound logic core."
       }
     ];
 
@@ -40,104 +51,128 @@ export default function WarRoomColosseum() {
     debateScript.forEach((msg, idx) => {
       delay += 2500;
       setTimeout(() => {
-        setMessages(prev => [...prev, msg as { agent: "DeepSeek" | "Llama"; text: string }]);
+        setMessages(prev => [...prev, msg as any]);
         if (idx === debateScript.length - 1) {
-          setTimeout(() => setStatus("consensus"), 1000);
+          setTimeout(() => setStatus("consensus"), 1500);
         }
       }, delay);
     });
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto min-h-screen bg-[#050505] text-white">
+    <div className="p-8 max-w-7xl mx-auto min-h-screen bg-[#050505] text-white overflow-hidden relative">
+      {/* Background WebGL-style Glows */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(99,102,241,0.05),transparent_70%)] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,183,255,0.03),transparent_70%)] rounded-full blur-3xl pointer-events-none" />
+
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-10 relative z-10">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
-          <Swords className="w-3 h-3" /> Multi-Agent Colosseum
+          <Swords className="w-3 h-3" /> 4-Node NVIDIA Protocol
         </div>
-        <h1 className="text-3xl font-bold font-sans tracking-tight mb-2 flex items-center gap-3">
-          The Strategy War Room
+        <h1 className="text-4xl font-bold font-sans tracking-tight mb-2 flex items-center gap-3">
+          Multi-Agent War Room
         </h1>
-        <p className="text-sm text-neutral-400 max-w-2xl">
-          Deploy DeepSeek-R1 (Master Strategist) against Llama-3.3-70B (Red Team Challenger). They will autonomously debate your topic, identify flaws in logic, and reach an optimal, battle-tested consensus before running the campaign.
+        <p className="text-sm text-neutral-400 max-w-3xl leading-relaxed">
+          Input your target vector. Four highly specialized, open-weights AI models will physically debate each other in real-time. The Master Strategist, Red Team Challenger, Visual Auditor, and Orchestrator will identify logic flaws and synthesize the ultimate, battle-tested consensus before execution.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Col: Setup */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="rounded-2xl bg-white/[0.02] border border-white/10 p-6 backdrop-blur-md">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
+        {/* Left Col: Setup & Nodes */}
+        <div className="lg:col-span-4 flex flex-col gap-6">
+          {/* Directive Input Form */}
+          <div className="rounded-2xl bg-white/[0.02] border border-white/10 p-6 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
             <h3 className="text-xs font-bold uppercase tracking-widest text-neutral-300 mb-6 flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-indigo-400" /> War Room Directive
+              <Crosshair className="w-4 h-4 text-rose-500" /> Target Directive
             </h3>
-            
-            <div className="space-y-4">
-               <div>
-                  <label className="text-[10px] text-neutral-500 uppercase tracking-widest font-bold mb-2 block">Campaign / Topic Directive</label>
-                  <textarea 
-                    rows={4}
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-sm text-white focus:border-indigo-500/50 outline-none"
-                    placeholder="E.g., Design a LinkedIn outreach sequence for high-ticket closing..."
-                  />
-               </div>
-            </div>
-
+            <textarea 
+              rows={3}
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-white focus:border-indigo-500/50 outline-none resize-none transition-colors"
+              placeholder="E.g., Design a LinkedIn outreach sequence..."
+            />
             <button 
               onClick={startDebate}
               disabled={status === "debating" || !topic}
-              className="w-full mt-6 py-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-indigo-500/20 text-indigo-400 border-indigo-500/30 hover:bg-indigo-500/30 shadow-[0_0_20px_rgba(99,102,241,0.15)]"
+              className="w-full mt-6 py-4 rounded-xl border flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-indigo-600/20 to-rose-600/20 text-white border-white/10 hover:border-white/20 hover:shadow-[0_0_30px_rgba(99,102,241,0.2)]"
             >
-              <Swords className="w-4 h-4" /> Initiate Debate Sequence
+              <Swords className="w-4 h-4" /> Initiate 4-Node Debate
             </button>
           </div>
 
+          {/* 4 Node Grid */}
           <div className="grid grid-cols-2 gap-4">
-             {/* DeepSeek Indicator */}
-             <div className={`rounded-2xl border p-4 text-center transition-all ${status === 'debating' && messages.length % 2 === 0 ? 'border-[#00B7FF]/50 bg-[#00B7FF]/10 shadow-[0_0_15px_rgba(0,183,255,0.2)]' : 'border-white/10 bg-white/[0.02]'}`}>
-                <Brain className={`w-8 h-8 mx-auto mb-2 ${status === 'debating' && messages.length % 2 === 0 ? 'text-[#00B7FF] animate-pulse' : 'text-neutral-500'}`} />
+             <motion.div 
+               className={`rounded-2xl border p-5 flex flex-col items-center justify-center text-center transition-all duration-500 ${status === 'debating' && messages.find(m => m.agent === 'DeepSeek') && !messages.find(m => m.agent === 'Nemotron') ? 'border-indigo-500/50 bg-indigo-500/10 shadow-[0_0_20px_rgba(99,102,241,0.2)]' : 'border-white/5 bg-white/[0.01]'}`}
+             >
+                <Terminal className={`w-8 h-8 mb-3 ${status === 'debating' && !messages.find(m => m.agent === 'Nemotron') ? 'text-indigo-400 animate-pulse' : 'text-neutral-600'}`} />
                 <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">DeepSeek-R1</h4>
-                <p className="text-[9px] text-[#00B7FF]/70 font-mono uppercase">Master Strategist</p>
-             </div>
+                <p className="text-[9px] text-indigo-400/80 font-mono uppercase">Strategist</p>
+             </motion.div>
 
-             {/* Llama Indicator */}
-             <div className={`rounded-2xl border p-4 text-center transition-all ${status === 'debating' && messages.length % 2 === 1 ? 'border-rose-500/50 bg-rose-500/10 shadow-[0_0_15px_rgba(244,63,94,0.2)]' : 'border-white/10 bg-white/[0.02]'}`}>
-                <Zap className={`w-8 h-8 mx-auto mb-2 ${status === 'debating' && messages.length % 2 === 1 ? 'text-rose-400 animate-pulse' : 'text-neutral-500'}`} />
-                <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">Llama 3.3 70B</h4>
-                <p className="text-[9px] text-rose-400/70 font-mono uppercase">Red Team Challenger</p>
-             </div>
+             <motion.div 
+               className={`rounded-2xl border p-5 flex flex-col items-center justify-center text-center transition-all duration-500 ${status === 'debating' && messages.find(m => m.agent === 'Llama') && !messages.find(m => m.agent === 'Nemotron') ? 'border-amber-500/50 bg-amber-500/10 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : 'border-white/5 bg-white/[0.01]'}`}
+             >
+                <ShieldAlert className={`w-8 h-8 mb-3 ${status === 'debating' && !messages.find(m => m.agent === 'Nemotron') ? 'text-amber-400 animate-pulse' : 'text-neutral-600'}`} />
+                <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">Llama 3.3</h4>
+                <p className="text-[9px] text-amber-400/80 font-mono uppercase">Red Team</p>
+             </motion.div>
+
+             <motion.div 
+               className={`rounded-2xl border p-5 flex flex-col items-center justify-center text-center transition-all duration-500 ${status === 'debating' && messages.find(m => m.agent === 'Kosmos') && !messages.find(m => m.agent === 'Nemotron') ? 'border-pink-500/50 bg-pink-500/10 shadow-[0_0_20px_rgba(236,72,153,0.2)]' : 'border-white/5 bg-white/[0.01]'}`}
+             >
+                <Eye className={`w-8 h-8 mb-3 ${status === 'debating' && !messages.find(m => m.agent === 'Nemotron') ? 'text-pink-400 animate-pulse' : 'text-neutral-600'}`} />
+                <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">Kosmos-2</h4>
+                <p className="text-[9px] text-pink-400/80 font-mono uppercase">Visual Scraper</p>
+             </motion.div>
+
+             <motion.div 
+               className={`rounded-2xl border p-5 flex flex-col items-center justify-center text-center transition-all duration-500 ${status === 'consensus' || messages.find(m => m.agent === 'Nemotron') ? 'border-[#00B7FF]/70 bg-[#00B7FF]/10 shadow-[0_0_30px_rgba(0,183,255,0.3)]' : 'border-white/5 bg-white/[0.01]'}`}
+             >
+                <Network className={`w-8 h-8 mb-3 ${status === 'consensus' || messages.find(m => m.agent === 'Nemotron') ? 'text-[#00B7FF] animate-pulse drop-shadow-[0_0_10px_rgba(0,183,255,0.8)]' : 'text-neutral-600'}`} />
+                <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">Nemotron 340B</h4>
+                <p className="text-[9px] text-[#00B7FF]/80 font-mono uppercase">Synthesis Core</p>
+             </motion.div>
           </div>
         </div>
 
-        {/* Right Col: The Debate Stream */}
+        {/* Right Col: The Output Stream */}
         <div className="lg:col-span-8">
-           <div className="h-full min-h-[500px] flex flex-col rounded-2xl bg-black border border-white/10 overflow-hidden shadow-[0_0_50px_rgba(99,102,241,0.05)]">
-               <div className="h-12 border-b border-white/10 bg-white/[0.02] flex items-center justify-between px-4">
-                  <div className="flex items-center gap-2">
-                    <ShieldAlert className="w-4 h-4 text-indigo-400" />
-                    <span className="text-[10px] font-mono text-indigo-400/80 tracking-widest uppercase">Live Dual-Stream Telemetry</span>
+           <div className="h-full min-h-[600px] flex flex-col rounded-3xl bg-[#080808] border border-white/5 overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+               <div className="h-14 border-b border-white/5 bg-white/[0.01] flex items-center justify-between px-6 backdrop-blur-md">
+                  <div className="flex items-center gap-3">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-rose-500/50" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500/50" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50" />
+                    </div>
+                    <span className="ml-2 text-[10px] font-mono text-neutral-500 tracking-[0.2em] uppercase">Multi-Thread Synapse Console</span>
                   </div>
                   {status === "debating" && (
-                     <div className="flex items-center gap-2 text-[9px] text-red-400 font-mono focus:outline-none uppercase tracking-widest font-bold">
-                        <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" /> Live Debate
+                     <div className="flex items-center gap-2 text-[10px] text-rose-500 font-mono focus:outline-none uppercase tracking-widest font-bold">
+                        <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" /> Calculating...
                      </div>
                   )}
                   {status === "consensus" && (
-                    <div className="flex items-center gap-2 text-[9px] text-emerald-400 font-mono focus:outline-none uppercase tracking-widest font-bold">
-                       <CheckCircle2 className="w-3 h-3" /> Consensus Reached
+                    <div className="flex items-center gap-2 text-[10px] text-[#00B7FF] font-mono focus:outline-none uppercase tracking-widest font-bold">
+                       <CheckCircle2 className="w-3.5 h-3.5" /> Consensus Achieved
                     </div>
                   )}
                </div>
 
-               <div className="p-6 flex-1 overflow-y-auto space-y-6 custom-scrollbar bg-[url('/noise.png')] bg-repeat opacity-95">
+               <div 
+                 ref={scrollRef}
+                 className="p-6 lg:p-10 flex-1 overflow-y-auto space-y-8 custom-scrollbar bg-[url('/noise.png')] bg-repeat opacity-95"
+               >
                   {messages.length === 0 && status === "idle" && (
-                    <div className="h-full flex items-center justify-center text-center">
-                       <p className="text-neutral-600 font-mono text-xs uppercase tracking-widest">
-                         Awaiting Topic Directive...<br/><br/>
-                         DeepSeek will generate primary logic.<br/>
-                         Llama will attack vulnerabilities.<br/>
-                         Consensus output routes to automation pipeline.
+                    <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
+                       <Network className="w-16 h-16 text-neutral-600 mb-6" />
+                       <p className="text-neutral-500 font-mono text-xs uppercase tracking-[0.2em] leading-loose">
+                         War Room Standby.<br/>
+                         Awaiting Target Directive initialization.<br/>
+                         CUDA Cores: Green.
                        </p>
                     </div>
                   )}
@@ -146,48 +181,35 @@ export default function WarRoomColosseum() {
                      {messages.map((msg, i) => (
                         <motion.div 
                           key={i}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className={`flex gap-4 ${msg.agent === "Llama" ? "flex-row-reverse" : "flex-row"}`}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          className="flex flex-col gap-2"
                         >
-                           <div className="flex-shrink-0">
-                             {msg.agent === "DeepSeek" ? (
-                               <div className="w-10 h-10 rounded-xl bg-[#00B7FF]/10 border border-[#00B7FF]/30 flex items-center justify-center shadow-[0_0_15px_rgba(0,183,255,0.2)]">
-                                  <Brain className="w-5 h-5 text-[#00B7FF]" />
-                               </div>
-                             ) : (
-                               <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(244,63,94,0.2)]">
-                                  <Zap className="w-5 h-5 text-rose-400" />
-                               </div>
-                             )}
+                           <div className="flex items-center gap-2">
+                              <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${msg.agent === 'DeepSeek' ? 'text-indigo-400' : msg.agent === 'Llama' ? 'text-amber-400' : msg.agent === 'Kosmos' ? 'text-pink-400' : 'text-[#00B7FF]'}`}>
+                                {msg.agent} Terminal
+                              </span>
+                              <div className="h-px flex-1 bg-white/5" />
+                              <span className="text-[8px] font-mono text-neutral-600">0.0{i * 12 + 6}ms</span>
                            </div>
                            
-                           <div className={`max-w-[80%] rounded-xl p-4 border ${
-                             msg.agent === "DeepSeek" 
-                               ? msg.text.startsWith("CONSENSUS:") 
-                                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-100 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-                                  : "bg-[#00B7FF]/5 border-[#00B7FF]/20 text-blue-100" 
-                               : "bg-rose-500/5 border-rose-500/20 text-rose-100"
+                           <div className={`rounded-xl p-5 border backdrop-blur-sm ${
+                             msg.agent === "Nemotron" && msg.text.includes("CONSENSUS DEPLOYMENT")
+                               ? "bg-[#00B7FF]/10 border-[#00B7FF]/50 text-white shadow-[0_0_30px_rgba(0,183,255,0.15)]"
+                               : "bg-white/[0.02] border-white/5 text-neutral-200"
                            }`}>
-                              <span className={`text-[10px] font-bold uppercase tracking-widest block mb-2 ${
-                                msg.agent === "DeepSeek" 
-                                   ? msg.text.startsWith("CONSENSUS:") ? "text-emerald-400" : "text-[#00B7FF]"
-                                   : "text-rose-400"
-                              }`}>
-                                {msg.agent === "DeepSeek" 
-                                  ? msg.text.startsWith("CONSENSUS:") ? "DeepSeek (Consensus Protocol)" : "DeepSeek (Master Strategist)" 
-                                  : "Llama 3.3 (Red Team Challenge)"}
-                              </span>
-                              <p className="text-sm leading-relaxed font-mono whitespace-pre-wrap">{msg.text}</p>
+                              <p className="text-sm leading-relaxed font-mono whitespace-pre-wrap">
+                                {msg.text}
+                              </p>
                            </div>
                         </motion.div>
                      ))}
                   </AnimatePresence>
 
                   {status === "consensus" && (
-                    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mt-8">
-                       <button className="w-full py-4 rounded-xl border border-emerald-500/50 bg-emerald-500/10 text-emerald-400 flex items-center justify-center gap-3 font-bold uppercase tracking-widest hover:bg-emerald-500/20 transition-all shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                         <Play className="w-5 h-5" /> Execute Consensus via n8n
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="pt-8">
+                       <button className="w-full py-5 rounded-2xl bg-white text-black flex items-center justify-center gap-3 font-bold uppercase tracking-[0.2em] text-xs hover:bg-neutral-200 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+                         <Play className="w-4 h-4 fill-black" /> Transmit to n8n Queue
                        </button>
                     </motion.div>
                   )}
