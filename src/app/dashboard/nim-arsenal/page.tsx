@@ -11,6 +11,7 @@ const TIER_CONFIG: Record<number, { label: string; color: string; icon: React.El
   5: { label: "Code Generation", color: "#A855F7", icon: Code },
   6: { label: "RAG & Embeddings", color: "#FACC15", icon: Database },
   7: { label: "Specialized", color: "#06B6D4", icon: Sparkles },
+  8: { label: "Frontier Free", color: "#F472B6", icon: Zap },
 };
 
 const MODELS = [
@@ -45,6 +46,13 @@ const MODELS = [
   { key: "usdcode", name: "USD Code", tier: 7, desc: "3D scene generation via OpenUSD" },
   { key: "nv-dinov2", name: "NV-DINOv2", tier: 7, desc: "Visual embeddings for image search" },
   { key: "grounding-dino", name: "Grounding DINO", tier: 7, desc: "Zero-shot object detection" },
+  { key: "glm-4.7", name: "GLM-4.7", tier: 8, desc: "#1 ranked multilingual agentic coding model" },
+  { key: "step-3.5-flash", name: "Step 3.5 Flash (200B)", tier: 8, desc: "200B reasoning engine with sparse MoE" },
+  { key: "kimi-k2", name: "Kimi K2 Instruct", tier: 8, desc: "Strong reasoning, coding, 256k context" },
+  { key: "qwq-32b", name: "QwQ-32B Reasoning", tier: 8, desc: "Powerful reasoning for hard problems" },
+  { key: "phi-4-multimodal", name: "Phi-4 Multimodal", tier: 8, desc: "Multimodal reasoning from image + audio" },
+  { key: "seed-oss-36b", name: "ByteDance SEED 36B", tier: 8, desc: "Long-context agentic intelligence" },
+  { key: "magistral-small", name: "Magistral Small", tier: 8, desc: "Efficient reasoning for edge deployment" },
 ];
 
 export default function NimArsenalPage() {

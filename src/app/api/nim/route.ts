@@ -289,6 +289,66 @@ const AVAILABLE_MODELS = {
     description: "Open vocabulary zero-shot object detection model for identifying anything in images.",
     endpoint: "/chat/completions",
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // TIER 8 — FRONTIER FREE MODELS (RECENTLY ADDED)
+  // ═══════════════════════════════════════════════════════════
+  "glm-4.7": {
+    id: "z-ai/glm-4.7",
+    name: "GLM-4.7",
+    category: "Frontier Free",
+    tier: 8,
+    description: "Multilingual agentic coding partner with stronger reasoning, tool use, and UI skills.",
+    endpoint: "/chat/completions",
+  },
+  "step-3.5-flash": {
+    id: "stepfun-ai/step-3.5-flash",
+    name: "Step 3.5 Flash (200B)",
+    category: "Frontier Free",
+    tier: 8,
+    description: "200B open-source reasoning engine with sparse MoE powering frontier agentic AI.",
+    endpoint: "/chat/completions",
+  },
+  "kimi-k2": {
+    id: "moonshotai/kimi-k2-instruct",
+    name: "Kimi K2 Instruct",
+    category: "Frontier Free",
+    tier: 8,
+    description: "State-of-the-art open MoE model with strong reasoning, coding, and agentic capabilities.",
+    endpoint: "/chat/completions",
+  },
+  "qwq-32b": {
+    id: "qwen/qwq-32b",
+    name: "QwQ-32B Reasoning",
+    category: "Frontier Free",
+    tier: 8,
+    description: "Powerful reasoning model for hard problems in coding, math, and downstream tasks.",
+    endpoint: "/chat/completions",
+  },
+  "phi-4-multimodal": {
+    id: "microsoft/phi-4-multimodal-instruct",
+    name: "Phi-4 Multimodal",
+    category: "Frontier Free",
+    tier: 8,
+    description: "Cutting-edge open multimodal model excelling in reasoning from image and audio inputs.",
+    endpoint: "/chat/completions",
+  },
+  "seed-oss-36b": {
+    id: "bytedance/seed-oss-36b-instruct",
+    name: "ByteDance SEED 36B",
+    category: "Frontier Free",
+    tier: 8,
+    description: "ByteDance open-source LLM with long-context, reasoning, and agentic intelligence.",
+    endpoint: "/chat/completions",
+  },
+  "magistral-small": {
+    id: "mistralai/magistral-small-2506",
+    name: "Magistral Small",
+    category: "Frontier Free",
+    tier: 8,
+    description: "High performance reasoning model optimized for efficiency and edge deployment.",
+    endpoint: "/chat/completions",
+  },
 };
 
 export async function GET() {
