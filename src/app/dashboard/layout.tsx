@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
   Layers, Globe2, Network,
-  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database, Headphones, FileVideo, Cuboid, Briefcase, Radar, RefreshCcw, Hexagon, ScanEye
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database, Headphones, FileVideo, Cuboid, Briefcase, Radar, RefreshCcw, Hexagon, ScanEye, Ghost, Zap, CircuitBoard, Crosshair
 } from "lucide-react";
 // Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
@@ -69,6 +69,8 @@ const NAV_GROUPS = [
       { href: "/dashboard/deepfake-studio", label: "Executive Deepfake", icon: FileVideo },
       { href: "/dashboard/visual-studio", label: "Sovereign Visual Studio", icon: Palette },
       { href: "/dashboard/edify-forge", label: "Edify 3D Forge", icon: Cuboid },
+      { href: "/dashboard/holographic-agent", label: "Holographic Agent", icon: CircuitBoard },
+      { href: "/dashboard/ghost-protocol", label: "Ghost Protocol", icon: Ghost },
     ]
   },
   {
@@ -84,6 +86,8 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard/god-eye", label: "God-Eye Spatial Array", icon: ScanEye },
       { href: "/dashboard/morpheus-shield", label: "Morpheus Shield", icon: Hexagon },
+      { href: "/dashboard/nim-arsenal", label: "NIM Arsenal", icon: Zap },
+      { href: "/dashboard/omnipresence", label: "Omnipresence Engine", icon: Crosshair },
     ]
   },
   {
