@@ -1,27 +1,23 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import twilio from "twilio";
 
-// ⚡ BULLETPROOF EDGE API: Serverless, cold-start immune, massively scalable.
-export const runtime = "edge";
+// Default Serverless Node.js Runtime (Required for Twilio SDK execution)
 
 // Zod Schema physically guarantees malformed Python data cannot crash the Postgres DB
 const leadSchema = z.object({
   name: z.string().min(2),
-  title: z.string(),
-  company: z.string(),
-  email: z.string().email(),
+  phone: z.string(),
+  planId: z.string().optional(),
+  title: z.string().optional(),
+  company: z.string().optional(),
+  email: z.string().email().optional(),
   linkedin: z.string().optional()
 });
 
 export async function POST(req: Request) {
   try {
-    // Node Authentication (Prevents unauthorized POST attacks)
-    const auth = req.headers.get("authorization");
-    const serverSecret = process.env.SOVEREIGN_NODE_KEY || "mock_key_cartel";
-    
-    if (auth !== `Bearer ${serverSecret}`) {
-       return new NextResponse(JSON.stringify({ error: "UNAUTHORIZED_NODE" }), { status: 401 });
-    }
+    // Node Authentication intentionally bypassed for public Client-Side initiation from Pricing component.
 
     const rawData = await req.json();
     
@@ -33,6 +29,24 @@ export async function POST(req: Request) {
     // 2. await resend.emails.send({ to: lead.email, subject: "Hyper-personalized line generated via Nemotron" });
     
     console.log(`[VERCEL EDGE] Securely ingested Executive Lead: ${lead.email} from ${lead.company}`);
+
+    // ⚡ THE KILOCLAW SENTINEL DIALER LOGIC
+    // If the lead provided a phone number, physically call them in 3 seconds.
+    if (lead.phone && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+       const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+       const myTwilioNumber = process.env.TWILIO_PHONE_NUMBER || "+15550000000";
+       
+       try {
+         await client.calls.create({
+           url: `https://sovereignmatrix.agency/api/webhooks/twilio/voice?name=${encodeURIComponent(lead.name)}`,
+           to: lead.phone,
+           from: myTwilioNumber,
+         });
+         console.log(`[SENTINEL_DIALER] Outbound Zero-Second Call Initiated to ${lead.phone}`);
+       } catch (dialError) {
+         console.error("[SENTINEL_DIALER] Twilio Dispatch Failure:", dialError);
+       }
+    }
 
     return NextResponse.json({ success: true, processed: lead.email }, { status: 200 });
     
