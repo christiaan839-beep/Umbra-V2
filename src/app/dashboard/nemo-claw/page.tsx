@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cpu, Terminal, Sparkles, Activity, ShieldAlert, Zap, Send, BrainCircuit, Maximize, Lock, Globe, Power } from "lucide-react";
+import { AgentOrgMap } from "@/components/dashboard/AgentOrgMap";
 
 interface Message {
   role: "system" | "user" | "assistant";
@@ -321,8 +322,11 @@ export default function NemoClawPage() {
           </div>
 
         </div>
-
       </div>
+
+      {/* Agent Org Map Visualization */}
+      <AgentOrgMap />
+
     </div>
   );
 }

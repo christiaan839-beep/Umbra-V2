@@ -23,6 +23,7 @@ import { JarvisSocket } from '@/components/JarvisSocket';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { CinematicOnboarding } from '@/components/dashboard/CinematicOnboarding';
+import { LiveActivityConsole } from '@/components/dashboard/LiveActivityConsole';
 
 const NAV_GROUPS = [
   {
@@ -310,6 +311,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <JarvisSocket />
         </main>
+
+        {/* === LIVE ACTIVITY CONSOLE (CLAWPORT INSPIRED) === */}
+        <LiveActivityConsole />
 
         {/* === MOBILE BOTTOM NAV === */}
         <nav className="lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-black/70 backdrop-blur-3xl border border-white/10 rounded-2xl flex items-center justify-around p-3 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">

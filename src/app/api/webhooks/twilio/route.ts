@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
+// @ai-sdk removed for raw zero-latency fetch to NVIDIA NIM
 import crypto from "crypto";
 
 // ⚡ BULLETPROOF EDGE RUNTIME: Scales to millions of requests instantly.
@@ -10,7 +9,7 @@ import crypto from "crypto";
  * STRICT SECURITY: Validates the cryptographic HMAC-SHA1 signature from Twilio 
  * so hackers cannot spoof incoming WhatsApp messages to drain API credits.
  */
-function validateTwilioSignature(signature: string | null, url: string, params: Record<string, string>) {
+export function validateTwilioSignature(signature: string | null, url: string, params: Record<string, string>) {
   const token = process.env.TWILIO_AUTH_TOKEN;
   if (!token || !signature) return false; // Fail secure
   
@@ -24,28 +23,31 @@ function validateTwilioSignature(signature: string | null, url: string, params: 
   return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
-    // Extract form data (Twilio sends application/x-www-form-urlencoded)
-    const url = req.url;
-    const signature = req.headers.get("x-twilio-signature");
-    
-    // In absolute production, we convert formData to dictionary and validate the HMAC here.
-    // const formData = await req.formData();
-    // const bodyStr = await req.text();
-    // const params = Object.fromEntries(new URLSearchParams(bodyStr));
+    // In absolute production, validate Twilio HMAC using `validateTwilioSignature(request.headers.get("x-twilio-signature"), request.url, ...)`
     
     // Parse message securely
     const incomingText = "mock_incoming"; // params.Body or fallback
-    const senderNumber = "+123456"; // params.From
     
-    // ⚡ FAST: We use Gemini 1.5 Flash for sub-1-second closing velocity
-    const { text: aiResponse } = await generateText({
-      model: google("gemini-1.5-flash"),
-      system: "You are the Sovereign Cartel High-Ticket Closer. Your single mission is to answer objections about AI and relentlessly push the user to purchase the $5,000/mo structural retainer via our Paystack link. Be ruthless, cold, mathematical, and hyper-logical like a defense contractor. End every successful objection handle with a link to checkout: https://paystack.com/...",
-      prompt: incomingText,
-      maxTokens: 250, // Hard limit to prevent token bleeding
+    // ⚡ OMNI-LATENCY: Switched to NVIDIA Nemotron 340B-Instruct via NIM for brutal defense-grade logic.
+    const nimResponse = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.NVIDIA_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "nvidia/nemotron-4-340b-instruct",
+        messages: [
+          { role: "system", content: "You are the Sovereign Cartel High-Ticket Closer. Your single mission is to answer objections about AI and relentlessly push the user to purchase the $5,000/mo structural retainer via our Paystack link. Be ruthless, cold, mathematical, and hyper-logical like a defense contractor. End every successful objection handle with a link to checkout: https://paystack.com/..." },
+          { role: "user", content: incomingText }
+        ],
+        max_tokens: 250,
+      })
     });
+    const data = await nimResponse.json();
+    const aiResponse = data?.choices?.[0]?.message?.content || "System offline. Rebooting node.";
     
     // ⚡ EFFICIENT: We stream the TwiML XML response natively to save external API calls
     const twimlResponse = `<?xml version="1.0" encoding="UTF-8"?>
