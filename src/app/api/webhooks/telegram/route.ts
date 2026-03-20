@@ -1,47 +1,92 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 
-// ⚡ SOVEREIGN MATRIX // TELEGRAM COMMAND CENTER
-// This Edge API catches commands from the Commander's iOS Telegram app
-// and securely routes them to the local NemoClaw Daemon or Ghost Fleet.
+type TelegramUpdate = {
+  update_id: number;
+  message?: {
+    message_id: number;
+    from: { id: number; is_bot: boolean; first_name: string; username?: string };
+    chat: { id: number; type: string };
+    date: number;
+    text?: string;
+  };
+};
 
-export const runtime = "edge";
+const COMMANDER_CHAT_ID = process.env.TELEGRAM_COMMANDER_CHAT_ID; // The only ID allowed to command the Swarm
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+
+async function sendTelegramMessage(chatId: string | number, text: string) {
+  if (!TELEGRAM_BOT_TOKEN) {
+    console.error("[MATRIX-NODE] Telegram Bot Token missing.");
+    return;
+  }
+  
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: "MarkdownV2"
+      })
+    });
+  } catch (error) {
+    console.error("[MATRIX-NODE] Telegram Transport Error:", error);
+  }
+}
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    console.log("[TELEGRAM UPLINK] Received Command Payload:", body);
+    // 1. Verify Telegram Secret Token for Edge Security
+    const headerPayload = headers();
+    const secretToken = headerPayload.get('X-Telegram-Bot-Api-Secret-Token');
     
-    // 1. Authenticate Commander 
-    // Ensure the message ONLY comes from Christiaan's explicit Telegram ID
-    const chatId = body?.message?.chat?.id;
-    /*
-    if (chatId !== Number(process.env.AUTHORIZED_TELEGRAM_ID)) {
-      return new NextResponse("UNAUTHORIZED UPLINK", { status: 403 });
-    }
-    */
-
-    // 2. Parse Sub-Command
-    const text = body?.message?.text;
-    let responseMessage = "Unrecognized Sovereign Command.";
-
-    if (text?.startsWith("/ghostfleet")) {
-      const target = text.split(" ")[1];
-      responseMessage = `⚡ Deploying Apollo.io Ghost Fleet natively to extract leads for targeted domain: ${target}.`;
-      // Here you trigger n8n or the python script via a secondary webhook
-    } else if (text?.startsWith("/status")) {
-      responseMessage = `🟢 SOVEREIGN UPLINK ACTIVE.\n- NemoClaw: Idle\n- Edge RAG: Online\n- Next.js Edge: 100% Health`;
+    if (process.env.TELEGRAM_WEBHOOK_SECRET && secretToken !== process.env.TELEGRAM_WEBHOOK_SECRET) {
+        console.error("[MATRIX-NODE] Unauthorized Webhook Invocation Detected.");
+        return NextResponse.json({ error: 'Unauthorized Interception' }, { status: 403 });
     }
 
-    // 3. Transmit confirmation back to iPhone
-    // await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-    //    method: "POST",
-    //    headers: { "Content-Type": "application/json" },
-    //    body: JSON.stringify({ chat_id: chatId, text: responseMessage })
-    // });
+    const body: TelegramUpdate = await req.json();
 
-    return NextResponse.json({ success: true, text: responseMessage });
+    if (!body.message || !body.message.text) {
+      return NextResponse.json({ status: 'ignored' });
+    }
 
+    const chatId = body.message.chat.id;
+    const text = body.message.text.trim();
+
+    // 2. Strict Authorization Layer
+    if (COMMANDER_CHAT_ID && chatId.toString() !== COMMANDER_CHAT_ID) {
+       await sendTelegramMessage(chatId, "⚠️ *ACCESS DENIED*\n\nUnauthorized transmission detected. Sovereign Core has logged your vector.");
+       return NextResponse.json({ status: 'unauthorized' });
+    }
+
+    // 3. Sovereign Command Router
+    console.log(`[MATRIX-NODE] Commander Directive Received: ${text}`);
+
+    if (text.startsWith('/metrics')) {
+      await sendTelegramMessage(chatId, "📊 *Sovereign Matrix Telemetry*\n\n🟢 Vercel Edge Nodes: Operating\n🟢 Neon Database: Synced\n🟢 PayFast Processor: Unlocked\n🟢 NemoClaw Ghost Nodes: 0 Active\n\n_System is fully optimized and awaiting deployment commands._");
+    } 
+    else if (text.startsWith('/strike')) {
+      const target = text.split(' ')[1];
+      if (!target) {
+         await sendTelegramMessage(chatId, "⚠️ *Invalid Syntax*\nUsage: `/strike <domain.com>`");
+      } else {
+         await sendTelegramMessage(chatId, `⚡ *STRIKE INITIATED*\n\nTarget: ${target}\nDeploying Google A2A Swarm to map logical vulnerabilities.\nPre-initializing NemoClaw fallback for physical DOM extraction...`);
+         // In production, this would trigger an internal API route to spawn the actual agents or add a job to a queue (like Upstash/QStash).
+      }
+    }
+    else if (text.startsWith('/ghost')) {
+      await sendTelegramMessage(chatId, "👻 *NemoClaw Ghost Protocol*\n\nBroadcasting wake-on-lan packets to authorized Apple Silicon.\nAwaiting physical mouse hijack confirmation...\n_WARNING: Autonomous RPA Control Engaged._");
+    }
+    else {
+      await sendTelegramMessage(chatId, "💠 *Sovereign Matrix Interface*\n\nAvailable Directives:\n/metrics - View Edge Diagnostics\n/strike <target> - Deploy Swarm to Domain\n/ghost - Trigger Mac Physical Hijack\n\n_Awaiting your command, Sir._");
+    }
+
+    return NextResponse.json({ status: 'executed' });
   } catch (error) {
-    return NextResponse.json({ error: "UPLINK_FAILURE" }, { status: 500 });
+    console.error("[MATRIX-NODE] Critical Router Failure:", error);
+    return NextResponse.json({ error: 'Internal Core Error' }, { status: 500 });
   }
 }

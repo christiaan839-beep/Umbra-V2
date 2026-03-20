@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Swords, Brain, Zap, Terminal, ShieldAlert, CheckCircle2, Play, Network, Eye, Crosshair } from "lucide-react";
+import { Swords, Terminal, ShieldAlert, CheckCircle2, Play, Network, Eye, Crosshair } from "lucide-react";
 
 export default function WarRoomColosseum() {
   const [topic, setTopic] = useState("Cold Outreach Campaign for B2B SaaS");
@@ -51,7 +51,7 @@ export default function WarRoomColosseum() {
     debateScript.forEach((msg, idx) => {
       delay += 2500;
       setTimeout(() => {
-        setMessages(prev => [...prev, msg as any]);
+        setMessages(prev => [...prev, msg as { agent: "Nemotron" | "Llama" | "Kosmos" | "DeepSeek"; text: string }]);
         if (idx === debateScript.length - 1) {
           setTimeout(() => setStatus("consensus"), 1500);
         }
