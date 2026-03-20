@@ -55,15 +55,37 @@ function ParticleSwarm() {
     </group>
   );
 }
+function WireframeCube() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x += delta * 0.1;
+      meshRef.current.rotation.y += delta * 0.15;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef}>
+      <boxGeometry args={[4.5, 4.5, 4.5]} />
+      <meshBasicMaterial 
+        color="#00ff66" 
+        wireframe={true} 
+        transparent 
+        opacity={0.05} 
+      />
+    </mesh>
+  );
+}
 
 export function ImmersiveNodeLayer() {
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
-       {/* Deep dark gradient over the 3D globe to make it look embedded in obsidian */}
        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10" />
        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] z-10 opacity-70" />
        
-       <Canvas camera={{ position: [0, 0, 4] }}>
+       <Canvas camera={{ position: [0, 0, 8] }}>
+         <ambientLight intensity={0.5} />
+         <WireframeCube />
          <ParticleSwarm />
        </Canvas>
     </div>
