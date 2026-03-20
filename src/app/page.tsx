@@ -122,13 +122,13 @@ export default function Home() {
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 mb-8 serif-text leading-[1.1] tracking-tight">
-            Chief Agent Officer.<br/>
-            <span className="text-neutral-400">Your Autonomous Agency.</span>
+            Transform Operations.<br/>
+            <span className="text-neutral-400">With Agentic AI.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-neutral-500 max-w-2xl mx-auto leading-relaxed mb-12">
-            Stop competing on labor. Productize your expertise into a $5,000/mo high-ticket retainer. 
-            The Sovereign Matrix runs 29 specialized agents 24/7—you just direct the swarm.
+            Explore the cutting-edge building blocks of AI agents designed to reason, plan, and act. 
+            The Sovereign Matrix runs open-source autonomous agents securely on your infrastructure.
           </p>
 
           <div className="mb-20">
@@ -153,12 +153,33 @@ export default function Home() {
 
           {/* Live Platform Demo Emulator */}
           <div className="w-full max-w-5xl mx-auto mb-20 mt-10">
-             <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-[#10B981] serif-text mb-4">Live Operations Demo</h2>
-                <p className="text-neutral-500 max-w-2xl mx-auto text-sm">
-                  Execute the Antigravity Code Engine, Google A2A Swarm Protocol, and NVIDIA Nemotron Voice models physically below.
-                </p>
-             </div>
+              <div className="text-center mb-10">
+                 <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-[#10B981] serif-text mb-4">Agentic AI Execution</h2>
+                 <p className="text-neutral-500 max-w-2xl mx-auto text-sm">
+                   Watch high-definition 30-second demonstrations of our NemoClaw and KiloClaw agents navigating complex logic seamlessly.
+                 </p>
+              </div>
+              {/* HD Video Console Array - Zero AI Slop */}
+              <div className="grid md:grid-cols-3 gap-6 mb-12">
+                 <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
+                    <video src="/videos/demo1.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
+                    <div className="p-4 border-t border-white/5">
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NemoClaw Scraping Node</p>
+                    </div>
+                 </div>
+                 <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
+                    <video src="/videos/demo2.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
+                    <div className="p-4 border-t border-white/5">
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">NVIDIA KiloClaw Analytics</p>
+                    </div>
+                 </div>
+                 <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/50 backdrop-blur-md shadow-[0_0_40px_rgba(16,185,129,0.05)]">
+                    <video src="/videos/demo3.mp4" autoPlay loop muted playsInline className="w-full h-[200px] object-cover opacity-80" />
+                    <div className="p-4 border-t border-white/5">
+                       <p className="text-xs font-bold uppercase tracking-widest text-[#10B981]">OpenClaw Telemetry UI</p>
+                    </div>
+                 </div>
+              </div>
              <AIDemoShowcase />
           </div>
 
@@ -246,8 +267,8 @@ export default function Home() {
         {/* Advanced Industry Override — The Extinction Sectors */}
         <div className="w-full max-w-7xl mx-auto relative z-10 mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 serif-text mb-4">Human Workforce Extinction.</h2>
-            <p className="text-neutral-500 max-w-2xl mx-auto">The Sovereign Matrix physically replaces SDR teams, design studios, and strategy consultants with zero latency.</p>
+             <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-[#10B981] serif-text mb-4">Run Autonomous Agents Safely.</h2>
+             <p className="text-neutral-500 max-w-2xl mx-auto">Sovereign Matrix leverages the NVIDIA open source stack to add absolute privacy and security controls to your enterprise data flywheel.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -279,9 +300,9 @@ export default function Home() {
       <section className="py-32 bg-black border-y border-white/5 px-6 relative">
          <div className="max-w-5xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-6">Stop Paying Retainers.</h2>
+              <h2 className="text-3xl md:text-5xl font-bold text-white serif-text mb-6">Trust Through Transparency.</h2>
               <p className="text-lg text-neutral-500 max-w-2xl mx-auto">
-                Why pay R15,000+ per month for slow, inconsistent operational work?
+                Bring trust and safety to everyday corporate execution using NVIDIA Agent Toolkit and OpenShell architecture.
               </p>
             </div>
 
