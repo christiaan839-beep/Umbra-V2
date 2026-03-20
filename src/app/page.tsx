@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, BrainCircuit, CheckCircle2, Cpu, Globe, Target, Zap, ShieldAlert, ChevronDown, XCircle, Clock, TrendingUp, DollarSign, MessageSquare } from "lucide-react";
+import { BrainCircuit, CheckCircle2, Cpu, Globe, Target, Zap, ShieldAlert, ChevronDown, XCircle, Clock, TrendingUp, DollarSign, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { SignInButton } from "@clerk/nextjs";
 import { useRef, useEffect, useState } from "react";
@@ -15,6 +15,7 @@ import { AnimatedVSL } from "@/components/ui/AnimatedVSL";
 import SovereignCalculator from "@/components/SovereignCalculator";
 import GodBrainTelemetry from "@/components/GodBrainTelemetry";
 import DeepfakeShowcase from "@/components/DeepfakeShowcase";
+import { InteractiveHeroStrike } from "@/components/ui/InteractiveHeroStrike";
 
 function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { end: number; suffix?: string; prefix?: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -66,10 +67,10 @@ export default function Home() {
       {/* Navigation */}
       <nav className="fixed top-6 inset-x-0 z-50 flex justify-center px-6 pointer-events-none">
          <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_0_80px_rgba(255,255,255,0.05)] rounded-full px-8 h-16 flex items-center justify-between gap-12 pointer-events-auto max-w-5xl w-full">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 group cursor-pointer">
             <SovereignLogo size="sm" />
-            <span className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white font-serif">Sovereign Matrix</span>
-          </div>
+            <span className="text-sm md:text-base font-bold tracking-[0.2em] uppercase text-white font-serif group-hover:text-neutral-300 transition-colors">Sovereign Matrix</span>
+          </Link>
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
              <Link href="/pricing" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Proof of Work</Link>
@@ -125,20 +126,8 @@ export default function Home() {
             The Sovereign Matrix runs 29 specialized agents 24/7—you just direct the swarm.
           </p>
 
-          <div className="flex flex-col items-center gap-4 mb-20">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-              <a href="#pricing" className="inline-flex px-10 py-5 rounded-full bg-white text-black text-lg font-bold shadow-[0_0_40px_rgba(255,255,255,0.15)] items-center gap-3 hover:-translate-y-1 hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] transition-all">
-                Initialize Sovereign Swarm V4 <ArrowRight className="w-6 h-6" />
-              </a>
-              <button 
-                 onClick={() => {
-                   document.getElementById("vsl")?.scrollIntoView({ behavior: "smooth" });
-                 }}
-                 className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 bg-black/50 backdrop-blur-md text-white font-bold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-2 group cursor-pointer"
-              >
-                <Globe className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" /> View Architectural Demo
-              </button>
-            </div>
+          <div className="mb-20">
+            <InteractiveHeroStrike />
           </div>
 
           {/* Trust Badges - Obsidian Edition */}
