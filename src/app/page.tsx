@@ -16,6 +16,7 @@ import SovereignCalculator from "@/components/SovereignCalculator";
 import GodBrainTelemetry from "@/components/GodBrainTelemetry";
 import DeepfakeShowcase from "@/components/DeepfakeShowcase";
 import { InteractiveHeroStrike } from "@/components/ui/InteractiveHeroStrike";
+import { AIDemoShowcase } from "@/components/ui/AIDemoShowcase";
 
 function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: { end: number; suffix?: string; prefix?: string; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -146,9 +147,20 @@ export default function Home() {
               </div>
            </div>
 
+          {/* Live Platform Demo Emulator */}
+          <div className="w-full max-w-5xl mx-auto mb-20 mt-10">
+             <div className="text-center mb-10">
+                <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-[#00B7FF] serif-text mb-4">Live Operations Demo</h2>
+                <p className="text-neutral-500 max-w-2xl mx-auto text-sm">
+                  Execute the Antigravity Code Engine, Google A2A Swarm Protocol, and NVIDIA Nemotron Voice models physically below.
+                </p>
+             </div>
+             <AIDemoShowcase />
+          </div>
+
           {/* God-Brain Diagnostics */}
           <div className="w-full max-w-4xl mx-auto mb-20 mt-10">
-             <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-6">Sovereign Node Telemetry Stream</h2>
+             <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-6">Deep-Layer Node Telemetry Stream</h2>
              <GodBrainTelemetry />
           </div>
 
