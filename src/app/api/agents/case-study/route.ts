@@ -1,0 +1,71 @@
+import { NextResponse } from "next/server";
+
+/**
+ * CASE STUDY GENERATOR — Takes client metrics and generates a polished
+ * case study document automatically.
+ */
+
+export async function POST(request: Request) {
+  try {
+    const { clientName, industry, metrics, challenge, result: outcome } = await request.json();
+
+    if (!clientName) {
+      return NextResponse.json({ error: "clientName is required." }, { status: 400 });
+    }
+
+    const nimKey = process.env.NVIDIA_NIM_API_KEY;
+    if (!nimKey) {
+      return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
+    }
+
+    const nimRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${nimKey}`,
+      },
+      body: JSON.stringify({
+        model: "deepseek-ai/deepseek-v3.2",
+        messages: [
+          {
+            role: "system",
+            content: `You are a professional case study writer for Sovereign Matrix. Generate a detailed, persuasive case study in HTML format. Structure:
+1. H1: "[Client Name] Case Study"
+2. Executive Summary (2-3 sentences)
+3. The Challenge (what problem they faced)
+4. The Solution (how Sovereign Matrix solved it)
+5. The Results (specific metrics and improvements)
+6. Client Quote (generate a realistic testimonial)
+7. Key Takeaways (3 bullet points)
+
+Make it professional, data-driven, and compelling. Use semantic HTML with proper headings.`,
+          },
+          {
+            role: "user",
+            content: `Client: ${clientName}
+Industry: ${industry || "Technology"}
+Metrics: ${JSON.stringify(metrics || { leads: "+340%", revenue: "+R180,000/mo", time_saved: "60 hours/week" })}
+Challenge: ${challenge || "Manual marketing operations were too slow and expensive"}
+Outcome: ${outcome || "Autonomous AI agents replaced the entire marketing team"}`,
+          },
+        ],
+        max_tokens: 3000,
+        temperature: 0.7,
+      }),
+    });
+
+    const nimData = await nimRes.json();
+    const caseStudyHtml = nimData?.choices?.[0]?.message?.content || "";
+
+    return NextResponse.json({
+      success: true,
+      clientName,
+      industry: industry || "Technology",
+      html: caseStudyHtml,
+      wordCount: caseStudyHtml.split(/\s+/).length,
+      slug: `/case-studies/${clientName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: "Case study error", details: String(error) }, { status: 500 });
+  }
+}
