@@ -1,65 +1,88 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
-import { ai } from "@/lib/ai";
-import { ANTI_SLOP_RULES } from "@/lib/content-engine";
-import { fireUserWebhook } from "@/lib/webhooks";
 
 /**
- * AI Page Builder API
- * Generates complete landing page HTML/React components from a brief.
+ * STITCH SDK PAGE BUILDER — Generates complete HTML pages from text prompts.
+ * Uses Google's Stitch SDK to autonomously build production-ready websites.
+ * 
+ * Flow: Text prompt → Stitch API → Full HTML + Screenshot
  */
 
-const PAGE_BUILDER_PROMPT = `You are an elite landing page architect and conversion specialist. You generate complete, production-ready landing page code.
-
-${ANTI_SLOP_RULES}
-
-## PAGE DESIGN RULES
-1. Mobile-first responsive design
-2. Single conversion goal per page
-3. Above-the-fold hero with clear value proposition
-4. Social proof within first two scrolls
-5. Maximum 3 CTA buttons, all pointing to same action
-6. Use contrast colors for CTAs
-7. Short paragraphs (2-3 sentences max)
-8. Include testimonial/case study section`;
-
-export async function POST(req: Request) {
-  const user = await currentUser();
-  if (!user?.primaryEmailAddress?.emailAddress) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+export async function POST(request: Request) {
   try {
-    const { businessName, businessType, offer, style, cta } = await req.json();
+    const { prompt, projectId } = await request.json();
 
-    const prompt = `Generate a complete, production-ready landing page for:
+    if (!prompt) {
+      return NextResponse.json({ error: "Prompt is required." }, { status: 400 });
+    }
 
-BUSINESS: ${businessName || "Premium Business"}
-TYPE: ${businessType || "Service Business"}
-MAIN OFFER: ${offer || "Book a free consultation"}
-STYLE: ${style || "Dark, premium, modern"}
-CTA: ${cta || "Book Now"}
+    const stitchKey = process.env.STITCH_API_KEY;
 
-Generate the FULL page as a single React/JSX component with inline Tailwind CSS.
+    if (!stitchKey) {
+      // Fallback: Use NVIDIA NIM to generate HTML via code generation model
+      const nimKey = process.env.NVIDIA_NIM_API_KEY;
+      if (!nimKey) {
+        return NextResponse.json({ error: "Neither STITCH_API_KEY nor NVIDIA_NIM_API_KEY is configured." }, { status: 500 });
+      }
 
-Include these sections:
-1. HERO: Bold headline + subheadline + CTA + trust badges
-2. PROBLEM: 3 pain points the audience faces
-3. SOLUTION: How this business solves them (3 features with icons)
-4. SOCIAL PROOF: 3 testimonials with names and roles
-5. PRICING/OFFER: Clear value proposition with CTA
-6. FAQ: 4 common questions
-7. FOOTER CTA: Final conversion push
+      const nimRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${nimKey}`,
+        },
+        body: JSON.stringify({
+          model: "mistralai/devstral-2-123b-instruct-2512",
+          messages: [
+            {
+              role: "system",
+              content: `You are an elite web designer. Generate a complete, production-ready HTML page based on the user's prompt. The page must:
+1. Be a single self-contained HTML file with inline CSS and JS.
+2. Use a dark premium aesthetic with modern design patterns.
+3. Include responsive design, smooth animations, and sharp typography.
+4. Be immediately usable — no placeholders, no TODOs.
+Output ONLY the raw HTML. No markdown, no explanation.`,
+            },
+            { role: "user", content: prompt },
+          ],
+          max_tokens: 4096,
+          temperature: 0.6,
+        }),
+      });
 
-Output ONLY the JSX code. No explanations. Use Tailwind classes. Make it visually stunning.`;
+      const nimData = await nimRes.json();
+      const generatedHtml = nimData?.choices?.[0]?.message?.content || "<html><body>Generation failed</body></html>";
 
-    const result = await ai(prompt, { system: PAGE_BUILDER_PROMPT, maxTokens: 4000 });
+      return NextResponse.json({
+        success: true,
+        provider: "NVIDIA NIM (Devstral 2)",
+        prompt,
+        html: generatedHtml,
+        screenshot: null,
+      });
+    }
 
-    await fireUserWebhook("PageBuilder", "Generated", { businessName });
+    // Use Google Stitch SDK when API key is available
+    const { stitch } = await import("@google/stitch-sdk");
 
-    return NextResponse.json({ success: true, page: result, metadata: { businessName, style } });
-  } catch (err) {
-    console.error("[Page Builder] Error:", err);
-    return NextResponse.json({ error: "Failed to generate page" }, { status: 500 });
+    const project = projectId
+      ? stitch.project(projectId)
+      : await stitch.callTool("create_project", { title: `Sovereign - ${prompt.substring(0, 30)}` });
+
+    const pId = projectId || (project as { content?: Array<{ text?: string }> })?.content?.[0]?.text || "default";
+    const proj = stitch.project(pId);
+    const screen = await proj.generate(prompt);
+    const html = await screen.getHtml();
+    const imageUrl = await screen.getImage();
+
+    return NextResponse.json({
+      success: true,
+      provider: "Google Stitch SDK",
+      prompt,
+      projectId: pId,
+      html,
+      screenshot: imageUrl,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: "Page Builder error", details: String(error) }, { status: 500 });
   }
 }
