@@ -84,6 +84,7 @@ const NAV_GROUPS = [
     group: "Industrial Nodes",
     icon: Factory,
     items: [
+      { href: "/dashboard/agent-command", label: "Agent Command Center", icon: Zap },
       { href: "/dashboard/god-eye", label: "God-Eye Spatial Array", icon: ScanEye },
       { href: "/dashboard/morpheus-shield", label: "Morpheus Shield", icon: Hexagon },
       { href: "/dashboard/nim-arsenal", label: "NIM Arsenal", icon: Zap },
