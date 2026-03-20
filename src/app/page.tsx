@@ -104,8 +104,12 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="pt-40 pb-20 px-6 relative overflow-hidden flex flex-col items-center min-h-[90vh] justify-center">
-        {/* Obsidian subtle background texture */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'url("/grid.svg")' }} />
+        {/* Immersive Quantum Emerald Grid */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+           <div className="absolute inset-0 bg-[linear-gradient(to_right,#10B98110_1px,transparent_1px),linear-gradient(to_bottom,#10B98110_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000_70%,transparent_110%)] animate-[pulse_8s_ease-in-out_infinite] opacity-60" />
+           <div className="absolute top-[-20%] left-1/4 w-[1000px] h-[1000px] bg-[#10B981]/10 rounded-full blur-[150px] opacity-50 mix-blend-screen" />
+           <div className="absolute bottom-[-10%] right-1/4 w-[800px] h-[800px] bg-emerald-900/10 rounded-full blur-[150px] opacity-30 mix-blend-screen" />
+        </div>
 
         {/* Elite Physical Data Flow Simulator */}
         <ImmersiveNodeLayer />
