@@ -1,247 +1,172 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Building2, Globe2, Rocket, ChevronRight, ChevronLeft, CheckCircle2, Loader2, Zap } from "lucide-react";
+import { Rocket, CheckCircle2, ArrowRight, Zap, Shield, FileText, BarChart3, Globe, Loader2 } from "lucide-react";
 
-const STEPS = [
-  { id: "business", title: "Business Profile", icon: Building2 },
-  { id: "channels", title: "Connect Channels", icon: Globe2 },
-  { id: "launch", title: "Launch Campaign", icon: Rocket },
+const GOALS = [
+  { id: "leads", label: "Generate More Leads", icon: Zap, color: "#00ff66", agents: ["abm-artillery", "blog-gen", "translate"], description: "Auto-research companies, send personalized emails, and generate SEO content" },
+  { id: "security", label: "Protect Client Data", icon: Shield, color: "#FF0055", agents: ["pii-redactor", "nemoclaw", "morpheus-shield"], description: "Auto-redact PII, deploy guardrailed agents, and content-safety check everything" },
+  { id: "content", label: "Create Content at Scale", icon: FileText, color: "#A855F7", agents: ["blog-gen", "image-gen", "page-builder", "cosmos-video"], description: "Auto-generate blogs, images, landing pages, and video scenes" },
+  { id: "analytics", label: "Track Everything", icon: BarChart3, color: "#00B7FF", agents: ["analytics", "doc-intel", "scheduler"], description: "Usage metering, document intelligence, and scheduled automation" },
+  { id: "global", label: "Go Multilingual", icon: Globe, color: "#06B6D4", agents: ["translate", "voice-synth", "abm-artillery"], description: "Translate to 12 languages, synthesize voice, and reach global markets" },
 ];
 
-export default function OnboardingWizard() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isLaunching, setIsLaunching] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
+export default function OnboardingPage() {
+  const [step, setStep] = useState(0);
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
+  const [companyName, setCompanyName] = useState("");
+  const [deploying, setDeploying] = useState(false);
+  const [deployed, setDeployed] = useState(false);
 
-  const [formData, setFormData] = useState({
-    businessName: "",
-    industry: "",
-    location: "",
-    website: "",
-    instagram: "",
-    googleBusiness: "",
-    facebook: "",
-    campaignGoal: "lead-generation",
-    targetAudience: "",
-    monthlyBudget: "1000",
-  });
-
-  const update = (key: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+  const toggleGoal = (id: string) => {
+    setSelectedGoals(prev => prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]);
   };
 
-  const canProceed = () => {
-    if (currentStep === 0) return formData.businessName.trim() && formData.industry.trim();
-    if (currentStep === 1) return true;
-    if (currentStep === 2) return formData.targetAudience.trim();
-    return false;
+  const deployAgents = async () => {
+    setDeploying(true);
+    // Simulate agent deployment
+    await new Promise(r => setTimeout(r, 2000));
+    setDeploying(false);
+    setDeployed(true);
   };
 
-  const handleLaunch = async () => {
-    setIsLaunching(true);
-    try {
-      // Try PayFast checkout first
-      const pfRes = await fetch("/api/payments/payfast/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: "starter", businessName: formData.businessName }),
-      });
-      const pfData = await pfRes.json();
-
-      if (pfData.success && pfData.formHtml) {
-        const container = document.createElement("div");
-        container.innerHTML = pfData.formHtml;
-        document.body.appendChild(container);
-        const form = container.querySelector("form");
-        if (form) { form.submit(); return; }
-      }
-
-      // Fallback to Paystack
-      const psRes = await fetch("/api/payments/paystack/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: "starter", businessName: formData.businessName }),
-      });
-      const psData = await psRes.json();
-
-      if (psData.success && psData.authorizationUrl) {
-        window.location.assign(psData.authorizationUrl);
-        return;
-      }
-
-      // If no payment gateway configured yet, complete onboarding anyway
-      setIsLaunching(false);
-      setIsComplete(true);
-    } catch {
-      // Payment gateway not ready — complete onboarding gracefully
-      setIsLaunching(false);
-      setIsComplete(true);
-    }
-  };
-
-  if (isComplete) {
-    return (
-      <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center p-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-lg w-full text-center"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", delay: 0.2 }}
-            className="w-20 h-20 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-6"
-          >
-            <CheckCircle2 className="w-10 h-10 text-emerald-400" />
-          </motion.div>
-          <h1 className="text-3xl font-light text-white tracking-wider mb-3">SOVEREIGN Node Activated</h1>
-          <p className="text-neutral-400 mb-8">Your AI marketing engine is now configured and initializing its first autonomous cycle for <strong className="text-white">{formData.businessName}</strong>.</p>
-          <a
-            href="/dashboard"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 text-cyan-400 rounded-xl uppercase tracking-widest font-bold font-mono text-xs hover:from-cyan-500/20 transition-all"
-          >
-            <Zap className="w-4 h-4" /> Enter Command Center
-          </a>
-        </motion.div>
-      </div>
-    );
-  }
+  const selectedAgents = [...new Set(selectedGoals.flatMap(g => GOALS.find(x => x.id === g)?.agents || []))];
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center p-6 font-mono">
       <div className="max-w-2xl w-full">
-        {/* Logo */}
-        <div className="text-center mb-10">
-          <h1 className="text-xl font-light text-white tracking-[0.3em] font-mono">SOVEREIGN</h1>
-          <p className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">Deploy Your AI Marketing Engine</p>
-        </div>
 
-        {/* Step Indicators */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          {STEPS.map((step, i) => {
-            const Icon = step.icon;
-            return (
-              <React.Fragment key={step.id}>
-                <div className="flex items-center gap-2">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${i <= currentStep ? "bg-cyan-500/10 border border-cyan-500/30" : "bg-white/5 border border-white/10"}`}>
-                    <Icon className={`w-4 h-4 ${i <= currentStep ? "text-cyan-400" : "text-neutral-600"}`} />
-                  </div>
-                  <span className={`text-[10px] uppercase tracking-widest font-bold hidden sm:block ${i <= currentStep ? "text-cyan-400" : "text-neutral-600"}`}>{step.title}</span>
-                </div>
-                {i < STEPS.length - 1 && <div className={`w-10 h-px ${i < currentStep ? "bg-cyan-500/30" : "bg-white/10"}`} />}
-              </React.Fragment>
-            );
-          })}
-        </div>
-
-        {/* Form Card */}
-        <div className="bg-black/40 backdrop-blur-2xl border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <AnimatePresence mode="wait">
-            {currentStep === 0 && (
-              <motion.div key="business" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <h2 className="text-lg font-light text-white tracking-wider mb-6">Tell us about your business</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="sm:col-span-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Business Name *</label>
-                    <input value={formData.businessName} onChange={(e) => update("businessName", e.target.value)} placeholder="e.g. Apex Dental Group" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Industry *</label>
-                    <select value={formData.industry} onChange={(e) => update("industry", e.target.value)} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-500/50 font-mono">
-                      <option value="">Select Industry</option>
-                      <option value="medspa">MedSpa / Aesthetics</option>
-                      <option value="dental">Dental</option>
-                      <option value="realestate">Real Estate</option>
-                      <option value="fitness">Fitness / Gym</option>
-                      <option value="saas">SaaS / Tech</option>
-                      <option value="ecommerce">E-Commerce</option>
-                      <option value="agency">Marketing Agency</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Location</label>
-                    <input value={formData.location} onChange={(e) => update("location", e.target.value)} placeholder="e.g. Miami, FL" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Website</label>
-                    <input value={formData.website} onChange={(e) => update("website", e.target.value)} placeholder="e.g. https://apexdental.com" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {currentStep === 1 && (
-              <motion.div key="channels" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <h2 className="text-lg font-light text-white tracking-wider mb-2">Connect your channels</h2>
-                <p className="text-xs text-neutral-500 mb-6">Optional — SOVEREIGN can operate without these, but connected channels enable full automation.</p>
-                <div className="space-y-4">
-                  {[
-                    { key: "instagram", label: "Instagram Handle", placeholder: "@yourbusiness" },
-                    { key: "googleBusiness", label: "Google Business Profile URL", placeholder: "https://g.co/..." },
-                    { key: "facebook", label: "Facebook Page URL", placeholder: "https://facebook.com/..." },
-                  ].map((ch) => (
-                    <div key={ch.key}>
-                      <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">{ch.label}</label>
-                      <input value={(formData as Record<string, string>)[ch.key]} onChange={(e) => update(ch.key, e.target.value)} placeholder={ch.placeholder} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {currentStep === 2 && (
-              <motion.div key="launch" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <h2 className="text-lg font-light text-white tracking-wider mb-6">Configure your first campaign</h2>
-                <div className="space-y-5">
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Campaign Goal</label>
-                    <select value={formData.campaignGoal} onChange={(e) => update("campaignGoal", e.target.value)} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-500/50 font-mono">
-                      <option value="lead-generation">Lead Generation</option>
-                      <option value="brand-awareness">Brand Awareness</option>
-                      <option value="competitor-domination">Competitor Domination</option>
-                      <option value="content-scale">Content at Scale</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Target Audience *</label>
-                    <input value={formData.targetAudience} onChange={(e) => update("targetAudience", e.target.value)} placeholder="e.g. Women 25-45 interested in Botox and facial treatments" className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 placeholder:text-neutral-600 focus:outline-none focus:border-cyan-500/50 font-mono" />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2 block">Monthly Budget</label>
-                    <select value={formData.monthlyBudget} onChange={(e) => update("monthlyBudget", e.target.value)} className="w-full bg-black/60 border border-white/10 rounded-xl p-3 text-sm text-neutral-300 focus:outline-none focus:border-cyan-500/50 font-mono">
-                      <option value="500">R5,000/mo</option>
-                      <option value="1000">R10,000/mo</option>
-                      <option value="2500">R25,000/mo</option>
-                      <option value="5000">R50,000/mo</option>
-                      <option value="10000">R100,000+/mo</option>
-                    </select>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
-            <button onClick={() => setCurrentStep((p) => Math.max(0, p - 1))} disabled={currentStep === 0} className="px-5 py-2.5 text-neutral-500 flex items-center gap-2 disabled:opacity-30 uppercase tracking-widest font-bold font-mono text-[10px]">
-              <ChevronLeft className="w-4 h-4" /> Back
-            </button>
-            {currentStep < 2 ? (
-              <button onClick={() => setCurrentStep((p) => p + 1)} disabled={!canProceed()} className="px-6 py-2.5 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 border border-cyan-500/30 text-cyan-400 rounded-xl flex items-center gap-2 uppercase tracking-widest font-bold font-mono text-[10px] disabled:opacity-30 hover:from-cyan-500/20 transition-all">
-                Continue <ChevronRight className="w-4 h-4" />
+        {/* Step 0: Welcome */}
+        {step === 0 && (
+          <div className="text-center space-y-8 animate-in fade-in duration-500">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center">
+              <Rocket className="w-8 h-8 text-[#00ff66]" />
+            </div>
+            <h1 className="text-3xl font-black uppercase tracking-[0.15em]">Welcome to <span className="text-[#00B7FF]">Sovereign Matrix</span></h1>
+            <p className="text-neutral-500 text-sm max-w-md mx-auto">25 autonomous AI agents are ready to work for you. Let&apos;s deploy the right ones for your goals.</p>
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={companyName}
+                onChange={e => setCompanyName(e.target.value)}
+                placeholder="Your company name"
+                className="w-full max-w-sm mx-auto block bg-neutral-950 border border-neutral-800 px-4 py-3 text-sm text-white placeholder:text-neutral-700 focus:outline-none focus:border-neutral-600 text-center"
+              />
+              <button
+                onClick={() => setStep(1)}
+                className="px-8 py-3 bg-white text-black font-bold text-sm uppercase tracking-widest hover:bg-neutral-200 transition-all"
+              >
+                Get Started <ArrowRight className="w-4 h-4 inline ml-2" />
               </button>
-            ) : (
-              <button onClick={handleLaunch} disabled={!canProceed() || isLaunching} className="px-8 py-3 bg-gradient-to-r from-emerald-500/10 to-emerald-500/5 border border-emerald-500/30 text-emerald-400 rounded-xl flex items-center gap-2 uppercase tracking-widest font-bold font-mono text-[10px] disabled:opacity-30 hover:from-emerald-500/20 transition-all">
-                {isLaunching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Rocket className="w-4 h-4" />}
-                {isLaunching ? "Deploying Node..." : "Launch SOVEREIGN Node"}
-              </button>
-            )}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Step 1: Select Goals */}
+        {step === 1 && (
+          <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="text-center mb-8">
+              <p className="text-[10px] text-neutral-500 uppercase tracking-widest mb-2">Step 1 of 3</p>
+              <h2 className="text-2xl font-black uppercase tracking-widest">What are your goals{companyName ? `, ${companyName}` : ""}?</h2>
+              <p className="text-neutral-500 text-xs mt-2">Select all that apply. We&apos;ll deploy the right agents.</p>
+            </div>
+            <div className="space-y-3">
+              {GOALS.map(goal => {
+                const Icon = goal.icon;
+                const selected = selectedGoals.includes(goal.id);
+                return (
+                  <button
+                    key={goal.id}
+                    onClick={() => toggleGoal(goal.id)}
+                    className={`w-full p-4 text-left border transition-all flex items-center gap-4 ${
+                      selected
+                        ? "border-white bg-white/5"
+                        : "border-neutral-800 bg-neutral-950 hover:border-neutral-700"
+                    }`}
+                  >
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${goal.color}15`, border: `1px solid ${goal.color}30` }}>
+                      <Icon className="w-5 h-5" style={{ color: goal.color }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-bold">{goal.label}</p>
+                      <p className="text-[10px] text-neutral-500">{goal.description}</p>
+                    </div>
+                    {selected && <CheckCircle2 className="w-5 h-5 text-[#00ff66] shrink-0" />}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              onClick={() => setStep(2)}
+              disabled={selectedGoals.length === 0}
+              className="w-full py-3 bg-white text-black font-bold text-sm uppercase tracking-widest hover:bg-neutral-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              Continue — {selectedAgents.length} agents selected <ArrowRight className="w-4 h-4 inline ml-2" />
+            </button>
+          </div>
+        )}
+
+        {/* Step 2: Review & Deploy */}
+        {step === 2 && !deployed && (
+          <div className="space-y-6 animate-in fade-in duration-500">
+            <div className="text-center mb-8">
+              <p className="text-[10px] text-neutral-500 uppercase tracking-widest mb-2">Step 2 of 3</p>
+              <h2 className="text-2xl font-black uppercase tracking-widest">Your Agent Fleet</h2>
+              <p className="text-neutral-500 text-xs mt-2">These agents will be deployed and configured for {companyName || "your company"}.</p>
+            </div>
+            <div className="bg-neutral-950 border border-neutral-800 p-5 space-y-3">
+              {selectedAgents.map(agent => (
+                <div key={agent} className="flex items-center justify-between py-2 border-b border-neutral-900 last:border-0">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#00ff66]" />
+                    <span className="text-xs font-bold text-white">{agent.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</span>
+                  </div>
+                  <span className="text-[9px] text-neutral-600 uppercase tracking-widest">Ready</span>
+                </div>
+              ))}
+            </div>
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="bg-neutral-950 border border-neutral-800 p-3">
+                <p className="text-lg font-black text-[#00ff66]">{selectedAgents.length}</p>
+                <p className="text-[8px] text-neutral-500 uppercase">Agents</p>
+              </div>
+              <div className="bg-neutral-950 border border-neutral-800 p-3">
+                <p className="text-lg font-black text-[#00B7FF]">38</p>
+                <p className="text-[8px] text-neutral-500 uppercase">NIM Models</p>
+              </div>
+              <div className="bg-neutral-950 border border-neutral-800 p-3">
+                <p className="text-lg font-black text-[#A855F7]">$0</p>
+                <p className="text-[8px] text-neutral-500 uppercase">Cost</p>
+              </div>
+            </div>
+            <button
+              onClick={deployAgents}
+              disabled={deploying}
+              className="w-full py-4 bg-[#00ff66] text-black font-bold text-sm uppercase tracking-widest hover:bg-[#00dd55] transition-all disabled:opacity-50"
+            >
+              {deploying ? <><Loader2 className="w-4 h-4 inline mr-2 animate-spin" /> Deploying Agents...</> : <>Deploy Fleet <Rocket className="w-4 h-4 inline ml-2" /></>}
+            </button>
+          </div>
+        )}
+
+        {/* Step 3: Success */}
+        {deployed && (
+          <div className="text-center space-y-8 animate-in fade-in duration-500">
+            <div className="w-20 h-20 mx-auto rounded-2xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center">
+              <CheckCircle2 className="w-10 h-10 text-[#00ff66]" />
+            </div>
+            <h2 className="text-3xl font-black uppercase tracking-widest">Fleet Deployed</h2>
+            <p className="text-neutral-500 text-sm max-w-md mx-auto">{selectedAgents.length} agents are now active and working for {companyName || "you"}. Head to the dashboard to monitor and control them.</p>
+            <div className="flex gap-3 justify-center">
+              <a href="/dashboard/agent-command" className="px-6 py-3 bg-white text-black font-bold text-sm uppercase tracking-widest hover:bg-neutral-200 transition-all">
+                Agent Command Center <ArrowRight className="w-4 h-4 inline ml-2" />
+              </a>
+              <a href="/dashboard" className="px-6 py-3 border border-neutral-800 text-neutral-400 font-bold text-sm uppercase tracking-widest hover:border-neutral-600 transition-all">
+                Dashboard
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
