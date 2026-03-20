@@ -24,10 +24,10 @@ export function InteractiveHeroStrike() {
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-6">
       {/* The Target Input */}
       <form onSubmit={handleStrike} className="w-full relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-[#00B7FF]/20 via-indigo-500/20 to-purple-500/20 rounded-[2rem] blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50" />
+        <div className="absolute -inset-1 bg-gradient-to-r from-[#10B981]/20 via-indigo-500/20 to-emerald-600/20 rounded-[2rem] blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50" />
         <div className="relative flex items-center bg-[#0a0a0a] border border-white/10 rounded-[2rem] p-2 shadow-2xl">
           <div className="pl-6 pr-4 hidden sm:flex items-center justify-center border-r border-white/10">
-            <Target className="w-6 h-6 text-neutral-500 group-hover:text-[#00B7FF] transition-colors" />
+            <Target className="w-6 h-6 text-neutral-500 group-hover:text-[#10B981] transition-colors" />
           </div>
           <input
             type="url"
@@ -44,7 +44,7 @@ export function InteractiveHeroStrike() {
             className="px-8 py-4 rounded-full bg-white text-black font-bold uppercase tracking-widest text-xs flex items-center gap-3 hover:bg-neutral-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isScanning ? (
-               <><Cpu className="w-4 h-4 animate-spin text-[#00B7FF]" /> Initializing...</>
+               <><Cpu className="w-4 h-4 animate-spin text-[#10B981]" /> Initializing...</>
             ) : (
                <>Strike <ArrowRight className="w-4 h-4" /></>
             )}
@@ -59,14 +59,14 @@ export function InteractiveHeroStrike() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="w-full p-4 rounded-2xl bg-[#00B7FF]/5 border border-[#00B7FF]/20 flex items-center justify-between"
+            className="w-full p-4 rounded-2xl bg-[#10B981]/5 border border-[#10B981]/20 flex items-center justify-between"
           >
             <div className="flex items-center gap-3">
-               <ShieldAlert className="w-5 h-5 text-[#00B7FF] animate-pulse" />
-               <span className="text-xs font-mono text-[#00B7FF] uppercase tracking-widest">NVIDIA NIM Interception Protocol</span>
+               <ShieldAlert className="w-5 h-5 text-[#10B981] animate-pulse" />
+               <span className="text-xs font-mono text-[#10B981] uppercase tracking-widest">NVIDIA NIM Interception Protocol</span>
             </div>
             <span className="text-[10px] font-bold text-white font-mono flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00B7FF] animate-ping" /> Scouring Vectors...
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" /> Scouring Vectors...
             </span>
           </motion.div>
         )}

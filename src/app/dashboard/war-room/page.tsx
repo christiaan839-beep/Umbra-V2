@@ -129,11 +129,11 @@ export default function WarRoomColosseum() {
              </motion.div>
 
              <motion.div 
-               className={`rounded-2xl border p-5 flex flex-col items-center justify-center text-center transition-all duration-500 ${status === 'consensus' || messages.find(m => m.agent === 'Nemotron') ? 'border-[#00B7FF]/70 bg-[#00B7FF]/10 shadow-[0_0_30px_rgba(0,183,255,0.3)]' : 'border-white/5 bg-white/[0.01]'}`}
+               className={`rounded-2xl border p-5 flex flex-col items-center justify-center text-center transition-all duration-500 ${status === 'consensus' || messages.find(m => m.agent === 'Nemotron') ? 'border-[#10B981]/70 bg-[#10B981]/10 shadow-[0_0_30px_rgba(0,183,255,0.3)]' : 'border-white/5 bg-white/[0.01]'}`}
              >
-                <Network className={`w-8 h-8 mb-3 ${status === 'consensus' || messages.find(m => m.agent === 'Nemotron') ? 'text-[#00B7FF] animate-pulse drop-shadow-[0_0_10px_rgba(0,183,255,0.8)]' : 'text-neutral-600'}`} />
+                <Network className={`w-8 h-8 mb-3 ${status === 'consensus' || messages.find(m => m.agent === 'Nemotron') ? 'text-[#10B981] animate-pulse drop-shadow-[0_0_10px_rgba(0,183,255,0.8)]' : 'text-neutral-600'}`} />
                 <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-1">Nemotron 340B</h4>
-                <p className="text-[9px] text-[#00B7FF]/80 font-mono uppercase">Synthesis Core</p>
+                <p className="text-[9px] text-[#10B981]/80 font-mono uppercase">Synthesis Core</p>
              </motion.div>
           </div>
         </div>
@@ -156,7 +156,7 @@ export default function WarRoomColosseum() {
                      </div>
                   )}
                   {status === "consensus" && (
-                    <div className="flex items-center gap-2 text-[10px] text-[#00B7FF] font-mono focus:outline-none uppercase tracking-widest font-bold">
+                    <div className="flex items-center gap-2 text-[10px] text-[#10B981] font-mono focus:outline-none uppercase tracking-widest font-bold">
                        <CheckCircle2 className="w-3.5 h-3.5" /> Consensus Achieved
                     </div>
                   )}
@@ -186,7 +186,7 @@ export default function WarRoomColosseum() {
                           className="flex flex-col gap-2"
                         >
                            <div className="flex items-center gap-2">
-                              <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${msg.agent === 'DeepSeek' ? 'text-indigo-400' : msg.agent === 'Llama' ? 'text-amber-400' : msg.agent === 'Kosmos' ? 'text-pink-400' : 'text-[#00B7FF]'}`}>
+                              <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${msg.agent === 'DeepSeek' ? 'text-indigo-400' : msg.agent === 'Llama' ? 'text-amber-400' : msg.agent === 'Kosmos' ? 'text-pink-400' : 'text-[#10B981]'}`}>
                                 {msg.agent} Terminal
                               </span>
                               <div className="h-px flex-1 bg-white/5" />
@@ -195,7 +195,7 @@ export default function WarRoomColosseum() {
                            
                            <div className={`rounded-xl p-5 border backdrop-blur-sm ${
                              msg.agent === "Nemotron" && msg.text.includes("CONSENSUS DEPLOYMENT")
-                               ? "bg-[#00B7FF]/10 border-[#00B7FF]/50 text-white shadow-[0_0_30px_rgba(0,183,255,0.15)]"
+                               ? "bg-[#10B981]/10 border-[#10B981]/50 text-white shadow-[0_0_30px_rgba(0,183,255,0.15)]"
                                : "bg-white/[0.02] border-white/5 text-neutral-200"
                            }`}>
                               <p className="text-sm leading-relaxed font-mono whitespace-pre-wrap">

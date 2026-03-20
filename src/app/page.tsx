@@ -150,7 +150,7 @@ export default function Home() {
           {/* Live Platform Demo Emulator */}
           <div className="w-full max-w-5xl mx-auto mb-20 mt-10">
              <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-[#00B7FF] serif-text mb-4">Live Operations Demo</h2>
+                <h2 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-[#10B981] serif-text mb-4">Live Operations Demo</h2>
                 <p className="text-neutral-500 max-w-2xl mx-auto text-sm">
                   Execute the Antigravity Code Engine, Google A2A Swarm Protocol, and NVIDIA Nemotron Voice models physically below.
                 </p>
@@ -205,7 +205,11 @@ export default function Home() {
                     <feature.icon className="w-32 h-32 text-white" />
                   </div>
                   <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 relative z-10">
-                    <feature.icon className="w-5 h-5 text-neutral-300 group-hover:text-white transition-colors" />
+                    {feature.icon === Globe ? (
+                      <Globe className="w-5 h-5 text-emerald-500 group-hover:text-emerald-400 transition-colors" />
+                    ) : (
+                      <feature.icon className="w-5 h-5 text-neutral-300 group-hover:text-white transition-colors" />
+                    )}
                   </div>
                   <h3 className="text-lg font-bold text-white mb-3 relative z-10">{feature.title}</h3>
                   <p className="text-sm text-neutral-500 leading-relaxed relative z-10">{feature.desc}</p>

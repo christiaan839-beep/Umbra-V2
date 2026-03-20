@@ -92,20 +92,20 @@ export function AIDemoShowcase() {
         {/* Left Side: Simulation Controls */}
         <div className="border-r border-white/10 p-8 flex flex-col gap-6">
           <div>
-             <h3 className="text-xl font-bold text-white mb-2 font-serif uppercase tracking-widest text-[#00B7FF]">Test The Swarm</h3>
+             <h3 className="text-xl font-bold text-white mb-2 font-serif uppercase tracking-widest text-[#10B981]">Test The Swarm</h3>
              <p className="text-sm text-neutral-400">Select an enterprise capability below to watch the Sovereign Matrix execute it autonomously in real-time.</p>
           </div>
 
           <div className="flex flex-col gap-3 flex-1">
             <button 
               onClick={() => startSimulation("antigravity")}
-              className={`p-4 rounded-xl border flex items-center gap-4 transition-all text-left group ${mode === "antigravity" ? 'border-[#00B7FF] bg-[#00B7FF]/10' : 'border-white/10 bg-white/[0.02] hover:border-white/20'}`}
+              className={`p-4 rounded-xl border flex items-center gap-4 transition-all text-left group ${mode === "antigravity" ? 'border-[#10B981] bg-[#10B981]/10' : 'border-white/10 bg-white/[0.02] hover:border-white/20'}`}
             >
-              <div className={`p-2 rounded-lg ${mode === "antigravity" ? 'bg-[#00B7FF]/20 text-[#00B7FF]' : 'bg-white/5 text-neutral-400'}`}>
+              <div className={`p-2 rounded-lg ${mode === "antigravity" ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-white/5 text-neutral-400'}`}>
                  <Cpu className="w-5 h-5" />
               </div>
               <div>
-                 <div className={`text-sm font-bold uppercase tracking-widest ${mode === "antigravity" ? 'text-[#00B7FF]' : 'text-neutral-200'}`}>Antigravity Codegen</div>
+                 <div className={`text-sm font-bold uppercase tracking-widest ${mode === "antigravity" ? 'text-[#10B981]' : 'text-neutral-200'}`}>Antigravity Codegen</div>
                  <div className="text-[10px] text-neutral-500 uppercase">Autonomous App Generation</div>
               </div>
             </button>
@@ -170,7 +170,7 @@ export function AIDemoShowcase() {
                          initial={{ opacity: 0, x: -10 }}
                          animate={{ opacity: 1, x: 0 }}
                          className={`text-sm ${
-                           log.includes("[SWARM]") ? "text-[#00B7FF] font-bold"
+                           log.includes("[SWARM]") ? "text-[#10B981] font-bold"
                            : log.includes("[CLIENT]") ? "text-white"
                            : log.includes("Success") || log.includes("Generated") || log.includes("Live") || log.includes("LOCKED") ? "text-emerald-400 font-bold"
                            : "text-neutral-400"
