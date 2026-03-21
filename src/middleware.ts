@@ -1,39 +1,85 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// ⚡ SOVEREIGN MATRIX // AUTONOMOUS A/B TESTING MIDDLEWARE ⚡
-// This mathematically annihilates human marketing agencies by 
-// automatically splitting traffic on the Vercel Edge and measuring conversion.
+/**
+ * SOVEREIGN MATRIX — UNIFIED EDGE MIDDLEWARE
+ * 
+ * Handles TWO concerns at the Vercel Edge:
+ * 1. A/B Testing for /landing/* routes
+ * 2. API Gateway for /api/agents/* routes — rate limiting, metering, CORS
+ */
 
 export const config = {
-  matcher: ['/landing/:path*'], // Apply only to generated marketing funnels
+  matcher: ['/landing/:path*', '/api/agents/:path*'],
 };
+
+// In-memory rate limit tracking (per-edge-instance)
+const rateLimits = new Map<string, { count: number; resetAt: number }>();
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
-  
-  // Check if user already has a variant cohort assigned
+
+  // ── API GATEWAY for /api/agents/* ──
+  if (url.pathname.startsWith('/api/agents')) {
+    // Extract client identifier (API key, IP, or session)
+    const apiKey = request.headers.get('x-api-key') || '';
+    const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'anonymous';
+    const clientId = apiKey || clientIp;
+
+    // Rate limiting: 100 requests per minute per client
+    const now = Date.now();
+    const limit = rateLimits.get(clientId);
+
+    if (limit && now < limit.resetAt) {
+      limit.count += 1;
+      if (limit.count > 100) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded. Max 100 requests per minute.', retry_after_seconds: Math.ceil((limit.resetAt - now) / 1000) },
+          { status: 429 }
+        );
+      }
+    } else {
+      rateLimits.set(clientId, { count: 1, resetAt: now + 60000 });
+    }
+
+    // Cleanup old entries every 1000 requests
+    if (rateLimits.size > 1000) {
+      for (const [key, val] of rateLimits.entries()) {
+        if (now > val.resetAt) rateLimits.delete(key);
+      }
+    }
+
+    // Add metering headers
+    const response = NextResponse.next();
+    response.headers.set('X-Sovereign-Agent', url.pathname.replace('/api/agents/', ''));
+    response.headers.set('X-Sovereign-Timestamp', new Date().toISOString());
+    response.headers.set('X-RateLimit-Remaining', String(Math.max(0, 100 - (rateLimits.get(clientId)?.count || 0))));
+    
+    // CORS headers for external integrations (Zapier, Make, n8n)
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, x-api-key, Authorization');
+
+    return response;
+  }
+
+  // ── A/B TESTING for /landing/* ──
   let cohort = request.cookies.get('sovereign_cohort')?.value;
   
   if (!cohort) {
-     // Randomly assign 50/50 split test mathematically on the Edge
-     cohort = Math.random() > 0.5 ? 'variant_alpha' : 'variant_beta';
+    cohort = Math.random() > 0.5 ? 'variant_alpha' : 'variant_beta';
   }
 
-  // Rewrite the URL to the exact cohort bucket (without changing the visible URL for the user)
-  // Example: /landing/plumber rewrites to /landing/plumber/variant_alpha
   url.pathname = `${url.pathname}/${cohort}`;
   const response = NextResponse.rewrite(url);
 
-  // Lock the user into their cohort so the test remains statistically valid
   response.cookies.set('sovereign_cohort', cohort, {
     path: '/',
     secure: true,
     httpOnly: true,
     sameSite: 'strict',
-    maxAge: 60 * 60 * 24 * 30, // 30 Day tracking persistence
+    maxAge: 60 * 60 * 24 * 30,
   });
 
-  console.log(`[EDGE A/B MATRIX] Routed user to ${url.pathname}`);
   return response;
 }
