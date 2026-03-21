@@ -23,6 +23,7 @@ import { ToastProvider } from '@/components/ui/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { CinematicOnboarding } from '@/components/dashboard/CinematicOnboarding';
 import { LiveActivityConsole } from '@/components/dashboard/LiveActivityConsole';
+import { UsageBar } from '@/components/ui/UsageBar';
 
 const NAV_GROUPS = [
   {
@@ -276,6 +277,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           {renderNavContent(false)}
+
+          {/* Usage Meter */}
+          <div className="px-4 py-2 z-10">
+            <UsageBar userId={user?.id} plan="node" />
+          </div>
 
           {/* User Footer */}
           <div className="p-4 border-t border-[#00B7FF]/10 z-10 bg-black/20 backdrop-blur-sm flex items-center justify-between">

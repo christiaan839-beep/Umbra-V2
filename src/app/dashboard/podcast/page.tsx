@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Headphones, FileText, UploadCloud, Settings, Mic, Waves, CheckCircle2, Play, Download, Pause, ShieldAlert, Zap } from "lucide-react";
+import { Headphones, FileText, UploadCloud, Settings, Mic, Waves, CheckCircle2, Play, Download, ShieldAlert, Zap } from "lucide-react";
 
 export default function PodcastBlueprintPage() {
   const [fileStatus, setFileStatus] = useState<"idle" | "uploading" | "uploaded">("idle");
@@ -250,9 +250,9 @@ export default function PodcastBlueprintPage() {
                       <Play className="w-4 h-4 ml-1" />
                     </button>
                     <div className="flex-1 h-8 rounded relative overflow-hidden flex items-center justify-between px-1">
-                      {/* Fake waveform */}
+                      {/* Deterministic waveform visualization */}
                       {[...Array(40)].map((_, i) => (
-                        <div key={i} className="w-1 bg-white/20 rounded-full" style={{ height: `${Math.random() * 80 + 20}%` }} />
+                        <div key={i} className="w-1 bg-white/20 rounded-full" style={{ height: `${Math.abs(Math.sin(i * 0.4) * 60) + 20}%` }} />
                       ))}
                     </div>
                   </div>
