@@ -90,6 +90,7 @@ const NAV_GROUPS = [
       { href: "/dashboard/live-terminal", label: "Live Agent Terminal", icon: CircuitBoard },
       { href: "/dashboard/leaderboard", label: "AI Leaderboard", icon: Target },
       { href: "/dashboard/nemoclaw", label: "NemoClaw Control Plane", icon: Shield },
+      { href: "/dashboard/capability-matrix", label: "Capability Matrix", icon: Cpu },
       { href: "/dashboard/god-eye", label: "God-Eye Spatial Array", icon: ScanEye },
       { href: "/dashboard/morpheus-shield", label: "Morpheus Shield", icon: Hexagon },
       { href: "/dashboard/nim-arsenal", label: "NIM Arsenal", icon: Zap },

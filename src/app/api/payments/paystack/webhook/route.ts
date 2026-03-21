@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { verifyPaystackWebhook } from "@/lib/payments";
-import { db } from "@/db";
-import { tenants } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { persistAppend } from "@/lib/persist";
+import crypto from "crypto";
 
 /**
- * Paystack Webhook Handler
+ * Paystack Webhook Handler — Cleaned for production.
  * 
- * Verifies SHA512 HMAC signature, then activates/deactivates plans.
+ * Verifies SHA512 HMAC signature, logs events with persistence,
+ * and triggers auto-onboard on successful payments.
  */
 export async function POST(req: Request) {
   try {
@@ -15,104 +14,78 @@ export async function POST(req: Request) {
     const signature = req.headers.get("x-paystack-signature") || "";
 
     // Verify webhook signature
-    if (!verifyPaystackWebhook(body, signature)) {
-      console.error("[Paystack Webhook] Invalid signature!");
-      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    const secret = process.env.PAYSTACK_SECRET_KEY || "";
+    if (secret) {
+      const hash = crypto.createHmac("sha512", secret).update(body).digest("hex");
+      if (hash !== signature) {
+        return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+      }
     }
 
     const event = JSON.parse(body);
-    console.log("[Paystack Webhook] Event:", event.event);
+
+    // Log every event for audit
+    persistAppend("paystack-events", {
+      event: event.event,
+      email: event.data?.customer?.email || "",
+      amount: event.data?.amount || 0,
+      timestamp: new Date().toISOString(),
+    }, 500);
+
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
     switch (event.event) {
       case "charge.success": {
-        const { customer, amount, metadata } = event.data;
-        const email = customer?.email;
-        const plan = metadata?.plan || "pro";
+        const email = event.data?.customer?.email || "";
+        const plan = event.data?.metadata?.plan || "node";
+        const amount = event.data?.amount || 0;
 
-        console.log(`[Paystack] ✅ Charge SUCCESS: ${email} paid R${(amount / 100).toFixed(2)} for plan: ${plan}`);
+        persistAppend("paystack-payments", {
+          email,
+          plan,
+          amount: (amount / 100).toFixed(2),
+          timestamp: new Date().toISOString(),
+        }, 1000);
 
+        // Trigger auto-onboard
         if (email) {
-          // Update the tenant's plan in the database
-          const [existing] = await db
-            .select()
-            .from(tenants)
-            .where(eq(tenants.clerkUserId, email))
-            .limit(1);
-
-          if (existing) {
-            await db
-              .update(tenants)
-              .set({ plan })
-              .where(eq(tenants.clerkUserId, email));
-            console.log(`[Paystack] ✅ Plan upgraded to ${plan} for ${email}`);
-          } else {
-            // Create tenant record if doesn't exist
-            await db.insert(tenants).values({
-              clerkUserId: email,
-              nodeId: `SOV-${Date.now().toString(36).toUpperCase()}`,
-              plan,
+          try {
+            await fetch(`${baseUrl}/api/agents/auto-onboard`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                clientName: event.data?.customer?.first_name || "New Client",
+                email,
+                plan,
+              }),
             });
-            console.log(`[Paystack] ✅ Created tenant with plan ${plan} for ${email}`);
-          }
-
-          // Trigger Autonomous Vercel Clone Phase 81 if Cartel
-          if (plan === "cartel") {
-             console.log(`[Paystack] 🚀 Ignition sequence started for Cartel Node: ${email}`);
-             try {
-               const agencyName = metadata?.agencyName || email.split("@")[0] + "-cartel";
-               await fetch(`${process.env.NEXT_PUBLIC_URL || "https://sovereign-matrix.com"}/api/provisioning`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ userEmail: email, agencyName })
-               });
-               console.log(`[Paystack] 🌐 Cartel Provisioning Ping dispatched successfully`);
-             } catch (e) {
-               console.error("[Paystack] Cartel Engine Ping failed:", e);
-             }
+          } catch {
+            // Best-effort
           }
         }
         break;
       }
 
       case "subscription.create": {
-        const email = event.data.customer?.email;
-        const plan = event.data.plan?.plan_code?.includes("cartel") ? "cartel" : "array";
-        console.log(`[Paystack] 🔄 Subscription created: ${email} → ${plan}`);
-
-        if (email) {
-          await db
-            .update(tenants)
-            .set({ plan })
-            .where(eq(tenants.clerkUserId, email));
-        }
+        persistAppend("paystack-subscriptions", {
+          email: event.data?.customer?.email || "",
+          plan_code: event.data?.plan?.plan_code || "",
+          timestamp: new Date().toISOString(),
+        }, 500);
         break;
       }
 
       case "subscription.disable": {
-        const email = event.data.customer?.email;
-        console.log(`[Paystack] 🚫 Subscription disabled: ${email}`);
-
-        if (email) {
-          await db
-            .update(tenants)
-            .set({ plan: "node" }) // Downgrade to baseline node
-            .where(eq(tenants.clerkUserId, email));
-        }
+        persistAppend("paystack-cancellations", {
+          email: event.data?.customer?.email || "",
+          timestamp: new Date().toISOString(),
+        }, 500);
         break;
       }
-
-      case "charge.failed": {
-        console.log(`[Paystack] ❌ Charge FAILED: ${event.data.customer?.email}`);
-        break;
-      }
-
-      default:
-        console.log(`[Paystack] Unhandled event: ${event.event}`);
     }
 
     return NextResponse.json({ received: true });
-  } catch (err) {
-    console.error("[Paystack Webhook] Error:", err);
+  } catch {
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
 }

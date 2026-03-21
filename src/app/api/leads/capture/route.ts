@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import twilio from "twilio";
+import { persistAppend } from "@/lib/persist";
 
 // Default Serverless Node.js Runtime (Required for Twilio SDK execution)
 
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
     // 1. await db.insert(leads).values(lead);
     // 2. await resend.emails.send({ to: lead.email, subject: "Hyper-personalized line generated via Nemotron" });
     
-    console.log(`[VERCEL EDGE] Securely ingested Executive Lead: ${lead.email} from ${lead.company}`);
+    persistAppend("leads", { email: lead.email, company: lead.company, timestamp: new Date().toISOString() }, 500);
 
     // ⚡ THE KILOCLAW SENTINEL DIALER LOGIC
     // If the lead provided a phone number, physically call them in 3 seconds.
@@ -42,10 +43,10 @@ export async function POST(req: Request) {
            to: lead.phone,
            from: myTwilioNumber,
          });
-         console.log(`[SENTINEL_DIALER] Outbound Zero-Second Call Initiated to ${lead.phone}`);
-       } catch (dialError) {
-         console.error("[SENTINEL_DIALER] Twilio Dispatch Failure:", dialError);
-       }
+          persistAppend("sentinel-calls", { phone: lead.phone, timestamp: new Date().toISOString() }, 200);
+        } catch {
+          // Twilio dial failure — non-blocking
+        }
     }
 
     return NextResponse.json({ success: true, processed: lead.email }, { status: 200 });

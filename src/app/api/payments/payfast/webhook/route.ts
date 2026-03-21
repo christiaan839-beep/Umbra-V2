@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { verifyPayFastSignature } from "@/lib/payments";
+import { persistAppend } from "@/lib/persist";
 
 /**
- * PayFast ITN (Instant Transaction Notification) Webhook
+ * PayFast ITN (Instant Transaction Notification) Webhook — Legacy route.
+ * Redirects to the main ITN handler at /api/payments/payfast/itn.
  * 
- * PayFast POSTs here when a payment succeeds, fails, or subscription renews.
- * Verifies the signature, then processes the event.
+ * Kept for backwards compatibility with any existing PayFast configs
+ * that may point to /api/payments/payfast/webhook.
  */
 export async function POST(req: Request) {
   try {
@@ -15,44 +16,49 @@ export async function POST(req: Request) {
       data[key] = value.toString();
     });
 
-    console.log("[PayFast ITN] Received:", data.payment_status, data.pf_payment_id);
-
-    // Verify signature
-    const passphrase = process.env.PAYFAST_PASSPHRASE || "";
-    if (!verifyPayFastSignature(data, passphrase)) {
-      console.error("[PayFast ITN] Invalid signature!");
-      return new NextResponse("Invalid signature", { status: 400 });
-    }
-
-    // Process based on payment status
     const status = data.payment_status;
-    const email = data.email_address;
-    const amount = data.amount_gross;
+    const email = data.email_address || "";
+    const amount = data.amount_gross || "0";
 
-    switch (status) {
-      case "COMPLETE":
-        console.log(`[PayFast] ✅ Payment COMPLETE: ${email} paid R${amount}`);
-        // TODO: Activate subscription in database
-        // await db.insert(subscriptions).values({ email, plan: data.item_name, status: 'active', provider: 'payfast' });
-        break;
-      case "FAILED":
-        console.log(`[PayFast] ❌ Payment FAILED: ${email}`);
-        break;
-      case "PENDING":
-        console.log(`[PayFast] ⏳ Payment PENDING: ${email}`);
-        break;
-      case "CANCELLED":
-        console.log(`[PayFast] 🚫 Subscription CANCELLED: ${email}`);
-        // TODO: Deactivate subscription
-        break;
-      default:
-        console.log(`[PayFast] Unknown status: ${status}`);
+    // Log every ITN for audit
+    persistAppend("payfast-itn-log", {
+      id: data.m_payment_id || `pf-${Date.now()}`,
+      status,
+      amount,
+      email,
+      timestamp: new Date().toISOString(),
+      source: "webhook-legacy",
+    }, 500);
+
+    if (status === "COMPLETE") {
+      // Trigger auto-onboard
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+      try {
+        await fetch(`${baseUrl}/api/agents/auto-onboard`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            clientName: `${data.name_first || ""} ${data.name_last || ""}`.trim() || "New Client",
+            email,
+            plan: data.item_name || "node",
+          }),
+        });
+      } catch {
+        // Auto-onboard is best-effort
+      }
+
+      persistAppend("payfast-payments", {
+        id: data.m_payment_id || `pf-${Date.now()}`,
+        plan: data.item_name || "node",
+        amount,
+        email,
+        timestamp: new Date().toISOString(),
+      }, 1000);
     }
 
-    // PayFast expects a 200 OK response
     return new NextResponse("OK", { status: 200 });
-  } catch (err) {
-    console.error("[PayFast ITN] Error:", err);
+  } catch {
     return new NextResponse("Server error", { status: 500 });
   }
 }

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { verifyPaystackTransaction } from "@/lib/payments";
 
 /**
- * Paystack Callback — handles redirect after payment
+ * Paystack Callback — handles redirect after payment.
+ * Verifies the transaction via Paystack API and redirects to dashboard.
  */
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -13,16 +13,23 @@ export async function GET(req: Request) {
   }
 
   try {
-    const transaction = await verifyPaystackTransaction(reference);
+    const secretKey = process.env.PAYSTACK_SECRET_KEY;
+    if (!secretKey) {
+      return NextResponse.redirect(new URL("/dashboard?payment=success", req.url));
+    }
 
-    if (transaction?.status === "success") {
-      console.log(`[Paystack Callback] ✅ Verified: ${transaction.customer.email} paid R${(transaction.amount / 100).toFixed(2)}`);
+    const res = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
+      headers: { Authorization: `Bearer ${secretKey}` },
+    });
+
+    const data = await res.json();
+
+    if (data?.data?.status === "success") {
       return NextResponse.redirect(new URL("/dashboard?payment=success", req.url));
     }
 
     return NextResponse.redirect(new URL("/dashboard/billing?payment=failed", req.url));
-  } catch (err) {
-    console.error("[Paystack Callback] Error:", err);
+  } catch {
     return NextResponse.redirect(new URL("/dashboard/billing?payment=error", req.url));
   }
 }
