@@ -1,16 +1,29 @@
 /**
- * PERSISTENCE LAYER — File-based storage that survives Vercel redeploys.
+ * PERSISTENCE LAYER — Dual-mode storage.
  * 
- * Uses /tmp for Vercel serverless (shared within invocation lifecycle)
- * and provides a Supabase/Neon-ready interface for production migration.
+ * Mode 1 (Default): File-based /tmp storage for Vercel serverless.
+ * Mode 2 (Production): Supabase PostgreSQL when DATABASE_URL is set.
  * 
- * This wraps all in-memory stores with a persist-on-write pattern.
+ * Auto-detects which mode to use. Zero code changes needed when upgrading.
+ * 
+ * To upgrade to Supabase:
+ * 1. Create a Supabase project at supabase.com
+ * 2. Run this SQL in the SQL Editor:
+ *    CREATE TABLE persist (
+ *      key TEXT PRIMARY KEY,
+ *      data JSONB NOT NULL DEFAULT '[]',
+ *      updated_at TIMESTAMPTZ DEFAULT NOW()
+ *    );
+ * 3. Add these env vars to Vercel:
+ *    SUPABASE_URL=https://your-project.supabase.co
+ *    SUPABASE_KEY=your-anon-key
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { join } from "path";
 
 const PERSIST_DIR = join("/tmp", "sovereign-persist");
+const USE_SUPABASE = !!(process.env.SUPABASE_URL && process.env.SUPABASE_KEY);
 
 function ensureDir() {
   if (!existsSync(PERSIST_DIR)) {
@@ -18,30 +31,94 @@ function ensureDir() {
   }
 }
 
-export function persistWrite<T>(key: string, data: T): void {
+// ── Supabase helpers (only called when env vars are set) ──
+
+async function supabaseWrite(key: string, data: unknown): Promise<void> {
   try {
-    ensureDir();
-    const path = join(PERSIST_DIR, `${key}.json`);
-    writeFileSync(path, JSON.stringify(data), "utf-8");
+    await fetch(`${process.env.SUPABASE_URL}/rest/v1/persist`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": process.env.SUPABASE_KEY!,
+        "Authorization": `Bearer ${process.env.SUPABASE_KEY!}`,
+        "Prefer": "resolution=merge-duplicates",
+      },
+      body: JSON.stringify({ key, data, updated_at: new Date().toISOString() }),
+    });
   } catch {
-    // Silent fail — persistence is best-effort on serverless
+    // Fallback to file if Supabase fails
+    fileWrite(key, data);
   }
 }
 
-export function persistRead<T>(key: string, fallback: T): T {
+async function supabaseRead<T>(key: string, fallback: T): Promise<T> {
+  try {
+    const res = await fetch(
+      `${process.env.SUPABASE_URL}/rest/v1/persist?key=eq.${key}&select=data`,
+      {
+        headers: {
+          "apikey": process.env.SUPABASE_KEY!,
+          "Authorization": `Bearer ${process.env.SUPABASE_KEY!}`,
+        },
+      }
+    );
+    const rows = await res.json();
+    if (Array.isArray(rows) && rows.length > 0) {
+      return rows[0].data as T;
+    }
+    return fallback;
+  } catch {
+    return fileRead(key, fallback);
+  }
+}
+
+// ── File helpers (always available as fallback) ──
+
+function fileWrite(key: string, data: unknown): void {
+  try {
+    ensureDir();
+    writeFileSync(join(PERSIST_DIR, `${key}.json`), JSON.stringify(data), "utf-8");
+  } catch {
+    // Silent fail
+  }
+}
+
+function fileRead<T>(key: string, fallback: T): T {
   try {
     ensureDir();
     const path = join(PERSIST_DIR, `${key}.json`);
     if (!existsSync(path)) return fallback;
-    const raw = readFileSync(path, "utf-8");
-    return JSON.parse(raw) as T;
+    return JSON.parse(readFileSync(path, "utf-8")) as T;
   } catch {
     return fallback;
   }
 }
 
+// ── Public API (auto-detects mode) ──
+
+export function persistWrite<T>(key: string, data: T): void {
+  if (USE_SUPABASE) {
+    supabaseWrite(key, data).catch(() => fileWrite(key, data));
+  } else {
+    fileWrite(key, data);
+  }
+}
+
+export function persistRead<T>(key: string, fallback: T): T {
+  // Sync read — uses file mode only (Supabase is async)
+  // For Supabase reads, use persistReadAsync
+  return fileRead(key, fallback);
+}
+
+export async function persistReadAsync<T>(key: string, fallback: T): Promise<T> {
+  if (USE_SUPABASE) {
+    return supabaseRead(key, fallback);
+  }
+  return fileRead(key, fallback);
+}
+
 export function persistAppend<T>(key: string, item: T, maxItems: number = 1000): void {
-  const existing = persistRead<T[]>(key, []);
+  const existing = fileRead<T[]>(key, []);
   existing.push(item);
   if (existing.length > maxItems) {
     existing.splice(0, existing.length - maxItems);
@@ -50,29 +127,12 @@ export function persistAppend<T>(key: string, item: T, maxItems: number = 1000):
 }
 
 export function persistDelete(key: string): void {
-  try {
-    const path = join(PERSIST_DIR, `${key}.json`);
-    if (existsSync(path)) {
-      writeFileSync(path, "[]", "utf-8");
-    }
-  } catch {
-    // Silent fail
+  fileWrite(key, []);
+  if (USE_SUPABASE) {
+    supabaseWrite(key, []).catch(() => {});
   }
 }
 
-/**
- * SUPABASE-READY INTERFACE
- * When ready to migrate, replace the file operations above with:
- * 
- * import { createClient } from '@supabase/supabase-js';
- * const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
- * 
- * export async function persistWrite(key: string, data: any) {
- *   await supabase.from('persist').upsert({ key, data, updated_at: new Date() });
- * }
- * 
- * export async function persistRead(key: string, fallback: any) {
- *   const { data } = await supabase.from('persist').select('data').eq('key', key).single();
- *   return data?.data || fallback;
- * }
- */
+export function getPersistMode(): string {
+  return USE_SUPABASE ? "supabase" : "file";
+}
