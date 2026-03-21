@@ -9,30 +9,44 @@ export default function CompetitorAssassination() {
   const [scanning, setScanning] = useState(false);
   const [intel, setIntel] = useState<{domain: string, threatLevel: string, vulnerabilities: string[], counterStrikes: string[]} | null>(null);
 
-  const initiateTacticalScan = (e: React.FormEvent) => {
+  const initiateTacticalScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!target) return;
     setScanning(true);
-    
-    // Simulate the extreme API Call to NemoClaw/Gemini 1.5 Pro
+    setIntel(null);
 
-    setTimeout(() => {
-      setIntel({
-         domain: target,
-         threatLevel: "HIGH",
-         vulnerabilities: [
-           "Their pricing structure is hidden behind 'Contact Sales'. Massive friction.",
-           "Their Facebook Ads Library shows they are overspending on broad B2B search terms.",
-           "TrustPilot reviews indicate their customer support takes 48hrs+ to reply."
-         ],
-         counterStrikes: [
-           "Ghost Fleet Protocol: Auto-DM their Twitter followers with a 'We reply in 5 mins' value prop.",
-           "Page Builder: Generate a landing page titled 'The Transparent Alternative to " + target + "'.",
-           "NemoClaw Scraping: Extract their exact LinkedIn followers and send personalized Twilio sequences."
-         ]
+    try {
+      const res = await fetch("/api/agents/competitor-scan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ target }),
       });
+      const data = await res.json();
+      if (data.success) {
+        setIntel({
+          domain: target,
+          threatLevel: data.threat_level || "HIGH",
+          vulnerabilities: data.vulnerabilities || [],
+          counterStrikes: data.counter_strikes || [],
+        });
+      } else {
+        setIntel({
+          domain: target,
+          threatLevel: "UNKNOWN",
+          vulnerabilities: ["Scan failed — check your API keys in Settings."],
+          counterStrikes: ["Ensure a Tavily or Gemini key is configured."],
+        });
+      }
+    } catch {
+      setIntel({
+        domain: target,
+        threatLevel: "ERROR",
+        vulnerabilities: ["Network error during scan."],
+        counterStrikes: ["Check your connection and try again."],
+      });
+    } finally {
       setScanning(false);
-    }, 4500);
+    }
   };
 
   return (

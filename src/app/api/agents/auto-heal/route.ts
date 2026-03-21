@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server";
+import { nimChat } from "@/lib/nvidia";
 
 /**
- * NEMOCLAW AUTO-HEAL — When an agent crashes or returns errors,
- * this system automatically:
- * 1. Detects the failure pattern
- * 2. Diagnoses the root cause using Nemotron
- * 3. Adjusts parameters (temperature, model, max_tokens)
- * 4. Retries with the healed configuration
- * 5. Logs the healing event for audit
- * 
- * This is the self-healing backbone of NemoClaw.
+ * NEMOCLAW AUTO-HEAL — Self-healing backbone.
+ * Now BYOK-aware via nimChat().
  */
 
 interface HealRecord {
@@ -33,36 +27,23 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "agent and error_message required." }, { status: 400 });
       }
 
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (!nimKey) {
-        return NextResponse.json({ error: "NVIDIA_NIM_API_KEY required for healing." }, { status: 500 });
-      }
-
-      // Step 1: Diagnose the failure using Nemotron
-      const diagRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
-        body: JSON.stringify({
-          model: "mistralai/mistral-nemotron",
-          messages: [
-            {
-              role: "system",
-              content: `You are an AI agent diagnostician. Analyze the error below and output a JSON object with:
+      // Step 1: Diagnose the failure using Nemotron (BYOK-aware)
+      const rawDiagnosis = await nimChat(
+        "mistralai/mistral-nemotron",
+        [
+          {
+            role: "system",
+            content: `You are an AI agent diagnostician. Analyze the error below and output a JSON object with:
 {"root_cause": "brief description", "healing_actions": ["action1", "action2"], "recommended_model": "model_id or null", "recommended_temperature": 0.7, "recommended_max_tokens": 1024, "severity": "low|medium|high|critical"}
 Only output valid JSON, nothing else.`,
-            },
-            {
-              role: "user",
-              content: `Agent: ${agent}\nError: ${error_message}\nOriginal payload: ${JSON.stringify(original_payload || {}).substring(0, 500)}`,
-            },
-          ],
-          max_tokens: 300,
-          temperature: 0.2,
-        }),
-      });
-
-      const diagData = await diagRes.json();
-      const rawDiagnosis = diagData?.choices?.[0]?.message?.content || "";
+          },
+          {
+            role: "user",
+            content: `Agent: ${agent}\nError: ${error_message}\nOriginal payload: ${JSON.stringify(original_payload || {}).substring(0, 500)}`,
+          },
+        ],
+        { maxTokens: 300, temperature: 0.2 }
+      );
 
       let diagnosis;
       try {

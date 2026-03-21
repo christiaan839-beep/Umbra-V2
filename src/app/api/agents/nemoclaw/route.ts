@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { nimChat } from "@/lib/nvidia";
 
 /**
  * NEMOCLAW SELF-HEALING AGENT SANDBOX — First-of-its-kind SaaS integration.
@@ -64,11 +65,6 @@ export async function POST(request: Request) {
   try {
     const { action, agentId, config } = await request.json();
 
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
-    if (!nimKey) {
-      return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
-    }
-
     // ═══════════════════════════════════════════════
     // ACTION: DEPLOY — Spin up a new NemoClaw agent
     // ═══════════════════════════════════════════════
@@ -106,30 +102,19 @@ export async function POST(request: Request) {
 
       const task = config?.task || "Describe the Sovereign Matrix pricing tiers.";
 
-      // Step 1: Pre-flight guardrail check
-      const guardrailRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${nimKey}`,
-        },
-        body: JSON.stringify({
-          model: "nvidia/nemotron-content-safety-reasoning-4b",
-          messages: [
-            {
-              role: "system",
-              content: `You are a NemoClaw guardrail enforcement engine. Analyze the following task against these policies: ${agent.guardrails.join(", ")}. 
+      // Step 1: Pre-flight guardrail check via BYOK-aware NIM
+      const guardrailResult = await nimChat(
+        "nvidia/nemotron-content-safety-reasoning-4b",
+        [
+          {
+            role: "system",
+            content: `You are a NemoClaw guardrail enforcement engine. Analyze the following task against these policies: ${agent.guardrails.join(", ")}. 
 Return JSON: {"allowed": true/false, "violations": ["list of violated policies"], "reasoning": "why"}. Output ONLY valid JSON.`,
-            },
-            { role: "user", content: task },
-          ],
-          max_tokens: 256,
-          temperature: 0.1,
-        }),
-      });
-
-      const guardrailData = await guardrailRes.json();
-      const guardrailResult = guardrailData?.choices?.[0]?.message?.content || '{"allowed": true, "violations": []}';
+          },
+          { role: "user", content: task },
+        ],
+        { maxTokens: 256, temperature: 0.1 }
+      );
 
       let enforcement;
       try {
@@ -151,29 +136,18 @@ Return JSON: {"allowed": true/false, "violations": ["list of violated policies"]
         });
       }
 
-      // Step 2: Execute the task via sandboxed LLM
-      const executeRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${nimKey}`,
-        },
-        body: JSON.stringify({
-          model: "mistralai/mistral-nemotron",
-          messages: [
-            {
-              role: "system",
-              content: `You are ${agent.name}, a NemoClaw-secured autonomous agent operating inside an OpenShell sandbox. You must follow these policies at all times: ${agent.guardrails.join(", ")}. Complete the user's task accurately and concisely.`,
-            },
-            { role: "user", content: task },
-          ],
-          max_tokens: 1024,
-          temperature: 0.6,
-        }),
-      });
-
-      const executeData = await executeRes.json();
-      const output = executeData?.choices?.[0]?.message?.content || "Execution failed.";
+      // Step 2: Execute the task via sandboxed LLM (BYOK-aware)
+      const output = await nimChat(
+        "mistralai/mistral-nemotron",
+        [
+          {
+            role: "system",
+            content: `You are ${agent.name}, a NemoClaw-secured autonomous agent operating inside an OpenShell sandbox. You must follow these policies at all times: ${agent.guardrails.join(", ")}. Complete the user's task accurately and concisely.`,
+          },
+          { role: "user", content: task },
+        ],
+        { maxTokens: 1024, temperature: 0.6 }
+      );
 
       agent.tasks_completed += 1;
 

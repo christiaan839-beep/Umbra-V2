@@ -1,0 +1,73 @@
+import { NextResponse } from "next/server";
+import { ai, research_ai } from "@/lib/ai";
+
+/**
+ * COMPETITOR SCAN — Real web research + LLM analysis.
+ * Uses Tavily to scrape the target domain, then synthesizes an
+ * intelligence report with vulnerabilities and counter-strikes.
+ */
+
+export async function POST(request: Request) {
+  try {
+    const { target } = await request.json();
+
+    if (!target) {
+      return NextResponse.json({ error: "target domain is required." }, { status: 400 });
+    }
+
+    const start = Date.now();
+
+    // Step 1: Real web research via Tavily
+    let webIntel = "";
+    try {
+      webIntel = await research_ai(
+        `${target} complaints reviews criticism pricing problems`,
+        `What are the weaknesses, negative reviews, pricing complaints, and competitive vulnerabilities of ${target}? Include any public criticism.`
+      );
+    } catch {
+      webIntel = `Unable to scrape ${target} — Tavily key may not be configured. Falling back to LLM analysis.`;
+    }
+
+    // Step 2: LLM analysis to produce structured intel
+    const analysis = await ai(
+      `You are a competitive intelligence analyst. Based on the web research below, produce a tactical intelligence report.
+
+TARGET: ${target}
+
+WEB RESEARCH:
+${webIntel}
+
+OUTPUT (strict JSON):
+{
+  "threat_level": "HIGH|MEDIUM|LOW",
+  "vulnerabilities": ["5 specific exploitable weaknesses with evidence"],
+  "counter_strikes": ["5 specific offensive actions our agency can take to beat them"]
+}
+
+Be specific, actionable, and aggressive. Reference real findings from the research. Output ONLY valid JSON.`,
+      { system: "You are a ruthless competitive strategist who finds and exploits competitor weaknesses.", maxTokens: 2000 }
+    );
+
+    let parsed;
+    try {
+      parsed = JSON.parse(analysis.replace(/```json?\n?/g, "").replace(/```/g, "").trim());
+    } catch {
+      parsed = {
+        threat_level: "MEDIUM",
+        vulnerabilities: ["Analysis produced non-structured output. Raw result available."],
+        counter_strikes: [analysis.substring(0, 200)],
+      };
+    }
+
+    return NextResponse.json({
+      success: true,
+      target,
+      threat_level: parsed.threat_level,
+      vulnerabilities: parsed.vulnerabilities,
+      counter_strikes: parsed.counter_strikes,
+      duration_ms: Date.now() - start,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: "Competitor scan error", details: String(error) }, { status: 500 });
+  }
+}

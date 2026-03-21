@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
+import { nimChat } from "@/lib/nvidia";
 
 /**
- * PII AUTO-REDACTION API — Uses NVIDIA GLiNER PII model to detect and redact
+ * PII AUTO-REDACTION API — Uses NVIDIA Content Safety model to detect and redact
  * Personally Identifiable Information from text before LLM processing.
- * 
- * Ensures POPIA/GDPR compliance for all client data.
+ * Ensures POPIA/GDPR compliance. Now BYOK-aware via nimChat().
  */
 
 export async function POST(request: Request) {
@@ -15,24 +15,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Text is required." }, { status: 400 });
     }
 
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
-    if (!nimKey) {
-      return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
-    }
-
-    // Step 1: Use NeMo Content Safety model to detect PII entities
-    const nimRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${nimKey}`,
-      },
-      body: JSON.stringify({
-        model: "nvidia/nemotron-content-safety-reasoning-4b",
-        messages: [
-          {
-            role: "system",
-            content: `You are a PII detection system. Analyze the following text and identify ALL personally identifiable information including:
+    // Step 1: Use NeMo Content Safety model to detect PII entities (BYOK-aware)
+    const rawResponse = await nimChat(
+      "nvidia/nemotron-content-safety-reasoning-4b",
+      [
+        {
+          role: "system",
+          content: `You are a PII detection system. Analyze the following text and identify ALL personally identifiable information including:
 - Full names
 - Email addresses
 - Phone numbers
@@ -51,26 +40,17 @@ Return a JSON object with:
 }
 
 Output ONLY valid JSON. No explanation.`,
-          },
-          { role: "user", content: text },
-        ],
-        max_tokens: 2048,
-        temperature: 0.1,
-      }),
-    });
-
-    const nimData = await nimRes.json();
-    const rawResponse = nimData?.choices?.[0]?.message?.content || "{}";
+        },
+        { role: "user", content: text },
+      ],
+      { maxTokens: 2048, temperature: 0.1 }
+    );
 
     let parsed;
     try {
       parsed = JSON.parse(rawResponse);
     } catch {
-      parsed = {
-        entities: [],
-        risk_level: "UNKNOWN",
-        redacted_text: text,
-      };
+      parsed = { entities: [], risk_level: "UNKNOWN", redacted_text: text };
     }
 
     return NextResponse.json({
