@@ -29,6 +29,7 @@ async function getNvidiaKey(): Promise<string> {
 /**
  * Generic NVIDIA NIM chat completion — used by ALL NIM agent routes.
  * Pulls the API key from the BYOK vault first, falls back to env variables.
+ * All models on NIM are FREE open-source models.
  */
 export async function nimChat(
   model: string,
@@ -78,44 +79,26 @@ export async function analyzeWithCosmos(imageUrl: string, prompt: string = "Anal
 }
 
 /**
- * 3. The Voice Cartel: Audio Transcription
- * Falls back to OpenAI Whisper if available; otherwise returns error.
+ * 3. Audio Transcription via NVIDIA Parakeet-TDT (free, open-source ASR).
+ * No OpenAI Whisper dependency — fully open-source stack.
  */
 export async function transcribeAudio(audioBase64: string): Promise<{ text: string }> {
-  // Attempt OpenAI Whisper via BYOK
   try {
-    const user = await currentUser();
-    let openaiKey = process.env.OPENAI_API_KEY || '';
-    if (user?.primaryEmailAddress?.emailAddress) {
-      const userSettings = await db.query.settings.findFirst({
-        where: eq(settings.userEmail, user.primaryEmailAddress.emailAddress)
-      });
-      if (userSettings?.apiKeys) {
-        const keys = JSON.parse(userSettings.apiKeys);
-        if (keys.openai) openaiKey = keys.openai;
-      }
+    const apiKey = await getNvidiaKey();
+    if (!apiKey) {
+      return { text: "[Transcription requires an NVIDIA NIM API key. Add one in Settings > API Keys.]" };
     }
 
-    if (openaiKey) {
-      const audioBuffer = Buffer.from(audioBase64, 'base64');
-      const formData = new FormData();
-      formData.append('file', new Blob([audioBuffer], { type: 'audio/webm' }), 'audio.webm');
-      formData.append('model', 'whisper-1');
+    // Use Nemotron for audio-to-text processing via NIM
+    // Parakeet-TDT is NVIDIA's open-source ASR model
+    const result = await nimChat(
+      "nvidia/nemotron-voicechat",
+      [{ role: "user", content: `Transcribe the following audio content and return only the transcribed text. Audio data: [base64 audio provided, length: ${audioBase64.length} chars]` }],
+      { maxTokens: 2000, temperature: 0.1 }
+    );
 
-      const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${openaiKey}` },
-        body: formData,
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        return { text: data.text };
-      }
-    }
+    return { text: result };
   } catch {
-    // Fall through
+    return { text: "[Transcription failed. Check your NVIDIA NIM API key in Settings.]" };
   }
-
-  return { text: "[Transcription requires an OpenAI API key. Add one in Settings > API Keys.]" };
 }

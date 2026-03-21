@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 
 export default function ApiKeysPage() {
   const [keys, setKeys] = useState({
+    nvidia: "",
     gemini: "",
-    openai: "",
     anthropic: "",
     grok: "",
     tavily: "",
@@ -76,9 +76,23 @@ export default function ApiKeysPage() {
         </div>
       ) : (
         <div className="space-y-6">
+          <div className="glass-panel p-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/5">
+            <label className="block text-sm font-bold text-white uppercase tracking-widest mb-2 flex items-center gap-2">
+              NVIDIA NIM API Key <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded uppercase tracking-wider">FREE — 10+ Open-Source Models</span>
+            </label>
+            <p className="text-xs text-neutral-500 mb-4">Powers all NemoClaw agents, Nemotron reasoning, VoiceChat, PII Redactor, and the Collab Room. Get your free key at <a href="https://build.nvidia.com" target="_blank" className="text-emerald-400 underline">build.nvidia.com</a></p>
+            <input 
+              type="password"
+              value={keys.nvidia}
+              onChange={(e) => setKeys({...keys, nvidia: e.target.value})}
+              placeholder="nvapi-..."
+              className="w-full bg-black/40 border border-emerald-500/20 rounded-xl px-4 py-3 text-white placeholder:text-neutral-600 focus:outline-none focus:border-emerald-500/50 font-mono transition-colors"
+            />
+          </div>
+
           <div className="glass-panel p-6 rounded-2xl border border-white/5 bg-black/40">
             <label className="block text-sm font-bold text-white uppercase tracking-widest mb-2">Google Gemini API Key</label>
-            <p className="text-xs text-neutral-500 mb-4">Required for core reasoning, content generation, and strategy synthesis. (Gemini 1.5 Pro/Flash)</p>
+            <p className="text-xs text-neutral-500 mb-4">Fallback for content generation and strategy synthesis. (Gemini 2.0 Flash — free tier)</p>
             <input 
               type="password"
               value={keys.gemini}
@@ -100,17 +114,7 @@ export default function ApiKeysPage() {
             />
           </div>
 
-          <div className="glass-panel p-6 rounded-2xl border border-white/5 bg-black/40">
-            <label className="block text-sm font-bold text-white uppercase tracking-widest mb-2">OpenAI API Key</label>
-            <p className="text-xs text-neutral-500 mb-4">Required if you prefer overriding Gemini with GPT-4o for sales reasoning.</p>
-            <input 
-              type="password"
-              value={keys.openai}
-              onChange={(e) => setKeys({...keys, openai: e.target.value})}
-              placeholder="sk-proj-..."
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-neutral-600 focus:outline-none focus:border-rose-500/50 font-mono transition-colors"
-            />
-          </div>
+
 
           <div className="glass-panel p-6 rounded-2xl border border-white/5 bg-black/40">
             <label className="block text-sm font-bold text-white uppercase tracking-widest mb-2">Anthropic (Claude) API Key</label>
