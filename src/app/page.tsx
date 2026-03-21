@@ -259,10 +259,10 @@ export default function Home() {
         <div className="w-full max-w-6xl mx-auto relative z-10 mt-10 mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { end: 29, suffix: "", label: "AI Tools", icon: BrainCircuit },
-              { end: 24, suffix: "/7", label: "Always Running", icon: Clock },
-              { end: 30, suffix: "s", label: "Content Generation", icon: TrendingUp },
-              { end: 90, suffix: "%", prefix: "", label: "Cost Savings vs Agency", icon: DollarSign },
+              { end: 62, suffix: "", label: "Autonomous AI Agents", icon: BrainCircuit },
+              { end: 41, suffix: "", label: "NVIDIA NIM Models", icon: Clock },
+              { end: 6, suffix: "", label: "Industry Verticals", icon: TrendingUp },
+              { end: 0, suffix: "", prefix: "$", label: "Infrastructure Cost", icon: DollarSign },
             ].map((stat, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
                 className="bg-black/50 border border-white/5 p-6 rounded-2xl text-center hover:border-white/10 transition-colors">
@@ -397,7 +397,7 @@ export default function Home() {
           <div className="marquee-track gap-12">
             {[...Array(2)].map((_, repeat) => (
               <div key={repeat} className="flex gap-12 items-center px-6">
-                {["Google Gemini 2.5", "NVIDIA Nemotron", "NVIDIA Riva STT/TTS", "TensorRT-LLM", "NeMo Guardrails", "OpenClaw", "Google Vertex AI", "Neon Postgres", "Pipecat WebRTC", "Vercel Edge", "Data Flywheel"].map(tech => (
+                {["NVIDIA NIM 41 Models", "DeepSeek V3.2", "Mistral Nemotron", "NeMo Guardrails", "Agent Memory", "Collab Rooms", "Smart Router", "Multi-Modal Pipeline", "NemoClaw OS", "Vercel Edge", "Self-Improving AI"].map(tech => (
                   <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-bold font-mono whitespace-nowrap">{tech}</span>
                 ))}
               </div>
