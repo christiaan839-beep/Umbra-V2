@@ -22,27 +22,59 @@ const LOG_MESSAGES = [
   { module: 'Cosmos VLM', message: 'Extracting semantic hooks from competitor MP4.', icon: Cpu, level: 'warn' },
 ];
 
+const iconMap: Record<string, React.ElementType> = {
+  NemoClaw: Zap,
+  'Twilio X1': Globe2,
+  'Nemotron V3': Activity,
+  Morpheus: ShieldAlert,
+  'Neon DB': Server,
+  'Cosmos VLM': Cpu,
+  default: Zap
+};
+
 export function LiveActivityConsole() {
-  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [logs, setLogs] = useState<LogEntry[]>(() => {
+    return Array.from({ length: 4 }).map((_, i) => createLog(i));
+  });
   const endRef = useRef<HTMLDivElement>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    // Initialize with first 4 logs (deterministic)
-    const initialLogs = Array.from({ length: 4 }).map((_, i) => createLog(i));
-    setLogs(initialLogs);
+    // Connect to genuine Server-Sent Events stream
+    const eventSource = new EventSource('/api/events');
 
-    // Cycle through logs sequentially at fixed 4-second interval (deterministic, not random)
-    let index = 4;
-    const interval = setInterval(() => {
-      const newLog = createLog(index);
-      setLogs(prev => {
-        const updated = [...prev, newLog];
-        return updated.length > 50 ? updated.slice(updated.length - 50) : updated;
-      });
-      index++;
-    }, 4000);
+    eventSource.onopen = () => {
+      setIsConnected(true);
+    };
 
-    return () => clearInterval(interval);
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'connected') return; // Ignore control messages
+
+        // Map network string back to React icon context if we want, or handle inside render
+        const newLog: LogEntry = {
+          ...data,
+          icon: iconMap[data.module] || iconMap.default
+        };
+
+        setLogs(prev => {
+          const updated = [...prev, newLog];
+          return updated.length > 50 ? updated.slice(updated.length - 50) : updated;
+        });
+      } catch (e) {
+        console.error("SSE parse error", e);
+      }
+    };
+
+    eventSource.onerror = () => {
+      setIsConnected(false);
+    };
+
+    return () => {
+      eventSource.close();
+      setIsConnected(false);
+    };
   }, []);
 
   useEffect(() => {
@@ -57,8 +89,10 @@ export function LiveActivityConsole() {
            <span className="text-xs font-bold tracking-widest uppercase text-white">Swarm Activity</span>
          </div>
          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[9px] font-mono text-emerald-500 uppercase tracking-widest">Live</span>
+            <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isConnected ? 'bg-emerald-500' : 'bg-red-500'}`} />
+            <span className={`text-[9px] font-mono uppercase tracking-widest ${isConnected ? 'text-emerald-500' : 'text-red-500'}`}>
+              {isConnected ? 'Live' : 'Offline'}
+            </span>
          </div>
        </div>
 

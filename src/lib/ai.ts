@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { tavily } from "@tavily/core";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/db";
@@ -9,9 +10,10 @@ import type { AIModel, AIOptions } from "@/types";
 
 const globalGeminiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || "";
 const globalAnthropicKey = process.env.ANTHROPIC_API_KEY || "";
+const globalOpenAIKey = process.env.OPENAI_API_KEY || "";
 const globalTavilyKey = process.env.TAVILY_API_KEY || "tvly-demo";
 
-async function getUserKeys(): Promise<{ gemini?: string, tavily?: string, anthropic?: string, ollama?: string }> {
+async function getUserKeys(): Promise<{ gemini?: string, tavily?: string, anthropic?: string, ollama?: string, openai?: string }> {
   try {
     const user = await currentUser();
     if (user?.primaryEmailAddress?.emailAddress) {
@@ -44,10 +46,33 @@ export async function ai(prompt: string, options: AIOptions = {}): Promise<strin
     return ollamaText(prompt, system, userKeys.ollama);
   }
 
-  if (model === "claude") {
+  if (model === "openai" || userKeys.openai && model !== "claude") {
+    // If user provided an OpenAI key, use it as default unless explicitly claude
+    return openAIText(prompt, system, maxTokens, userKeys);
+  }
+
+  if (model === "claude" || userKeys.anthropic && !userKeys.gemini) {
     return claudeText(prompt, system, maxTokens, userKeys);
   }
+
   return geminiText(prompt, system, maxTokens, userKeys);
+}
+
+async function openAIText(prompt: string, system?: string, maxTokens: number = 2000, userKeys: { openai?: string } = {}): Promise<string> {
+  const keys = Object.keys(userKeys).length > 0 ? userKeys : await getUserKeys();
+  const apiKey = keys.openai || globalOpenAIKey;
+  if (!apiKey) throw new Error("OpenAI key required but not found.");
+
+  const openai = new OpenAI({ apiKey });
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [
+      ...(system ? [{ role: "system", content: system } as const] : []),
+      { role: "user", content: prompt }
+    ],
+    max_tokens: maxTokens,
+  });
+  return response.choices[0].message.content || "";
 }
 
 async function ollamaText(prompt: string, system?: string, ollamaUrl: string = "http://localhost:11434"): Promise<string> {
@@ -72,7 +97,7 @@ async function ollamaText(prompt: string, system?: string, ollamaUrl: string = "
   }
 }
 
-async function geminiText(prompt: string, system?: string, maxTokens: number = 2000, userKeys: any = {}): Promise<string> {
+async function geminiText(prompt: string, system?: string, maxTokens: number = 2000, userKeys: { gemini?: string } = {}): Promise<string> {
   const keys = Object.keys(userKeys).length > 0 ? userKeys : await getUserKeys();
   const client = keys.gemini ? new GoogleGenerativeAI(keys.gemini) : globalGenAI;
   
@@ -85,7 +110,7 @@ async function geminiText(prompt: string, system?: string, maxTokens: number = 2
   return result.response.text();
 }
 
-async function claudeText(prompt: string, system?: string, maxTokens: number = 2000, userKeys: any = {}): Promise<string> {
+async function claudeText(prompt: string, system?: string, maxTokens: number = 2000, userKeys: { anthropic?: string } = {}): Promise<string> {
   const keys = Object.keys(userKeys).length > 0 ? userKeys : await getUserKeys();
   const client = keys.anthropic ? new Anthropic({ apiKey: keys.anthropic }) : globalAnthropic;
 
