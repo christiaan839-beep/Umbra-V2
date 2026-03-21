@@ -10,19 +10,26 @@ import crypto from "crypto";
 // ─── Pricing Plans ──────────────────────────────────────────────
 
 export const PLANS = {
-  pro: {
-    name: "Pro",
-    priceZAR: 99700, // R997.00 (in cents for Paystack)
-    priceDisplay: "R997",
-    monthlyAmount: 997,
-    features: ["Unlimited AI Generations", "All AI Tools", "Priority Processing", "Export to PDF", "Email Support"],
+  node: {
+    name: "Sovereign Node",
+    priceZAR: 999700,
+    priceDisplay: "R9,997",
+    monthlyAmount: 9997,
+    features: ["OpenClaw Local Execution", "Apollo Ghost Fleet", "Sovereign Visual Studio", "NVIDIA Edify 3D", "Morpheus Shield", "Single macOS Node License"],
   },
-  agency: {
-    name: "Agency",
-    priceZAR: 275000, // R2,750.00
-    priceDisplay: "R2,750",
-    monthlyAmount: 2750,
-    features: ["Everything in Pro", "White-Label Dashboard", "Client Portal", "Bulk Pages (1000+/mo)", "API Access", "Dedicated Support"],
+  array: {
+    name: "Sovereign Array",
+    priceZAR: 2499700,
+    priceDisplay: "R24,997",
+    monthlyAmount: 24997,
+    features: ["Everything in Node", "Unlimited AI generations", "Cosmos VLM Video", "Priority processing", "War Room Red-Teaming", "Direct Comm-Link (24h)"],
+  },
+  cartel: {
+    name: "Cartel License",
+    priceZAR: 4999700,
+    priceDisplay: "R49,997",
+    monthlyAmount: 49997,
+    features: ["Everything in Array", "White-label dashboard", "Client portal", "Root Admin Command Center", "API access", "5 Sub-Licenses", "SLA guarantee"],
   },
 } as const;
 
@@ -46,7 +53,7 @@ function getPayFastConfig(): PayFastConfig | null {
     merchantId,
     merchantKey,
     passphrase: process.env.PAYFAST_PASSPHRASE || "",
-    sandbox: process.env.PAYFAST_SANDBOX === "true",
+    sandbox: process.env.PAYFAST_MODE === "sandbox",
   };
 }
 
@@ -62,16 +69,16 @@ export function generatePayFastForm(plan: PlanId, email: string, returnUrl: stri
   const data: Record<string, string> = {
     merchant_id: config.merchantId,
     merchant_key: config.merchantKey,
-    return_url: `${returnUrl}/dashboard?payment=success`,
-    cancel_url: `${returnUrl}/dashboard/billing?payment=cancelled`,
-    notify_url: `${returnUrl}/api/payments/payfast/webhook`,
+    return_url: `${returnUrl}/payment/success`,
+    cancel_url: `${returnUrl}/payment/cancel`,
+    notify_url: `${returnUrl}/api/payments/payfast/itn`,
     email_address: email,
     amount: planData.monthlyAmount.toFixed(2),
-    item_name: `SOVEREIGN ${planData.name} Plan - Monthly`,
-    subscription_type: "1", // Subscription
+    item_name: `${planData.name} - Monthly`,
+    subscription_type: "1",
     recurring_amount: planData.monthlyAmount.toFixed(2),
-    frequency: "3", // Monthly
-    cycles: "0", // Indefinite
+    frequency: "3",
+    cycles: "0",
   };
 
   // Generate signature
@@ -85,7 +92,6 @@ export function generatePayFastForm(plan: PlanId, email: string, returnUrl: stri
 
   data.signature = crypto.createHash("md5").update(signatureWithPassphrase).digest("hex");
 
-  // Build form HTML
   const fields = Object.entries(data)
     .map(([k, v]) => `<input type="hidden" name="${k}" value="${v}" />`)
     .join("\n");
@@ -130,7 +136,7 @@ export async function initializePaystack(plan: PlanId, email: string, callbackUr
     },
     body: JSON.stringify({
       email,
-      amount: planData.priceZAR, // Paystack uses kobo/cents
+      amount: planData.priceZAR,
       currency: "ZAR",
       callback_url: `${callbackUrl}/api/payments/paystack/callback`,
       metadata: { plan, planName: planData.name },
@@ -146,7 +152,6 @@ export async function initializePaystack(plan: PlanId, email: string, callbackUr
     };
   }
 
-  console.error("[Paystack] Init failed:", data);
   return null;
 }
 

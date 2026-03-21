@@ -18,7 +18,7 @@ const NeuralWebGLBackground = dynamic(
   { ssr: false }
 );
 import { UserButton, useUser } from "@clerk/nextjs";
-import { TelemetryProvider, useTelemetry } from '@/components/providers/TelemetryProvider';
+import { TelemetryProvider } from '@/components/providers/TelemetryProvider';
 import { JarvisSocket } from '@/components/JarvisSocket';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';

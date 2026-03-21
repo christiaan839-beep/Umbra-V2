@@ -114,9 +114,9 @@ export default function Home() {
         {/* Elite Physical Data Flow Simulator */}
         <ImmersiveNodeLayer />
 
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
           
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, ease: "easeOut" }}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1, ease: "easeOut" }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-xs font-medium uppercase tracking-[0.2em] mb-8 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
             The Ultimate Autonomous AI OS
           </motion.div>
@@ -259,8 +259,8 @@ export default function Home() {
         <div className="w-full max-w-6xl mx-auto relative z-10 mt-10 mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { end: 62, suffix: "", label: "Autonomous AI Agents", icon: BrainCircuit },
-              { end: 41, suffix: "", label: "NVIDIA NIM Models", icon: Clock },
+              { end: 72, suffix: "+", label: "Autonomous AI Agents", icon: BrainCircuit },
+              { end: 50, suffix: "+", label: "NVIDIA NIM Models", icon: Clock },
               { end: 6, suffix: "", label: "Industry Verticals", icon: TrendingUp },
               { end: 0, suffix: "", prefix: "$", label: "Infrastructure Cost", icon: DollarSign },
             ].map((stat, i) => (
