@@ -34,7 +34,6 @@ export default function RevenueAttributionPage({ params }: Props) {
           setData(result);
         }
       } catch (err) {
-        console.error("Failed to fetch revenue data", err);
       } finally {
         setLoading(false);
       }

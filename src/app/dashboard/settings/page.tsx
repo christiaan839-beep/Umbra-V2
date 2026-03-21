@@ -46,7 +46,7 @@ const API_KEY_FIELDS = [
     desc: "Name of your Pinecone index for memory storage",
     icon: Database,
     color: "text-emerald-400",
-    placeholder: "umbra-memory",
+    placeholder: "sovereign-memory",
   },
 ];
 

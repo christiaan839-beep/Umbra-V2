@@ -53,7 +53,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">8. Contact</h2>
-            <p>For questions about these terms, contact us at <a href="mailto:support@umbra.co.za" className="text-[#00B7FF] hover:underline">support@umbra.co.za</a>.</p>
+            <p>For questions about these terms, contact us at <a href="mailto:support@sovereignmatrix.agency" className="text-[#00B7FF] hover:underline">support@sovereignmatrix.agency</a>.</p>
           </section>
         </div>
       </div>

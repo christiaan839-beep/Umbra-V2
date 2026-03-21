@@ -24,7 +24,6 @@ export default function WebhooksPage() {
           } catch (e) {}
         }
       } catch (err) {
-        console.error("Failed to load webhooks", err);
       } finally {
         setIsLoading(false);
       }

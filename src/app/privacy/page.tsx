@@ -38,7 +38,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">5. Your Rights</h2>
-            <p>Under POPIA (Protection of Personal Information Act), you have the right to: access your personal information, request correction or deletion of your data, object to processing, and withdraw consent. Contact us at support@umbra.co.za to exercise these rights.</p>
+            <p>Under POPIA (Protection of Personal Information Act), you have the right to: access your personal information, request correction or deletion of your data, object to processing, and withdraw consent. Contact us at support@sovereignmatrix.agency to exercise these rights.</p>
           </section>
 
           <section>
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-lg font-bold text-white mb-3">7. Contact</h2>
-            <p>For privacy-related inquiries, contact us at <a href="mailto:support@umbra.co.za" className="text-[#00B7FF] hover:underline">support@umbra.co.za</a>.</p>
+            <p>For privacy-related inquiries, contact us at <a href="mailto:support@sovereignmatrix.agency" className="text-[#00B7FF] hover:underline">support@sovereignmatrix.agency</a>.</p>
           </section>
         </div>
       </div>

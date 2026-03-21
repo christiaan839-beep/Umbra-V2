@@ -26,10 +26,18 @@ export function SwarmDemo() {
     setTimeout(() => setStatus("analyzing"), 1500);
 
     try {
-      // In a real scenario we'd call an API. But this is the homepage demo so we simulate an amazing audit.
+      // In a real scenario we'd call an API. This is the homepage demo — produces a deterministic score from the URL.
       setTimeout(() => {
+        // Deterministic score based on URL hash (same URL = same score)
+        let hash = 0;
+        for (let i = 0; i < url.length; i++) {
+          hash = ((hash << 5) - hash) + url.charCodeAt(i);
+          hash |= 0;
+        }
+        const score = (Math.abs(hash) % 20) + 30;
+
         setResult({
-          score: Math.floor(Math.random() * 20) + 30, // Show a low score to create urgency
+          score,
           issues: [
             "Missing dynamic meta tags (-15% CTR)",
             "H1 tag not optimized for high-intent keywords",

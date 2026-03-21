@@ -30,7 +30,6 @@ export default function ApiKeysPage() {
           } catch (e) {}
         }
       } catch (err) {
-        console.error("Failed to load keys", err);
       } finally {
         setIsLoading(false);
       }

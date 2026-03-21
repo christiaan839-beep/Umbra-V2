@@ -227,7 +227,7 @@ export default function LibraryPage() {
                               <span className="text-[9px] uppercase tracking-[0.3em] text-emerald-400 font-mono flex items-center gap-1">
                                 <CheckCircle2 className="w-3 h-3" /> Saved Output
                               </span>
-                              <ExportButtons content={selectedOutput} filename={`umbra-${gen.tool}-${gen.action}`} />
+                              <ExportButtons content={selectedOutput} filename={`sovereign-${gen.tool}-${gen.action}`} />
                             </div>
                             <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
                               <MarkdownRenderer content={selectedOutput} />

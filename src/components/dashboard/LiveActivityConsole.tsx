@@ -27,17 +27,20 @@ export function LiveActivityConsole() {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Initialize with a few logs
-    const initialLogs = Array.from({ length: 4 }).map((_, i) => createRandomLog(i));
+    // Initialize with first 4 logs (deterministic)
+    const initialLogs = Array.from({ length: 4 }).map((_, i) => createLog(i));
     setLogs(initialLogs);
 
+    // Cycle through logs sequentially at fixed 4-second interval (deterministic, not random)
+    let index = 4;
     const interval = setInterval(() => {
+      const newLog = createLog(index);
       setLogs(prev => {
-        const newLogs = [...prev, createRandomLog(Date.now())];
-        if (newLogs.length > 50) return newLogs.slice(newLogs.length - 50);
-        return newLogs;
+        const updated = [...prev, newLog];
+        return updated.length > 50 ? updated.slice(updated.length - 50) : updated;
       });
-    }, Math.random() * 4000 + 2000); // Random interval between 2-6s
+      index++;
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -87,12 +90,12 @@ export function LiveActivityConsole() {
   );
 }
 
-function createRandomLog(idSeed: string | number): LogEntry {
-  const template = LOG_MESSAGES[Math.floor(Math.random() * LOG_MESSAGES.length)];
+function createLog(index: number): LogEntry {
+  const template = LOG_MESSAGES[index % LOG_MESSAGES.length];
   const d = new Date();
   const timestamp = `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}:${d.getSeconds().toString().padStart(2, '0')}`;
   return {
-    id: `log-${idSeed}-${Math.random()}`,
+    id: `log-${index}`,
     timestamp,
     module: template.module,
     message: template.message,

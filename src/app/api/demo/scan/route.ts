@@ -104,7 +104,6 @@ Keep findings BRUTAL and ACTIONABLE. You are replacing them. Return ONLY valid J
     return NextResponse.json({ success: true, scan: parsed });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("[Demo Scan Error]:", message);
     return NextResponse.json(
       { error: "Scan failed. Try again.", details: message },
       { status: 500 }

@@ -139,7 +139,6 @@ function KPIGrid({ clientId }: { clientId: string }) {
         const data = await res.json();
         if (data.success) setMetrics(data.metrics);
       } catch (err) {
-        console.error("Failed to fetch portal metrics:", err);
       }
     };
     fetchMetrics();
@@ -217,7 +216,6 @@ function LiveLogFeed({ clientId }: { clientId: string }) {
 
         setLogs(formattedLogs);
       } catch (e) {
-        console.error(e);
       } finally {
         setLoading(false);
       }

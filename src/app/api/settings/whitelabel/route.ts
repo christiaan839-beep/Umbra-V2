@@ -19,7 +19,6 @@ export async function GET() {
 
     return NextResponse.json({ config: config || null });
   } catch (err) {
-    console.error("GET /api/settings/whitelabel error:", err);
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }
@@ -56,7 +55,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("POST /api/settings/whitelabel error:", err);
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }

@@ -29,7 +29,6 @@ export default function WhitelabelPage() {
           });
         }
       } catch (err) {
-        console.error("Failed to load whitelabel settings", err);
       } finally {
         setIsLoading(false);
       }
