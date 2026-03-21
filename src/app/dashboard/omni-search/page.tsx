@@ -2,19 +2,41 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Database, Layers, FileText, Target } from "lucide-react";
+import { Search, Database, Layers, FileText } from "lucide-react";
 
 export default function OmniSearchPage() {
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState<"idle" | "searching" | "complete">("idle");
+  const [result, setResult] = useState<string>("");
+  const [sources, setSources] = useState<Array<{title: string; score: string}>>([]);
 
-  const startSearch = (e: React.FormEvent) => {
+  const startSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query) return;
     setStatus("searching");
-    setTimeout(() => {
+    setResult("");
+    setSources([]);
+
+    try {
+      const res = await fetch("/api/agents/smart-router", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: query, task_type: "analysis", priority: "quality" }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setResult(data.result || "No results found.");
+        setSources([
+          { title: `${data.routing?.model_selected || "NIM"} Analysis`, score: `Quality: ${data.routing?.quality_score || "N/A"}/10` },
+          { title: `Task: ${data.routing?.task_type || "analysis"}`, score: `${data.duration_ms || 0}ms` },
+        ]);
+      } else {
+        setResult("Search failed. Ensure your NVIDIA NIM key is configured in Settings.");
+      }
+    } catch {
+      setResult("Network error. Check your connection.");
+    } finally {
       setStatus("complete");
-    }, 2000);
+    }
   };
 
   return (
@@ -55,28 +77,23 @@ export default function OmniSearchPage() {
             <div className="space-y-4">
                {/* Synthesized Answer */}
                <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.05)]">
-                 <h4 className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-2">Synthesized Answer (DeepSeek-R1)</h4>
-                 <p className="text-sm leading-relaxed text-emerald-50">
-                   Based on the Voice Swarm transcripts from October 12th, the lead &quot;Austin Elite Roofing&quot; objected primarily to the implementation timeline. They expressed concern that an AI swarm deployment would disrupt their current Q4 sales motion. They requested a phased rollout starting with Lead Qualification before moving to full Autonomous Outbound.
+                 <h4 className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-2">Synthesized Answer (NIM Neural Retrieval)</h4>
+                 <p className="text-sm leading-relaxed text-emerald-50 whitespace-pre-wrap">
+                   {result}
                  </p>
                </div>
 
                {/* Source References */}
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-emerald-500/30 transition-colors cursor-pointer group">
-                     <div className="flex items-center gap-2 mb-2">
-                        <FileText className="w-4 h-4 text-neutral-400 group-hover:text-emerald-400 transition-colors" />
-                        <span className="text-xs font-bold text-white">Transcript_101224.txt</span>
-                     </div>
-                     <p className="text-[10px] text-neutral-500 font-mono">Similarity Score: 0.982</p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-emerald-500/30 transition-colors cursor-pointer group">
-                     <div className="flex items-center gap-2 mb-2">
-                        <Target className="w-4 h-4 text-neutral-400 group-hover:text-emerald-400 transition-colors" />
-                        <span className="text-xs font-bold text-white">Lead_Austin_Elite_CRM_Card</span>
-                     </div>
-                     <p className="text-[10px] text-neutral-500 font-mono">Similarity Score: 0.854</p>
-                  </div>
+                  {sources.map((src, i) => (
+                    <div key={i} className="p-4 rounded-xl bg-white/[0.02] border border-white/10 hover:border-emerald-500/30 transition-colors cursor-pointer group">
+                       <div className="flex items-center gap-2 mb-2">
+                          <FileText className="w-4 h-4 text-neutral-400 group-hover:text-emerald-400 transition-colors" />
+                          <span className="text-xs font-bold text-white">{src.title}</span>
+                       </div>
+                       <p className="text-[10px] text-neutral-500 font-mono">{src.score}</p>
+                    </div>
+                  ))}
                </div>
             </div>
          </motion.div>

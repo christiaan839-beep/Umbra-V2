@@ -20,43 +20,53 @@ export default function WarRoomColosseum() {
     }
   }, [messages]);
 
-  const startDebate = () => {
+  const startDebate = async () => {
     setStatus("debating");
     setMessages([]);
 
-    const debateScript = [
-      {
-        agent: "DeepSeek",
-        text: "STRATEGY: Target Series A SaaS founders using a logic-based math hook. The angle should leverage high burn rate, pitching the Sovereign Swarm as an operational cost-cutter without flashy sales copy."
-      },
-      {
-        agent: "Llama",
-        text: "RED TEAM: Flawed premise. Series A founders are actively spending to acquire growth, not cut costs. If we pitch pure cost-cutting, we sound like cheap accounting software. Position AI as a revenue scaling multiplier."
-      },
-      {
-        agent: "Kosmos",
-        text: "VISUAL AUDIT: I have scraped the target's recent YouTube ads. They rely heavily on 'Fast Integration' messaging. We should counter their creative by mocking their slow deployment speed. 'Ubernatural takes 24 hours. We take 4 minutes.'"
-      },
-      {
-         agent: "Nemotron",
-         text: "SYNTHESIS: DeepSeek provides the math vector. Llama provides the growth psychology. Kosmos provides the competitor visual weakness. I am fusing these data points into the ultimate strike vector."
-      },
-      {
-         agent: "Nemotron",
-         text: "CONSENSUS DEPLOYMENT:\nSubject Line: 'Scale SDR throughput by 400% in 4 minutes (Not 24 hours)'\nMechanism: AI Swarm integration generating top-line revenue.\nAction: Queuing payload to n8n outbound logic core."
-      }
-    ];
+    try {
+      const res = await fetch("/api/agents/collab-room", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task: topic, room_type: "debate" }),
+      });
+      const data = await res.json();
 
-    let delay = 0;
-    debateScript.forEach((msg, idx) => {
-      delay += 2500;
-      setTimeout(() => {
-        setMessages(prev => [...prev, msg as { agent: "Nemotron" | "Llama" | "Kosmos" | "DeepSeek"; text: string }]);
-        if (idx === debateScript.length - 1) {
-          setTimeout(() => setStatus("consensus"), 1500);
+      if (data.success && data.rounds) {
+        const allMessages: Array<{ agent: "Nemotron" | "Llama" | "Kosmos" | "DeepSeek"; text: string }> = [];
+
+        // Map proposals
+        data.rounds.proposals?.forEach((p: { agent: string; proposal: string }) => {
+          const mapped = p.agent === "Strategist" ? "DeepSeek" : p.agent === "Operator" ? "Llama" : "Kosmos";
+          allMessages.push({ agent: mapped as "DeepSeek" | "Llama" | "Kosmos", text: `PROPOSAL: ${p.proposal}` });
+        });
+
+        // Map critiques
+        data.rounds.critiques?.forEach((c: { agent: string; critique: string }) => {
+          const mapped = c.agent === "Strategist" ? "DeepSeek" : c.agent === "Operator" ? "Llama" : "Kosmos";
+          allMessages.push({ agent: mapped as "DeepSeek" | "Llama" | "Kosmos", text: `CRITIQUE: ${c.critique}` });
+        });
+
+        // Consensus from Nemotron
+        if (data.rounds.consensus) {
+          allMessages.push({ agent: "Nemotron", text: `CONSENSUS DEPLOYMENT:\n${data.rounds.consensus}` });
         }
-      }, delay);
-    });
+
+        // Reveal messages one by one with delay for dramatic effect
+        for (let i = 0; i < allMessages.length; i++) {
+          await new Promise(r => setTimeout(r, 800));
+          setMessages(prev => [...prev, allMessages[i]]);
+        }
+
+        setStatus("consensus");
+      } else {
+        setMessages([{ agent: "Nemotron", text: `Error: ${data.error || "Collab Room failed. Check your NVIDIA NIM key in Settings."}` }]);
+        setStatus("consensus");
+      }
+    } catch {
+      setMessages([{ agent: "Nemotron", text: "Network error. Check your connection and API keys." }]);
+      setStatus("consensus");
+    }
   };
 
   return (
