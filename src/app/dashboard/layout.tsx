@@ -87,6 +87,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard/agent-command", label: "Agent Command Center", icon: Zap },
       { href: "/dashboard/agent-analytics", label: "Agent Analytics", icon: BarChart3 },
+      { href: "/dashboard/live-terminal", label: "Live Agent Terminal", icon: CircuitBoard },
       { href: "/dashboard/nemoclaw", label: "NemoClaw Control Plane", icon: Shield },
       { href: "/dashboard/god-eye", label: "God-Eye Spatial Array", icon: ScanEye },
       { href: "/dashboard/morpheus-shield", label: "Morpheus Shield", icon: Hexagon },
