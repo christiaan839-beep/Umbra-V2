@@ -19,7 +19,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_URL || "https://umbra-v3.vercel.app";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://sovereignmatrix.agency");
     const result = await initializePaystack(plan as PlanId, email, baseUrl);
 
     if (!result) {

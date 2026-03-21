@@ -5,14 +5,14 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sovereign-matrix.com"),
+  metadataBase: new URL("https://sovereignmatrix.agency"),
   title: "SOVEREIGN MATRIX | The Ultimate Autonomous Agency OS",
   description: "Stop paying $5k retainers. Deploy 29 autonomous AI agents via the Sovereign Vector Matrix. Fire your agency. Become the Chief Agent Officer.",
   keywords: ["AI matrix", "God-Brain", "AI outbound engine", "faceless automation", "sovereign matrix"],
   authors: [{ name: "Sovereign Matrix - Edge" }],
   openGraph: {
     title: "SOVEREIGN MATRIX | The Ultimate Autonomous Agency OS",
-    description: "Stop paying $5k retainers. Deploy 29 autonomous AI agents via the Sovereign Vector Matrix. Fire your agency. Become the Chief Agent Officer.",
+    description: "Deploy 72+ autonomous AI agents powered by NVIDIA NIM. Replace your entire marketing team with agentic AI that reasons, plans, and acts.",
     type: "website",
     siteName: "Sovereign Matrix",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Sovereign Matrix — AI Marketing Platform" }],
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const plausibleDomain = process.env.NEXT_PUBLIC_URL?.replace("https://", "").replace("http://", "") || "umbra-v3.vercel.app";
+  const plausibleDomain = process.env.NEXT_PUBLIC_APP_URL?.replace("https://", "").replace("http://", "") || "sovereignmatrix.agency";
   return (
     <html lang="en">
       <head>
