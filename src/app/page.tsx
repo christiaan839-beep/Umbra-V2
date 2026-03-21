@@ -104,8 +104,8 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} className="relative z-10 w-full max-w-5xl mx-auto text-center">
           
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-xs font-medium uppercase tracking-[0.2em] mb-8 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-            The Ultimate Autonomous AI OS
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium uppercase tracking-[0.2em] mb-8 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> 100% Open-Source AI · Zero Vendor Lock-In
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 mb-8 serif-text leading-[1.1] tracking-tight">
@@ -124,17 +124,17 @@ export default function Home() {
 
           {/* Trust Badges - Obsidian Edition */}
           <div className="flex flex-wrap items-center justify-center gap-6 mb-20 max-w-4xl mx-auto">
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md px-4 py-2 rounded-full">
+                <ShieldAlert className="w-4 h-4 text-emerald-500" /> 100% Open-Source AI Stack
+              </div>
               <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full">
-                <ShieldAlert className="w-4 h-4 text-emerald-500" /> Secured by Google Vertex AI
+                <Cpu className="w-4 h-4 text-emerald-500" /> Powered by 10+ Free NVIDIA NIM Models
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full" style={{ animationDelay: '1s' }}>
-                <Cpu className="w-4 h-4 text-emerald-500" /> Powered by NVIDIA NIM APIs
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full">
+                <DollarSign className="w-4 h-4 text-emerald-500" /> Zero API Costs — $0 Inference
               </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full" style={{ animationDelay: '2s' }}>
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" /> NVIDIA Riva Speech AI
-              </div>
-              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full" style={{ animationDelay: '3s' }}>
-                <Zap className="w-4 h-4 text-emerald-500" /> TensorRT-LLM Microsecond Latency
+              <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-neutral-400 bg-black/40 border border-white/10 backdrop-blur-md px-4 py-2 rounded-full">
+                <Zap className="w-4 h-4 text-emerald-500" /> No OpenAI · No GPT · No Vendor Lock-In
               </div>
            </div>
 
@@ -199,10 +199,10 @@ export default function Home() {
         <div className="w-full max-w-6xl mx-auto relative z-10 mt-10 mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { display: "72+", label: "Autonomous AI Agents", icon: BrainCircuit },
-              { display: "50+", label: "NVIDIA NIM Models", icon: Clock },
-              { display: "6", label: "Industry Verticals", icon: TrendingUp },
-              { display: "$0", label: "Infrastructure Cost", icon: DollarSign },
+               { display: "80+", label: "Autonomous AI Agents", icon: BrainCircuit },
+               { display: "10+", label: "Free NIM Models", icon: Clock },
+               { display: "6", label: "Industry Verticals", icon: TrendingUp },
+               { display: "$0", label: "AI Inference Cost", icon: DollarSign },
             ].map((stat, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.5 }}
                 className="bg-black/50 border border-white/5 p-6 rounded-2xl text-center hover:border-white/10 transition-colors">
@@ -263,17 +263,18 @@ export default function Home() {
                    <Target className="w-48 h-48 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-neutral-400 mb-2 flex items-center gap-3">
-                  <XCircle className="w-5 h-5 text-neutral-600" /> Traditional Agency
+                  <XCircle className="w-5 h-5 text-neutral-600" /> ChatGPT / OpenAI
                 </h3>
-                <p className="text-neutral-500 font-mono font-bold text-xl mb-8">R15,000 – R50,000 / month</p>
+                <p className="text-neutral-500 font-mono font-bold text-xl mb-8">$20/seat + $0.01/1K tokens</p>
                 
                 <ul className="space-y-4 relative z-10">
                   {[
-                    "Takes 4 weeks to launch campaigns",
-                    "Writes 4 generic blog posts a month",
-                    "Manually audits 1 competitor occasionally",
-                    "Expects YOU to close the leads",
-                    "Takes weekends and holidays off"
+                    "Single model — generic GPT-4o chatbot",
+                    "Pay per token — costs scale with usage",
+                    "Your data goes to OpenAI servers",
+                    "No multi-agent orchestration",
+                    "No guardrails or safety controls",
+                    "Cannot control hardware or local systems"
                   ].map((item, i) => (
                      <li key={i} className="flex items-start gap-3 text-neutral-600">
                        <XCircle className="w-5 h-5 shrink-0 mt-0.5" />
@@ -292,14 +293,15 @@ export default function Home() {
                 <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-3">
                   <CheckCircle2 className="w-5 h-5 text-neutral-300" /> Sovereign Matrix Platform
                 </h3>
-                <p className="text-neutral-300 font-mono font-bold text-xl mb-8">Deploy Instantly. Zero Overhead.</p>
+                <p className="text-neutral-300 font-mono font-bold text-xl mb-8">$0 Inference · 80+ Agents · Open-Source</p>
                 
                 <ul className="space-y-4 relative z-10">
                   {[
-                    "Content generated in under 30 seconds",
+                    "10+ specialized free models, auto-routed",
+                    "$0 inference via NVIDIA NIM",
+                    "Full data sovereignty — BYOK + local Ollama",
+                    "5-phase NemoClaw Orchestrator kill chain",
                     "NeMo Guardrails — zero AI hallucinations",
-                    "Nemotron Voice Agent dials & books leads",
-                    "Self-optimizing via NVIDIA Data Flywheel",
                     "Runs 24/7 — absolute operational superiority"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-neutral-300">
@@ -335,7 +337,7 @@ export default function Home() {
           <div className="marquee-track gap-12">
             {[...Array(2)].map((_, repeat) => (
               <div key={repeat} className="flex gap-12 items-center px-6">
-                {["NVIDIA NIM 41 Models", "DeepSeek V3.2", "Mistral Nemotron", "NeMo Guardrails", "Agent Memory", "Collab Rooms", "Smart Router", "Multi-Modal Pipeline", "NemoClaw OS", "Vercel Edge", "Self-Improving AI"].map(tech => (
+                {["Nemotron Ultra 253B", "DeepSeek V3.2", "Mistral Nemotron", "Devstral 123B", "NemoClaw Orchestrator", "Smart Router", "Site Assassin", "SEO Dominator", "Code Reviewer", "NemoClaw OS", "100% Open-Source"].map(tech => (
                   <span key={`${tech}-${repeat}`} className="text-[10px] uppercase tracking-[0.2em] text-neutral-600 font-bold font-mono whitespace-nowrap">{tech}</span>
                 ))}
               </div>

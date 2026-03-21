@@ -9,21 +9,53 @@ export default function CyberAuditPage() {
   const [pipelineStatus, setPipelineStatus] = useState<"idle" | "scanning" | "analyzing" | "complete">("idle");
   const [vulnerabilities, setVulnerabilities] = useState<Array<{ type: "critical" | "high" | "medium"; title: string; desc: string }>>([]);
 
-  const startAudit = () => {
+  const startAudit = async () => {
     setPipelineStatus("scanning");
     
-    setTimeout(() => {
+    try {
       setPipelineStatus("analyzing");
-    }, 2500);
+      const res = await fetch("/api/agents/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ target: targetUrl, action: "security" }),
+      });
+      const data = await res.json();
 
-    setTimeout(() => {
-      setVulnerabilities([
-        { type: "critical", title: "Exposed .env Configuration", desc: "Found publicly accessible environment variables at /api/.env.backup containing master database URIs." },
-        { type: "high", title: "Outdated JWT Verification", desc: "Authentication middleware uses a deprecated JSON Web Token signing algorithm susceptible to key-confusion attacks." },
-        { type: "medium", title: "Missing Rate Limiting (DDoS Risk)", desc: "The /webhook/stripe endpoint lacks throttle controls, enabling potential denial of service via rapid payload injection." }
-      ]);
+      if (data.success && data.audit) {
+        const parsed = typeof data.audit === "string" ? data.audit : JSON.stringify(data.audit);
+        // Extract vulnerability patterns from the AI response
+        const vulns: Array<{ type: "critical" | "high" | "medium"; title: string; desc: string }> = [];
+        const sections = parsed.split(/\n/).filter((l: string) => l.trim());
+        let current: { type: "critical" | "high" | "medium"; title: string; desc: string } | null = null;
+        
+        for (const line of sections) {
+          if (line.toLowerCase().includes("critical")) {
+            current = { type: "critical", title: line.replace(/[*#-]/g, "").trim().substring(0, 80), desc: "" };
+            vulns.push(current);
+          } else if (line.toLowerCase().includes("high")) {
+            current = { type: "high", title: line.replace(/[*#-]/g, "").trim().substring(0, 80), desc: "" };
+            vulns.push(current);
+          } else if (line.toLowerCase().includes("medium") || line.toLowerCase().includes("warning")) {
+            current = { type: "medium", title: line.replace(/[*#-]/g, "").trim().substring(0, 80), desc: "" };
+            vulns.push(current);
+          } else if (current && line.trim()) {
+            current.desc += (current.desc ? " " : "") + line.trim();
+          }
+        }
+
+        if (vulns.length === 0) {
+          vulns.push({ type: "medium", title: "Audit Complete", desc: parsed.substring(0, 300) });
+        }
+
+        setVulnerabilities(vulns.slice(0, 5));
+      } else {
+        setVulnerabilities([{ type: "medium", title: "Audit Error", desc: data.error || "Failed to connect to audit agent. Ensure NVIDIA NIM key is configured." }]);
+      }
+    } catch {
+      setVulnerabilities([{ type: "medium", title: "Network Error", desc: "Could not reach the audit API. Check your connection." }]);
+    } finally {
       setPipelineStatus("complete");
-    }, 6000);
+    }
   };
 
   return (

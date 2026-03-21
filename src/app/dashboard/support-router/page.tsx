@@ -18,30 +18,20 @@ export default function SupportRouterPage() {
   const [pipelineState, setPipelineState] = useState<"idle" | "ingesting" | "analyzing" | "executing" | "resolved">("idle");
   const [activeTicket, setActiveTicket] = useState<TicketPayload | null>(null);
 
-  const triggerIngestion = () => {
-    setPipelineState("ingesting");
-    
-    // Simulate webhook arrival
-    setTimeout(() => {
-      setActiveTicket({
-        id: "TCK-8924",
-        customer: "Michael Vance",
-        email: "m.vance@industrialops.net",
-        intent: "Refund Request - Defective Unit",
-        body: "The hydraulic pump system I ordered (Order #4401-B) arrived yesterday, but the primary gasket is ruptured. I need a full refund immediately, this is holding up our assembly line.",
-        sentiment: "Angry / Urgent",
-        history: "$42k LTV (14 Previous Orders)"
+  const triggerIngestion = async () => {
+    setIngestionStatus("ingesting");
+    try {
+      const res = await fetch("/api/agents/smart-router", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: "Analyze and classify support tickets for routing", task_type: "analysis" }),
       });
-      setPipelineState("analyzing");
-    }, 2000);
-
-    setTimeout(() => {
-      setPipelineState("executing");
-    }, 5500);
-
-    setTimeout(() => {
-      setPipelineState("resolved");
-    }, 9000);
+      const data = await res.json();
+      if (data.success) setIngestionStatus("complete");
+      else setIngestionStatus("idle");
+    } catch {
+      setIngestionStatus("idle");
+    }
   };
 
   return (

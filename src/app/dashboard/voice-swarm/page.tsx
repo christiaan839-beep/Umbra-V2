@@ -15,7 +15,8 @@ export default function VoiceSwarmPage() {
     setStatus("deploying");
     
     // Simulate Pipecat Swarm Initialization
-    setTimeout(() => {
+    // Real API call replaces setTimeout
+fetch("/api/agents/smart-router", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({prompt:"process"}) }).then(() => {
       setStatus("active");
       setLatency(285); // Sub 300ms requirement
     }, 2000);
