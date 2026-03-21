@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -31,10 +32,6 @@ export async function POST(request: Request) {
     if (!goal) {
       return NextResponse.json({ error: "goal is required." }, { status: 400 });
     }
-
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
-    if (!nimKey) {
-      return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
     }
 
     // Step 1: GLM-5 creates the execution plan
@@ -42,7 +39,7 @@ export async function POST(request: Request) {
 
     const planRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
       body: JSON.stringify({
         model: "z-ai/glm5",
         messages: [

@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -21,9 +22,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "brief is required." }, { status: 400 });
     }
 
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
-    if (!nimKey) return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
-
     const styleGuides: Record<string, string> = {
       professional: "Polished, authoritative, data-driven. Think McKinsey meets Apple.",
       bold: "Provocative, disruptive, attention-grabbing. Think Ogilvy meets Nike.",
@@ -43,7 +41,7 @@ export async function POST(request: Request) {
     const start = Date.now();
     const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
       body: JSON.stringify({
         model: "moonshotai/kimi-k2.5",
         messages: [

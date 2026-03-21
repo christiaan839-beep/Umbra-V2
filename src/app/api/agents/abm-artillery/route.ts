@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -43,15 +44,14 @@ export async function POST(request: Request) {
     // ═══════════════════════════════════════════════
     // STEP 2: NVIDIA NIM GENERATES OUTREACH EMAIL
     // ═══════════════════════════════════════════════
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
     let emailBody = `We'd love to help ${companyName} scale with AI.`;
 
-    if (nimKey) {
+    if (await getNimKey()) {
       const nimRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${nimKey}`,
+          "Authorization": `Bearer ${await getNimKey()}`,
         },
         body: JSON.stringify({
           model: "mistralai/mistral-nemotron",

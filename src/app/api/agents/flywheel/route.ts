@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 import { persistRead, persistAppend } from "@/lib/persist";
 
@@ -58,12 +59,9 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: true, message: `Need at least 10 data points. Current: ${agentData.length}` });
       }
 
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (!nimKey) return NextResponse.json({ error: "NVIDIA_NIM_API_KEY required." }, { status: 500 });
-
       const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
         body: JSON.stringify({
           model: "nvidia/nemotron-3-super-120b-a12b",
           messages: [

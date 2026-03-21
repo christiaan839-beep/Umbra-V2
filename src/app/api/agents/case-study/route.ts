@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -12,17 +13,13 @@ export async function POST(request: Request) {
     if (!clientName) {
       return NextResponse.json({ error: "clientName is required." }, { status: 400 });
     }
-
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
-    if (!nimKey) {
-      return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
     }
 
     const nimRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${nimKey}`,
+        "Authorization": `Bearer ${await getNimKey()}`,
       },
       body: JSON.stringify({
         model: "deepseek-ai/deepseek-v3.2",

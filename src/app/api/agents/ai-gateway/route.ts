@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.VERCEL_AI_GATEWAY_KEY || process.env.NVIDIA_NIM_API_KEY}`,
+        "Authorization": `Bearer ${process.env.VERCEL_AI_GATEWAY_KEY || await getNimKey()}`,
       },
       body: JSON.stringify({
         model,
@@ -42,13 +43,12 @@ export async function POST(request: Request) {
 
     if (!gatewayResponse.ok) {
       // Fallback to NVIDIA NIM if Vercel AI Gateway is not configured
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (nimKey) {
+      if (await getNimKey()) {
         const fallbackRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${nimKey}`,
+            "Authorization": `Bearer ${await getNimKey()}`,
           },
           body: JSON.stringify({
             model: "minimaxai/minimax-m2.1",

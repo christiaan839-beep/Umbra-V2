@@ -7,8 +7,9 @@ const NVIDIA_BASE_URL = 'https://integrate.api.nvidia.com/v1';
 
 /**
  * Retrieve the NVIDIA NIM API key — checks BYOK vault first, falls back to env.
+ * Exported as getNimKey for use by agent routes that have their own fetch logic.
  */
-async function getNvidiaKey(): Promise<string> {
+export async function getNimKey(): Promise<string> {
   try {
     const user = await currentUser();
     if (user?.primaryEmailAddress?.emailAddress) {
@@ -36,7 +37,7 @@ export async function nimChat(
   messages: { role: string; content: string }[],
   options: { maxTokens?: number; temperature?: number } = {}
 ): Promise<string> {
-  const apiKey = await getNvidiaKey();
+  const apiKey = await getNimKey();
   if (!apiKey) throw new Error("NVIDIA NIM API key not configured. Add it in Settings > API Keys.");
 
   const response = await fetch(`${NVIDIA_BASE_URL}/chat/completions`, {
@@ -84,7 +85,7 @@ export async function analyzeWithCosmos(imageUrl: string, prompt: string = "Anal
  */
 export async function transcribeAudio(audioBase64: string): Promise<{ text: string }> {
   try {
-    const apiKey = await getNvidiaKey();
+    const apiKey = await getNimKey();
     if (!apiKey) {
       return { text: "[Transcription requires an NVIDIA NIM API key. Add one in Settings > API Keys.]" };
     }

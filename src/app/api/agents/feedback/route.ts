@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 import { persistRead, persistAppend } from "@/lib/persist";
 
@@ -82,10 +83,6 @@ export async function POST(request: Request) {
           total_ratings: records.length,
         });
       }
-
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (!nimKey) {
-        return NextResponse.json({ error: "NVIDIA_NIM_API_KEY required for improvement generation." }, { status: 500 });
       }
 
       const feedbackSummary = `
@@ -97,7 +94,7 @@ ${lowRated.slice(-5).map(r => `- Rating: ${r.rating}/5 | Comment: ${r.comment} |
 
       const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
         body: JSON.stringify({
           model: "deepseek-ai/deepseek-v3.2",
           messages: [

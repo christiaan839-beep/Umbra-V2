@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -19,8 +20,6 @@ export async function POST(request: Request) {
 
     if (!stitchKey) {
       // Fallback: Use NVIDIA NIM to generate HTML via code generation model
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (!nimKey) {
         return NextResponse.json({ error: "Neither STITCH_API_KEY nor NVIDIA_NIM_API_KEY is configured." }, { status: 500 });
       }
 
@@ -28,7 +27,7 @@ export async function POST(request: Request) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${nimKey}`,
+          "Authorization": `Bearer ${await getNimKey()}`,
         },
         body: JSON.stringify({
           model: "mistralai/devstral-2-123b-instruct-2512",

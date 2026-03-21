@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -9,10 +10,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const { prompt = "Write a 100-word analysis of how AI will impact marketing in 2026." } = await request.json();
-
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
-    if (!nimKey) {
-      return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
     }
 
     const models = [
@@ -29,7 +26,7 @@ export async function POST(request: Request) {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${nimKey}`,
+              "Authorization": `Bearer ${await getNimKey()}`,
             },
             body: JSON.stringify({
               model: model.id,

@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -90,15 +91,13 @@ export async function POST(request: Request) {
 
     // If prompt provided, also execute the call
     if (prompt) {
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (!nimKey) {
         return NextResponse.json({ model_selected: bestModel, error: "NVIDIA_NIM_API_KEY not set — returning model selection only." });
       }
 
       const start = Date.now();
       const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
         body: JSON.stringify({
           model: bestModel.id,
           messages: [{ role: "user", content: prompt }],

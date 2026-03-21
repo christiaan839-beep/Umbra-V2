@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -22,10 +23,6 @@ export async function POST(request: Request) {
     if (!question) {
       return NextResponse.json({ error: "question is required." }, { status: 400 });
     }
-
-    const nimKey = process.env.NVIDIA_NIM_API_KEY;
-    if (!nimKey) {
-      return NextResponse.json({ error: "NVIDIA_NIM_API_KEY not configured." }, { status: 500 });
     }
 
     const steps: Array<{ step: string; content: string; model: string; duration_ms: number }> = [];
@@ -35,7 +32,7 @@ export async function POST(request: Request) {
     const decomposeStart = Date.now();
     const decomposeRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
       body: JSON.stringify({
         model: "nvidia/llama-3.1-nemotron-ultra-253b",
         messages: [
@@ -55,7 +52,7 @@ export async function POST(request: Request) {
     const analysisStart = Date.now();
     const analysisRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
       body: JSON.stringify({
         model: "deepseek-ai/deepseek-v3.2",
         messages: [
@@ -75,7 +72,7 @@ export async function POST(request: Request) {
     const synthStart = Date.now();
     const synthRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
       body: JSON.stringify({
         model: "nvidia/llama-3.1-nemotron-ultra-253b",
         messages: [
@@ -95,7 +92,7 @@ export async function POST(request: Request) {
     const critiqueStart = Date.now();
     const critiqueRes = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
       body: JSON.stringify({
         model: "mistralai/mistral-nemotron",
         messages: [

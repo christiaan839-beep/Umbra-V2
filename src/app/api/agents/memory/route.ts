@@ -1,3 +1,4 @@
+import { nimChat, getNimKey } from "@/lib/nvidia";
 import { NextResponse } from "next/server";
 
 /**
@@ -67,12 +68,11 @@ export async function POST(request: Request) {
 
       // If Pinecone is configured, also store as vector
       const pineconeKey = process.env.PINECONE_API_KEY;
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (pineconeKey && nimKey) {
+      if (pineconeKey && await getNimKey()) {
         try {
           const embedRes = await fetch("https://integrate.api.nvidia.com/v1/embeddings", {
             method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
             body: JSON.stringify({ model: "nvidia/nv-embed-v1", input: [content], input_type: "passage" }),
           });
           const embedData = await embedRes.json();
@@ -139,9 +139,6 @@ export async function POST(request: Request) {
       if (memories.length === 0) {
         return NextResponse.json({ success: true, summary: "No memories stored yet." });
       }
-
-      const nimKey = process.env.NVIDIA_NIM_API_KEY;
-      if (!nimKey) {
         return NextResponse.json({ summary: `${memories.length} memories stored. Configure NVIDIA_NIM_API_KEY for AI summary.` });
       }
 
@@ -153,7 +150,7 @@ export async function POST(request: Request) {
 
       const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${nimKey}` },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${await getNimKey()}` },
         body: JSON.stringify({
           model: "mistralai/mistral-nemotron",
           messages: [
