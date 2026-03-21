@@ -3,7 +3,7 @@ import { db } from '@/db';
 import { whitelabelConfig } from '@/db/schema';
 
 const VERCEL_API_URL = 'https://api.vercel.com';
-const SOURCE_REPO = 'christiaan839-beep/Umbra-V2'; // The master template
+const SOURCE_REPO = 'christiaan839-beep/sovereign-matrix'; // The master template
 
 export async function POST(req: Request) {
   try {

@@ -74,12 +74,14 @@ export default function Home() {
           </Link>
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-8">
-             <Link href="/pricing" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Proof of Work</Link>
+             <Link href="/demo" className="text-xs font-bold tracking-widest uppercase text-emerald-400 hover:text-emerald-300 transition-colors">Try Demo</Link>
+             <Link href="/pricing" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Pricing</Link>
+             <Link href="/partner" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Partners</Link>
              <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
-               <button className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Client Login</button>
+               <button className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors">Login</button>
              </SignInButton>
-             <Link href="/pricing" className="px-6 py-2.5 rounded-full border border-white/10 bg-white text-[10px] font-bold tracking-widest text-black uppercase hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-               Initialize Control
+             <Link href="/demo" className="px-6 py-2.5 rounded-full border border-emerald-500/20 bg-white text-[10px] font-bold tracking-widest text-black uppercase hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+               Try Free
              </Link>
           </div>
           {/* Mobile hamburger */}
@@ -93,11 +95,13 @@ export default function Home() {
         {/* Mobile dropdown */}
         {mobileNavOpen && (
           <div className="absolute top-24 left-6 right-6 p-6 rounded-2xl md:hidden bg-black/95 backdrop-blur-2xl border border-white/10 flex flex-col gap-4 animate-fade-in pointer-events-auto">
-            <Link href="/pricing" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Proof of Work</Link>
+            <Link href="/demo" className="text-xs font-bold tracking-widest uppercase text-emerald-400 hover:text-emerald-300 transition-colors" onClick={() => setMobileNavOpen(false)}>Try Demo</Link>
+            <Link href="/pricing" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Pricing</Link>
+            <Link href="/partner" className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors" onClick={() => setMobileNavOpen(false)}>Partners</Link>
             <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
-              <button className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors text-left" onClick={() => setMobileNavOpen(false)}>Client Login</button>
+              <button className="text-xs font-bold tracking-widest uppercase text-neutral-400 hover:text-white transition-colors text-left" onClick={() => setMobileNavOpen(false)}>Login</button>
             </SignInButton>
-            <Link href="/pricing" className="px-5 py-4 rounded-xl border border-white/10 bg-white text-xs font-bold uppercase tracking-widest text-black text-center hover:bg-neutral-200 transition-colors mt-4" onClick={() => setMobileNavOpen(false)}>Initialize Control</Link>
+            <Link href="/demo" className="px-5 py-4 rounded-xl border border-emerald-500/20 bg-white text-xs font-bold uppercase tracking-widest text-black text-center hover:bg-neutral-200 transition-colors mt-4" onClick={() => setMobileNavOpen(false)}>Try Free</Link>
           </div>
         )}
       </nav>
