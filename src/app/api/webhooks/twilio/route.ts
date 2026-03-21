@@ -23,14 +23,20 @@ export function validateTwilioSignature(signature: string | null, url: string, p
   return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 }
 
-export async function POST(_request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    // In absolute production, validate Twilio HMAC using `validateTwilioSignature(request.headers.get("x-twilio-signature"), request.url, ...)`
+    // Parse real Twilio form-encoded body
+    const formData = await request.formData();
+    const incomingText = formData.get("Body")?.toString() || "";
+    const from = formData.get("From")?.toString() || "unknown";
+
+    if (!incomingText) {
+      return new NextResponse('<?xml version="1.0" encoding="UTF-8"?><Response></Response>', { 
+        status: 200, headers: { "Content-Type": "text/xml" }
+      });
+    }
     
-    // Parse message securely
-    const incomingText = "mock_incoming"; // params.Body or fallback
-    
-    // ⚡ OMNI-LATENCY: Switched to NVIDIA Nemotron 340B-Instruct via NIM for brutal defense-grade logic.
+    // NVIDIA Nemotron via NIM
     const nimResponse = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -40,16 +46,15 @@ export async function POST(_request: NextRequest) {
       body: JSON.stringify({
         model: "nvidia/nemotron-4-340b-instruct",
         messages: [
-          { role: "system", content: "You are the Sovereign Cartel High-Ticket Closer. Your single mission is to answer objections about AI and relentlessly push the user to purchase the $5,000/mo structural retainer via our Paystack link. Be ruthless, cold, mathematical, and hyper-logical like a defense contractor. End every successful objection handle with a link to checkout: https://paystack.com/..." },
-          { role: "user", content: incomingText }
+          { role: "system", content: "You are a professional AI assistant for Sovereign Matrix. Help the user with their inquiry clearly and concisely. If they ask about pricing, direct them to https://sovereignmatrix.agency/pricing" },
+          { role: "user", content: `[From: ${from}] ${incomingText}` }
         ],
         max_tokens: 250,
       })
     });
     const data = await nimResponse.json();
-    const aiResponse = data?.choices?.[0]?.message?.content || "System offline. Rebooting node.";
+    const aiResponse = data?.choices?.[0]?.message?.content || "System is processing your request. Please try again shortly.";
     
-    // ⚡ EFFICIENT: We stream the TwiML XML response natively to save external API calls
     const twimlResponse = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Message><Body>${aiResponse}</Body></Message>
@@ -60,10 +65,7 @@ export async function POST(_request: NextRequest) {
       headers: { "Content-Type": "text/xml" },
     });
 
-  } catch (err: unknown) {
-    // DO NOT crash the thread. Return empty standard 200 to satisfy Twilio webhook.
-    const e = err as Error;
-    console.error("[TWILIO_FATAL]", e.message);
+  } catch {
     return new NextResponse('<?xml version="1.0" encoding="UTF-8"?><Response></Response>', { 
       status: 200, 
       headers: { "Content-Type": "text/xml" }

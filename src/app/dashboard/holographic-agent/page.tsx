@@ -5,22 +5,18 @@ import { HolographicAgent } from '@/components/3d/HolographicAgent';
 import { Mic, PhoneCall, Activity, Server, RadioReceiver } from 'lucide-react';
 
 export default function HolographicAgentDashboard() {
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [callActive, setCallActive] = useState(false);
+  const [speakCycle, setSpeakCycle] = useState(0);
 
-  // Simulate an AI speaking dynamically during a call
+  // Deterministic speaking cycle during active call
   useEffect(() => {
-    if (!callActive) {
-      setIsSpeaking(false);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setIsSpeaking(Math.random() > 0.4); // Randomly speak 60% of the time during active call
-    }, 2000);
-
+    if (!callActive) return;
+    const interval = setInterval(() => setSpeakCycle(c => c + 1), 2000);
     return () => clearInterval(interval);
   }, [callActive]);
+
+  // Derived state — no setState in effect body
+  const isSpeaking = callActive && speakCycle % 2 === 0;
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

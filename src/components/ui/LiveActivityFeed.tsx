@@ -33,23 +33,25 @@ export function LiveActivityFeed({ maxEvents = 8 }: { maxEvents?: number }) {
   const feedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Seed with 3 initial events
+    // Seed with first 3 events (deterministic)
     const initial = Array.from({ length: 3 }, (_, i) => {
-      const template = AGENT_EVENTS[i % AGENT_EVENTS.length];
+      const template = AGENT_EVENTS[i];
       return { ...template, id: `init-${i}`, timestamp: new Date(Date.now() - (3 - i) * 4000) };
     });
     setEvents(initial);
 
-    // Add new event every 3-7 seconds
+    // Cycle through events sequentially (deterministic, not random)
+    let index = 3;
     const interval = setInterval(() => {
-      const template = AGENT_EVENTS[Math.floor(Math.random() * AGENT_EVENTS.length)];
+      const template = AGENT_EVENTS[index % AGENT_EVENTS.length];
       const newEvent: ActivityEvent = {
         ...template,
-        id: `${Date.now()}-${Math.random()}`,
+        id: `event-${index}`,
         timestamp: new Date(),
       };
       setEvents(prev => [newEvent, ...prev].slice(0, maxEvents));
-    }, 3000 + Math.random() * 4000);
+      index++;
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [maxEvents]);

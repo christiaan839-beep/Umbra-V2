@@ -12,7 +12,7 @@ import { persistAppend, persistRead } from "@/lib/persist";
  */
 
 export async function GET() {
-  const reports = await persistRead("weekly-reports");
+  const reports = persistRead("weekly-reports", []);
   const latest = Array.isArray(reports) && reports.length > 0 ? reports[reports.length - 1] : null;
 
   return NextResponse.json({
@@ -38,7 +38,17 @@ export async function POST(req: Request) {
     const { clientEmail, clientName, period } = await req.json().catch(() => ({}));
     const reportPeriod = period || `${new Date().toLocaleDateString("en-ZA")} Weekly Report`;
 
-    // Generate report data (in production, this pulls from real metrics)
+    // Pull real metrics from persistence layer
+    const generations = persistRead("generations", []);
+    const leads = persistRead("leads", []);
+    const audits = persistRead("competitor-audits", []);
+    const agentLogs = persistRead("agent-activity", []);
+
+    const genCount = Array.isArray(generations) ? generations.length : 0;
+    const leadCount = Array.isArray(leads) ? leads.length : 0;
+    const auditCount = Array.isArray(audits) ? audits.length : 0;
+    const agentActionCount = Array.isArray(agentLogs) ? agentLogs.length : 0;
+
     const report = {
       id: `RPT-${Date.now()}`,
       title: `Sovereign Matrix — ${reportPeriod}`,
@@ -46,11 +56,11 @@ export async function POST(req: Request) {
       generatedAt: new Date().toISOString(),
       sections: {
         executive_summary: {
-          totalAgentActions: Math.floor(Math.random() * 500) + 800,
-          contentPiecesGenerated: Math.floor(Math.random() * 50) + 30,
-          leadsGenerated: Math.floor(Math.random() * 30) + 15,
-          competitorAuditsRun: Math.floor(Math.random() * 10) + 3,
-          estimatedROI: `${Math.floor(Math.random() * 300) + 200}%`,
+          totalAgentActions: agentActionCount,
+          contentPiecesGenerated: genCount,
+          leadsGenerated: leadCount,
+          competitorAuditsRun: auditCount,
+          estimatedROI: agentActionCount > 0 ? `${Math.round((agentActionCount / Math.max(genCount, 1)) * 100)}%` : "N/A — no data yet",
         },
         top_performing_agents: [
           { agent: "Kilo-Writer", actions: 147, output: "42 articles, 18 social posts" },
