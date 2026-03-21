@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import dynamic from 'next/dynamic';
 import Link from "next/link";
 import Image from "next/image";
@@ -9,9 +9,8 @@ import {
   LayoutDashboard,
   Users, Settings, Shield, DollarSign, Target,
   Layers, Globe2, Network,
-  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database, Headphones, FileVideo, Cuboid, Briefcase, Radar, RefreshCcw, Hexagon, ScanEye, Ghost, Zap, CircuitBoard, Crosshair, BarChart3
+  Search, ChevronDown, Rocket, Palette, Factory, X, Menu, Cpu, Mic, ScanFace, Video, Swords, ShieldAlert, Database, Headphones, FileVideo, Cuboid, Briefcase, Ghost, Zap, CircuitBoard, BarChart3, RefreshCcw
 } from "lucide-react";
-// Note: Star already imported via other icons, BarChart3 available from lucide
 import { motion, AnimatePresence } from "framer-motion";
 const NeuralWebGLBackground = dynamic(
   () => import('@/components/3d/NeuralWebGLBackground').then(mod => ({ default: mod.NeuralWebGLBackground })),
@@ -27,83 +26,56 @@ import { LiveActivityConsole } from '@/components/dashboard/LiveActivityConsole'
 
 const NAV_GROUPS = [
   {
-    group: "Core",
+    group: "Command Center",
     icon: LayoutDashboard,
     items: [
       { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+      { href: "/dashboard/agent-command", label: "Agent Command", icon: Zap },
+      { href: "/dashboard/war-room", label: "War Room", icon: Swords },
+      { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
+      { href: "/dashboard/agent-analytics", label: "Analytics", icon: BarChart3 },
+      { href: "/dashboard/live-terminal", label: "Live Terminal", icon: CircuitBoard },
     ]
   },
   {
-    group: "AI Tools",
+    group: "AI Arsenal",
     icon: Rocket,
     items: [
       { href: "/dashboard/seo-dominator", label: "SEO X-Ray", icon: Search },
       { href: "/dashboard/content-factory", label: "Content Factory", icon: Factory },
-      { href: "/dashboard/designer", label: "Design Studio", icon: Palette },
-      { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
       { href: "/dashboard/competitor", label: "Competitor Intel", icon: Shield },
-    ]
-  },
-  {
-    group: "God-Brain V3",
-    icon: Network,
-    items: [
-      { href: "/dashboard/leads", label: "Lead Prospector", icon: Users },
-      { href: "/dashboard/war-room", label: "War Room Colosseum", icon: Swords },
-      { href: "/dashboard/voice-swarm", label: "Pipecat Voice Swarm", icon: Mic },
-      { href: "/dashboard/nemo-claw", label: "Nano 30B Edge Terminal", icon: Cpu },
+      { href: "/dashboard/nemo-claw", label: "Edge Terminal", icon: Cpu },
+      { href: "/dashboard/voice-swarm", label: "Voice Swarm", icon: Mic },
       { href: "/dashboard/podcast", label: "PDF-to-Podcast", icon: Headphones },
-      { href: "/dashboard/avatar", label: "Digital Human", icon: ScanFace },
-      { href: "/dashboard/vsl-hacker", label: "Cosmos VSL Hacker", icon: Video },
-      { href: "/dashboard/omni-search", label: "Global RAG Search", icon: Database },
-      { href: "/dashboard/cyber-audit", label: "Cyber Security Auditor", icon: ShieldAlert },
-      { href: "/dashboard/competitor-intel", label: "Competitor Analysis", icon: Radar },
+      { href: "/dashboard/omni-search", label: "RAG Search", icon: Database },
+      { href: "/dashboard/cyber-audit", label: "Cyber Audit", icon: ShieldAlert },
+      { href: "/dashboard/ghost-protocol", label: "Ghost Protocol", icon: Ghost },
       { href: "/dashboard/flywheel", label: "Anti-Slop Flywheel", icon: RefreshCcw },
     ]
   },
   {
-    group: "Extinction Protocol",
-    icon: Rocket,
+    group: "Creative Suite",
+    icon: Palette,
     items: [
-      { href: "/dashboard/audit-destroy", label: "Audit & Destroy Engine", icon: ShieldAlert },
+      { href: "/dashboard/designer", label: "Design Studio", icon: Palette },
+      { href: "/dashboard/visual-studio", label: "Visual Studio", icon: Palette },
+      { href: "/dashboard/page-builder", label: "Page Builder", icon: Globe2 },
+      { href: "/dashboard/avatar", label: "Digital Human", icon: ScanFace },
       { href: "/dashboard/deepfake-studio", label: "Executive Deepfake", icon: FileVideo },
-      { href: "/dashboard/visual-studio", label: "Sovereign Visual Studio", icon: Palette },
+      { href: "/dashboard/vsl-hacker", label: "Cosmos VSL", icon: Video },
       { href: "/dashboard/edify-forge", label: "Edify 3D Forge", icon: Cuboid },
       { href: "/dashboard/holographic-agent", label: "Holographic Agent", icon: CircuitBoard },
-      { href: "/dashboard/ghost-protocol", label: "Ghost Protocol", icon: Ghost },
     ]
   },
   {
-    group: "The Syndicate",
-    icon: Globe2,
-    items: [
-      { href: "/dashboard/agency-hub", label: "Agency Cartel Hub", icon: Briefcase },
-      { href: "/dashboard/marketplace", label: "Agent Marketplace", icon: Globe2 },
-    ]
-  },
-  {
-    group: "Industrial Nodes",
-    icon: Factory,
-    items: [
-      { href: "/dashboard/agent-command", label: "Agent Command Center", icon: Zap },
-      { href: "/dashboard/agent-analytics", label: "Agent Analytics", icon: BarChart3 },
-      { href: "/dashboard/live-terminal", label: "Live Agent Terminal", icon: CircuitBoard },
-      { href: "/dashboard/leaderboard", label: "AI Leaderboard", icon: Target },
-      { href: "/dashboard/nemoclaw", label: "NemoClaw Control Plane", icon: Shield },
-      { href: "/dashboard/capability-matrix", label: "Capability Matrix", icon: Cpu },
-      { href: "/dashboard/god-eye", label: "God-Eye Spatial Array", icon: ScanEye },
-      { href: "/dashboard/morpheus-shield", label: "Morpheus Shield", icon: Hexagon },
-      { href: "/dashboard/nim-arsenal", label: "NIM Arsenal", icon: Zap },
-      { href: "/dashboard/omnipresence", label: "Omnipresence Engine", icon: Crosshair },
-    ]
-  },
-  {
-    group: "Account",
+    group: "Platform",
     icon: Settings,
     items: [
+      { href: "/dashboard/marketplace", label: "Marketplace", icon: Globe2 },
+      { href: "/dashboard/agency-hub", label: "Agency Hub", icon: Briefcase },
       { href: "/dashboard/library", label: "My Library", icon: Layers },
       { href: "/dashboard/billing", label: "Billing & Plans", icon: DollarSign },
-      { href: "/dashboard/settings", label: "API Keys", icon: Settings },
+      { href: "/dashboard/settings", label: "Settings", icon: Settings },
     ]
   }
 ];
@@ -111,10 +83,26 @@ const NAV_GROUPS = [
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user } = useUser();
-  const isConnected = true;
-  const ping = 14;
+  const [isConnected, setIsConnected] = useState(false);
+  const [ping, setPing] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Real health check — ping every 30s
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const start = performance.now();
+        const res = await fetch("/api/health");
+        const elapsed = Math.round(performance.now() - start);
+        setIsConnected(res.ok);
+        setPing(elapsed);
+      } catch { setIsConnected(false); }
+    };
+    checkHealth();
+    const interval = setInterval(checkHealth, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Determine which groups should be open — active group + Agency Swarm always open
   const getActiveGroup = useCallback(() => {
