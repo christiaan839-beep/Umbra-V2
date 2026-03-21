@@ -26,13 +26,16 @@ fetch("/api/agents/smart-router", { method: "POST", headers: {"Content-Type":"ap
     <div className="p-8 max-w-7xl mx-auto space-y-8 relative min-h-screen">
       <div className="relative z-10 flex items-center justify-between mb-8">
         <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00ff66]/10 border border-[#00ff66]/20 text-[#00ff66] text-xs font-bold uppercase tracking-wider mb-3">
+            <Zap className="w-3 h-3" /> $0 Inference Cost
+          </div>
           <h1 className="text-3xl font-bold text-white serif-text tracking-tight flex items-center gap-3">
             <Phone className="w-8 h-8 text-[#00B7FF]" />
-            Pipecat Voice Swarm
+            Pipecat Voice Swarm <span className="text-[#00B7FF] text-xl font-mono uppercase tracking-widest">[PersonaPlex-7B]</span>
           </h1>
           <p className="text-neutral-400 mt-2 max-w-2xl">
-            Command the Nemotron Speech Sub-Swarm. Initiate ultra-low latency, autonomous SIP voice calls 
-            powered by the Super 120B Omni-RAG execution layer.
+            Command the real-time conversational AI voice sub-swarm powered by NVIDIA PersonaPlex-7B-v1. 
+            Initiate ultra-low latency, autonomous SIP voice calls with open-source domain adaptability.
           </p>
         </div>
 
@@ -81,10 +84,10 @@ fetch("/api/agents/smart-router", { method: "POST", headers: {"Content-Type":"ap
                </div>
                
                <div>
-                 <label className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-2 block">Speech Engine</label>
+                 <label className="text-xs uppercase tracking-widest text-neutral-500 font-bold mb-2 block">Voice Engine</label>
                  <div className="flex items-center gap-2 bg-[#00B7FF]/10 border border-[#00B7FF]/30 rounded-lg px-4 py-3">
                    <Zap className="w-4 h-4 text-[#00B7FF]" />
-                   <span className="text-[#00B7FF] font-mono text-sm font-bold tracking-widest uppercase">Nemotron Speech (Sub-300ms)</span>
+                   <span className="text-[#00B7FF] font-mono text-sm font-bold tracking-widest uppercase">NVIDIA PersonaPlex-7B-v1 (Sub-300ms)</span>
                  </div>
                </div>
             </div>

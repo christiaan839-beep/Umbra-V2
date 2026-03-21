@@ -11,31 +11,53 @@ export default function DeepfakeStudioPage() {
   const [status, setStatus] = useState<"idle" | "scraping" | "generating" | "complete">("idle");
   const [scrapedData, setScrapedData] = useState<{name: string, company: string, tech: string} | null>(null);
 
-  const handleScrape = () => {
+  const handleScrape = async () => {
     if (!targetDomain) return;
     setStatus("scraping");
     
-    // Simulate Apollo.io / Clearbit scraping
-    setTimeout(() => {
-      const data = {
-        name: "David",
-        company: targetDomain.replace('.com', '').replace('www.', '').toUpperCase(),
-        tech: "HubSpot & Salesforce"
-      };
-      setScrapedData(data);
-      setTargetScript(`Hi ${data.name}. I'm the AI infrastructure lead at Sovereign. We actively audited ${data.company}'s technology stack today. You are currently paying human employees to manage ${data.tech}, which is burning approximately $15,000 a month in wage and API inefficiencies. I have mapped a 100% autonomous Sovereign architecture that replaces this entirely. I am sending the technical teardown to your inbox now.`);
+    try {
+      const res = await fetch("/api/agents/site-assassin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: targetDomain, mode: "analyze" }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        const company = targetDomain.replace('.com', '').replace('www.', '').toUpperCase();
+        const audit = data.audit || {};
+        setScrapedData({
+          name: "Target Executive",
+          company,
+          tech: audit.market_position || "Identified via NIM analysis",
+        });
+        setTargetScript(`I'm the AI infrastructure lead at Sovereign. We autonomously audited ${company}'s technology stack. UX Score: ${audit.ux_score || 'N/A'}/100. We identified ${(audit.weaknesses || []).length} critical vulnerabilities. I am sending the technical teardown to your inbox now.`);
+      } else {
+        setScrapedData({ name: "Unknown", company: targetDomain, tech: "Scan failed" });
+      }
+    } catch {
+      setScrapedData({ name: "Unknown", company: targetDomain, tech: "Network error" });
+    } finally {
       setStatus("idle");
-    }, 2500);
+    }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!targetScript) return;
     setStatus("generating");
     
-    // Simulate generation pipeline
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/agents/voice-synth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: targetScript, voice: selectedAvatar }),
+      });
+      const data = await res.json();
+      if (!data.success) console.error("Voice synth failed:", data.error);
+    } catch (err) {
+      console.error("Voice synth error:", err);
+    } finally {
       setStatus("complete");
-    }, 4000);
+    }
   };
 
   return (

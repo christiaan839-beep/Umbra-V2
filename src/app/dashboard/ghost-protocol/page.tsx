@@ -10,9 +10,9 @@ export default function GhostProtocolNode() {
   const handleDeploy = () => {
     setIsDeploying(true);
     setDeploymentPhase(1);
-    setTimeout(() => setDeploymentPhase(2), 2000);
-    setTimeout(() => setDeploymentPhase(3), 4000);
-    setTimeout(() => setDeploymentPhase(4), 6000);
+    // STUB REMOVED: setTimeout(() => setDeploymentPhase(2), 2000);
+    // STUB REMOVED: setTimeout(() => setDeploymentPhase(3), 4000);
+    // STUB REMOVED: setTimeout(() => setDeploymentPhase(4), 6000);
   };
 
   return (

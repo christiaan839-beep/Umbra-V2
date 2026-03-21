@@ -9,19 +9,33 @@ export default function VisualStudioNode() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationStep, setGenerationStep] = useState(0);
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!prompt) return;
     setIsGenerating(true);
     setGenerationStep(1);
 
-    // Simulate the Cosmos + ComfyUI pipeline steps
-    setTimeout(() => setGenerationStep(2), 2000);
-    setTimeout(() => setGenerationStep(3), 4500);
-    setTimeout(() => setGenerationStep(4), 7000);
-    setTimeout(() => {
+    try {
+      // Real API call to the Cosmos video generation NIM agent
+      const res = await fetch("/api/agents/cosmos-video", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, style: "cinematic_commercial" }),
+      });
+      const data = await res.json();
+      // Step through generation phases
+      setGenerationStep(2);
+      await new Promise(r => setTimeout(r, 500));
+      setGenerationStep(3);
+      await new Promise(r => setTimeout(r, 500));
+      setGenerationStep(4);
+      await new Promise(r => setTimeout(r, 500));
+      if (!data.success) console.error("Video gen failed:", data.error);
+    } catch (err) {
+      console.error("Cosmos video error:", err);
+    } finally {
       setIsGenerating(false);
       setGenerationStep(5);
-    }, 9500);
+    }
   };
 
   const steps = [

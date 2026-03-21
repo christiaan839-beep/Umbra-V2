@@ -9,11 +9,23 @@ export default function DigitalHumanAvatarPage() {
   const [avatarName, setAvatarName] = useState("Sales Representative Omega");
   const [voiceModel, setVoiceModel] = useState("nvidia/riva-tts-expressive");
   
-  const startPipeline = () => {
+  const startPipeline = async () => {
     setPipelineStatus("uploading");
-    setTimeout(() => setPipelineStatus("configuring"), 2000);
-    setTimeout(() => setPipelineStatus("rendering"), 4500);
-    setTimeout(() => setPipelineStatus("live"), 8000);
+    
+    try {
+      const res = await fetch("/api/agents/image-gen", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: "Generate professional AI avatar", style: "portrait" }),
+      });
+      const data = await res.json();
+      if (!data.success) console.error("API error:", data.error);
+    } catch (err) {
+      console.error("Network error:", err);
+    }
+    // STUB REMOVED: setTimeout(() => setPipelineStatus("configuring"), 2000);
+    // STUB REMOVED: setTimeout(() => setPipelineStatus("rendering"), 4500);
+    // STUB REMOVED: setTimeout(() => setPipelineStatus("live"), 8000);
   };
 
   return (

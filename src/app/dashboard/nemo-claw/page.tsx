@@ -72,9 +72,9 @@ export default function NemoClawPage() {
         }),
       });
 
-      setLatency(`${(endTime - startTime).toFixed(0)} ms`);
-
       const data = await res.json();
+      const endTime = performance.now();
+      setLatency(`${(endTime - startTime).toFixed(0)} ms`);
 
       if (data.success && data.result?.choices?.[0]?.message) {
         setMessages(prev => [
@@ -105,11 +105,11 @@ export default function NemoClawPage() {
           <Activity className="w-3 h-3 animate-pulse" /> Edge Telemetry Active
         </div>
         <h1 className="text-3xl font-bold font-sans tracking-tight mb-2 flex items-center gap-3">
-          Nano 30B Edge Terminal
+          NemoClaw God-Chain <span className="text-emerald-400 text-xl font-mono uppercase tracking-widest">[Agentic Grounding]</span>
         </h1>
         <p className="text-sm text-neutral-400 max-w-2xl">
-          Live connection to your local macOS OpenClaw Daemon. Execute OS-level commands natively, 
-          manage background routines, and view payload telemetry bypassing the cloud.
+          Autonomous orchestration of your entire local macOS environment. Execute OS-level commands natively 
+          using structured Agentic Grounding principles. Bypass the cloud entirely.
         </p>
       </div>
 

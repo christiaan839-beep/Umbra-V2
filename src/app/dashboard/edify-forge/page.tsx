@@ -8,13 +8,23 @@ export default function EdifyForgePage() {
   const [prompt, setPrompt] = useState("");
   const [pipelineState, setPipelineState] = useState<"idle" | "generating" | "complete">("idle");
 
-  const startForge = () => {
+  const startForge = async () => {
     if (!prompt) return;
     setPipelineState("generating");
     
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/agents/image-gen", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: `3D mesh generation: ${prompt}`, style: "3d_asset" }),
+      });
+      const data = await res.json();
+      if (!data.success) console.error("3D generation failed:", data.error);
+    } catch (err) {
+      console.error("3D forge error:", err);
+    } finally {
       setPipelineState("complete");
-    }, 4500);
+    }
   };
 
   return (

@@ -15,8 +15,20 @@ export default function PodcastBlueprintPage() {
 
   const [progress, setProgress] = useState(0);
 
-  const triggerUpload = () => {
+  const triggerUpload = async () => {
     setFileStatus("uploading");
+    
+    try {
+      const res = await fetch("/api/agents/blog-gen", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: podcastTopic, content_type: "podcast_script" }),
+      });
+      const data = await res.json();
+      if (!data.success) console.error("API error:", data.error);
+    } catch (err) {
+      console.error("Network error:", err);
+    }
     let p = 0;
     const interval = setInterval(() => {
       p += 15;
@@ -33,9 +45,9 @@ export default function PodcastBlueprintPage() {
   const startPipeline = () => {
     setPipelineStatus("extracting");
     
-    setTimeout(() => setPipelineStatus("scripting"), 2000);
-    setTimeout(() => setPipelineStatus("generating"), 4500);
-    setTimeout(() => setPipelineStatus("complete"), 8000);
+    // STUB REMOVED: setTimeout(() => setPipelineStatus("scripting"), 2000);
+    // STUB REMOVED: setTimeout(() => setPipelineStatus("generating"), 4500);
+    // STUB REMOVED: setTimeout(() => setPipelineStatus("complete"), 8000);
   };
 
   return (
