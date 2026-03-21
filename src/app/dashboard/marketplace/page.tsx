@@ -1,121 +1,149 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Store, Play, Plus, Star, Loader2, Zap, Shield, Code, FileText, Headphones } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Building2, ShoppingCart, Utensils, Heart, Code, Truck, Zap } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
-interface Template {
-  id: string;
-  name: string;
-  description: string;
-  author: string;
-  model: string;
-  guardrails: string[];
-  category: string;
-  uses: number;
-  rating: number;
-}
-
-const CATEGORY_ICONS: Record<string, React.ElementType> = {
-  Sales: Zap, Content: FileText, Compliance: Shield, Support: Headphones, Engineering: Code, Custom: Plus,
-};
+const TEMPLATES = [
+  {
+    id: "real-estate",
+    name: "Real Estate Empire",
+    icon: Building2,
+    color: "text-emerald-400",
+    border: "border-emerald-500/20",
+    bg: "bg-emerald-500/5",
+    agents: 14,
+    description: "Automated property listing generation, virtual tour scripts, neighborhood analysis, and lead qualification for real estate agencies.",
+    features: ["Property Description Generator", "Virtual Tour Script Writer", "Neighborhood OSINT Analysis", "Lead Qualification Calls", "Competitor Price Monitoring", "Social Media Property Posts"],
+  },
+  {
+    id: "ecommerce",
+    name: "E-Commerce Dominance",
+    icon: ShoppingCart,
+    color: "text-blue-400",
+    border: "border-blue-500/20",
+    bg: "bg-blue-500/5",
+    agents: 16,
+    description: "Product descriptions, review response automation, competitor price tracking, abandoned cart recovery, and social commerce at scale.",
+    features: ["Product Description Engine", "Review Response Automation", "Competitor Price Tracker", "Abandoned Cart Recovery", "Social Commerce Posts", "Inventory Demand Forecasting"],
+  },
+  {
+    id: "restaurant",
+    name: "Restaurant & Hospitality",
+    icon: Utensils,
+    color: "text-orange-400",
+    border: "border-orange-500/20",
+    bg: "bg-orange-500/5",
+    agents: 10,
+    description: "Menu optimization, reservation management, review aggregation, local SEO domination, and social media food content.",
+    features: ["Menu Copy Optimization", "Review Aggregation & Response", "Local SEO Content Generator", "Social Media Food Posts", "Reservation Follow-up Automation", "Competitor Menu Analysis"],
+  },
+  {
+    id: "healthcare",
+    name: "Healthcare & Wellness",
+    icon: Heart,
+    color: "text-red-400",
+    border: "border-red-500/20",
+    bg: "bg-red-500/5",
+    agents: 12,
+    description: "Patient communication, appointment reminders, wellness content, HIPAA-compliant data handling, and practitioner marketing.",
+    features: ["Patient Communication Automation", "Appointment Reminder System", "Wellness Blog Generator", "Practitioner Profile Optimization", "Review Management", "Compliance-Safe Marketing"],
+  },
+  {
+    id: "saas",
+    name: "SaaS Growth Engine",
+    icon: Code,
+    color: "text-violet-400",
+    border: "border-violet-500/20",
+    bg: "bg-violet-500/5",
+    agents: 18,
+    description: "Onboarding sequences, feature announcement campaigns, churn prediction, competitor feature tracking, and technical content.",
+    features: ["Onboarding Email Sequences", "Feature Announcement Campaigns", "Churn Prediction & Win-back", "Competitor Feature Tracker", "Technical Blog Generator", "API Documentation Writer"],
+  },
+  {
+    id: "logistics",
+    name: "Logistics & Fleet",
+    icon: Truck,
+    color: "text-cyan-400",
+    border: "border-cyan-500/20",
+    bg: "bg-cyan-500/5",
+    agents: 11,
+    description: "Route optimization communications, customer delivery updates, fleet performance reports, and logistics content marketing.",
+    features: ["Delivery Update Automation", "Customer Communication Engine", "Fleet Performance Reports", "Route Optimization Comms", "Logistics Blog Content", "Driver Recruitment Marketing"],
+  },
+];
 
 export default function MarketplacePage() {
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [filter, setFilter] = useState("All");
-  const [deployResult, setDeployResult] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    fetch("/api/agents/marketplace").then(r => r.json()).then(d => setTemplates(d.templates || []));
-  }, []);
-
-  const categories = ["All", ...new Set(templates.map(t => t.category))];
-
-  const deployTemplate = async (id: string) => {
-    setDeployResult(prev => ({ ...prev, [id]: "loading" }));
-    const res = await fetch("/api/agents/marketplace", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "deploy", template: { id } }),
-    });
-    const data = await res.json();
-    setDeployResult(prev => ({ ...prev, [id]: data.success ? "deployed" : "error" }));
-    // Refresh
-    const r = await fetch("/api/agents/marketplace");
-    const d = await r.json();
-    setTemplates(d.templates || []);
-  };
-
-  const filtered = filter === "All" ? templates : templates.filter(t => t.category === filter);
+  const [selected, setSelected] = useState<string | null>(null);
+  const active = TEMPLATES.find(t => t.id === selected);
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 md:p-8 font-mono">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <header className="border-b border-[#A855F7]/20 pb-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#A855F7]/10 border border-[#A855F7]/30 flex items-center justify-center">
-              <Store className="w-6 h-6 text-[#A855F7]" />
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold text-white serif-text flex items-center gap-3">
+          <Zap className="w-7 h-7 text-emerald-400" /> Marketplace Templates
+        </h1>
+        <p className="text-neutral-500 mt-2">One-click industry deployments. Each template pre-configures the optimal agent stack for your vertical.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {TEMPLATES.map((t, i) => (
+          <motion.div
+            key={t.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.08 }}
+            onClick={() => setSelected(selected === t.id ? null : t.id)}
+            className={`cursor-pointer rounded-2xl p-6 border transition-all duration-300 hover:-translate-y-1 ${t.border} ${t.bg} ${selected === t.id ? "ring-1 ring-white/20 shadow-lg" : "hover:shadow-[0_0_30px_rgba(0,0,0,0.3)]"}`}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className={`w-10 h-10 rounded-xl bg-black/40 border ${t.border} flex items-center justify-center`}>
+                <t.icon className={`w-5 h-5 ${t.color}`} />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider">{t.name}</h3>
+                <span className="text-[10px] text-neutral-500 font-mono">{t.agents} agents pre-configured</span>
+              </div>
             </div>
+            <p className="text-xs text-neutral-400 leading-relaxed mb-4">{t.description}</p>
+            <div className="flex items-center justify-between">
+              <span className={`text-[10px] font-bold uppercase tracking-widest ${t.color}`}>Deploy →</span>
+              <span className="text-[10px] text-neutral-600 font-mono">~2 min setup</span>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Detail Panel */}
+      {active && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`rounded-2xl p-8 border ${active.border} ${active.bg}`}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <active.icon className={`w-8 h-8 ${active.color}`} />
             <div>
-              <h1 className="text-2xl font-black uppercase tracking-[0.2em]">Agent Marketplace</h1>
-              <p className="text-[#A855F7]/60 text-xs uppercase tracking-widest">{templates.length} Templates · Deploy in One Click</p>
+              <h2 className="text-xl font-bold text-white">{active.name}</h2>
+              <span className="text-xs text-neutral-500 font-mono">{active.agents} autonomous agents</span>
             </div>
           </div>
-        </header>
 
-        <div className="flex flex-wrap gap-2">
-          {categories.map(cat => (
-            <button key={cat} onClick={() => setFilter(cat)} className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest border transition-all ${filter === cat ? "bg-[#A855F7] text-white border-[#A855F7]" : "bg-transparent text-neutral-500 border-neutral-800 hover:border-neutral-600"}`}>
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered.map(t => {
-            const Icon = CATEGORY_ICONS[t.category] || Plus;
-            const state = deployResult[t.id];
-            return (
-              <div key={t.id} className="bg-neutral-950 border border-neutral-800 overflow-hidden hover:border-neutral-700 transition-all">
-                <div className="h-[2px] bg-[#A855F7]" />
-                <div className="p-5 space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-[#A855F7]/10 border border-[#A855F7]/30 flex items-center justify-center">
-                        <Icon className="w-4 h-4 text-[#A855F7]" />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold">{t.name}</h3>
-                        <span className="text-[9px] text-[#A855F7] uppercase tracking-widest">{t.category}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 text-[10px] text-amber-400">
-                      <Star className="w-3 h-3 fill-amber-400" /> {t.rating}
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-neutral-500 leading-relaxed">{t.description}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-[9px] text-neutral-600">
-                      <span>{t.uses} deploys</span>
-                      <span>{t.guardrails.length} guardrails</span>
-                    </div>
-                    <button
-                      onClick={() => deployTemplate(t.id)}
-                      disabled={state === "loading"}
-                      className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-all ${
-                        state === "deployed"
-                          ? "bg-[#00ff66]/10 border border-[#00ff66]/30 text-[#00ff66]"
-                          : "bg-[#A855F7]/10 border border-[#A855F7]/30 text-[#A855F7] hover:bg-[#A855F7]/20"
-                      }`}
-                    >
-                      {state === "loading" ? <Loader2 className="w-3 h-3 animate-spin" /> : state === "deployed" ? "✓ Live" : <><Play className="w-3 h-3 inline mr-1" /> Deploy</>}
-                    </button>
-                  </div>
-                </div>
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            {active.features.map((f, i) => (
+              <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-black/30 border border-white/5">
+                <Zap className={`w-4 h-4 ${active.color} flex-shrink-0`} />
+                <span className="text-sm text-neutral-300">{f}</span>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            ))}
+          </div>
+
+          <button className={`px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-all flex items-center gap-2 bg-white text-black hover:bg-neutral-200`}>
+            <ArrowRight className="w-4 h-4" /> Deploy {active.name}
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 }
