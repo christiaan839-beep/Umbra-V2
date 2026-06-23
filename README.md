@@ -1,40 +1,40 @@
-# ⚡ SOVEREIGN MATRIX OVERRIDE ⚡
+# Umbra V2
 
-> **STATUS: ABSOLUTE MARKET DOMINATION ACTIVE**
-> **DEPLOYMENT:** Vercel Edge / Local Docker XFVB
+An autonomous AI agent platform for B2B lead generation and outbound workflow automation. Umbra orchestrates multi-agent pipelines that handle lead research, personalized outreach drafting, and campaign reporting, giving small teams a force-multiplier for repetitive sales operations.
 
-## 1. The Structure of Power
-The Sovereign Matrix isn't software; it is an autonomous workforce deployed on **Vercel Edge Runtimes** and orchestrated locally via **Dockerized Python Daemons** (NemoClaw).
+## Overview
 
-It completely replaces the need for SDRs, strategists, and copywriters. 
+Umbra combines a Next.js edge application with a Python-based agent daemon. Client requests flow through a clean web UI; the agent layer executes the work and returns structured results and reporting. The system uses a local retrieval-augmented (RAG) memory loop so that every campaign improves the context available to the next one.
 
-## 2. Does the System Get Smarter?
-**YES.** The Sovereign Matrix employs a permanent localized RAG memory loop (`ChromaDB`). Every time you feed it a competitor PDF, an old sales call transcript, or a winning cold email, it embeds this logic locally. Every subsequent strike it makes pulls from an ever-expanding contextual knowledge base. It physically gets smarter without relying on OpenAI's memory constraints. 
+## Key Features
 
-## 3. How Do Users Experience This Platform?
-Your $5,000/mo Cartel clients log into `sovereign-matrix.com/client-portal/[domain]`. 
-They see a flawless, military-style UI (The Palantir 3D Map, The Extinction Calculators). They submit a request (e.g., "Need 500 tech leads"), and then they close the browser.
+Multi-agent orchestration: coordinated agents for research, copy drafting, and reporting. RAG memory loop: a local vector store (ChromaDB) embeds prior campaigns, transcripts, and reference docs to ground future outputs. LLM-powered drafting generates personalized outreach copy using Gemini, with human review before anything is sent. Automated reporting generates client-facing summary reports of work completed. The system is edge-ready: the Next.js app deploys to Vercel and the Python daemon runs locally or in Docker.
 
-You receive a ping on your iOS Telegram App. You tap `/execute`. The Swarm extracts the leads via Stealth Headless Chromium, writes 500 emails via Gemini 1.5 Flash, and sends them via Resend API. On Sunday, the client receives an automated PDF proving you saved them 160 hours of human labor.
+## Tech Stack
 
-They never see the backend. They only see the results.
+Frontend / App: Next.js, TypeScript, Tailwind CSS, Drizzle ORM. Backend / Agents: Python, ChromaDB (vector memory), Docker. Database: Postgres (Neon). LLMs: Google Gemini. Validation: Zod schema validation on all inbound payloads.
 
-## 4. Is it Fast and Secure?
-- **Speed:** The Vercel Edge API runs on cold-start-immune instances, meaning UI responsiveness is measured in micro-seconds.
-- **Security:** NATIVE Zod Schema validation physically guarantees no malformed JSON can breach your Neon Postgres DB. The local Python scraper utilizes `try...except...finally` logic to ruthlessly kill zombie Chromium processes instantly, meaning your Mac/Server will *never* crash or run out of RAM.
+## Getting Started
 
-## Deployment Commands
-To run the UI:
-```bash
-bun run dev
-```
-To run the Daemon:
-```bash
-cd server/python-agents && source venv/bin/activate && python nemoclaw_os.py
-```
-To execute physical containerization:
-```bash
-docker-compose up -d --build
-```
+Install and run the web app:
 
-Execute. Dominate. Extinguish.
+    bun install
+        bun run dev
+
+        Run the agent daemon:
+
+            cd server/python-agents
+                source venv/bin/activate
+                    python nemoclaw_os.py
+
+                    Or run the full stack with Docker:
+
+                        docker-compose up -d --build
+
+                        ## Responsible Use
+
+                        Umbra is built for legitimate, permission-based B2B outreach. Users are responsible for complying with applicable anti-spam and data-protection laws (e.g., GDPR, POPIA, CAN-SPAM), respecting website terms of service, and honoring opt-out requests. Outreach copy is generated for human review prior to sending.
+
+                        ## License
+
+                        Add a license (e.g., MIT or proprietary).
